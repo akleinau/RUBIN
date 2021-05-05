@@ -30,7 +30,7 @@ class Scenario:
         infer = inference.VariableElimination(self.network.model)
 
         for t in self.targets:
-            t.value = infer.map_query([t.name], evidence=self.patient.evidences)[t.name]
+            t.distribution = infer.query([t.name], evidence=self.patient.get_active_evidences())
 
     def print_targets(self):
         for t in self.targets:

@@ -9,5 +9,5 @@ s.add_target("Therapy")
 s.patient.add_evidences({"PrimaryTumor": "grade_1"})
 s.compute_targets()
 
-print(s.patient.evidences)
+s.patient.print_evidences()
 s.print_targets()
