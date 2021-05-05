@@ -53,7 +53,7 @@ def compute_relevancies_for_outcome_states(distribution_1, distribution_2):
 
 def get_influence_of_evidences_on_target(network, evidences, target):
     all_relevance_of_evidence_objects = []  # list with all evidences and their relevances
-    infer = inference.VariableElimination(network.model)
+    infer = inference.VariableElimination(network)
 
     sum_of_all_overall_relevancies = 0  # jennsen-shannon relevances of all targets together
 

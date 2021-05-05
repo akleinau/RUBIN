@@ -2,6 +2,7 @@ from Patient import Patient
 from Network import Network
 from pgmpy import inference
 import relevance
+import explanation
 
 from TargetNode import TargetNode
 
@@ -39,6 +40,12 @@ class Scenario:
             print(str(self.targets[t]))
 
     def compute_relevancies_for_target(self, target):
-        return relevance.get_influence_of_evidences_on_target(self.network,
+        return relevance.get_influence_of_evidences_on_target(self.network.model,
                                                              self.patient.get_active_evidences(),
                                                              self.targets[target])
+
+    def compute_explanation_of_target(self, target, filename=""):
+        explanation.compute_explanation_of_target(self.network.model,
+                                                  self.patient.get_active_evidences(),
+                                                  self.targets[target],
+                                                  filename=filename)
