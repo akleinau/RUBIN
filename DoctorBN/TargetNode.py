@@ -6,7 +6,14 @@ class TargetNode:
 
     def get_value(self):
         if self.distribution is not None:
-            return self.distribution.no_to_name[self.name][0]
+            max = 0
+            id = -1
+            for i, val in enumerate(self.distribution.values):
+                if val > max:
+                    max = val
+                    id = i
+
+            return self.distribution.no_to_name[self.name][id]
         return -1
 
     def __str__(self):
