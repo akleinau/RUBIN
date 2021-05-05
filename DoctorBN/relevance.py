@@ -3,10 +3,24 @@ from scipy.spatial import distance
 from pgmpy import inference
 from TargetNode import TargetNode
 
+class RelevanceOfEvidenceObject(object):
+    def __init__(self, node_name, overall_relevance, relevancies,
+                 resulting_in_max_state_change, max_state_with_current_evidence, max_state_without_current_evidence):
+        self.node_name = node_name
+        self.overall_relevance = overall_relevance
+        self.relevancies = relevancies
+        self.resulting_in_max_state_change = resulting_in_max_state_change
+        self.max_state_with_current_evidence = max_state_with_current_evidence
+        self.max_state_without_current_evidence = max_state_without_current_evidence
+
+
+class RelevanceObject(object):
+    def __init__(self, state, relevance):
+        self.state = state
+        self.relevance = relevance
+
 #calculates the dissimilarity of two probability distributions (states) of a node
-import classes
-
-
+# == computes global relevance
 def compute_jensen_shannon_divergence(distribution_1, distribution_2):
     p1 = []
     p2 = []
@@ -22,13 +36,14 @@ def compute_jensen_shannon_divergence(distribution_1, distribution_2):
 
     return jen_shan
 
+#compute local relevances
 def compute_relevancies_for_outcome_states(distribution_1, distribution_2):
     all_rel_objects_for_current_node = []
 
     for i in range(len(distribution_1.values)):
         name = list(distribution_1.no_to_name.keys())[0] ##get name of the target
         prob_diff = float(distribution_2.values[i]) - float(distribution_1.values[i]) #compute prob diff of each state
-        rel_obj = classes.RelevanceObject(state=distribution_1.no_to_name[name][i], relevance=prob_diff)
+        rel_obj = RelevanceObject(state=distribution_1.no_to_name[name][i], relevance=prob_diff)
 
         all_rel_objects_for_current_node.append(rel_obj) #all states with their relevance difference
 
@@ -44,20 +59,15 @@ def get_influence_of_evidences_on_target(network, evidences, target):
 
     for e in evidences.keys():
 
-        rel_of_ev_obj = classes.RelevanceOfEvidenceObject(node_id=e, node_label=evidences.get(e),
-                                                      states=None, overall_relevance=None, relevancies=None,
-                                                      lines=None, point=None, is_virtual_evidence=None,
+        rel_of_ev_obj = RelevanceOfEvidenceObject(node_name=e, overall_relevance=None, relevancies=None,
                                                       resulting_in_max_state_change=None,
                                                       max_state_with_current_evidence=None,
-                                                      max_state_without_current_evidence=None,
-                                                      is_observed=None)
-
-
+                                                      max_state_without_current_evidence=None)
 
         evidences_wo = {}
         for node in evidences.keys():
             if not node == e:
-                evidences_wo[node] = evidences.get(node)
+                evidences_wo[node] = evidences[node]
 
         distribution_wo = infer.query([target.name], evidence=evidences_wo)
         node_wo = TargetNode(target.name)
@@ -70,11 +80,11 @@ def get_influence_of_evidences_on_target(network, evidences, target):
         rel_of_ev_obj.overall_relevance = jensen_shannon_value
         sum_of_all_overall_relevancies += jensen_shannon_value
 
-        #local relevance
+        # local relevance
         rel_of_ev_obj.relevancies = compute_relevancies_for_outcome_states(target.distribution,
                                                              distribution_wo)
 
-        #compute if recommendation changer
+        # compute if recommendation changer
         if (target.get_value() != node_wo.get_value()):
             rel_of_ev_obj.resulting_in_max_state_change = True
             rel_of_ev_obj.max_state_with_current_evidence = target.get_value()
@@ -82,6 +92,7 @@ def get_influence_of_evidences_on_target(network, evidences, target):
 
         all_relevance_of_evidence_objects.append(rel_of_ev_obj)
 
+    # make global relevance to percentage
     for i in range(len(all_relevance_of_evidence_objects)):
         new_overall_relevance_in_percentage = all_relevance_of_evidence_objects[i].overall_relevance / \
                                               sum_of_all_overall_relevancies
