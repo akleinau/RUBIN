@@ -1,6 +1,7 @@
 <template>
-<h2> Evidence</h2>
-<div id="evidence"> symptoms</div>
+<Panel header="Evidence">
+  Symptoms
+</Panel>
 </template>
 
 <script>

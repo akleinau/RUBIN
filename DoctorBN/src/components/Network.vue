@@ -1,6 +1,7 @@
 <template>
-  <h2> Network view</h2>
-  <div id="network"> Network</div>
+<Panel header="Network">
+  Symptoms
+</Panel>
 </template>
 
 <script>

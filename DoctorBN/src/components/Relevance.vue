@@ -1,6 +1,7 @@
 <template>
-<h2> Relevance</h2>
-<div id="relevance"> relevances</div>
+<Panel header="Relevance">
+  Symptoms
+</Panel>
 </template>
 
 <script>

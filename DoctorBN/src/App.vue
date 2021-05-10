@@ -1,33 +1,30 @@
 <template>
-  <w-app>
-    <header>
-        <Header/>
-    </header>
-    <main>
-    <w-flex class="text-left column grow wrap fill-height" >
-      <div class="w-flex" id="row1">
-        <div class="xs2 pa1">
+
+  <Header/>
+
+
+    <div class="p-grid p-flex-column" >
+      <div class="p-grid p-col p-flex-row">
+        <div class="p-col">
           <Evidence/>
         </div>
-        <div class="xs2 pa1">
+        <div class="p-col">
           <Target/>
         </div>
-        <div class="xs6 pa1">
+        <div class="p-col">
           <Relevance/>
         </div>
-        <div class="xs2 pa1">
+        <div class="p-col">
           <Additional/>
         </div>
       </div>
 
-      <div>
+      <div class="p-col">
         <Network/>
       </div>
 
-    </w-flex>
-</main>
+    </div>
 
-  </w-app>
 </template>
 
 <script>
@@ -69,8 +66,10 @@ body, html {
   height: 100%;
 }
 
-.w-flex {
-  width: 100%
+.p-grid {
+  padding: 10px;
+  margin-top: 10px
 }
+
 
 </style>

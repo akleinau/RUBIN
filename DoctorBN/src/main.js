@@ -1,15 +1,21 @@
-import { createApp, h } from 'vue'
+import { createApp} from 'vue'
 import App from './App.vue'
-import WaveUI from 'wave-ui'
-import 'wave-ui/dist/wave-ui.css'
+import PrimeVue from 'primevue/config';
+import Dialog from 'primevue/dialog';
+import MegaMenu from 'primevue/megamenu'
+import Panel from 'primevue/panel';
+import 'primevue/resources/themes/saga-blue/theme.css'       //theme
+import 'primevue/resources/primevue.min.css'                 //core css
+import 'primeicons/primeicons.css'
+import 'primeflex/primeflex.css';
 
-const app = createApp({
-  render: () => h(App)
-})
+import Button from 'primevue/button';
 
-new WaveUI(app, {
-  // Some Wave UI options.
-})
-
-app.mount('#app')
+createApp(App)
+      .use(PrimeVue)
+    .component('Dialog', Dialog)
+    .component('Button', Button)
+    .component('MegaMenu', MegaMenu)
+    .component('Panel', Panel)
+      .mount('#app')
 

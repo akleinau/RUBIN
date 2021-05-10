@@ -1,6 +1,7 @@
 <template>
-<h2> Target</h2>
-<div id="targets"> targets</div>
+<Panel header="Target">
+  Symptoms
+</Panel>
 </template>
 
 <script>
