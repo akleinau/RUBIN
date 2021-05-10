@@ -9,7 +9,11 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^3.0.0"
+    "element-plus": "^1.0.2-beta.42",
+    "primeicons": "^4.1.0",
+    "primevue": "^3.3.5",
+    "vue": "^3.0.0",
+    "vuesax": "^4.0.1-alpha.25"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
