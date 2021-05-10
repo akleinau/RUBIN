@@ -1,17 +1,18 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <UploadNetwork></UploadNetwork>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import UploadNetwork from "./components/UploadNetwork";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    UploadNetwork
   }
 }
+
+
 </script>
 
 <style>

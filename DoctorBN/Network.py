@@ -8,3 +8,4 @@ class Network:
         self.model = reader.get_model()
 
 
+
