@@ -1,13 +1,31 @@
 <template>
-<Panel header="additional">
-  Symptoms
-</Panel>
-
+<Accordion>
+    <AccordionTab header="Network description">
+      Content I
+    </AccordionTab>
+    <AccordionTab header="PubMed">
+      Content II
+    </AccordionTab>
+    <AccordionTab header="How can I change the result?">
+      Content III
+    </AccordionTab>
+  <AccordionTab header="Compare">
+      Content III
+    </AccordionTab>
+<AccordionTab header="Send Feedback">
+      Content III
+    </AccordionTab>
+</Accordion>
 </template>
 
 <script>
 export default {
-name: "additional",
+  name: "additional",
+  data() {
+    return {
+      active: 0
+    }
+  }
 }
 </script>
 
@@ -21,10 +39,8 @@ div {
   width: 100%
 }
 
-.w-button {
-  word-wrap: break-word;
-  white-space: normal;
-  height: 200%
+p-accordion-header {
+ font-size: 10px;
 }
 
 </style>

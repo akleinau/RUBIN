@@ -1,6 +1,7 @@
 <template>
 <Panel header="Relevance">
-  Symptoms
+  <img src="../assets/globalRelevance.png">
+  <Button label="show local"></Button>
 </Panel>
 </template>
 
@@ -15,4 +16,10 @@ export default {
   background-color: white;
 
 }
+
+img {
+  width: 100%;
+}
+
+
 </style>

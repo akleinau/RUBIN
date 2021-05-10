@@ -1,7 +1,15 @@
 <template>
-<Panel header="Network">
-  Symptoms
-</Panel>
+<TabView>
+	<TabPanel header="Causal explanation">
+		<img src="../assets/Argumentation.png">
+	</TabPanel>
+	<TabPanel header="compact network">
+		Content II
+	</TabPanel>
+	<TabPanel header="full network">
+		Content III
+	</TabPanel>
+</TabView>
 </template>
 
 <script>
@@ -11,8 +19,7 @@ export default {
 </script>
 
 <style scoped>
-#network {
-  background-color: white;
-  height: 100%
+img {
+  height: 100%;
 }
 </style>

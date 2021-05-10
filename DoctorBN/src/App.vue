@@ -3,26 +3,26 @@
   <Header/>
 
 
-    <div class="p-grid p-flex-column" >
+    <div class="p-grid p-flex-column p-ai-stretch" >
       <div class="p-grid p-col p-flex-row">
-        <div class="p-col">
+        <div class="p-col-2">
           <Evidence/>
         </div>
-        <div class="p-col">
+        <div class="p-col-2">
           <Target/>
         </div>
         <div class="p-col">
           <Relevance/>
         </div>
-        <div class="p-col">
+        <div class="p-col-3">
           <Additional/>
         </div>
       </div>
-
-      <div class="p-col">
+       <div class="p-col">
+      <div class="box box-stretched">
         <Network/>
       </div>
-
+    </div>
     </div>
 
 </template>
@@ -68,7 +68,8 @@ body, html {
 
 .p-grid {
   padding: 10px;
-  margin-top: 10px
+  margin-top: 10px;
+  margin-bottom: 50px
 }
 
 
