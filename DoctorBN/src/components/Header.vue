@@ -1,22 +1,34 @@
 <template>
-  <el-menu mode="horizontal">
-    <el-menu-item> Reset</el-menu-item>
-    <el-menu-item> Load Patient</el-menu-item>
-    <el-menu-item> Save Patient</el-menu-item>
-    <el-submenu>
-      <template #title>Settings</template>
-      <el-menu-item>change color theme</el-menu-item>
-      <el-menu-item>change font size</el-menu-item>
-      <el-menu-item>change language</el-menu-item>
-    </el-submenu>
-    <el-menu-item> back to network selection</el-menu-item>
-  </el-menu>
+  <w-toolbar shadow>
+    <w-button class="mr12" text>
+      Reset
+    </w-button>
+    <w-button class="mr12" text>
+      Load patient
+    </w-button>
+    <w-button class="mr12" text>
+      Save patient
+    </w-button>
+    <w-menu>
+      <template #activator="{ on }">
+        <w-button class="mr12" v-on="on" text>
+          Settings
+        </w-button>
+      </template>
+      change color theme
+    </w-menu>
+
+    <w-button class="mr12" text>
+      back to network selection
+    </w-button>
+  </w-toolbar>
+
 
 </template>
 
 <script>
 export default {
-  name: "Header"
+  name: "Header",
 }
 </script>
 

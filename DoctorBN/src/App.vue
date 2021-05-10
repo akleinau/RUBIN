@@ -1,30 +1,33 @@
 <template>
-<el-container>
-      <el-header> <Header class="header"/></el-header>
-<el-main>
-  <el-row id = "main">
-    <el-col :span="4">
-      <Evidence/>
-    </el-col>
-    <el-col :span="4">
-      <Target/>
-    </el-col>
-    <el-col :span="10">
-      <Relevance/>
-    </el-col>
-    <el-col :span="4">
-      <Additional/>
-    </el-col>
-  </el-row>
-  <el-row id="network">
-    <el-col>
-      <Network/>
-    </el-col>
+  <w-app>
+    <header>
+        <Header/>
+    </header>
+    <main>
+    <w-flex class="text-left column grow wrap fill-height" >
+      <div class="w-flex" id="row1">
+        <div class="xs2 pa1">
+          <Evidence/>
+        </div>
+        <div class="xs2 pa1">
+          <Target/>
+        </div>
+        <div class="xs6 pa1">
+          <Relevance/>
+        </div>
+        <div class="xs2 pa1">
+          <Additional/>
+        </div>
+      </div>
 
-  </el-row>
-</el-main>
-  <el-footer> Hi</el-footer>
-</el-container>
+      <div>
+        <Network/>
+      </div>
+
+    </w-flex>
+</main>
+
+  </w-app>
 </template>
 
 <script>
@@ -66,21 +69,8 @@ body, html {
   height: 100%;
 }
 
-.el-col {
-  margin-right: 10px
-
-}
-
-.el-container {
-  height: 100%
-}
-
-#main {
-  height: 500px
-}
-
-#network {
-  height: 200px
+.w-flex {
+  width: 100%
 }
 
 </style>

@@ -12,7 +12,6 @@ export default {
 <style scoped>
 #network {
   background-color: white;
-  height: 100%;
-  width: 100%
+  height: 100%
 }
 </style>

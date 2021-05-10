@@ -12,7 +12,6 @@ export default {
 <style scoped>
 #relevance {
   background-color: white;
-   height: 90%;
-  width: 100%
+
 }
 </style>

@@ -1,43 +1,37 @@
 <template>
   <h2> additional information</h2>
-<el-tabs tab-position="right">
-  <el-tab-pane label="Network description">
-    <div>Hi</div>
-  </el-tab-pane>
-  <el-tab-pane label="pubmed">
-    <div>Hi</div>
-  </el-tab-pane>
-   <el-tab-pane label="How can I change the outcome?">
-    <div>Hi</div>
-  </el-tab-pane>
-   <el-tab-pane label="Compare">
-    <div>Hi</div>
-  </el-tab-pane>
-   <el-tab-pane label="Send feedback">
-    <div>Hi</div>
-  </el-tab-pane>
-</el-tabs>
+  <w-flex fill-height>
+    <div class="xs8"> content</div>
+    <div class="xs4">
+      <w-button width="100%">Network description</w-button>
+      <w-button width="100%" >pubmed</w-button>
+       <w-button id="hi" width="100% shrink">How can I change the outcome?</w-button>
+       <w-button width="100%">Compare</w-button>
+       <w-button width="100%">send feedback</w-button>
+    </div>
+  </w-flex>
 </template>
 
 <script>
 export default {
-name: "additional"
+name: "additional",
 }
 </script>
 
 <style scoped>
 #additional {
   background-color: white;
-   height: 90%;
-  width: 100%
 }
 
 div {
-  height: 90%;
-  background-color: white
+  background-color: white;
+  width: 100%
 }
 
-el-tab-pane {
-  width: 10px
+.w-button {
+  word-wrap: break-word;
+  white-space: normal;
+  height: 200%
 }
+
 </style>

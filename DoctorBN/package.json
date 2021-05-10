@@ -10,14 +10,18 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "element-plus": "^1.0.2-beta.42",
+    "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
     "primevue": "^3.3.5",
     "vue": "^3.0.0",
-    "vuesax": "^4.0.1-alpha.25"
+    "vue-router": "^4.0.0-0",
+    "vuesax": "^4.0.1-alpha.25",
+    "wave-ui": "^2.18.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
