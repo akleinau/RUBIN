@@ -1,30 +1,30 @@
 <template>
-<el-container>
-      <el-header> <Header class="header"/></el-header>
-<el-main>
-  <el-row id = "main">
-    <el-col :span="4">
-      <Evidence/>
-    </el-col>
-    <el-col :span="4">
-      <Target/>
-    </el-col>
-    <el-col :span="10">
-      <Relevance/>
-    </el-col>
-    <el-col :span="4">
-      <Additional/>
-    </el-col>
-  </el-row>
-  <el-row id="network">
-    <el-col>
-      <Network/>
-    </el-col>
 
-  </el-row>
-</el-main>
-  <el-footer> Hi</el-footer>
-</el-container>
+  <Header/>
+
+
+    <div class="p-grid p-flex-column" >
+      <div class="p-grid p-col p-flex-row">
+        <div class="p-col">
+          <Evidence/>
+        </div>
+        <div class="p-col">
+          <Target/>
+        </div>
+        <div class="p-col">
+          <Relevance/>
+        </div>
+        <div class="p-col">
+          <Additional/>
+        </div>
+      </div>
+
+      <div class="p-col">
+        <Network/>
+      </div>
+
+    </div>
+
 </template>
 
 <script>
@@ -66,21 +66,10 @@ body, html {
   height: 100%;
 }
 
-.el-col {
-  margin-right: 10px
-
+.p-grid {
+  padding: 10px;
+  margin-top: 10px
 }
 
-.el-container {
-  height: 100%
-}
-
-#main {
-  height: 500px
-}
-
-#network {
-  height: 200px
-}
 
 </style>

@@ -1,22 +1,32 @@
 <template>
-  <el-menu mode="horizontal">
-    <el-menu-item> Reset</el-menu-item>
-    <el-menu-item> Load Patient</el-menu-item>
-    <el-menu-item> Save Patient</el-menu-item>
-    <el-submenu>
-      <template #title>Settings</template>
-      <el-menu-item>change color theme</el-menu-item>
-      <el-menu-item>change font size</el-menu-item>
-      <el-menu-item>change language</el-menu-item>
-    </el-submenu>
-    <el-menu-item> back to network selection</el-menu-item>
-  </el-menu>
-
+  <MegaMenu :model="items"/>
 </template>
 
 <script>
 export default {
-  name: "Header"
+  name: "Header",
+  data() {
+    return {
+      items: [
+        {
+          label: 'Reset'
+        },
+        {
+          label: 'Load Patient'
+        },
+        {
+          label: 'Save Patient'
+        },
+        {
+          label: 'Settings',
+          items: [{label: 'change theme'}, {label: 'change language'}]
+        },
+        {
+          label: 'back'
+        }
+      ]
+    }
+  }
 }
 </script>
 

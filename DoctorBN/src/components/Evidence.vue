@@ -1,6 +1,7 @@
 <template>
-<h2> Evidence</h2>
-<div id="evidence"> symptoms</div>
+<Panel header="Evidence">
+  Symptoms
+</Panel>
 </template>
 
 <script>
@@ -12,7 +13,5 @@ export default {
 <style scoped>
 #evidence {
   background-color: white;
-  height: 90%;
-  width: 100%
 }
 </style>

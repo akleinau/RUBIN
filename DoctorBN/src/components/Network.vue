@@ -1,6 +1,7 @@
 <template>
-  <h2> Network view</h2>
-  <div id="network"> Network</div>
+<Panel header="Network">
+  Symptoms
+</Panel>
 </template>
 
 <script>
@@ -12,7 +13,6 @@ export default {
 <style scoped>
 #network {
   background-color: white;
-  height: 100%;
-  width: 100%
+  height: 100%
 }
 </style>

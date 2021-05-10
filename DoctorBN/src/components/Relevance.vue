@@ -1,6 +1,7 @@
 <template>
-<h2> Relevance</h2>
-<div id="relevance"> relevances</div>
+<Panel header="Relevance">
+  Symptoms
+</Panel>
 </template>
 
 <script>
@@ -12,7 +13,6 @@ export default {
 <style scoped>
 #relevance {
   background-color: white;
-   height: 90%;
-  width: 100%
+
 }
 </style>
