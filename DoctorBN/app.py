@@ -9,8 +9,9 @@ import os
 
 NETWORK_FOLDER = './Networks'
 ALLOWED_EXTENSIONS = ['.bif']
+TEMPLATE_FOLDER = os.path.relpath('src')
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=TEMPLATE_FOLDER)
 app.config['NETWORK_FOLDER'] = NETWORK_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///networks.db'
 db = SQLAlchemy(app)
@@ -69,13 +70,15 @@ def addNetwork(file, filePath, displayName):
     return redirect(url_for('/'))
 
 
-# TODO
+# returns a python dict object
+# key = network's ID number
+# value = list, index 0 = filePath, index 1 = display name for the network
 def getNetworkList():
-    networks = NetworkData.query.all()
-    networks
+    networks = NetworkData.query.order_by(NetworkData.netId).all()
     netList = {}
     for network in networks:
-        netList[network.id] = []
+        netList[network.netId] = [network.filePath, network.displayName]
+    return netList
 
 
 # Checks if filetype is in the list of allowed files
@@ -85,9 +88,9 @@ def allowed_file(filename: str):
 
 
 # TODO
-@app.route('/', netList=getNetworkList())
+@app.route('/', methods=["GET", "POST"])
 def home():
-    return render_template('index.html')
+    return render_template('App.vue', netList=getNetworkList())
 
 
 # Save file upload from application
