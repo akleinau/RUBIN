@@ -1,5 +1,6 @@
 <template>
-  <MegaMenu :model="items"/>
+  <Menubar :model="items"/>
+  <div id="logo">DoctorBN</div>
 </template>
 
 <script>
@@ -31,5 +32,13 @@ export default {
 </script>
 
 <style scoped>
+
+#logo {
+  position: absolute;
+  top: 1%;
+  left: 90%;
+  font-size: 2em;
+  color: teal
+}
 
 </style>

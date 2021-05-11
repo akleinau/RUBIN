@@ -1,13 +1,14 @@
 <template>
-<Panel header="Target">
-   <Listbox v-model="selectedCity" :options="cities" optionLabel="name" />
-</Panel>
+  <Panel header="Target">
+    <Button icon="pi pi-plus"></Button>
+    <Listbox v-model="selectedCity" :options="cities" optionLabel="name"/>
+  </Panel>
 </template>
 
 <script>
 export default {
-name: "Target",
-    data() {
+  name: "Target",
+  data() {
     return {
       selectedCity: null,
       cities: [
@@ -23,5 +24,11 @@ name: "Target",
 <style scoped>
 #targets {
   background-color: white;
+}
+
+Button {
+  position: absolute;
+  top: 8%;
+  left: 30%
 }
 </style>

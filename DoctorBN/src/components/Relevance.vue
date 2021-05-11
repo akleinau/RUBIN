@@ -1,13 +1,24 @@
 <template>
-<Panel header="Relevance">
-  <img src="../assets/globalRelevance.png">
-  <Button label="show local"></Button>
-</Panel>
+  <Panel header="Relevance">
+    <div v-if="onlyGlobal">
+      <img src="../assets/globalRelevance.png">
+      <Button label="show more" @click="onlyGlobal=false"></Button>
+    </div>
+    <div v-if="!onlyGlobal">
+      <img src="../assets/localRelevance.png">
+      <Button label="show less" @click="onlyGlobal=true"></Button>
+    </div>
+  </Panel>
 </template>
 
 <script>
 export default {
-  name: "Relevance"
+  name: "Relevance",
+  data() {
+    return {
+      onlyGlobal: true
+    }
+  }
 }
 </script>
 
