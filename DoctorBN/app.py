@@ -26,6 +26,7 @@ class NetworkData(db.Model):
         return self.displayName
 
 
+# checks if the network name passed on already exists
 def doesNetworkNameExist(newDisplayName):
     if NetworkData.query.filter_by(displayName=newDisplayName).first() is not None:
         flash('Network name already exists', 'error')
@@ -70,11 +71,11 @@ def addNetwork(file, filePath, displayName):
 
 # TODO
 def getNetworkList():
-    path = os.getcwd() + "/networks"
-    number_files = len(os.listdir(path))
+    networks = NetworkData.query.all()
+    networks
     netList = {}
-    for netName in os.listdir(path):
-        pass
+    for network in networks:
+        netList[network.id] = []
 
 
 # Checks if filetype is in the list of allowed files
@@ -111,7 +112,7 @@ def saveNetwork():
             addNetwork(file, filePath, newDisplayName)
     # unexpected errors return
     flash('unexpected error, try again', 'error')
-    return redirect(request.url)
+    return redirect(url_for('/'))
 
 
 # TODO
