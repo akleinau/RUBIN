@@ -1,16 +1,21 @@
 <template>
 <Interface />
+  <UploadNetwork></UploadNetwork>
 </template>
 
 <script>
 import Interface from "./Interface";
+import UploadNetwork from "./components/UploadNetwork";
 
 export default {
   name: 'App',
   components: {
-    Interface
+    Interface,
+    UploadNetwork
   }
 }
+
+
 </script>
 
 <style>
