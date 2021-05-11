@@ -1,6 +1,6 @@
 <template>
-  <Button style="width: 90%" label="Save configuration"></Button>
   <Listbox v-model="selectedConfig" :options="configs" optionLabel="name"/>
+  <Button style="width: 90%" label="Save configuration"></Button>
 </template>
 
 <script>

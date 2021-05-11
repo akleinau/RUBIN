@@ -49,7 +49,7 @@ export default {
 
 Button {
   position: absolute;
-  top: 8%;
+  top: 9%;
   left: 13%
 }
 
