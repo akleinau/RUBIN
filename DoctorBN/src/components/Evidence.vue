@@ -1,4 +1,5 @@
 <template>
+  <div style="position: relative">
   <DataTable :value="items" responsiveLayout="scroll">
     <Column field="name" header="Evidence"></Column>
     <Column field="value">
@@ -13,6 +14,7 @@
   <Dialog header="Add Evidence" v-model:visible="overlay">
     <Listbox v-model="selected" :options="items" optionLabel="name"/>
   </Dialog>
+    </div>
 </template>
 
 <script>
@@ -49,8 +51,9 @@ export default {
 
 Button {
   position: absolute;
-  top: 9%;
-  left: 13%
+  right: 0%;
+  top: 0%;
+  margin: 5px;
 }
 
 </style>

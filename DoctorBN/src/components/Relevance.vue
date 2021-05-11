@@ -1,5 +1,5 @@
 <template>
-  <Panel header="Relevance">
+
     <div v-if="onlyGlobal">
       <img src="../assets/globalRelevance.png">
       <Button label="show more" @click="onlyGlobal=false"></Button>
@@ -8,7 +8,6 @@
       <img src="../assets/localRelevance.png">
       <Button label="show less" @click="onlyGlobal=true"></Button>
     </div>
-  </Panel>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <Panel header="Target">
+  <Panel header="Target" style="position: relative">
     <Button icon="pi pi-plus"></Button>
     <Listbox v-model="selectedCity" :options="cities" optionLabel="name">
       <template #option="slotProps">
@@ -36,7 +36,8 @@ export default {
 
 Button {
   position: absolute;
-  top: 9%;
-  left: 30%
+  right: 0%;
+  top: 0%;
+  margin: 5px;
 }
 </style>

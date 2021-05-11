@@ -3,10 +3,13 @@
   <Header @changePage="changePage()"/>
 
 
-    <div class="p-grid p-flex-column p-ai-stretch" >
-      <div class="p-grid p-col p-flex-row">
+    <div class="p-grid p-flex-column p-ai-stretch box">
+      <div class="p-grid p-col p-flex-row p-d-flex-wrap">
         <div class="p-col-2">
           <Evidence/>
+        </div>
+        <div class="p-col-fixed p-d-flex p-ai-center" style="width:50px">
+          <img src="./assets/Arrow.svg" id="arrow">
         </div>
         <div class="p-col-2">
           <Target/>
@@ -18,11 +21,11 @@
           <Additional/>
         </div>
       </div>
-       <div class="p-col">
+
       <div class="box box-stretched">
         <Network/>
       </div>
-    </div>
+
     </div>
 </template>
 
@@ -58,4 +61,10 @@ name: "Interface",
   margin-top: 0px;
   margin-bottom: 10px
 }
+
+#arrow {
+  width: 100%;
+  height: 60%;
+}
+
 </style>

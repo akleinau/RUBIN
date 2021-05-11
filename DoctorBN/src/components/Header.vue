@@ -23,7 +23,7 @@ export default {
           items: [{label: 'change theme'}, {label: 'change language'}]
         },
         {
-          label: 'back',
+          label: 'back to network selection',
           command: () => {
             this.changePage()
           }
