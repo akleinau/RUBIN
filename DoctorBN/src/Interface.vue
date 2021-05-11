@@ -1,6 +1,6 @@
 <template>
 
-  <Header/>
+  <Header @changePage="changePage()"/>
 
 
     <div class="p-grid p-flex-column p-ai-stretch" >
@@ -43,6 +43,11 @@ name: "Interface",
     Relevance,
     Additional,
     Network
+  },
+  methods: {
+  changePage() {
+    this.$emit("changePage")
+    }
   }
 }
 </script>

@@ -6,6 +6,7 @@
     <input name = "net_upload" type = "file" ref="netFile" @change="selectFile"/> <br>
     <input name = "net_submit" type = "submit" value = "Upload Network"/>
   </form>
+  <Button @click="changePage()">open</Button>
 </template>
 
 <script>
@@ -22,7 +23,10 @@ export default {
         name: this.networks.name
       })
       console.log(this.networks)
-    }
+    },
+    changePage() {
+      this.$emit("changePage")
+}
     //TODO: Method that adds saved networks to list
   }
 }

@@ -23,9 +23,17 @@ export default {
           items: [{label: 'change theme'}, {label: 'change language'}]
         },
         {
-          label: 'back'
+          label: 'back',
+          command: () => {
+            this.changePage()
+          }
         }
       ]
+    }
+  },
+  methods: {
+    changePage() {
+      this.$emit('changePage')
     }
   }
 }

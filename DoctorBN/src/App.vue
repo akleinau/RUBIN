@@ -1,6 +1,6 @@
 <template>
-<Interface />
-  <UploadNetwork></UploadNetwork>
+  <UploadNetwork v-if="page === 'chooseNet'" @changePage="page = 'interface'"></UploadNetwork>
+  <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'"/>
 </template>
 
 <script>
@@ -12,6 +12,11 @@ export default {
   components: {
     Interface,
     UploadNetwork
+  },
+  data () {
+    return {
+      page: "interface"
+    }
   }
 }
 
