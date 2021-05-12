@@ -3,30 +3,28 @@
   <Header @changePage="changePage()"/>
 
 
-    <div class="p-grid p-flex-column p-ai-stretch box">
-      <div class="p-grid p-col p-flex-row p-d-flex-wrap">
-        <div class="p-col-2">
-          <Evidence/>
-        </div>
-        <div class="p-col-fixed p-d-flex p-ai-center" style="width:50px">
-          <img src="./assets/Arrow.svg" id="arrow">
-        </div>
-        <div class="p-col-2">
-          <Target/>
-        </div>
-        <div class="p-col">
-          <Relevance/>
-        </div>
-        <div class="p-col-3">
-          <Additional/>
-        </div>
+    <div class="p-grid p-col p-flex-row" style="height: 40%">
+      <div class="p-col-2">
+        <Evidence @setEvidence="evidence = $event" />
       </div>
-
-      <div class="box box-stretched">
-        <Network/>
+      <div class="p-col-fixed p-d-flex p-ai-center" style="width:50px">
+        <img src="./assets/Arrow.svg" id="arrow">
       </div>
-
+      <div class="p-col-2">
+        <Target @setTarget="target = $event"/>
+      </div>
+      <div class="p-col">
+        <Relevance/>
+      </div>
+      <div class="p-col-3">
+        <Additional/>
+      </div>
     </div>
+
+    <div>
+      <Network/>
+    </div>
+
 </template>
 
 <script>
@@ -38,7 +36,7 @@ import Additional from "./components/additional";
 import Network from "./components/Network";
 
 export default {
-name: "Interface",
+  name: "Interface",
   components: {
     Header,
     Evidence,
@@ -47,9 +45,15 @@ name: "Interface",
     Additional,
     Network
   },
+  data() {
+    return {
+      target: null,
+      evidence: null
+    }
+  },
   methods: {
-  changePage() {
-    this.$emit("changePage")
+    changePage() {
+      this.$emit("changePage")
     }
   }
 }

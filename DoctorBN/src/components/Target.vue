@@ -1,7 +1,7 @@
 <template>
   <Panel header="Target" style="position: relative">
     <Button icon="pi pi-plus"></Button>
-    <Listbox v-model="selectedCity" :options="cities" optionLabel="name">
+    <Listbox v-model="selected" :options="targets" optionLabel="name" @change="onTargetChange()">
       <template #option="slotProps">
         <div>
           {{ slotProps.option.name }}: {{slotProps.option.value}}
@@ -16,8 +16,8 @@ export default {
   name: "Target",
   data() {
     return {
-      selectedCity: null,
-      cities: [
+      selected: null,
+      targets: [
         {name: 'Therapy', value: 'radiotx'},
         {name: '1yr Survival', value: 'yes'},
         {name: '5yr Survival', value: 'yes'}
@@ -27,6 +27,9 @@ export default {
   methods: {
     getLabel(event) {
       return event.name + event.code;
+    },
+    onTargetChange() {
+      this.$emit("setTarget", this.selected);
     }
   }
 }
