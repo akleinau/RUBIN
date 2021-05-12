@@ -1,22 +1,27 @@
 <template>
-  <div style="position: relative">
-    <Panel header="Evidence">
-          <Button id="addButton" icon="pi pi-plus" @click="overlay = true" style="z-index:1"></Button>
-
-
-    <DataTable :value="evidence" :scrollable="true" scrollHeight="300px" >
-      <Column field="name">
-      </Column>
-      <Column field="value">
-        <template #body="slotProps">
-          <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
-                    placeholder="slotProps.data.selected" @change="onEvidenceChange()">
-          </Dropdown>
-        </template>
-      </Column>
-    </DataTable>
-
-</Panel>
+  <Panel header="Evidence" style="position: relative">
+    <div>
+      <DataTable id="table" :value="evidence" :scrollable="true" scrollHeight="300px"
+      dataKey="id" v-model:filters="filters" filterDisplay="menu"
+                :globalFilterFields="['name']">
+        <Column field="name">
+          <template #header class="table-header">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"/>
+              <InputText v-model="filters['name'].name" placeholder="Search..." style="width: 200%"/>
+            </span>
+          </template>
+        </Column>
+        <Column field="value">
+          <template #body="slotProps">
+            <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
+                      placeholder="slotProps.data.selected" @change="onEvidenceChange()">
+            </Dropdown>
+          </template>
+        </Column>
+      </DataTable>
+      <Button id="addButton" icon="pi pi-plus" @click="overlay = true"></Button>
+    </div>
     <Dialog header="Add Evidence" v-model:visible="overlay" style="width: 50%">
       <Button class="p-mb-1" label="Add evidences" style="width: 100%" @click="addEvidencesFromOverlay()"/>
       <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
@@ -27,28 +32,33 @@
         </template>
       </Listbox>
       <DataTable :value="nodes">
-      <Column field="name" header="Evidence"></Column>
-      <Column field="options">
-        <template #body="slotProps">
-            <Button class="p-m-2" v-for="option in slotProps.data.options" :key="option" @click="addOption(slotProps, option)">
-              <i class="pi pi-plus"></i> &nbsp; {{option.name}}
+        <Column field="name" header="Evidence"></Column>
+        <Column field="options">
+          <template #body="slotProps">
+            <Button class="p-m-2" v-for="option in slotProps.data.options" :key="option"
+                    @click="addOption(slotProps, option)">
+              <i class="pi pi-plus"></i> &nbsp; {{ option.name }}
             </Button>
 
-        </template>
-      </Column>
+          </template>
+        </Column>
       </DataTable>
     </Dialog>
-  </div>
+  </Panel>
 </template>
 
 
 <script>
+import {FilterMatchMode,FilterOperator} from 'primevue/api';
 export default {
   name: "Evidence",
   data() {
     return {
       overlay: false,
       selected: null,
+      filters: {
+        'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+        'name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]}},
       evidence: [
         {
           name: 'LVSI',
@@ -64,23 +74,22 @@ export default {
       ],
       nodes: [
         {name: 'Histology', options: [{name: 'grade_1'}, {name: 'grade_2'}, {name: 'grade_3'}]},
-        {name: 'ER', options: [{name: 'positive'},{name: 'negative'}]},
+        {name: 'ER', options: [{name: 'positive'}, {name: 'negative'}]},
         {name: 'p53', options: [{name: 'wildtype'}, {name: 'mutant'}]},
         {name: 'Cytology', options: [{name: 'no'}, {name: 'yes'}]},
-        {name: 'PR', options: [{name: 'positive'},{name: 'negative'}]},
-        {name: 'MyometrialInvasion', options: [{name: 'no'}, {name:'lt_50'},{name:'ge_50'}]},
-        {name: 'ER', options: [{name: 'positive'},{name: 'negative'}]}
+        {name: 'PR', options: [{name: 'positive'}, {name: 'negative'}]},
+        {name: 'MyometrialInvasion', options: [{name: 'no'}, {name: 'lt_50'}, {name: 'ge_50'}]},
+        {name: 'ER', options: [{name: 'positive'}, {name: 'negative'}]}
       ],
-      nodesToAdd: [
-      ]
+      nodesToAdd: []
     }
   },
   methods: {
     onEvidenceChange() {
       this.$emit("setEvidence", this.items);
     },
-    addOption(slotProps, option ) {
-      console.log({slotProps, option })
+    addOption(slotProps, option) {
+      console.log({slotProps, option})
       let item = {
         name: slotProps.data.name,
         selected: {name: option.name},
@@ -103,14 +112,16 @@ export default {
 }
 
 #addButton {
-  position: absolute;
-  right: 0%;
-  top: 0%;
-  margin: 5px;
+  width: 100%
 }
 
-.table-header {
-    display: None;
+#table{
+  padding: 0;
+  margin: 0
+}
+
+::v-deep(#table .p-datatable-thead){
+  display: None !important
 }
 
 </style>

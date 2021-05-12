@@ -3,7 +3,7 @@
   <Header @changePage="changePage()"/>
 
 
-    <div class="p-grid p-col p-flex-row" style="height: 40%">
+    <div class="p-grid p-col p-flex-row" style="height: 50%">
       <div class="p-col-2">
         <Evidence @setEvidence="evidence = $event" />
       </div>
@@ -14,15 +14,15 @@
         <Target @setTarget="target = $event"/>
       </div>
       <div class="p-col">
-        <Relevance/>
+        <Relevance v-if="target !== null"/>
       </div>
       <div class="p-col-3">
-        <Additional/>
+        <Additional />
       </div>
     </div>
 
     <div>
-      <Network/>
+      <Network />
     </div>
 
 </template>
@@ -68,7 +68,7 @@ export default {
 
 #arrow {
   width: 100%;
-  height: 60%;
+  height: 30%;
 }
 
 </style>

@@ -1,6 +1,7 @@
 <template>
-  <Panel header="Target" style="position: relative">
-    <Button icon="pi pi-plus"></Button>
+  <div style="position:relative">
+  <Panel header="Target">
+
     <Listbox v-model="selected" :options="targets" optionLabel="name" @change="onTargetChange()">
       <template #option="slotProps">
         <div>
@@ -8,7 +9,10 @@
         </div>
       </template>
     </Listbox>
+  <Button id="AddButton" icon="pi pi-plus"></Button>
   </Panel>
+
+</div>
 </template>
 
 <script>
@@ -37,10 +41,7 @@ export default {
 
 <style scoped>
 
-Button {
-  position: absolute;
-  right: 0%;
-  top: 0%;
-  margin: 5px;
+#AddButton {
+  width: 100%
 }
 </style>
