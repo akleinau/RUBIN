@@ -2,12 +2,12 @@
 
   <Header @changePage="changePage()"/>
 
-
-    <div class="p-grid p-col p-flex-row" style="height: 50%">
+<div class=" p-grid p-flex-column nested-grid">
+    <div class="p-grid p-d-flex" style="height: 50%">
       <div class="p-col-2">
         <Evidence @setEvidence="evidence = $event" />
       </div>
-      <div class="p-col-fixed p-d-flex p-ai-center" style="width:50px">
+      <div class="p-d-flex p-col-fixed p-ai-center p-flex-wrap" style="width:50px">
         <img src="./assets/Arrow.svg" id="arrow">
       </div>
       <div class="p-col-2">
@@ -21,10 +21,10 @@
       </div>
     </div>
 
-    <div>
-      <Network />
+    <div class="p-col">
+      <Network :target='target' />
     </div>
-
+</div>
 </template>
 
 <script>

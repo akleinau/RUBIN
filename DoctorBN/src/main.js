@@ -21,6 +21,7 @@ import ScrollPanel from "primevue/scrollpanel";
 import Checkbox from "primevue/checkbox";
 import Textarea from 'primevue/textarea';
 import InputText from 'primevue/inputtext';
+import Tooltip from 'primevue/tooltip';
 import 'primevue/resources/themes/saga-blue/theme.css';       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css'
@@ -51,5 +52,6 @@ createApp(App)
     .component('Checkbox', Checkbox)
     .component('Textarea', Textarea)
     .component('InputText', InputText)
+    .directive('tooltip', Tooltip)
       .mount('#app')
 

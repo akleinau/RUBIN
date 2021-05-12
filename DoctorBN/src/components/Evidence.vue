@@ -101,6 +101,7 @@ export default {
     addEvidencesFromOverlay() {
       this.evidence = this.evidence.concat(this.nodesToAdd)
       this.nodesToAdd = []
+      this.overlay=false
     }
   }
 }

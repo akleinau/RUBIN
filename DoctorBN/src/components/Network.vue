@@ -1,20 +1,24 @@
 <template>
   <TabView>
     <TabPanel header="Causal explanation">
-      <img src="../assets/Argumentation.png">
+      <img v-if="target !== null" src="../assets/Argumentation.png">
+      <div v-else>Please specify a target.</div>
     </TabPanel>
     <TabPanel header="compact network">
-      <img src="../assets/compactNet.png">
+      <img v-if="target !== null" src="../assets/compactNet.png">
+      <div v-else>Please specify a target.</div>
     </TabPanel>
     <TabPanel header="full network">
       <img src="../assets/fullNet.png">
     </TabPanel>
   </TabView>
+
 </template>
 
 <script>
 export default {
-  name: "Network"
+  name: "Network",
+  props: ['target']
 }
 </script>
 
