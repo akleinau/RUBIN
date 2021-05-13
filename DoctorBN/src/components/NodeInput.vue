@@ -1,9 +1,9 @@
 <template>
-  <Panel header="Evidence" style="position: relative">
+  <Panel :header="title" style="position: relative">
     <div>
-      <DataTable id="table" :value="evidence" :scrollable="true" scrollHeight="300px"
-      dataKey="id" v-model:filters="filters" filterDisplay="menu"
-                :globalFilterFields="['name']">
+      <DataTable id="table" :value="setNodes" :scrollable="true" scrollHeight="300px"
+                 dataKey="id" v-model:filters="filters" filterDisplay="menu"
+                 :globalFilterFields="['name']">
         <Column field="name">
           <template #header class="table-header">
             <span class="p-input-icon-left">
@@ -12,18 +12,19 @@
             </span>
           </template>
         </Column>
-        <Column field="value">
+        <Column field="value" class="optionCol">
           <template #body="slotProps">
             <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
-                      placeholder="slotProps.data.selected" @change="onEvidenceChange()">
+                      placeholder="slotProps.data.selected" @change="onNodeChange()" >
             </Dropdown>
+            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text"  />
           </template>
         </Column>
       </DataTable>
       <Button id="addButton" icon="pi pi-plus" @click="overlay = true"></Button>
     </div>
-    <Dialog header="Add Evidence" v-model:visible="overlay" style="width: 50%">
-      <Button class="p-mb-1" label="Add evidences" style="width: 100%" @click="addEvidencesFromOverlay()"/>
+    <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%">
+      <Button class="p-mb-1" label="Add evidences" style="width: 100%" @click="addNodesFromOverlay()"/>
       <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
         <template #option="slotProps">
           <div>
@@ -32,7 +33,7 @@
         </template>
       </Listbox>
       <DataTable :value="nodes">
-        <Column field="name" header="Evidence"></Column>
+        <Column field="name" :header="title"></Column>
         <Column field="options">
           <template #body="slotProps">
             <Button class="p-m-2" v-for="option in slotProps.data.options" :key="option"
@@ -52,6 +53,9 @@
 import {FilterMatchMode,FilterOperator} from 'primevue/api';
 export default {
   name: "Evidence",
+  props: [
+    "title"
+  ],
   data() {
     return {
       overlay: false,
@@ -59,7 +63,7 @@ export default {
       filters: {
         'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
         'name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]}},
-      evidence: [
+      setNodes: [
         {
           name: 'LVSI',
           selected: {name: 'positive'},
@@ -85,8 +89,8 @@ export default {
     }
   },
   methods: {
-    onEvidenceChange() {
-      this.$emit("setEvidence", this.items);
+    onNodeChange() {
+      this.$emit("setNodes", this.items);
     },
     addOption(slotProps, option) {
       console.log({slotProps, option})
@@ -98,8 +102,8 @@ export default {
       this.nodesToAdd.push(item);
       this.nodes = this.nodes.filter(x => x !== slotProps.data);
     },
-    addEvidencesFromOverlay() {
-      this.evidence = this.evidence.concat(this.nodesToAdd)
+    addNodesFromOverlay() {
+      this.setNodes = this.setNodes.concat(this.nodesToAdd)
       this.nodesToAdd = []
       this.overlay=false
     }
@@ -123,6 +127,10 @@ export default {
 
 ::v-deep(#table .p-datatable-thead){
   display: None !important
+}
+
+::v-deep(.p-datatable-tbody) {
+  float: right
 }
 
 </style>

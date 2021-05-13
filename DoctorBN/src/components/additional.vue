@@ -17,7 +17,7 @@
     <Panel id="change" v-if="view === 'change'" header='How can I change the result?'>
       <Change/>
     </Panel>
-    <Panel id="compare" v-if="view === 'compare'" header="'Compare to saved configurations'">
+    <Panel id="compare" v-if="view === 'compare'" header="Compare to saved configurations">
       <Compare/>
     </Panel>
     <Panel id="feedback" v-if="view === 'feedback'" header="Send feedback">

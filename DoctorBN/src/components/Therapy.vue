@@ -1,13 +1,15 @@
 <template>
   <div style="position:relative">
-    <Panel header="Target">
+    <Panel header="Therapy">
 
       <Listbox v-model="selected" :options="targets" optionLabel="name"
                @change="onTargetChange()" listStyle="max-height:300px">
         <template #option="slotProps">
-          <div>
-            {{ slotProps.option.name }}: {{ slotProps.option.value }}
+          <div class="p-text-center rowContent">
+            {{ slotProps.option.name }}
+          <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton" />
           </div>
+
         </template>
       </Listbox>
       <Button id="AddButton" icon="pi pi-plus" @click="overlay = true"></Button>
@@ -23,7 +25,7 @@
         </template>
       </Listbox>
       <Listbox v-model="selected" :options="nodes" optionLabel="name" emptyMessage="choose evidences to add"
-               :filter="true" filterPlaceholder="Search" @change="addTarget()" >
+               :filter="true" filterPlaceholder="Search" >
           <template #option="slotProps">
           <div v-tooltip.bottom="'Add as target'">
             {{ slotProps.option.name }}
@@ -44,9 +46,9 @@ export default {
       selected2: null,
       overlay: false,
       targets: [
-        {name: 'Therapy', value: 'radiotx'},
-        {name: '1yr Survival', value: 'yes'},
-        {name: '5yr Survival', value: 'yes'}
+        {name: 'Therapy'},
+        {name: '1yr Survival'},
+        {name: '5yr Survival'}
       ],
       nodes: [
         {name: 'Histology'},
@@ -63,9 +65,6 @@ export default {
   methods: {
     getLabel(event) {
       return event.name + event.code;
-    },
-    onTargetChange() {
-      this.$emit("setTarget", this.selected);
     },
     addTarget() {
       this.nodesToAdd.push(this.selected);
@@ -88,7 +87,20 @@ export default {
   display:None
 }
 
+.rowContent {
+  position: relative;
+  display: flex;
+justify-content: center;
+align-items: center;
+}
+
 #AddButton {
   width: 100%
 }
+
+.xButton {
+  position: absolute;
+  right: 0%
+}
+
 </style>
