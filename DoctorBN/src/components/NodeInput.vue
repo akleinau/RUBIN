@@ -64,17 +64,20 @@ export default {
       filters: {
         'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
         'name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]}},
-      setNodes: [
-      ],
+      setNodes: [],
       nodesToAdd: []
     }
   },
   methods: {
     onNodeChange() {
-      this.$emit("setNodes", this.items);
+      let nodeDict = {}
+      this.setNodes.forEach(item => {
+        nodeDict[item.name] = item.selected;
+      })
+      console.log(nodeDict)
+      this.$emit("setNodes", nodeDict);
     },
     addOption(slotProps, option) {
-      console.log({slotProps, option})
       let item = {
         name: slotProps.data.name,
         selected: {name: option.name},
@@ -86,6 +89,7 @@ export default {
     addNodesFromOverlay() {
       this.setNodes = this.setNodes.concat(this.nodesToAdd)
       this.nodesToAdd = []
+      this.onNodeChange()
       this.overlay=false
     }
   }

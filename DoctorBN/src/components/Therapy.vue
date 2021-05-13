@@ -5,7 +5,7 @@
       <Listbox v-model="selected" :options="targets" optionLabel="name" listStyle="max-height:300px">
         <template #option="slotProps">
           <div class="p-text-center rowContent">
-            {{ slotProps.option.name }}
+            {{ slotProps.option }}
           <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton" />
           </div>
 
@@ -19,7 +19,7 @@
       <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
         <template #option="slotProps">
           <div>
-            {{ slotProps.option.name }}
+            {{ slotProps.option }}
           </div>
         </template>
       </Listbox>
@@ -53,12 +53,14 @@ export default {
   },
   methods: {
     addTarget() {
-      this.nodesToAdd.push(this.selected);
+      this.nodesToAdd.push(this.selected.name);
       //this.nodes = this.nodes.filter(x => x !== this.selected);
     },
     addTargetsFromOverlay() {
       this.targets = this.targets.concat(this.nodesToAdd)
       this.nodesToAdd = []
+      console.log(this.targets)
+      this.$emit("update", this.targets)
       this.overlay=false
     }
   }

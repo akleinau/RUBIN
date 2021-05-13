@@ -4,10 +4,10 @@
   <div class=" p-grid p-flex-column nested-grid">
     <div class="p-grid p-d-flex" style="height: 50%">
       <div class="p-col-2">
-        <NodeInput title = "Evidence" :nodes="nodes" @setNodes="evidence = $event"/>
+        <NodeInput title = "Evidence" :nodes="nodes" @setNodes="evidenceUpdated($event)"/>
       </div>
       <div class="p-col-2">
-        <Therapy :nodes="nodes" />
+        <Therapy :nodes="nodes" @update="targetsUpdated($event)" />
       </div>
       <div class="p-col-2">
         <NodeInput title = "Desired Outcomes" :nodes="nodes" @setNodes="goals = $event"/>
@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      target: "Therapy",
+      targets: null,
       evidence: null,
       goals: null,
       nodes: null
@@ -56,6 +56,19 @@ export default {
   methods: {
     changePage() {
       this.$emit("changePage")
+    },
+    calculate() {
+      console.log("doing calculation for:")
+      console.log(this.targets)
+      console.log(this.evidence)
+    },
+    evidenceUpdated(evidence) {
+      this.evidence = evidence
+      this.calculate()
+    },
+    targetsUpdated(target) {
+      this.targets = target
+      this.calculate()
     }
   },
   created: async function(){
