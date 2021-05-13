@@ -7,5 +7,8 @@ class Network:
         reader = BIFReader(name)
         self.model = reader.get_model()
 
-
+    def getNodes(name):
+        reader = BIFReader(name)
+        states = reader.get_states()
+        return states
 

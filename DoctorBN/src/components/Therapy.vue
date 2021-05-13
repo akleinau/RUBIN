@@ -2,8 +2,7 @@
   <div style="position:relative">
     <Panel header="Therapy">
 
-      <Listbox v-model="selected" :options="targets" optionLabel="name"
-               @change="onTargetChange()" listStyle="max-height:300px">
+      <Listbox v-model="selected" :options="targets" optionLabel="name" listStyle="max-height:300px">
         <template #option="slotProps">
           <div class="p-text-center rowContent">
             {{ slotProps.option.name }}
@@ -25,7 +24,7 @@
         </template>
       </Listbox>
       <Listbox v-model="selected" :options="nodes" optionLabel="name" emptyMessage="choose evidences to add"
-               :filter="true" filterPlaceholder="Search" >
+               :filter="true" filterPlaceholder="Search" @change="addTarget()" >
           <template #option="slotProps">
           <div v-tooltip.bottom="'Add as target'">
             {{ slotProps.option.name }}
@@ -40,35 +39,22 @@
 <script>
 export default {
   name: "Target",
+  props: [
+    "nodes"
+  ],
   data() {
     return {
       selected: null,
       selected2: null,
       overlay: false,
-      targets: [
-        {name: 'Therapy'},
-        {name: '1yr Survival'},
-        {name: '5yr Survival'}
-      ],
-      nodes: [
-        {name: 'Histology'},
-        {name: 'ER'},
-        {name: 'p53'},
-        {name: 'Cytology'},
-        {name: 'PR'},
-        {name: 'MyometrialInvasion'},
-        {name: 'ER'}
-      ],
+      targets: [],
       nodesToAdd: []
     }
   },
   methods: {
-    getLabel(event) {
-      return event.name + event.code;
-    },
     addTarget() {
       this.nodesToAdd.push(this.selected);
-      this.nodes = this.nodes.filter(x => x !== this.selected);
+      //this.nodes = this.nodes.filter(x => x !== this.selected);
     },
     addTargetsFromOverlay() {
       this.targets = this.targets.concat(this.nodesToAdd)

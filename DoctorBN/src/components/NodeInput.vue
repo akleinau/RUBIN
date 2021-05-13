@@ -54,7 +54,8 @@ import {FilterMatchMode,FilterOperator} from 'primevue/api';
 export default {
   name: "Evidence",
   props: [
-    "title"
+    "title",
+      "nodes"
   ],
   data() {
     return {
@@ -64,26 +65,6 @@ export default {
         'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
         'name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]}},
       setNodes: [
-        {
-          name: 'LVSI',
-          selected: {name: 'positive'},
-          options: [{name: 'positive'}, {name: 'negative'}]
-        },
-        {name: 'LNM', value: 'yes', selected: {name: 'yes'}, options: [{name: 'yes'}, {name: 'no'}]},
-        {
-          name: 'PostGrade',
-          selected: {name: 'grade_2'},
-          options: [{name: 'grade_1'}, {name: 'grade_2'}, {name: 'grade_3'}]
-        }
-      ],
-      nodes: [
-        {name: 'Histology', options: [{name: 'grade_1'}, {name: 'grade_2'}, {name: 'grade_3'}]},
-        {name: 'ER', options: [{name: 'positive'}, {name: 'negative'}]},
-        {name: 'p53', options: [{name: 'wildtype'}, {name: 'mutant'}]},
-        {name: 'Cytology', options: [{name: 'no'}, {name: 'yes'}]},
-        {name: 'PR', options: [{name: 'positive'}, {name: 'negative'}]},
-        {name: 'MyometrialInvasion', options: [{name: 'no'}, {name: 'lt_50'}, {name: 'ge_50'}]},
-        {name: 'ER', options: [{name: 'positive'}, {name: 'negative'}]}
       ],
       nodesToAdd: []
     }
@@ -100,7 +81,7 @@ export default {
         options: slotProps.data.options
       }
       this.nodesToAdd.push(item);
-      this.nodes = this.nodes.filter(x => x !== slotProps.data);
+      //this.nodes = this.nodes.filter(x => x !== slotProps.data);
     },
     addNodesFromOverlay() {
       this.setNodes = this.setNodes.concat(this.nodesToAdd)

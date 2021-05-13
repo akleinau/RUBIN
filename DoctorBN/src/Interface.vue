@@ -1,17 +1,16 @@
 <template>
 
   <Header @changePage="changePage()"/>
-<div> DOGS!!! {{dogs}}</div>
   <div class=" p-grid p-flex-column nested-grid">
     <div class="p-grid p-d-flex" style="height: 50%">
       <div class="p-col-2">
-        <NodeInput title = "Evidence" @setNodes="evidence = $event"/>
+        <NodeInput title = "Evidence" :nodes="nodes" @setNodes="evidence = $event"/>
       </div>
       <div class="p-col-2">
-        <Therapy/>
+        <Therapy :nodes="nodes" />
       </div>
       <div class="p-col-2">
-        <NodeInput title = "Desired Outcomes" @setNodes="goals = $event"/>
+        <NodeInput title = "Desired Outcomes" :nodes="nodes" @setNodes="goals = $event"/>
       </div>
       <div class="p-col">
         <Relevance v-if="target !== null"/>
@@ -61,8 +60,17 @@ export default {
   },
   created: async function(){
         const gResponse = await fetch("http://localhost:5000/cancernet");
-        const gObject = await gResponse.json();
-        this.nodes  = gObject.nodes;
+        const nodeDict = await gResponse.json();
+        let nodes = []
+        for (var key in nodeDict) {
+          let options = []
+          nodeDict[key].forEach(value => {
+            options.push({'name' : value})
+          })
+          nodes.push({'name': key, 'options' : options})
+        }
+        this.nodes = nodes
+        console.log(nodes)
     }
 }
 </script>
