@@ -2,11 +2,13 @@
   <div style="position:relative">
     <Panel header="Therapy">
 
-      <Listbox v-model="selected" :options="targets" optionLabel="name" listStyle="max-height:300px">
+      <Listbox v-model="selected" :options="targets" optionLabel="name" listStyle="max-height:300px"
+               emptyMessage="choose therapy nodes">
         <template #option="slotProps">
           <div class="p-text-center rowContent">
             {{ slotProps.option }}
-          <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton" />
+          <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
+              @click="deleteNode(slotProps.option)"/>
           </div>
 
         </template>
@@ -62,6 +64,9 @@ export default {
       console.log(this.targets)
       this.$emit("update", this.targets)
       this.overlay=false
+    },
+    deleteNode(node) {
+      this.targets = this.targets.filter(x => x !== node)
     }
   }
 }

@@ -17,7 +17,8 @@
             <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
                       placeholder="slotProps.data.selected" @change="onNodeChange()" >
             </Dropdown>
-            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text"  />
+            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text"
+                    @click="deleteNode(slotProps.data)" />
           </template>
         </Column>
       </DataTable>
@@ -91,6 +92,9 @@ export default {
       this.nodesToAdd = []
       this.onNodeChange()
       this.overlay=false
+    },
+    deleteNode(node) {
+      this.setNodes = this.setNodes.filter(x => x !== node)
     }
   }
 }
