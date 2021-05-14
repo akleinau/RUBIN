@@ -1,9 +1,5 @@
 from flask import Flask, flash, request, redirect, jsonify, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms_sqlalchemy.fields import QuerySelectField
-from flask_wtf.file import FileField
-from wtforms import StringField
 from pgmpy.models import BayesianModel
 from pgmpy.readwrite import BIFReader
 from pgmpy import inference
@@ -20,9 +16,6 @@ app.config['NETWORK_FOLDER'] = NETWORK_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///networks.db'
 db = SQLAlchemy(app)
 
-
-class UploadForm(FlaskForm):
-    displayName = StringField()
 
 # Database object
 class NetworkData(db.Model):
@@ -120,9 +113,10 @@ def saveNetwork():
             doesPathExist(filePath)
             # add new network to database and save it
             addNetwork(file, filePath, newDisplayName)
-    # unexpected errors return
-    flash('unexpected error, try again', 'error')
-    return redirect(url_for('/'))
+        # unexpected errors return
+        else:
+            flash('unexpected error, try again', 'error')
+            return redirect(url_for('/'))
 
 
 # TODO
