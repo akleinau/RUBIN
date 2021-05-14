@@ -1,17 +1,17 @@
 <template>
-  <UploadNetwork v-if="page === 'chooseNet'" @changePage="page = 'interface'"></UploadNetwork>
+  <ChooseNet v-if="page === 'chooseNet'" @changePage="page = 'interface'"></ChooseNet>
   <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'"/>
 </template>
 
 <script>
 import Interface from "./Interface";
-import UploadNetwork from "./components/UploadNetwork";
+import ChooseNet from "./ChooseNet";
 
 export default {
   name: 'App',
   components: {
     Interface,
-    UploadNetwork
+    ChooseNet
   },
   data () {
     return {
