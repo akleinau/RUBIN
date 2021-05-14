@@ -17,9 +17,7 @@
       </div>
     </div>
     <div class="p-grid p-d-flex" style="height: 50%">
-      <div class="p-col">
-        <Relevance v-if="target !== null"/>
-      </div>
+
       <div class="p-col">
         <Network :target='target'/>
       </div>
@@ -34,7 +32,6 @@
 import Header from "./components/Header";
 import NodeInput from "./components/NodeInput";
 import Therapy from "./components/Therapy";
-import Relevance from "./components/Relevance";
 import Additional from "./components/additional";
 import Network from "./components/Network";
 import TherapyOptions from "@/components/TherapyOptions";
@@ -45,7 +42,6 @@ export default {
     Header,
     NodeInput,
     Therapy,
-    Relevance,
     Additional,
     Network,
     TherapyOptions

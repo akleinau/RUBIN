@@ -11,14 +11,24 @@
     <TabPanel header="full network">
       <img src="../assets/fullNet.png">
     </TabPanel>
+    <TabPanel header="Relevance">
+
+        <Relevance />
+
+    </TabPanel>
   </TabView>
 
 </template>
 
 <script>
+import Relevance from "./Relevance";
+
 export default {
   name: "Network",
-  props: ['target']
+  props: ['target'],
+  components: {
+    Relevance
+  }
 }
 </script>
 

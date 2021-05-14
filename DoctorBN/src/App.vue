@@ -27,7 +27,8 @@ export default {
 body, html {
   height: 100%;
   padding: 0;
-  margin: 0
+  margin: 0;
+  background-color: #6eb5be;
 }
 
 #app {
