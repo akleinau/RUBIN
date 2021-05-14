@@ -67,6 +67,7 @@ export default {
     },
     deleteNode(node) {
       this.targets = this.targets.filter(x => x !== node)
+      this.$emit("update", this.targets)
     }
   }
 }

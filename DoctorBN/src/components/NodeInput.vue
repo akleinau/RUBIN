@@ -95,6 +95,7 @@ export default {
     },
     deleteNode(node) {
       this.setNodes = this.setNodes.filter(x => x !== node)
+      this.onNodeChange()
     }
   }
 }

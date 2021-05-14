@@ -13,10 +13,13 @@
         <NodeInput title = "Desired Outcomes" :nodes="nodes" @setNodes="goalsUpdated($event)"/>
       </div>
       <div class="p-col">
-        <Relevance v-if="target !== null"/>
+        <TherapyOptions :results="results"/>
       </div>
     </div>
     <div class="p-grid p-d-flex" style="height: 50%">
+      <div class="p-col">
+        <Relevance v-if="target !== null"/>
+      </div>
       <div class="p-col">
         <Network :target='target'/>
       </div>
@@ -34,6 +37,7 @@ import Therapy from "./components/Therapy";
 import Relevance from "./components/Relevance";
 import Additional from "./components/additional";
 import Network from "./components/Network";
+import TherapyOptions from "@/components/TherapyOptions";
 
 export default {
   name: "Interface",
@@ -43,14 +47,16 @@ export default {
     Therapy,
     Relevance,
     Additional,
-    Network
+    Network,
+    TherapyOptions
   },
   data() {
     return {
       targets: null,
       evidence: null,
       goals: null,
-      nodes: null
+      nodes: null,
+      results: null
     }
   },
   methods: {
@@ -86,7 +92,8 @@ export default {
         });
         let nodeDict = await gResponse.json();
         console.log('results: ')
-        console.log(nodeDict)
+        console.log(nodeDict.results)
+        this.results = nodeDict.results
       }
     },
     evidenceUpdated(evidence) {
