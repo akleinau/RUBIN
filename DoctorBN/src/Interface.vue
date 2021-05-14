@@ -10,7 +10,7 @@
         <Therapy :nodes="nodes" @update="targetsUpdated($event)" />
       </div>
       <div class="p-col-2">
-        <NodeInput title = "Desired Outcomes" :nodes="nodes" @setNodes="goals = $event"/>
+        <NodeInput title = "Desired Outcomes" :nodes="nodes" @setNodes="goalsUpdated($event)"/>
       </div>
       <div class="p-col">
         <Relevance v-if="target !== null"/>
@@ -57,10 +57,37 @@ export default {
     changePage() {
       this.$emit("changePage")
     },
-    calculate() {
-      console.log("doing calculation for:")
-      console.log(this.targets)
-      console.log(this.evidence)
+    calculate: async function() {
+      if (this.evidence != null && this.targets != null && this.goals != null) {
+        console.log("doing calculation for:")
+        console.log(this.targets)
+        console.log(this.evidence)
+        console.log(this.goals)
+
+        let evidences = {}
+        for (var ev in this.evidence) {
+          evidences[ev] = this.evidence[ev].name;
+        }
+        let goals = {}
+        for (var goal in this.goals) {
+          goals[goal] = this.goals[goal].name;
+        }
+
+        const gResponse = await fetch("http://localhost:5000//calcTargetForGoals", {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            evidences: evidences,
+            target: this.targets,
+            goals: goals
+          })
+        });
+        let nodeDict = await gResponse.json();
+        console.log('results: ')
+        console.log(nodeDict)
+      }
     },
     evidenceUpdated(evidence) {
       this.evidence = evidence
@@ -68,6 +95,10 @@ export default {
     },
     targetsUpdated(target) {
       this.targets = target
+      this.calculate()
+    },
+    goalsUpdated(goals) {
+      this.goals = goals
       this.calculate()
     }
   },

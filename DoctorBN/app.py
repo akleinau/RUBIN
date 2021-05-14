@@ -6,6 +6,7 @@ from pgmpy.readwrite import BIFReader
 from pgmpy import inference
 from werkzeug.utils import secure_filename
 from Network import Network
+from Scenario import Scenario
 import os
 
 NETWORK_FOLDER = './Networks'
@@ -20,7 +21,15 @@ db = SQLAlchemy(app)
 
 @app.route('/cancernet')
 def getCancerNet():
-    return Network.getNodes("endomcancerlast.bif")
+    return Network("endomcancerlast.bif").states
+
+@app.route('/calcTargetForGoals', methods=['POST'])
+def calcTargetForGoals():
+    data = request.get_json()
+    s = Scenario("endomcancerlast.bif", evidences=data['evidences'], targets=data['target'], goals=data['goals'])
+    results = s.compute_target_for_goals(data['target'][0])
+    return {'results': results}
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

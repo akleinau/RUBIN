@@ -1,5 +1,3 @@
-from EvidenceNode import EvidenceNode
-
 
 class Patient:
     evidences = {}
@@ -12,20 +10,11 @@ class Patient:
     #add or update evidences
     def add_evidences(self, map):
         for name in map.keys():
-            self.evidences[name] = EvidenceNode(name, map.get(name))
+            self.evidences[name] = map.get(name)
 
     def print_evidences(self):
         for e in self.evidences:
             print(self.evidences.get(e))
-
-    def get_active_evidences(self):
-        map = {}
-        for e in self.evidences.keys():
-            node = self.evidences.get(e)
-            if not node.hidden:
-                map[node.name] = node.value
-
-        return map
 
 
     def export_file(self):
