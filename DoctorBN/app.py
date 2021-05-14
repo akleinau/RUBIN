@@ -1,5 +1,9 @@
 from flask import Flask, flash, request, redirect, jsonify, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms_sqlalchemy.fields import QuerySelectField
+from flask_wtf.file import FileField
+from wtforms import StringField
 from pgmpy.models import BayesianModel
 from pgmpy.readwrite import BIFReader
 from pgmpy import inference
@@ -9,13 +13,16 @@ import os
 
 NETWORK_FOLDER = './Networks'
 ALLOWED_EXTENSIONS = ['.bif']
-TEMPLATE_FOLDER = os.path.relpath('src')
+TEMPLATE_FOLDER = os.path.abspath('./src')
 
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER)
 app.config['NETWORK_FOLDER'] = NETWORK_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///networks.db'
 db = SQLAlchemy(app)
 
+
+class UploadForm(FlaskForm):
+    displayName = StringField()
 
 # Database object
 class NetworkData(db.Model):
@@ -75,9 +82,9 @@ def addNetwork(file, filePath, displayName):
 # value = list, index 0 = filePath, index 1 = display name for the network
 def getNetworkList():
     networks = NetworkData.query.order_by(NetworkData.netId).all()
-    netList = {}
+    netList = []
     for network in networks:
-        netList[network.netId] = [network.filePath, network.displayName]
+        netList[network.netId] = [network.netId, network.filePath, network.displayName]
     return netList
 
 
@@ -121,8 +128,10 @@ def saveNetwork():
 # TODO
 @app.route('/openNetwork', methods=["GET", "POST"])
 def openNetwork():
-    netName = 1
-    network = Network.__init__(netName)
+    netName = ''
+    network = Network(netName)
+    # render_template()
+
 
 
 if __name__ == '__main__':

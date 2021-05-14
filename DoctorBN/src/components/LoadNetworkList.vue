@@ -1,11 +1,11 @@
 <template>
   <div>
     <h4>Select a network</h4>
-    <table>
-      <tr>
-        <td></td>
-      </tr>
-    </table>
+    <select>
+      {% for network in netList %}
+        <option value = {{network[0]}}>{{network[2]}}</option>
+      {% endfor %}
+    </select>
   </div>
 </template>
 
