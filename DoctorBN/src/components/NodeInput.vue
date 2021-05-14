@@ -24,7 +24,7 @@
       </DataTable>
       <Button id="addButton" icon="pi pi-plus" @click="overlay = true"></Button>
     </div>
-    <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%">
+    <Dialog :header="'Add ' + title" v-model:visible="overlay">
       <Button class="p-mb-1" label="Add evidences" style="width: 100%" @click="addNodesFromOverlay()"/>
       <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
         <template #option="slotProps">
@@ -33,7 +33,7 @@
           </div>
         </template>
       </Listbox>
-      <DataTable :value="nodes">
+      <DataTable :value="nodes" :scrollable="true" scrollHeight="500px">
         <Column field="name" :header="title"></Column>
         <Column field="options">
           <template #body="slotProps">

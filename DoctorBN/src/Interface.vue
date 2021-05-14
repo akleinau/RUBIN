@@ -2,7 +2,7 @@
 
   <Header @changePage="changePage()"/>
   <div class=" p-grid p-flex-column nested-grid">
-    <div class="p-grid p-d-flex" style="height: 50%">
+    <div class="p-grid p-d-flex p-flex-nowrap">
       <div class="p-col-2">
         <NodeInput title = "Evidence" :nodes="nodes" @setNodes="evidenceUpdated($event)"/>
       </div>

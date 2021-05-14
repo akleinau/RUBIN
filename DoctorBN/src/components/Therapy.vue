@@ -26,7 +26,7 @@
         </template>
       </Listbox>
       <Listbox v-model="selected" :options="nodes" optionLabel="name" emptyMessage="choose evidences to add"
-               :filter="true" filterPlaceholder="Search" @change="addTarget()" >
+               :filter="true" filterPlaceholder="Search" @change="addTarget()" listStyle="max-height:500px">
           <template #option="slotProps">
           <div v-tooltip.bottom="'Add as target'">
             {{ slotProps.option.name }}
