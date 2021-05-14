@@ -3,6 +3,7 @@ from Network import Network
 from pgmpy import inference
 import relevance
 import explanation
+import numpy as np
 
 from TargetNode import TargetNode
 
@@ -66,10 +67,14 @@ class Scenario:
             simEvidence[target] = option
             distribution = infer.query(list(goalNames), evidence=simEvidence)
             value = distribution.values
-            for goal in distribution.variables:
-                value = value[distribution.name_to_no[goal][self.patient.goals[goal]]]
+            goalValues = {}
+            for i, goal in enumerate(distribution.variables):
+                optionNum =distribution.name_to_no[goal][self.patient.goals[goal]]
+                value = value[optionNum]
+                singleGoalDist = infer.query([goal], evidence=simEvidence)
+                goalValues[goal] = singleGoalDist.values[singleGoalDist.name_to_no[goal][self.patient.goals[goal]]]
 
-            results.append({'option': option, 'value': value})
+            results.append({'option': option, 'value': value, 'goalValues': goalValues})
 
         results.sort(key=lambda a: a['value'], reverse=True)
         return results
