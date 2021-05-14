@@ -55,16 +55,43 @@ class Scenario:
 
     #clique-inspired: if A,B is worse then A, then A,B,C won't be better then AC
     def compute_target_combs_for_goals(self):
-        raise NotImplementedError
+        n = pow(2, len(self.patient.targets))
+        results = []
+        for i in range(1, n):
+            chosenTargets = []
+            value = i
+            for target in self.patient.targets:
+                if int(value%2) == 1: chosenTargets.append(target)
+                value = value / 2
+
+            results = results + self.compute_target_for_goals(chosenTargets)
+
+        results.sort(key=lambda a: a['value'], reverse=True)
+        return results
 
     #compute_target_combs with just one target
-    def compute_target_for_goals(self, target):
+    def compute_target_for_goals(self, targets):
         infer = inference.BeliefPropagation(self.network.model)
+
+        states = []
+        n = [1]
+        #get dict with all states
+        for target in targets:
+            states.append({'name': target, 'states': self.network.states[target]})
+            n.append(n[len(n)-1] * len(self.network.states[target]))
+
         results = []
-        for option in self.network.states[target]:
+        for i in range(n[len(n)-1]):
             goalNames = self.patient.goals.keys()
             simEvidence = self.patient.evidences.copy()
-            simEvidence[target] = option
+            option = {}
+
+            index = i
+            for j, target in sorted(enumerate(states), reverse=True):
+                simEvidence[target['name']] = states[j]['states'][int(index/n[j])]
+                option[target['name']] = states[j]['states'][int(index/n[j])]
+                index = index%n[j]
+
             distribution = infer.query(list(goalNames), evidence=simEvidence)
             value = distribution.values
             goalValues = {}
@@ -76,5 +103,4 @@ class Scenario:
 
             results.append({'option': option, 'value': value, 'goalValues': goalValues})
 
-        results.sort(key=lambda a: a['value'], reverse=True)
         return results
