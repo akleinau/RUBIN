@@ -65,11 +65,30 @@ export default {
       filters: {
         'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
         'name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]}},
-      setNodes: [],
+      setNodes: [
+      ],
       nodesToAdd: []
     }
   },
+  mounted() {
+    if (this.title === "Evidence") {
+      this.setNodes.push({
+        'name': 'CA125',
+        'selected': {'name': 'lt_35'},
+        'options': [{'name': 'lt_35'}, {'name': 'ge_45'}]
+      })
+    }
+    else {
+          this.setNodes.push({
+        'name': 'Survival1yr',
+        'selected': {'name': 'yes'},
+        'options': [{'name': 'yes'}, {'name': 'no'}]
+      })
+    }
+    this.onNodeChange()
+    },
   methods: {
+
     onNodeChange() {
       let nodeDict = {}
       this.setNodes.forEach(item => {

@@ -13,7 +13,7 @@
         <NodeInput title = "Desired Outcomes" :nodes="nodes" @setNodes="goalsUpdated($event)"/>
       </div>
       <div class="p-col">
-        <TherapyOptions :results="results"/>
+        <TherapyOptions :results="results" :goals="newGoals"/>
       </div>
     </div>
     <div class="p-grid p-d-flex" style="height: 50%">
@@ -51,6 +51,7 @@ export default {
       targets: null,
       evidence: null,
       goals: null,
+      newGoals: null,
       nodes: null,
       results: null
     }
@@ -90,6 +91,9 @@ export default {
         console.log('results: ')
         console.log(nodeDict.results)
         this.results = nodeDict.results
+
+        this.newGoals = goals
+
       }
     },
     evidenceUpdated(evidence) {

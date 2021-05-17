@@ -53,6 +53,11 @@ export default {
       nodesToAdd: []
     }
   },
+  mounted() {
+
+          this.targets.push('Therapy')
+          this.$emit("update", this.targets)
+    },
   methods: {
     addTarget() {
       this.nodesToAdd.push(this.selected.name);
