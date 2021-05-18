@@ -2,7 +2,8 @@
   <TabView header="Options">
     <TabPanel header="table">
       <DataTable :value="results" :scrollable="true" scrollHeight="300px"
-                 dataKey="id">
+                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
+                 @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
         <Column header="option" field="option"/>
         <Column header="value" field="value">
           <template #body="slotProps">
@@ -23,8 +24,9 @@
       <options-vis :results="results"/>
     </TabPanel>
     <TabPanel header="compare">
-            <DataTable :value="results" :scrollable="true" scrollHeight="300px"
-                 dataKey="id">
+      <DataTable :value="results" :scrollable="true" scrollHeight="300px"
+                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
+                 @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
         <Column header="option" field="option"/>
         <Column header="value" field="value">
           <template #body="slotProps">
@@ -33,7 +35,8 @@
         </Column>
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
           <template #body="slotProps">
-            <twoSidedBar :value="slotProps.data.goalValues[String(goal)] - goalResults.goalValues[String(goal)]"></twoSidedBar>
+            <twoSidedBar
+                :value="slotProps.data.goalValues[String(goal)] - goalResults.goalValues[String(goal)]"></twoSidedBar>
           </template>
         </Column>
       </DataTable>
@@ -57,20 +60,35 @@ export default {
   props: [
     "results",
     "goals",
-      "goalResults"
+    "goalResults"
   ],
   data() {
     return {
       columns: [],
-      normal: 0.9
+      normal: 0.9,
+      selectedOption: null
     }
   },
   methods: {
+    getOptionLabel(option) {
+      if (option == null) return null
+      let label = ""
+      Object.keys(option).forEach(d => {
+        label = label + d + ": " + option[d] + "; "
+      })
+      return label
+    },
     getGoalKeys() {
-        if (this.goals != null) {
-          return Object.keys(this.goals)
-        }
+      if (this.goals != null) {
+        return Object.keys(this.goals)
+      }
 
+    },
+    onRowSelect() {
+      this.$emit("update", this.selectedOption);
+    },
+    onRowUnselect() {
+      this.$emit("update", this.selectedOption);
     }
   }
 }

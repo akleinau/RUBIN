@@ -57,10 +57,10 @@ class Scenario:
         for t in self.patient.targets.keys():
             print(str(self.patient.targets[t]))
 
-    def compute_relevancies_for_target(self, target):
-        return relevance.get_influence_of_evidences_on_target(self.network.model,
+    def compute_relevancies_for_goals(self):
+        return relevance.get_influence_of_evidences_on_goals(self.network.model,
                                                              self.patient.evidences,
-                                                             self.patient.targets[target])
+                                                             self.patient.goals)
 
     def compute_explanation_of_target(self, target, filename=""):
         explanation.compute_explanation_of_target(self.network.model,

@@ -31,6 +31,12 @@ def calcTargetForGoals():
     likely_results = s.compute_goals()
     return {'optionResults': results, 'likelyResults': likely_results}
 
+@app.route('/calcRelevancies', methods=['POST'])
+def calcRelevancies():
+    data = request.get_json()
+    s = Scenario("endomcancerlast.bif", evidences=data['evidences'], goals=data['goals'])
+    relevance = s.compute_relevancies_for_goals()
+    return {'relevance': relevance}
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
