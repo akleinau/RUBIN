@@ -66,7 +66,7 @@ def get_influence_of_evidences_on_goals(network, evidences, goals):
         sum_of_all_overall_relevancies += jensen_shannon_value
 
         # local relevance
-        rel_of_ev_obj["relevancies"] = [] #compute_relevancies_for_outcome_states(distribution_all,
+        rel_of_ev_obj["relevancies"] = {} #compute_relevancies_for_outcome_states(distribution_all,
                                                              #distribution_wo)
 
         for goal in goals.keys():
@@ -77,7 +77,7 @@ def get_influence_of_evidences_on_goals(network, evidences, goals):
             optionNum2 = distribution2.name_to_no[goal][goals[goal]]
             value2 = distribution2.values[optionNum2]
 
-            rel_of_ev_obj["relevancies"].append({"goal": str(goal) + ": " + str(goals[goal]), "value": value1 - value2})
+            rel_of_ev_obj["relevancies"][str(goal) + ": " + str(goals[goal])] = value1 - value2
 
 
         # compute if recommendation changer

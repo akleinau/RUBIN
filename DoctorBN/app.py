@@ -21,7 +21,8 @@ db = SQLAlchemy(app)
 
 @app.route('/cancernet')
 def getCancerNet():
-    return Network("endomcancerlast.bif").states
+    network = Network("endomcancerlast.bif")
+    return {'states': network.states, 'edges': network.edges}
 
 @app.route('/calcTargetForGoals', methods=['POST'])
 def calcTargetForGoals():

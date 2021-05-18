@@ -11,10 +11,23 @@
     <TabPanel header="full network">
       <img src="../assets/fullNet.png">
     </TabPanel>
+    <TabPanel header="full network computed">
+      <BNvis :edges="edges" :nodes="nodes"/>
+    </TabPanel>
+    <TabPanel header="RelevanceComputed">
+
+      <Relevance :relevance="relevance" :goals="goals"/>
+
+    </TabPanel>
     <TabPanel header="Relevance">
-
-        <Relevance />
-
+      <div v-if="onlyGlobal">
+        <img src="../assets/globalRelevance.png">
+        <Button label="show more" @click="onlyGlobal=false"></Button>
+      </div>
+      <div v-if="!onlyGlobal">
+        <img src="../assets/localRelevance.png">
+        <Button label="show less" @click="onlyGlobal=true"></Button>
+      </div>
     </TabPanel>
   </TabView>
 
@@ -22,12 +35,19 @@
 
 <script>
 import Relevance from "./Relevance";
+import BNvis from "@/components/visualisations/BNvis";
 
 export default {
   name: "Network",
-  props: ['target'],
+  props: ['relevance', 'goals', "edges", "nodes"],
   components: {
-    Relevance
+    Relevance,
+    BNvis
+  },
+  data() {
+    return {
+      onlyGlobal: true
+    }
   }
 }
 </script>

@@ -7,5 +7,5 @@ class Network:
         reader = BIFReader(name)
         self.model = reader.get_model()
         self.states = reader.get_states()
-
+        self.edges = reader.variable_edges
 

@@ -8,7 +8,8 @@ import * as d3 from "d3";
 export default {
   name: "bar",
   props: [
-    "value"
+    "value",
+      "color"
   ],
   mounted() {
     this.visualise()
@@ -18,9 +19,14 @@ export default {
       let width = 300
       let height = 50
 
-      var color = d3.scaleQuantize()
-          .domain([0, 0.5, 1])
-          .range(["red","yellow", "green"]);
+      let color = "black"
+      if (this.color === "trafficlight") {
+        const colorScale = d3.scaleQuantize()
+            .domain([0, 0.5, 1])
+            .range(["red", "yellow", "green"]);
+        color = colorScale(this.value)
+      }
+      else color = this.color
 
       var svg = d3.select(this.$refs.container)
           .append("svg")
@@ -31,7 +37,7 @@ export default {
           .range([0, width])
 
       svg.append("rect")
-          .attr("fill", color(this.value))
+          .attr("fill", color)
           .attr("y", 0)
           .attr("x", 0)
           .attr("height", 50)

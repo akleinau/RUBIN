@@ -2,6 +2,6 @@ from Network import Network
 
 name = "endomcancerlast.bif"
 
-nodes = Network.getNodes(name)
+network = Network(name)
 
 print("hi")

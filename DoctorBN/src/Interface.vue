@@ -17,10 +17,10 @@
                         @update="selectedOptionUpdated($event)"/>
       </div>
     </div>
-    <div class="p-grid p-d-flex" style="height: 50%">
+    <div class="p-grid p-d-flex">
 
       <div class="p-col">
-        <Network :target='target'/>
+        <Network :relevance = "relevance" :goals="newGoals" :edges="edges" :nodes="nodes"/>
       </div>
       <div class="p-col-3">
         <Additional/>
@@ -57,7 +57,8 @@ export default {
       options: null,
       goalResults: null,
       selectedOption: null,
-      relevance: null
+      relevance: null,
+      edges: null
     }
   },
   methods: {
@@ -136,6 +137,7 @@ export default {
       console.log('relevance: ')
       this.relevance = nodeDict.relevance
       console.log(this.relevance)
+      this.newGoals = goals
     },
     evidenceUpdated(evidence) {
       this.evidence = evidence
@@ -151,22 +153,31 @@ export default {
     },
     selectedOptionUpdated(option) {
       this.selectedOption = option
-      this.calculateRelevance()
+      if (option === []) this.relevance = null
+      else this.calculateRelevance()
     }
   },
   created: async function () {
     const gResponse = await fetch("http://localhost:5000/cancernet");
-    const nodeDict = await gResponse.json();
+    const network = await gResponse.json();
     let nodes = []
-    for (var key in nodeDict) {
+    for (var key in network.states) {
       let options = []
-      nodeDict[key].forEach(value => {
+      network.states[key].forEach(value => {
         options.push({'name': value})
       })
       nodes.push({'name': key, 'options': options})
     }
     this.nodes = nodes
     console.log(nodes)
+
+    let edges = []
+    network.edges.forEach(edge => {
+      edges.push({"source": edge[0], "target": edge[1]})
+    })
+    this.edges = edges
+    console.log("edges: " )
+    console.log(edges)
   }
 }
 </script>

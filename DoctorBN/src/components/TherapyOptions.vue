@@ -7,12 +7,12 @@
         <Column header="option" field="option"/>
         <Column header="value" field="value">
           <template #body="slotProps">
-            <bar :value=slotProps.data.value></bar>
+            <bar :value=slotProps.data.value color="trafficlight"></bar>
           </template>
         </Column>
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
           <template #body="slotProps">
-            <bar :value="slotProps.data.goalValues[String(goal)]"></bar>
+            <bar :value="slotProps.data.goalValues[String(goal)]" color="trafficlight"></bar>
           </template>
         </Column>
       </DataTable>
