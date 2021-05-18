@@ -28,7 +28,8 @@ def calcTargetForGoals():
     data = request.get_json()
     s = Scenario("endomcancerlast.bif", evidences=data['evidences'], targets=data['target'], goals=data['goals'])
     results = s.compute_target_combs_for_goals()
-    return {'results': results}
+    likely_results = s.compute_goals()
+    return {'optionResults': results, 'likelyResults': likely_results}
 
 
 if __name__ == '__main__':

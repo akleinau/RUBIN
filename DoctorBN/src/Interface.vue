@@ -13,7 +13,7 @@
         <NodeInput title = "Desired Outcomes" :nodes="nodes" @setNodes="goalsUpdated($event)"/>
       </div>
       <div class="p-col">
-        <TherapyOptions :results="results" :goals="newGoals"/>
+        <TherapyOptions :results="options" :goals="newGoals" :goalResults="goalResults"/>
       </div>
     </div>
     <div class="p-grid p-d-flex" style="height: 50%">
@@ -53,7 +53,8 @@ export default {
       goals: null,
       newGoals: null,
       nodes: null,
-      results: null
+      options: null,
+      goalResults: null
     }
   },
   methods: {
@@ -89,8 +90,10 @@ export default {
         });
         let nodeDict = await gResponse.json();
         console.log('results: ')
-        console.log(nodeDict.results)
-        this.results = nodeDict.results
+        console.log(nodeDict.optionResults)
+        this.options = nodeDict.optionResults
+        console.log(nodeDict.likelyResults)
+        this.goalResults = nodeDict.likelyResults
 
         this.newGoals = goals
 

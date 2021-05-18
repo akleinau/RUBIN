@@ -32,11 +32,26 @@ class Scenario:
 
     #computes the values for the targets
     def compute_targets(self):
-        infer = inference.VariableElimination(self.network.model)
+        infer = inference.BeliefPropagation(self.network.model)
 
-        for t in self.patient.targets.keys():
+        for t in self.patient.targets:
             node = self.patient.targets[t]
             node.distribution = infer.query([node.name], evidence=self.patient.evidences)
+
+    # computes the values for the goals
+    def compute_goals(self):
+        infer = inference.BeliefPropagation(self.network.model)
+
+        distribution = infer.query(list(self.patient.goals.keys()), evidence=self.patient.evidences)
+        value = distribution.values
+        goalValues = {}
+        for i, goal in enumerate(distribution.variables):
+            optionNum = distribution.name_to_no[goal][self.patient.goals[goal]]
+            value = value[optionNum]
+            singleGoalDist = infer.query([goal], evidence=self.patient.evidences)
+            goalValues[goal] = singleGoalDist.values[singleGoalDist.name_to_no[goal][self.patient.goals[goal]]]
+
+        return {'value': value, 'goalValues': goalValues}
 
     def print_targets(self):
         for t in self.patient.targets.keys():
