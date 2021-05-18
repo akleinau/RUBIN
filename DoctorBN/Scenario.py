@@ -119,3 +119,18 @@ class Scenario:
             results.append({'option': option, 'value': value, 'goalValues': goalValues})
 
         return results
+
+    def compute_all_nodes(self):
+        infer = inference.BeliefPropagation(self.network.model)
+        nodes = []
+        for node in self.network.states:
+            if node in self.patient.evidences:
+                nodes.append({"name": node, "state": self.patient.evidences[node], "probability": 1})
+            else:
+                distribution = infer.query([node], evidence=self.patient.evidences)
+                state = infer.map_query([node], evidence=self.patient.evidences)
+                numberState = distribution.name_to_no[node][state[node]]
+                nodes.append({"name": node, "state": state[node], "probability": distribution.values[numberState]})
+
+
+        return nodes

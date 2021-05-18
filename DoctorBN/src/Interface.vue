@@ -20,7 +20,7 @@
     <div class="p-grid p-d-flex">
 
       <div class="p-col">
-        <Network :relevance = "relevance" :goals="newGoals" :edges="edges" :nodes="nodes"/>
+        <Network :relevance = "relevance" :goals="newGoals" :edges="edges" :nodes="states"/>
       </div>
       <div class="p-col-3">
         <Additional/>
@@ -58,7 +58,8 @@ export default {
       goalResults: null,
       selectedOption: null,
       relevance: null,
-      edges: null
+      edges: null,
+      states: null
     }
   },
   methods: {
@@ -103,7 +104,7 @@ export default {
 
       }
     },
-    calculateRelevance: async function () {
+    calculateOption: async function () {
       console.log("calculating relevance for:")
       console.log(this.selectedOption)
 
@@ -123,7 +124,7 @@ export default {
 
       console.log(goals)
 
-      const gResponse = await fetch("http://localhost:5000/calcRelevancies", {
+      const gResponse = await fetch("http://localhost:5000/calcOptions", {
         method: 'POST',
         headers: {
           'content-type': 'application/json'
@@ -138,6 +139,8 @@ export default {
       this.relevance = nodeDict.relevance
       console.log(this.relevance)
       this.newGoals = goals
+      this.states = nodeDict.nodes
+      console.log(this.states)
     },
     evidenceUpdated(evidence) {
       this.evidence = evidence
@@ -154,7 +157,9 @@ export default {
     selectedOptionUpdated(option) {
       this.selectedOption = option
       if (option === []) this.relevance = null
-      else this.calculateRelevance()
+      else {
+        this.calculateOption()
+      }
     }
   },
   created: async function () {

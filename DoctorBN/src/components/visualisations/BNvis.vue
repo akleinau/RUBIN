@@ -1,6 +1,6 @@
 <template>
   <div ref="container"/>
-  <Button label="vis" @click="visualise()" />
+  <Button label="vis" @click="visualise()"/>
 </template>
 
 <script>
@@ -14,14 +14,14 @@ export default {
   ],
   data() {
     return {
-      exNodes: [{"name":"a"},{"name": "b"} ,{"name": "c"}],
+      exNodes: [{"name": "a"}, {"name": "b"}, {"name": "c"}],
       exEdges: [
         {"target": "a", "source": "b"},
         {"target": "a", "source": "c"}
       ]
     }
   },
-  mounted(){
+  mounted() {
     if (this.nodes != null && this.edges != null) this.visualise()
   },
   methods: {
@@ -35,11 +35,15 @@ export default {
       const simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d => d.name))
           .force("charge", d3.forceManyBody())
-          .force("center", d3.forceCenter(width / 2, height / 2));
+          .force('collision', d3.forceCollide().radius(15))
+          .force("center", d3.forceCenter(width / 2, height / 2))
+          .force("y", d3.forceY())
 
       var svg = d3.select(this.$refs.container)
           .append("svg")
           .attr("viewBox", [0, 0, width, height]);
+
+      svg.selectAll('*').remove();
 
       const link = svg.append("g")
           .attr("stroke", "black")
@@ -47,16 +51,37 @@ export default {
           .selectAll("line")
           .data(links)
           .join("line")
-          .attr("stroke-width", 1);
+          .attr("stroke-width", 0.5);
+
+      var colorScale = d3.scaleQuantize()
+          .domain([0, 1])
+          .range(["red", "yellow", "green"]);
+
+      var color = d => {
+        if (d === 1) return "black"
+        else return colorScale(d)
+      }
 
       const node = svg.append("g")
-          .attr("stroke", "green")
-          .attr("stroke-width", 1.5)
-          .selectAll("circle")
+          .attr("stroke-width", 0.5)
+          .selectAll("rect")
           .data(nodes)
-          .join("circle")
-          .attr("r", 5)
-          .attr("fill", "red")
+          .join("rect")
+          .attr("width", 40)
+          .attr("height", 5)
+          .attr('fill', "white")
+          .attr("stroke", d => color(d.probability))
+
+
+
+      // Text to nodes
+      const text = svg.append("g")
+          .attr("class", "text")
+          .attr('font-size', '4px')
+          .selectAll("text")
+          .data(nodes)
+          .enter().append("text")
+          .text(d => d.name.substring(0,10) + ": " + d.state)
 
       simulation.on("tick", () => {
         link
@@ -66,8 +91,12 @@ export default {
             .attr("y2", d => d.target.y);
 
         node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
+            .attr("x", d => d.x)
+            .attr("y", d => d.y);
+
+         text.attr("x", d => d.x) //position of the lower left point of the text
+          .attr("y", d => d.y+4); //position of the lower left point of the text
+
       });
 
 
