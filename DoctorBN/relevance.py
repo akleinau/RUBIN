@@ -98,5 +98,6 @@ def get_influence_of_evidences_on_goals(network, evidences, goals):
 
         all_relevance_of_evidence_objects[i]["overall_relevance"] = float(new_overall_relevance_in_percentage)
 
+    all_relevance_of_evidence_objects.sort(key= lambda d: d["overall_relevance"], reverse=True)
 
     return all_relevance_of_evidence_objects
