@@ -22,8 +22,8 @@ export default {
       let color = "black"
       if (this.color === "trafficlight") {
         const colorScale = d3.scaleQuantize()
-            .domain([0, 0.5, 1])
-            .range(["red", "darkGoldenRod", "green"]);
+            .domain([0, 1])
+            .range(["red", "chocolate", "darkGoldenRod", "yellowgreen", "green"]);
         color = colorScale(this.value)
       }
       else color = this.color

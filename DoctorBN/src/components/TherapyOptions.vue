@@ -20,9 +20,6 @@
     <TabPanel header="image">
       <img src="../assets/options.png">
     </TabPanel>
-    <TabPanel header="vis">
-      <options-vis :results="results"/>
-    </TabPanel>
     <TabPanel header="compare">
       <DataTable :value="results" :scrollable="true" scrollHeight="300px"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
@@ -46,14 +43,12 @@
 </template>
 
 <script>
-import optionsVis from "@/components/visualisations/optionsVis";
 import bar from "@/components/visualisations/bar";
 import twoSidedBar from "@/components/visualisations/twoSidedBar";
 
 export default {
   name: "TherapyOptions",
   components: {
-    optionsVis,
     bar,
     twoSidedBar
   },
