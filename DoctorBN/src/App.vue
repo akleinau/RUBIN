@@ -1,26 +1,43 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <UploadNetwork v-if="page === 'chooseNet'" @changePage="page = 'interface'"></UploadNetwork>
+  <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Interface from "./Interface";
+import UploadNetwork from "./components/UploadNetwork";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Interface,
+    UploadNetwork
+  },
+  data () {
+    return {
+      page: "interface"
+    }
   }
 }
+
+
 </script>
 
 <style>
+body, html {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: #6eb5be;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background-color: #6eb5be;
 }
+
 </style>
