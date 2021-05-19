@@ -35,7 +35,7 @@ export default {
       const simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d => d.name))
           .force("charge", d3.forceManyBody())
-          .force('collision', d3.forceCollide().radius(15))
+          .force('collision', d3.forceCollide().radius(20))
           .force("center", d3.forceCenter(width / 2, height / 2))
           .force("y", d3.forceY())
 
@@ -55,7 +55,7 @@ export default {
 
       var colorScale = d3.scaleQuantize()
           .domain([0, 1])
-          .range(["red", "yellow", "green"]);
+          .range(["red", "darkGoldenRod", "green"]);
 
       var color = d => {
         if (d === 1) return "black"
@@ -67,10 +67,12 @@ export default {
           .selectAll("rect")
           .data(nodes)
           .join("rect")
-          .attr("width", 40)
-          .attr("height", 5)
+          .attr("width", 25)
+          .attr("height", 10)
           .attr('fill', "white")
           .attr("stroke", d => color(d.probability))
+          .attr("rx", 2)
+          .attr("ry", 2)
 
 
 
@@ -81,7 +83,12 @@ export default {
           .selectAll("text")
           .data(nodes)
           .enter().append("text")
-          .text(d => d.name.substring(0,10) + ": " + d.state)
+
+      const textName = text.append("tspan")
+            .text(d => d.name.substring(0,10) + ": ")
+      const textState = text.append("tspan")
+          .text(d => String(d.state).substring(0,10))
+          .attr("dy", 5)
 
       simulation.on("tick", () => {
         link
@@ -91,11 +98,14 @@ export default {
             .attr("y2", d => d.target.y);
 
         node
-            .attr("x", d => d.x)
-            .attr("y", d => d.y);
+            .attr("x", d => d.x -12)
+            .attr("y", d => d.y - 9);
 
-         text.attr("x", d => d.x) //position of the lower left point of the text
-          .attr("y", d => d.y+4); //position of the lower left point of the text
+         text.attr("x", d => d.x -12) //position of the lower left point of the text
+          .attr("y", d => d.y -5 ); //position of the lower left point of the text
+
+        textState.attr("x", d => d.x -11)
+        textName.attr("x", d=> d.x -11)
 
       });
 
