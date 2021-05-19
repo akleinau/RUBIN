@@ -4,7 +4,15 @@
       <DataTable :value="results" :scrollable="true" scrollHeight="300px"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
                  @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
-        <Column header="option" field="option"/>
+        <Column header="option" field="option">
+          <template #body="slotProps">
+            <div>
+            <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
+               {{o}}: {{slotProps.data.option[o]}}
+            </div>
+              </div>
+          </template>
+        </Column>
         <Column header="value" field="value">
           <template #body="slotProps">
             <bar :value=slotProps.data.value color="trafficlight"></bar>
@@ -24,7 +32,15 @@
       <DataTable :value="results" :scrollable="true" scrollHeight="300px"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
                  @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
-        <Column header="option" field="option"/>
+        <Column header="option" field="option">
+                    <template #body="slotProps">
+            <div>
+            <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
+               {{o}}: {{slotProps.data.option[o]}}
+            </div>
+              </div>
+          </template>
+        </Column>
         <Column header="value" field="value">
           <template #body="slotProps">
             <twoSidedBar :value="slotProps.data.value - goalResults.value"></twoSidedBar>

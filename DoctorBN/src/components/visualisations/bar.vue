@@ -23,7 +23,13 @@ export default {
       if (this.color === "trafficlight") {
         const colorScale = d3.scaleQuantize()
             .domain([0, 1])
-            .range(["red", "chocolate", "darkGoldenRod", "yellowgreen", "green"]);
+             .range(["red", "chocolate", "darkGoldenRod", "yellowgreen", "green"]);
+        color = colorScale(this.value)
+      }
+      else if (this.color === "bluescale") {
+        const colorScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range(["darkslategrey", "midnightblue"]);
         color = colorScale(this.value)
       }
       else color = this.color
