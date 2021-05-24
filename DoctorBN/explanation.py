@@ -163,11 +163,10 @@ def compute_explanation_of_target(network, evidences, variables, outcomes, filen
         for child in node.children:
             edges.append([child.name, node.name])
 
-    reduced_nodes = list(set(nodes))
+    nodes = list(set(nodes))
     reduced_edges = []
     [reduced_edges.append(edge) for edge in edges if edge not in reduced_edges]
 
-    obj_nodes = [{"name": node} for node in reduced_nodes]
     obj_edges = [{"source": edge[0], "target": edge[1]} for edge in reduced_edges]
 
-    return {"nodes": obj_nodes, "edges": obj_edges}
+    return {"nodes": nodes, "edges": obj_edges}

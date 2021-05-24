@@ -40,8 +40,8 @@ export default {
       const width = 300
       const height = 150
 
-      let links = this.edges
-      let nodes = this.nodes
+      let links = JSON.parse(JSON.stringify(this.edges))
+      let nodes = JSON.parse(JSON.stringify(this.nodes))
 
       const simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d => d.name))

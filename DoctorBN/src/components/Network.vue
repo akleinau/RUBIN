@@ -1,36 +1,16 @@
 <template>
   <TabView>
-    <TabPanel header="Causal explanation">
-      <img v-if="target !== null" src="../assets/Argumentation.png">
-      <div v-else>Please specify a target.</div>
+    <TabPanel header="Relevance">
+      <Relevance :relevance="relevance" :goals="goals"/>
     </TabPanel>
-    <TabPanel header="Causal explanation computed">
+    <TabPanel header="Causal explanation">
       <BNvis :edges="getExEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="compact network">
-      <img v-if="target !== null" src="../assets/compactNet.png">
-      <div v-else>Please specify a target.</div>
+      <BNvis :edges="getCompactEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="full network">
-      <img src="../assets/fullNet.png">
-    </TabPanel>
-    <TabPanel header="full network computed">
       <BNvis :edges="edges" :nodes="nodes"/>
-    </TabPanel>
-    <TabPanel header="RelevanceComputed">
-
-      <Relevance :relevance="relevance" :goals="goals"/>
-
-    </TabPanel>
-    <TabPanel header="Relevance">
-      <div v-if="onlyGlobal">
-        <img src="../assets/globalRelevance.png">
-        <Button label="show more" @click="onlyGlobal=false"></Button>
-      </div>
-      <div v-if="!onlyGlobal">
-        <img src="../assets/localRelevance.png">
-        <Button label="show less" @click="onlyGlobal=true"></Button>
-      </div>
     </TabPanel>
   </TabView>
 
@@ -62,10 +42,24 @@ export default {
      if (this.explanation != null) {
        let explanationNodes = []
        this.explanation["nodes"].forEach(node => {
-         explanationNodes.push({"name": node["name"], "probability": "1.0"})
+         explanationNodes.push({"name": node, "probability": "1.0"})
        })
        return explanationNodes
      }
+    },
+    getCompactEdges() {
+      if (this.explanation != null) {
+        let edges = []
+        console.log(this.edges)
+        this.edges.forEach(edge => {
+          if (this.explanation["nodes"].includes(edge["source"]) && this.explanation["nodes"].includes(edge["target"])) {
+            console.log(edge)
+            console.log(this.explanation["nodes"])
+            edges.push(edge)
+          }
+        })
+        return edges
+      }
     }
   }
 }
