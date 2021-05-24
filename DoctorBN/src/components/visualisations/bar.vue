@@ -43,11 +43,21 @@ export default {
           .range([0, width])
 
       svg.append("rect")
+          .style("stroke", "black")
+          .style("stroke-width", 3)
+          .attr("fill", "white")
+          .attr("y", 0)
+          .attr("x", 0)
+          .attr("height", height)
+          .attr("width", width);
+
+      svg.append("rect")
           .attr("fill", color)
           .attr("y", 0)
           .attr("x", 0)
           .attr("height", 50)
           .attr("width", x(this.value));
+
 
 
     }
