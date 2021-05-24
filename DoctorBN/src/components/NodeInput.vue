@@ -126,7 +126,10 @@ export default {
 }
 
 #addButton {
-  width: 100%
+  width: 90%;
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
 }
 
 #table{

@@ -94,7 +94,10 @@ align-items: center;
 }
 
 #AddButton {
-  width: 100%
+  width: 90%;
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
 }
 
 .xButton {

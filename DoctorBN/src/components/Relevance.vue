@@ -1,7 +1,7 @@
 <template>
 <DataTable :value="relevance" :scrollable="true" scrollHeight="500px">
         <Column header="option" field="node_name"/>
-        <Column header="global relevance" field="overall_relevance">
+        <Column header="overall relevance" field="overall_relevance">
           <template #body="slotProps">
             <bar :value="slotProps.data.overall_relevance" color="midnightblue"></bar>
           </template>
