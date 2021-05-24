@@ -1,6 +1,6 @@
 <template>
   <div style="position:relative">
-    <Panel header="Therapy">
+    <Panel header="Interventions">
 
       <Listbox v-model="selected" :options="targets" optionLabel="name" listStyle="max-height:300px"
                emptyMessage="choose therapy nodes">
