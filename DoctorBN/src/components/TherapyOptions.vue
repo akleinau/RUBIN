@@ -103,5 +103,7 @@ export default {
 </script>
 
 <style scoped>
-
+.p-tabview-panel {
+  height: 300px
+}
 </style>

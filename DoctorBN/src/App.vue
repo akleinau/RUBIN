@@ -44,8 +44,4 @@ body, html {
   height: 333px
 }
 
-.p-tabview-panel {
-  height: 300px
-}
-
 </style>

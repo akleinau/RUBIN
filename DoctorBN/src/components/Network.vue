@@ -1,6 +1,6 @@
 <template>
   <TabView>
-    <TabPanel header="Relevance">
+    <TabPanel header="Relevance explanation">
       <Relevance :relevance="relevance" :goals="goals"/>
     </TabPanel>
     <TabPanel header="Causal explanation">
@@ -42,7 +42,13 @@ export default {
      if (this.explanation != null) {
        let explanationNodes = []
        this.explanation["nodes"].forEach(node => {
-         explanationNodes.push({"name": node, "probability": "1.0"})
+         let originalNode = this.nodes.find(n => n.name === node)
+         if (originalNode != null) {
+           explanationNodes.push(originalNode)
+         }
+        else {
+           explanationNodes.push({"name": node, "probability": "1.0"})
+         }
        })
        return explanationNodes
      }

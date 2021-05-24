@@ -1,6 +1,6 @@
 <template>
   <div ref="container"/>
-  <Button label="vis" @click="visualise()"/>
+  <Button label="vis" @click="visualise()" style="position: absolute; left: 1%; bottom: 2%"/>
 </template>
 
 <script>
@@ -37,24 +37,23 @@ export default {
       return Math.sqrt(xq + yq)
     },
     visualise() {
-      const width = 300
-      const height = 150
+      const width = 450
+      const height = 110
 
       let links = JSON.parse(JSON.stringify(this.edges))
       let nodes = JSON.parse(JSON.stringify(this.nodes))
 
       const simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d => d.name))
-          .force('collision', d3.forceCollide().radius(20))
+          .force('collision', d3.forceCollide().radius(15))
           .force("center", d3.forceCenter(width / 2, height / 2))
           .force("y", d3.forceY(height/2))
 
+      d3.select(this.$refs.container).selectAll("*").remove()
 
       var svg = d3.select(this.$refs.container)
           .append("svg")
           .attr("viewBox", [0, 0, width, height]);
-
-      svg.selectAll('*').remove();
 
       // Define the arrowhead marker variables
       const markerBoxWidth = 4;
@@ -152,5 +151,7 @@ export default {
 </script>
 
 <style scoped>
+div {
 
+}
 </style>
