@@ -35,10 +35,20 @@ def calcTargetForGoals():
 @app.route('/calcOptions', methods=['POST'])
 def calcOptions():
     data = request.get_json()
-    s = Scenario("endomcancerlast.bif", evidences=data['evidences'], goals=data['goals'])
+    relevanceEvidences = {}
+    for ev in data['evidences']:
+        relevanceEvidences[ev] = data['evidences'][ev]
+    for op in data['options']:
+        relevanceEvidences[op] = data['options'][op]
+
+    s = Scenario("endomcancerlast.bif", evidences=relevanceEvidences, goals=data['goals'])
     relevance = s.compute_relevancies_for_goals()
     nodes = s.compute_all_nodes()
-    return {'relevance': relevance, 'nodes': nodes}
+
+    e = Scenario("endomcancerlast.bif", evidences=data['evidences'], goals=data['goals'])
+    explanation = e.compute_explanation_of_goals(data['options'])
+
+    return {'relevance': relevance, 'nodes': nodes, 'explanation': explanation}
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

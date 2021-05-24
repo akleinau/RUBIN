@@ -20,7 +20,7 @@
     <div class="p-grid p-d-flex">
 
       <div class="p-col">
-        <Network :relevance = "relevance" :goals="newGoals" :edges="edges" :nodes="states"/>
+        <Network :relevance = "relevance" :goals="newGoals" :edges="edges" :nodes="states" :explanation="explanation"/>
       </div>
       <div class="p-col-3">
         <Additional/>
@@ -59,7 +59,8 @@ export default {
       selectedOption: null,
       relevance: null,
       edges: null,
-      states: null
+      states: null,
+      explanation: null
     }
   },
   methods: {
@@ -112,9 +113,6 @@ export default {
       for (var ev in this.evidence) {
         evidences[ev] = this.evidence[ev].name;
       }
-      for (var o in this.selectedOption.option) {
-        evidences[o] = this.selectedOption.option[o];
-      }
       console.log(evidences)
 
       let goals = {}
@@ -131,6 +129,7 @@ export default {
         },
         body: JSON.stringify({
           evidences: evidences,
+          options: this.selectedOption.option,
           goals: goals
         })
       });
@@ -141,6 +140,8 @@ export default {
       this.newGoals = goals
       this.states = nodeDict.nodes
       console.log(this.states)
+      this.explanation = nodeDict.explanation
+      console.log(this.explanation)
     },
     evidenceUpdated(evidence) {
       this.evidence = evidence

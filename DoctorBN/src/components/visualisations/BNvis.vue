@@ -22,7 +22,11 @@ export default {
     }
   },
   mounted() {
-    if (this.nodes != null && this.edges != null) this.visualise()
+    if (this.nodes != null && this.edges != null) {
+      console.log(this.nodes)
+      console.log(this.edges)
+      this.visualise()
+    }
   },
   methods: {
     normalVect(v1, v2) {

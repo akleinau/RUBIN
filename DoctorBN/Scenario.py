@@ -62,10 +62,11 @@ class Scenario:
                                                              self.patient.evidences,
                                                              self.patient.goals)
 
-    def compute_explanation_of_target(self, target, filename=""):
-        explanation.compute_explanation_of_target(self.network.model,
+    def compute_explanation_of_goals(self, interventions, filename=""):
+        return explanation.compute_explanation_of_target(self.network.model,
                                                   self.patient.evidences,
-                                                  self.patient.targets[target],
+                                                  interventions,
+                                                  self.patient.goals,
                                                   filename=filename)
 
     #clique-inspired: if A,B is worse then A, then A,B,C won't be better then AC

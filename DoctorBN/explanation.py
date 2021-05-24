@@ -1,9 +1,10 @@
 from pgmpy.models import BayesianModel
 from pgmpy.readwrite import BIFReader
 from pgmpy import inference
-from anytree import NodeMixin, RenderTree
+from anytree import NodeMixin, RenderTree, PreOrderIter
 from anytree.exporter import DotExporter
 import itertools
+
 
 class Support:
     forbidden_set = []
@@ -35,6 +36,7 @@ def find_changed_set(root, set, evidences, network):
             if withEvidence != standard:
                 reduced_set.append(item)
     return reduced_set
+
 
 # reduce markov blanket to smallest set of elements, that still gets the same classifications
 def find_smallest_set(root, set, evidences, network):
@@ -83,7 +85,7 @@ def find_smallest_set(root, set, evidences, network):
     return set
 
 
-def add_markov_children(root, network, evidences=None, subsetFunc=None):
+def add_markov_children(root, network, evidences=None, variables=None, subsetFunc=None):
     blanket = network.get_markov_blanket(root.name)
 
     # find smallest set of nodes
@@ -94,8 +96,12 @@ def add_markov_children(root, network, evidences=None, subsetFunc=None):
 
     small_blanket = cleanedBlanket
     if subsetFunc:
-        small_blanket = subsetFunc(root, cleanedBlanket, evidences, network)
-
+        subset_evidence = {}
+        for ev in evidences:
+            subset_evidence[ev] = evidences[ev]
+        for var in variables:
+            subset_evidence[var] = variables[var]
+        small_blanket = subsetFunc(root, cleanedBlanket, subset_evidence, network)
 
     # construct forbidden sets and add nodes
     for node in small_blanket:
@@ -115,7 +121,7 @@ def add_markov_children(root, network, evidences=None, subsetFunc=None):
 
         if not evidences or node not in evidences.keys():
             sn = SupportNode(node, parent=root, forbidden_set=forbidden_set)
-            add_markov_children(sn, network, evidences, subsetFunc)
+            add_markov_children(sn, network, evidences, variables, subsetFunc)
         else:
             sn = SupportNode(node, parent=root)
 
@@ -134,13 +140,34 @@ def deleteUseless(root, network, evidences):
         root.parent = None
 
 
-def compute_explanation_of_target(network, evidences, target, filename=""):
-    Therapy_Node = SupportNode("Therapy", forbidden_set=["Therapy"])
-    add_markov_children(Therapy_Node, network, evidences=evidences,
-                        subsetFunc=find_changed_set)  # , subsetFunc=find_smallest_set)
-    deleteUseless(Therapy_Node, network, evidences)
+def compute_explanation_of_target(network, evidences, variables, outcomes, filename=""):
+    # create dummy node that connects all outcomes
+    dummy = SupportNode("Dummy", forbidden_set=["Dummy"])
+    for outcome in outcomes:
+        outcome_node = SupportNode(outcome, parent=dummy, forbidden_set=[outcome, "Dummy"])
+        add_markov_children(outcome_node, network, evidences=evidences, variables=variables,
+                            subsetFunc=find_changed_set)  # , subsetFunc=find_smallest_set)
+
+    deleteUseless(dummy, network, evidences)
 
     if filename != "":
-        DotExporter(Therapy_Node).to_picture(filename)
+        DotExporter(dummy).to_picture(filename)
 
-    Therapy_Node.print_tree()
+    dummy.print_tree()
+
+    # create node list
+    nodes = []
+    edges = []
+    for node in PreOrderIter(dummy):
+        nodes.append(node.name)
+        for child in node.children:
+            edges.append([child.name, node.name])
+
+    reduced_nodes = list(set(nodes))
+    reduced_edges = []
+    [reduced_edges.append(edge) for edge in edges if edge not in reduced_edges]
+
+    obj_nodes = [{"name": node} for node in reduced_nodes]
+    obj_edges = [{"source": edge[0], "target": edge[1]} for edge in reduced_edges]
+
+    return {"nodes": obj_nodes, "edges": obj_edges}

@@ -12,4 +12,3 @@ target = ["Therapy"]
 goal = {"Survival1yr": "yes", "Survival5yr": "yes"}
 s = Scenario(network, evidences=evidences, targets=target, goals=goal)
 results = s.compute_target_for_goals(target[0])
-
