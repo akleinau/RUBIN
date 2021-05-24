@@ -25,9 +25,6 @@
         </Column>
       </DataTable>
     </TabPanel>
-    <TabPanel header="image">
-      <img src="../assets/options.png">
-    </TabPanel>
     <TabPanel header="compare">
       <DataTable :value="results" :scrollable="true" scrollHeight="300px"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
