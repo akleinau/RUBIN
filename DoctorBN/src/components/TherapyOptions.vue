@@ -15,12 +15,12 @@
         </Column>
         <Column header="value" field="value">
           <template #body="slotProps">
-            <bar :value=slotProps.data.value color="trafficlight"></bar>
+            <bar :value=slotProps.data.value color="RebeccaPurple"></bar>
           </template>
         </Column>
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
           <template #body="slotProps">
-            <bar :value="slotProps.data.goalValues[String(goal)]" color="trafficlight"></bar>
+            <bar :value="slotProps.data.goalValues[String(goal)]" color="RebeccaPurple"></bar>
           </template>
         </Column>
       </DataTable>

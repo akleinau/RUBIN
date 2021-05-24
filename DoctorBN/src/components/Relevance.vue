@@ -3,7 +3,7 @@
         <Column header="option" field="node_name"/>
         <Column header="global relevance" field="overall_relevance">
           <template #body="slotProps">
-            <bar :value="slotProps.data.overall_relevance" color="bluescale"></bar>
+            <bar :value="slotProps.data.overall_relevance" color="midnightblue"></bar>
           </template>
         </Column>
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
