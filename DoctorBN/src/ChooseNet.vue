@@ -1,7 +1,7 @@
 <template>
-  <Upload></Upload>
-  <Networklist></Networklist>
-  <Button @click="changePage()">open</Button>
+  <Upload ref="uploadField" @reloadNetList="this.$refs.netList.loadNetList()"></Upload>
+  <br>
+  <Networklist ref="netList" @changePage="this.changePage()"></Networklist>
 </template>
 
 <script>

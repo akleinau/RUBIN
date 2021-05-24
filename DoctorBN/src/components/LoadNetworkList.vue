@@ -1,31 +1,52 @@
 <template>
-  <div>
-    <h4>Select a network</h4>
-    <form action="/openNetwork" method="POST" id="selectNetForm">
-      <select form = "selectNetForm">
-        <option v-for="network in networks" v-bind:key="network.id" value = network.id >{{network.displayName}}</option>
-      </select>
-    </form>
-
-  </div>
+  <form @submit.prevent="openNet" method="POST" id="selectNetForm" name="selectNetForm">
+    <label for="selectID">Select a network</label> <br>
+    <select id="selectID" form="selectNetForm" v-model="networks" required>
+      <option v-for="network in networks" v-bind:key="network" v-bind:value="network.id" >{{ network.name }}</option>
+    </select>
+    <br>
+    <Button type="submit">Open network</Button>
+  </form>
 </template>
 
 <script>
 export default {
   name: "LoadNetworkList",
   data() {
-    return{
+    return {
       networks: []
     }
   },
-  created: async function() {
-    const gResponse = await fetch("http://localhost:5000/loadNetList");
-    const netlist = await gResponse.json();
-    let networksArray = []
-    for (var key in netlist) {
-      this.networks.push({id: parseInt(key, 10), displayName: netlist[key]})
+  methods: {
+    onChange(event) {
+      console.log(event.target.value)
+    },
+    openNet: async function () {
+      let selectID = document.getElementById('selectedID')
+      let selected = selectID.options[selectID.selectedIndex].value
+      console.log(selected)
+      let formData = new FormData();
+      formData.append('selection', selected)
+      fetch('http://localhost:5000//openNetwork', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      this.$emit("changePage")
+    },
+    loadNetList: async function () {
+      const gResponse = await fetch("http://localhost:5000//loadNetList");
+      const netList = await gResponse.json();
+      this.networks = []
+      for (let key in netList) {
+        this.networks.push({id: key, name: netList[key]})
+      }
     }
-    this.networks = networksArray
+  },
+  created: function () {
+    this.loadNetList()
   }
 }
 </script>

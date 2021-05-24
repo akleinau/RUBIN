@@ -1,19 +1,34 @@
 <template>
   <!-- Form to upload a network file -->
-  <form action="http://localhost:5000/uploadNetwork" method="POST" enctype="multipart/form-data">
+  <form @submit.prevent="upload" id = "upload-form" enctype="multipart/form-data">
     <h3>Upload new network</h3>
-    <span>Network name:<input name = "net_name" type = "text"/> <br></span>
-    <input name = "net_upload" type = "file" ref="netFile"/> <br>
-    <input name = "net_submit" type = "submit" value = "Upload Network"/>
+    <span>Network name:<input id = "net-name" type = "text" required/> <br></span>
+    <input name = "net-upload" type = "file" accept=".bif" required/> <br>
+    <input name = "net-submit" type = "submit" value = "Upload Network"/>
   </form>
 </template>
 
 <script>
 export default {
   name: "UploadNetwork",
-  data() {
-    return {
-      networks: []
+  methods: {
+    upload: async function() {
+      let uploadForm = document.getElementById('upload-form');
+      let displayName = document.getElementById('net-name').value;
+      let fileField = uploadForm.querySelector('input[type="file"]');
+      let formData = new FormData();
+      formData.append('displayName', displayName)
+      formData.append('file', fileField.files[0])
+      let options = {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      delete options.headers['Content-Type']
+      fetch('http://localhost:5000//uploadNetwork', options)
+      this.$emit("reloadNetList")
     }
   }
 }
