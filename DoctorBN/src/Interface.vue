@@ -2,17 +2,17 @@
 
   <Header @changePage="changePage()"/>
   <div class=" p-grid p-flex-column nested-grid">
-    <div class="p-grid p-d-flex p-flex-nowrap">
-      <div class="p-col-2">
+    <div class="p-grid p-ai-stretch vertical-container" style="height:400px">
+      <div class="p-col-2 box-stretched">
         <NodeInput title="Evidence" :nodes="nodes" @setNodes="evidenceUpdated($event)"/>
       </div>
-      <div class="p-col-2">
+      <div class="p-col-2 box box-stretched">
         <Therapy :nodes="nodes" @update="targetsUpdated($event)"/>
       </div>
-      <div class="p-col-2">
+      <div class="p-col-2 box-stretched">
         <NodeInput title="Desired Outcomes" :nodes="nodes" @setNodes="goalsUpdated($event)"/>
       </div>
-      <div class="p-col">
+      <div class="p-col box-stretched">
         <TherapyOptions :results="options" :goals="newGoals" :goalResults="goalResults"
                         @update="selectedOptionUpdated($event)"/>
       </div>
@@ -194,6 +194,10 @@ export default {
   margin-top: 0px;
   margin-bottom: 10px
 }
+
+.box-stretched {
+        height: 100%;
+    }
 
 #arrow {
   width: 100%;

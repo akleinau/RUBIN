@@ -40,4 +40,12 @@ body, html {
   background-color: #6eb5be;
 }
 
+.p-panel-content {
+  height: 333px
+}
+
+.p-tabview-panel {
+  height: 300px
+}
+
 </style>
