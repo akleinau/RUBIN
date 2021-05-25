@@ -29,6 +29,8 @@
           </template>
         </Column>
 </DataTable>
+  <Button label="show more" @click="onlyGlobal = false" v-if="onlyGlobal===true"></Button>
+  <Button label="show less" @click="onlyGlobal = true" v-if="onlyGlobal===false"></Button>
 
 </template>
 
