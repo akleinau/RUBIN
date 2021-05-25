@@ -40,6 +40,9 @@ def find_changed_set(root, set, evidences, network):
 
 # reduce markov blanket to smallest set of elements, that still gets the same classifications
 def find_smallest_set(root, set, evidences, network):
+    #smallest set of an evidence is empty set
+    if root.name in evidences: return []
+
     infer = inference.VariableElimination(network)
     ancestors = [root]
     a = root
@@ -126,40 +129,37 @@ def add_markov_children(root, network, evidences=None, variables=None, subsetFun
             sn = SupportNode(node, parent=root)
 
 
-def deleteUseless(root, network, evidences):
+def deleteUseless(root, network, evidences, variables):
     # if root is evidence itself, don't delete
     if root.name in evidences.keys():
         return 1
 
+    if root.name in variables.keys():
+        return 1
+
     # if roots children are useless, delete them
     for c in root.children:
-        deleteUseless(c, network, evidences)
+        deleteUseless(c, network, evidences, variables)
 
     # if root is no evidence, but has no children, delete
     if not root.children:
         root.parent = None
 
 
-def compute_explanation_of_target(network, evidences, variables, outcomes, filename=""):
-    # create dummy node that connects all outcomes
-    dummy = SupportNode("Dummy", forbidden_set=["Dummy"])
-    for outcome in outcomes:
-        outcome_node = SupportNode(outcome, parent=dummy, forbidden_set=[outcome, "Dummy"])
-        add_markov_children(outcome_node, network, evidences=evidences, variables=variables,
-                            subsetFunc=find_changed_set)  # , subsetFunc=find_smallest_set)
-
-    deleteUseless(dummy, network, evidences)
-
-    if filename != "":
-        DotExporter(dummy).to_picture(filename)
-
-    dummy.print_tree()
-
+def compute_explanation_of_target(network, evidences, variables, outcomes):
+    rootNodes = []
     # create node list
     nodes = []
     edges = []
-    for node in PreOrderIter(dummy):
-        if (node.name != "Dummy"):
+
+    for outcome in outcomes:
+        outcome_node = SupportNode(outcome, forbidden_set=[outcome])
+        add_markov_children(outcome_node, network, evidences=evidences, variables=variables,
+                            subsetFunc=find_changed_set)  # , subsetFunc=find_smallest_set)
+        deleteUseless(outcome_node, network, evidences, variables)
+        rootNodes.append(outcome_node)
+
+        for node in PreOrderIter(outcome_node):
             nodes.append(node.name)
             for child in node.children:
                 edges.append([child.name, node.name])

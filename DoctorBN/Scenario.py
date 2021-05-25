@@ -62,12 +62,11 @@ class Scenario:
                                                              self.patient.evidences,
                                                              self.patient.goals)
 
-    def compute_explanation_of_goals(self, interventions, filename=""):
+    def compute_explanation_of_goals(self, interventions):
         return explanation.compute_explanation_of_target(self.network.model,
                                                   self.patient.evidences,
                                                   interventions,
-                                                  self.patient.goals,
-                                                  filename=filename)
+                                                  self.patient.goals)
 
     #clique-inspired: if A,B is worse then A, then A,B,C won't be better then AC
     def compute_target_combs_for_goals(self):
