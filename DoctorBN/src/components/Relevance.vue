@@ -1,18 +1,34 @@
 <template>
-<DataTable :value="relevance" :scrollable="true" scrollHeight="500px">
+  <div class="p-d-flex p-grid  p-ai-center vertical-container" v-if="onlyGlobal===true">
+    <DataTable class="p-col-8" :value="relevance" :scrollable="true" scrollHeight="500px">
         <Column header="option" field="node_name"/>
         <Column header="overall relevance" field="overall_relevance">
           <template #body="slotProps">
             <bar :value="slotProps.data.overall_relevance" color="midnightblue"></bar>
           </template>
         </Column>
-        <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
+      </DataTable>
+    <dif class="p-col-1">
+      <i class="pi pi-chevron-right" style="fontSize: 5rem"></i>
+    </dif>
+    <dif class="p-col-3">
+      <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{goal}}</div>
+    </dif>
+</div>
+
+<DataTable :value="relevance" :scrollable="true" scrollHeight="500px" v-if="onlyGlobal===false">
+        <Column header="option" field="node_name"/>
+        <Column header="overall relevance" field="overall_relevance">
+          <template #body="slotProps">
+            <bar :value="slotProps.data.overall_relevance" color="midnightblue"></bar>
+          </template>
+        </Column>
+        <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal" >
           <template #body="slotProps">
             <twoSidedBar :value="slotProps.data.relevancies[goal]"></twoSidedBar>
           </template>
         </Column>
-      </DataTable>
-
+</DataTable>
 
 </template>
 
@@ -28,7 +44,8 @@ export default {
   },
   props: [
       "relevance",
-      "goals"
+      "goals",
+      "nodes"
   ],
   data() {
     return {
@@ -41,6 +58,17 @@ export default {
         let goalnames = []
         Object.keys(this.goals).forEach(goal => {
           goalnames.push(goal + ": " + this.goals[goal])
+        })
+
+        return goalnames
+      }
+    },
+        getGoalForSummary() {
+      if (this.goals != null && this.nodes != null) {
+        let goalnames = []
+        Object.keys(this.goals).forEach(goal => {
+          goalnames.push(goal + " - " + this.goals[goal] + ": " +
+              (this.nodes.find(d => d.name === goal)).probability.toFixed(2)*100 + "%")
         })
 
         return goalnames

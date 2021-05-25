@@ -1,7 +1,7 @@
 <template>
   <TabView>
     <TabPanel header="Relevance explanation">
-      <Relevance :relevance="relevance" :goals="goals"/>
+      <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
     </TabPanel>
     <TabPanel header="Causal explanation">
       <sugiyama :edges="getExEdges()" :nodes="getExNodes()"/>
