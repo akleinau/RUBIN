@@ -90,12 +90,7 @@ export default {
   methods: {
 
     onNodeChange() {
-      let nodeDict = {}
-      this.setNodes.forEach(item => {
-        nodeDict[item.name] = item.selected;
-      })
-      console.log(nodeDict)
-      this.$emit("setNodes", nodeDict);
+      this.$emit("setNodes", this.setNodes);
     },
     addOption(slotProps, option) {
       let item = {

@@ -6,7 +6,7 @@
                emptyMessage="choose therapy nodes">
         <template #option="slotProps">
           <div class="p-text-center rowContent">
-            {{ slotProps.option }}
+            {{ slotProps.option.name }}
           <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
               @click="deleteNode(slotProps.option)"/>
           </div>
@@ -21,7 +21,7 @@
       <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
         <template #option="slotProps">
           <div>
-            {{ slotProps.option }}
+            {{ slotProps.option.name }}
           </div>
         </template>
       </Listbox>
@@ -55,12 +55,13 @@ export default {
   },
   mounted() {
 
-          this.targets.push('Therapy')
+          this.targets.push({"name": "Therapy", "options": [{"name": "no"}, {"name": "radiotx"},
+                            {"name": "chemotx"}, {"name": "chemoradiotx"}]})
           this.$emit("update", this.targets)
     },
   methods: {
     addTarget() {
-      this.nodesToAdd.push(this.selected.name);
+      this.nodesToAdd.push(this.selected);
       //this.nodes = this.nodes.filter(x => x !== this.selected);
     },
     addTargetsFromOverlay() {

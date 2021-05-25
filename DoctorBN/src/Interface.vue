@@ -70,18 +70,24 @@ export default {
     calculate: async function () {
       if (this.evidence != null && this.targets != null && this.goals != null) {
         console.log("doing calculation for:")
-        console.log(this.targets)
-        console.log(this.evidence)
-        console.log(this.goals)
 
         let evidences = {}
         for (var ev in this.evidence) {
-          evidences[ev] = this.evidence[ev].name;
+          evidences[this.evidence[ev].name] = this.evidence[ev].selected.name;
         }
         let goals = {}
         for (var goal in this.goals) {
-          goals[goal] = this.goals[goal].name;
+          goals[this.goals[goal].name] = this.goals[goal].selected.name;
         }
+
+        let targets = []
+        for (var target in this.targets) {
+          targets.push(this.targets[target].name)
+        }
+
+        console.log(targets)
+        console.log(evidences)
+        console.log(goals)
 
         const gResponse = await fetch("http://localhost:5000/calcTargetForGoals", {
           method: 'POST',
@@ -90,7 +96,7 @@ export default {
           },
           body: JSON.stringify({
             evidences: evidences,
-            target: this.targets,
+            target: targets,
             goals: goals
           })
         });
@@ -111,13 +117,13 @@ export default {
 
       let evidences = {}
       for (var ev in this.evidence) {
-        evidences[ev] = this.evidence[ev].name;
+        evidences[this.evidence[ev].name] = this.evidence[ev].selected.name;
       }
       console.log(evidences)
 
       let goals = {}
       for (var goal in this.goals) {
-        goals[goal] = this.goals[goal].name;
+        goals[this.goals[goal].name] = this.goals[goal].selected.name;
       }
 
       console.log(goals)
