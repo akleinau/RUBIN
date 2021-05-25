@@ -2,7 +2,7 @@
   <div style="position:relative">
     <Panel header="Interventions">
 
-      <Listbox v-model="selected" :options="targets" optionLabel="name" listStyle="max-height:300px"
+      <Listbox v-model="selected" :options="selection" optionLabel="name" listStyle="max-height:300px"
                emptyMessage="choose therapy nodes">
         <template #option="slotProps">
           <div class="p-text-center rowContent">
@@ -42,38 +42,29 @@
 export default {
   name: "Target",
   props: [
-    "nodes"
+    "nodes",
+      "selection"
   ],
   data() {
     return {
       selected: null,
       selected2: null,
       overlay: false,
-      targets: [],
       nodesToAdd: []
     }
   },
-  mounted() {
-
-          this.targets.push({"name": "Therapy", "options": [{"name": "no"}, {"name": "radiotx"},
-                            {"name": "chemotx"}, {"name": "chemoradiotx"}]})
-          this.$emit("update", this.targets)
-    },
   methods: {
     addTarget() {
       this.nodesToAdd.push(this.selected);
       //this.nodes = this.nodes.filter(x => x !== this.selected);
     },
     addTargetsFromOverlay() {
-      this.targets = this.targets.concat(this.nodesToAdd)
+      this.$emit("addNodes", this.nodesToAdd)
       this.nodesToAdd = []
-      console.log(this.targets)
-      this.$emit("update", this.targets)
       this.overlay=false
     },
     deleteNode(node) {
-      this.targets = this.targets.filter(x => x !== node)
-      this.$emit("update", this.targets)
+      this.$emit("deleteNode", node)
     }
   }
 }
