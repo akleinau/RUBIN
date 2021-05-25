@@ -22,8 +22,6 @@ export default {
   },
   mounted() {
     if (this.nodes != null && this.edges != null) {
-      console.log(this.nodes)
-      console.log(this.edges)
       this.visualise()
     }
   },
@@ -151,7 +149,8 @@ export default {
 
       });
 
-
+      console.log(this.nodes)
+      console.log(this.edges)
     }
   }
 }
