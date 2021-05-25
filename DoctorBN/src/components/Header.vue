@@ -10,7 +10,10 @@ export default {
     return {
       items: [
         {
-          label: 'Reset'
+          label: 'Reset',
+          command: () => {
+            this.reset()
+          }
         },
         {
           label: 'Load Patient'
@@ -34,6 +37,9 @@ export default {
   methods: {
     changePage() {
       this.$emit('changePage')
+    },
+    reset() {
+      this.$emit('reset')
     }
   }
 }

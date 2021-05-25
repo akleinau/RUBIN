@@ -1,6 +1,6 @@
 <template>
 
-  <Header @changePage="changePage()"/>
+  <Header @changePage="changePage()" @reset="reset()"/>
   <div class=" p-grid p-flex-column nested-grid">
     <div class="p-grid p-ai-stretch vertical-container" style="height:400px">
       <div class="p-col-2 box-stretched">
@@ -69,6 +69,44 @@ export default {
   methods: {
     changePage() {
       this.$emit("changePage")
+    },
+    loadNodes: async function(){
+        const gResponse = await fetch("http://localhost:5000/cancernet");
+      const network = await gResponse.json();
+      let nodes = []
+      for (var key in network.states) {
+        let options = []
+        network.states[key].forEach(value => {
+          options.push({'name': value})
+        })
+        nodes.push({'name': key, 'options': options})
+      }
+      this.nodes = nodes
+      console.log(nodes)
+
+      let edges = []
+      network.edges.forEach(edge => {
+        edges.push({"source": edge[0], "target": edge[1]})
+      })
+      this.edges = edges
+      console.log("edges: " )
+      console.log(edges)
+    },
+    reset() {
+      this.targets= []
+      this.evidence= []
+      this.goals= []
+      this.newGoals= null
+      this.nodes= []
+      this.options= null
+      this.goalResults= null
+      this.selectedOption= null
+      this.relevance= null
+      this.edges= null
+      this.states= null
+      this.explanation= null
+
+      this.loadNodes()
     },
     calculate: async function () {
       if (this.evidence.length !== 0 && this.targets.length !== 0 && this.goals.length !== 0) {
@@ -197,27 +235,9 @@ export default {
     }
   },
   created: async function () {
-    const gResponse = await fetch("http://localhost:5000/cancernet");
-    const network = await gResponse.json();
-    let nodes = []
-    for (var key in network.states) {
-      let options = []
-      network.states[key].forEach(value => {
-        options.push({'name': value})
-      })
-      nodes.push({'name': key, 'options': options})
-    }
-    this.nodes = nodes
-    console.log(nodes)
+    await this.loadNodes()
 
-    let edges = []
-    network.edges.forEach(edge => {
-      edges.push({"source": edge[0], "target": edge[1]})
-    })
-    this.edges = edges
-    console.log("edges: " )
-    console.log(edges)
-
+    //add example nodes
     let CA125 = this.nodes.find(x => x.name === "CA125")
     CA125["selected"] = {"name":"lt_35"}
     this.addEvidences([CA125])
