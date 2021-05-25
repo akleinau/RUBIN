@@ -90,10 +90,11 @@ def saveNetwork():
 # TODO
 @app.route('/openNetwork', methods=["POST"])
 def openNetwork():
-    selectedNetwork = request.form['selection']
-    networks: NetworkData = NetworkData.query.order_by(NetworkData.netId).all()
-    path = networks[selectedNetwork].filePath
+    selectedNetwork = int(request.get_json())
+    network = NetworkData.query.get(selectedNetwork)
+    path = network.filePath
     network = Network(path)
+    return ''
 
 
 @app.route('/')

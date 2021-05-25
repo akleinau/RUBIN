@@ -1,9 +1,6 @@
 <template>
-  <form @submit.prevent="openNet" method="POST" id="selectNetForm" name="selectNetForm">
-    <label for="selectID">Select a network</label> <br>
-    <select id="selectID" form="selectNetForm" v-model="networks" required>
-      <option v-for="network in networks" v-bind:key="network" v-bind:value="network.id" >{{ network.name }}</option>
-    </select>
+  <form @submit.prevent="openNetwork" method="POST" id="selectNetForm" name="selectNetForm">
+    <dropdown v-model="selectedNetwork" ref="selectMenu" :filter="true" empty-message="No networks, upload one above" emptyFilterMessage="No networks found" :options="networks" option-label="name" placeholder="Select a network" required/>
     <br>
     <Button type="submit">Open network</Button>
   </form>
@@ -14,22 +11,21 @@ export default {
   name: "LoadNetworkList",
   data() {
     return {
-      networks: []
+      networks: [],
+      selectedNetwork: ''
     }
   },
   methods: {
-    onChange(event) {
-      console.log(event.target.value)
-    },
-    openNet: async function () {
-      let selectID = document.getElementById('selectedID')
-      let selected = selectID.options[selectID.selectedIndex].value
+    openNetwork: async function () {
+      if (typeof(this.$refs.selectMenu.modelValue.netID) == 'undefined') {
+        alert("No network selected")
+        return
+      }
+      let selected = this.$refs.selectMenu.modelValue.netID
       console.log(selected)
-      let formData = new FormData();
-      formData.append('selection', selected)
-      fetch('http://localhost:5000//openNetwork', {
+      fetch('http://localhost:5000/openNetwork', {
         method: 'POST',
-        body: formData,
+        body: JSON.stringify(selected),
         headers: {
           'Content-Type': 'application/json'
         }
@@ -40,8 +36,8 @@ export default {
       const gResponse = await fetch("http://localhost:5000//loadNetList");
       const netList = await gResponse.json();
       this.networks = []
-      for (let key in netList) {
-        this.networks.push({id: key, name: netList[key]})
+      for (const key in netList) {
+        this.networks.push({netID: key, name: netList[key]})
       }
     }
   },
