@@ -218,6 +218,14 @@ export default {
     console.log("edges: " )
     console.log(edges)
 
+    let CA125 = this.nodes.find(x => x.name === "CA125")
+    CA125["selected"] = {"name":"lt_35"}
+    this.addEvidences([CA125])
+    this.addTargets([this.nodes.find(x => x.name === "Therapy")])
+    let surv = this.nodes.find(x => x.name === "Survival1yr")
+    surv["selected"] = {"name": "yes"}
+    this.addGoals([surv])
+
   }
 }
 </script>

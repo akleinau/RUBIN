@@ -2,7 +2,7 @@
   <div style="position:relative">
     <Panel header="Interventions">
 
-      <Listbox v-model="selected" :options="selection" optionLabel="name" listStyle="max-height:300px"
+      <Listbox :options="selection" optionLabel="name" listStyle="max-height:300px"
                emptyMessage="choose therapy nodes">
         <template #option="slotProps">
           <div class="p-text-center rowContent">
