@@ -1,6 +1,5 @@
 <template>
   <div ref="container"/>
-  <Button label="vis" @click="visualise()" style="position: absolute; left: 1%; bottom: 2%"/>
 </template>
 
 <script>
@@ -25,6 +24,14 @@ export default {
     if (this.nodes != null && this.edges != null) {
       console.log(this.nodes)
       console.log(this.edges)
+      this.visualise()
+    }
+  },
+  watch :{
+    nodes: function() {
+      this.visualise()
+    },
+    edges: function() {
       this.visualise()
     }
   },
