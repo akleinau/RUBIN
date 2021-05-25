@@ -1,31 +1,28 @@
 <template>
 
-  <ScrollPanel style="width: 100%; height: 100%">
-    <Menu :model="items" v-if="view ==='menu'" style="width: 100%; height: 100%"/>
+  <ScrollPanel style="position: relative; width: 100%; height: 100%">
+    <Menu :model="items" v-if="view ==='menu'" style="width: 100%"/>
     <div v-if="view !== 'menu'">
-      <h2> {{ label(view) }}
-        <Button label="back" class="p-button-sm" @click="view='menu'"></Button>
-      </h2>
+        <Button label="back" class="p-button-sm" @click="view='menu'" style="position:absolute; right:5%; margin: 5px" />
     </div>
-    <div id="network" v-if="view === 'network'">
-      The endometrial cancer network
+    <Panel id="network" v-if="view === 'network'" header="The endometrial cancer network">
       Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
       dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
       kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
       sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
       voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
       sanctus est Lorem ipsum dolor sit amet.
-    </div>
-    <div id="pubmed" v-if="view === 'pubmed'">pubmed</div>
-    <div id="change" v-if="view === 'change'">
+    </Panel>
+    <Panel id="pubmed" v-if="view === 'pubmed'" header="pubmed"></Panel>
+    <Panel id="change" v-if="view === 'change'" header='How can I change the result?'>
       <Change/>
-    </div>
-    <div id="compare" v-if="view === 'compare'">
+    </Panel>
+    <Panel id="compare" v-if="view === 'compare'" header="Compare to saved configurations">
       <Compare/>
-    </div>
-    <div id="feedback" v-if="view === 'feedback'">
+    </Panel>
+    <Panel id="feedback" v-if="view === 'feedback'" header="Send feedback">
       <Feedback/>
-    </div>
+    </Panel>
 
   </ScrollPanel>
 </template>
@@ -97,31 +94,11 @@ export default {
 </script>
 
 <style scoped>
-#additional {
-  background-color: white;
-}
-
-div {
-  background-color: white;
-  width: 100%
-}
 
 Button {
   float: right;
   margin-right: 10px
 }
 
-
-</style>
-
-<style>
-
-.p-accordion-header {
-  font-size: 10px;
-}
-
-.hide {
-  display: None;
-}
 
 </style>

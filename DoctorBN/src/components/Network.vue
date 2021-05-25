@@ -1,20 +1,78 @@
 <template>
   <TabView>
+    <TabPanel header="Relevance explanation">
+      <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
+    </TabPanel>
     <TabPanel header="Causal explanation">
-      <img src="../assets/Argumentation.png">
+      <sugiyama :edges="getExEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="compact network">
-      <img src="../assets/compactNet.png">
+      <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="full network">
-      <img src="../assets/fullNet.png">
+      <BNvis :edges="edges" :nodes="nodes"/>
+    </TabPanel>
+    <TabPanel header="sugiyama">
+      <sugiyama :edges="edges" :nodes="nodes"/>
     </TabPanel>
   </TabView>
+
 </template>
 
 <script>
+import Relevance from "./Relevance";
+import BNvis from "@/components/visualisations/BNvis";
+import sugiyama from "@/components/visualisations/sugiyama";
+
 export default {
-  name: "Network"
+  name: "Network",
+  props: ['relevance', 'goals', "edges", "nodes", "explanation"],
+  components: {
+    Relevance,
+    BNvis,
+    sugiyama
+  },
+  data() {
+    return {
+      onlyGlobal: true,
+    }
+  },
+  methods: {
+    getExEdges() {
+      if (this.explanation != null) {
+        return this.explanation["edges"]
+      }
+    },
+    getExNodes() {
+     if (this.explanation != null) {
+       let explanationNodes = []
+       this.explanation["nodes"].forEach(node => {
+         let originalNode = this.nodes.find(n => n.name === node)
+         if (originalNode != null) {
+           explanationNodes.push(originalNode)
+         }
+        else {
+           explanationNodes.push({"name": node, "probability": "1.0"})
+         }
+       })
+       return explanationNodes
+     }
+    },
+    getCompactEdges() {
+      if (this.explanation != null) {
+        let edges = []
+        console.log(this.edges)
+        this.edges.forEach(edge => {
+          if (this.explanation["nodes"].includes(edge["source"]) && this.explanation["nodes"].includes(edge["target"])) {
+            console.log(edge)
+            console.log(this.explanation["nodes"])
+            edges.push(edge)
+          }
+        })
+        return edges
+      }
+    }
+  }
 }
 </script>
 
