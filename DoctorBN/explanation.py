@@ -159,9 +159,10 @@ def compute_explanation_of_target(network, evidences, variables, outcomes, filen
     nodes = []
     edges = []
     for node in PreOrderIter(dummy):
-        nodes.append(node.name)
-        for child in node.children:
-            edges.append([child.name, node.name])
+        if (node.name != "Dummy"):
+            nodes.append(node.name)
+            for child in node.children:
+                edges.append([child.name, node.name])
 
     nodes = list(set(nodes))
     reduced_edges = []

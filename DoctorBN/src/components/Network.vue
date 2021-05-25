@@ -4,13 +4,16 @@
       <Relevance :relevance="relevance" :goals="goals"/>
     </TabPanel>
     <TabPanel header="Causal explanation">
-      <BNvis :edges="getExEdges()" :nodes="getExNodes()"/>
+      <sugiyama :edges="getExEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="compact network">
-      <BNvis :edges="getCompactEdges()" :nodes="getExNodes()"/>
+      <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="full network">
       <BNvis :edges="edges" :nodes="nodes"/>
+    </TabPanel>
+    <TabPanel header="sugiyama">
+      <sugiyama :edges="edges" :nodes="nodes"/>
     </TabPanel>
   </TabView>
 
@@ -19,13 +22,15 @@
 <script>
 import Relevance from "./Relevance";
 import BNvis from "@/components/visualisations/BNvis";
+import sugiyama from "@/components/visualisations/sugiyama";
 
 export default {
   name: "Network",
   props: ['relevance', 'goals', "edges", "nodes", "explanation"],
   components: {
     Relevance,
-    BNvis
+    BNvis,
+    sugiyama
   },
   data() {
     return {
