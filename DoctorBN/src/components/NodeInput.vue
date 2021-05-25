@@ -1,7 +1,7 @@
 <template>
   <Panel :header="title" style="position: relative">
     <div>
-      <DataTable id="table" :value="setNodes" :scrollable="true" scrollHeight="300px"
+      <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="300px"
                  dataKey="id" v-model:filters="filters" filterDisplay="menu"
                  :globalFilterFields="['name']">
         <Column field="name">
@@ -56,7 +56,8 @@ export default {
   name: "Evidence",
   props: [
     "title",
-      "nodes"
+      "nodes",
+      "selection"
   ],
   data() {
     return {
@@ -65,38 +66,10 @@ export default {
       filters: {
         'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
         'name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]}},
-      setNodes: [
-      ],
       nodesToAdd: []
     }
   },
-  mounted() {
-    if (this.title === "Evidence") {
-      this.setNodes.push({
-        'name': 'CA125',
-        'selected': {'name': 'lt_35'},
-        'options': [{'name': 'lt_35'}, {'name': 'ge_45'}]
-      })
-    }
-    else {
-          this.setNodes.push({
-        'name': 'Survival1yr',
-        'selected': {'name': 'yes'},
-        'options': [{'name': 'yes'}, {'name': 'no'}]
-      })
-    }
-    this.onNodeChange()
-    },
   methods: {
-
-    onNodeChange() {
-      let nodeDict = {}
-      this.setNodes.forEach(item => {
-        nodeDict[item.name] = item.selected;
-      })
-      console.log(nodeDict)
-      this.$emit("setNodes", nodeDict);
-    },
     addOption(slotProps, option) {
       let item = {
         name: slotProps.data.name,
@@ -104,17 +77,14 @@ export default {
         options: slotProps.data.options
       }
       this.nodesToAdd.push(item);
-      //this.nodes = this.nodes.filter(x => x !== slotProps.data);
     },
     addNodesFromOverlay() {
-      this.setNodes = this.setNodes.concat(this.nodesToAdd)
+      this.$emit("addNodes", this.nodesToAdd);
       this.nodesToAdd = []
-      this.onNodeChange()
       this.overlay=false
     },
     deleteNode(node) {
-      this.setNodes = this.setNodes.filter(x => x !== node)
-      this.onNodeChange()
+      this.$emit("deleteNode", node);
     }
   }
 }

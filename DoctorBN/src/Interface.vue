@@ -4,13 +4,16 @@
   <div class=" p-grid p-flex-column nested-grid">
     <div class="p-grid p-ai-stretch vertical-container" style="height:400px">
       <div class="p-col-2 box-stretched">
-        <NodeInput title="Evidence" :nodes="nodes" @setNodes="evidenceUpdated($event)"/>
+        <NodeInput title="Evidence" :nodes="nodes" :selection="evidence"
+                   @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
       </div>
       <div class="p-col-2 box box-stretched">
-        <Therapy :nodes="nodes" @update="targetsUpdated($event)"/>
+        <Therapy :nodes="nodes" :selection="targets"
+                 @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
       </div>
       <div class="p-col-2 box-stretched">
-        <NodeInput title="Desired Outcomes" :nodes="nodes" @setNodes="goalsUpdated($event)"/>
+        <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="goals"
+                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)"/>
       </div>
       <div class="p-col box-stretched">
         <TherapyOptions :results="options" :goals="newGoals" :goalResults="goalResults"
@@ -49,11 +52,11 @@ export default {
   },
   data() {
     return {
-      targets: null,
-      evidence: null,
-      goals: null,
+      targets: [],
+      evidence: [],
+      goals: [],
       newGoals: null,
-      nodes: null,
+      nodes: [],
       options: null,
       goalResults: null,
       selectedOption: null,
@@ -68,20 +71,26 @@ export default {
       this.$emit("changePage")
     },
     calculate: async function () {
-      if (this.evidence != null && this.targets != null && this.goals != null) {
+      if (this.evidence.length !== 0 && this.targets.length !== 0 && this.goals.length !== 0) {
         console.log("doing calculation for:")
-        console.log(this.targets)
-        console.log(this.evidence)
-        console.log(this.goals)
 
         let evidences = {}
         for (var ev in this.evidence) {
-          evidences[ev] = this.evidence[ev].name;
+          evidences[this.evidence[ev].name] = this.evidence[ev].selected.name;
         }
         let goals = {}
         for (var goal in this.goals) {
-          goals[goal] = this.goals[goal].name;
+          goals[this.goals[goal].name] = this.goals[goal].selected.name;
         }
+
+        let targets = []
+        for (var target in this.targets) {
+          targets.push(this.targets[target].name)
+        }
+
+        console.log(targets)
+        console.log(evidences)
+        console.log(goals)
 
         const gResponse = await fetch("http://localhost:5000/calcTargetForGoals", {
           method: 'POST',
@@ -90,7 +99,7 @@ export default {
           },
           body: JSON.stringify({
             evidences: evidences,
-            target: this.targets,
+            target: targets,
             goals: goals
           })
         });
@@ -111,13 +120,13 @@ export default {
 
       let evidences = {}
       for (var ev in this.evidence) {
-        evidences[ev] = this.evidence[ev].name;
+        evidences[this.evidence[ev].name] = this.evidence[ev].selected.name;
       }
       console.log(evidences)
 
       let goals = {}
       for (var goal in this.goals) {
-        goals[goal] = this.goals[goal].name;
+        goals[this.goals[goal].name] = this.goals[goal].selected.name;
       }
 
       console.log(goals)
@@ -143,16 +152,40 @@ export default {
       this.explanation = nodeDict.explanation
       console.log(this.explanation)
     },
-    evidenceUpdated(evidence) {
-      this.evidence = evidence
+    addEvidences(nodes) {
+      nodes.forEach(node => {
+        this.evidence.push(node)
+        this.nodes = this.nodes.filter(x => x.name !== node.name)
+      })
       this.calculate()
     },
-    targetsUpdated(target) {
-      this.targets = target
+    deleteEvidence(node) {
+      this.evidence = this.evidence.filter(x => x.name !== node.name)
+      this.nodes.push({name: node.name, options: node.options})
       this.calculate()
     },
-    goalsUpdated(goals) {
-      this.goals = goals
+    addTargets(nodes) {
+      nodes.forEach(node => {
+        this.targets.push(node)
+        this.nodes = this.nodes.filter(x => x.name !== node.name)
+      })
+      this.calculate()
+    },
+    deleteTarget(node) {
+      this.targets = this.targets.filter(x => x.name !== node.name)
+      this.nodes.push(node)
+      this.calculate()
+    },
+    addGoals(nodes) {
+      nodes.forEach(node => {
+        this.goals.push(node)
+        this.nodes = this.nodes.filter(x => x.name !== node.name)
+      })
+      this.calculate()
+    },
+    deleteGoal(node) {
+      this.goals = this.goals.filter(x => x.name !== node.name)
+      this.nodes.push({name: node.name, options: node.options})
       this.calculate()
     },
     selectedOptionUpdated(option) {
@@ -184,6 +217,15 @@ export default {
     this.edges = edges
     console.log("edges: " )
     console.log(edges)
+
+    let CA125 = this.nodes.find(x => x.name === "CA125")
+    CA125["selected"] = {"name":"lt_35"}
+    this.addEvidences([CA125])
+    this.addTargets([this.nodes.find(x => x.name === "Therapy")])
+    let surv = this.nodes.find(x => x.name === "Survival1yr")
+    surv["selected"] = {"name": "yes"}
+    this.addGoals([surv])
+
   }
 }
 </script>
