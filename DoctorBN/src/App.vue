@@ -48,7 +48,7 @@ body, html {
 }
 
 .p-panel-content {
-  height: 333px
+  height: 200px
 }
 
 </style>

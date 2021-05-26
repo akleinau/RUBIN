@@ -17,7 +17,7 @@ export default {
   methods: {
     visualise() {
       let width = 300
-      let height = 50
+      let height = 30
 
       let color = "black"
       if (this.color === "trafficlight") {
