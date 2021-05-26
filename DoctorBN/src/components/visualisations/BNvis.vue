@@ -42,9 +42,8 @@ export default {
       return Math.sqrt(xq + yq)
     },
     visualise() {
-      const width = 450
-      const height = 110
-
+      const width = 200
+      const height = 200
       let links = JSON.parse(JSON.stringify(this.edges))
       let nodes = JSON.parse(JSON.stringify(this.nodes))
 

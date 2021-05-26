@@ -1,7 +1,7 @@
 <template>
   <TabView header="Options">
     <TabPanel header="table">
-      <DataTable :value="results" :scrollable="true" scrollHeight="300px"
+      <DataTable :value="results" :scrollable="true" scrollHeight="400px"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
                  @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
         <Column header="option" field="option">

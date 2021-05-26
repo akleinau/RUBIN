@@ -1,7 +1,7 @@
 <template>
   <Panel :header="title" style="position: relative">
     <div>
-      <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="300px"
+      <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="500px"
                  dataKey="id" v-model:filters="filters" filterDisplay="menu"
                  :globalFilterFields="['name']">
         <Column field="name">
