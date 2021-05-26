@@ -21,16 +21,15 @@ export default {
         alert("No network selected")
         return
       }
-      let selected = this.$refs.selectMenu.modelValue.netID
-      console.log(selected)
+      let selectedID = this.$refs.selectMenu.modelValue.netID
       fetch('http://localhost:5000/openNetwork', {
         method: 'POST',
-        body: JSON.stringify(selected),
+        body: JSON.stringify(selectedID),
         headers: {
           'Content-Type': 'application/json'
         }
       })
-      this.$emit("changePage")
+      this.$emit("changePage", selectedID)
     },
     loadNetList: async function () {
       const gResponse = await fetch("http://localhost:5000//loadNetList");

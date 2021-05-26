@@ -12,7 +12,7 @@ import os
 NETWORK_FOLDER = './Networks'
 ALLOWED_EXTENSIONS = ['.bif']
 TEMPLATE_FOLDER = os.path.abspath('./src')
-
+OPEN_NETWORKS = {}
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER)
 app.config['NETWORK_FOLDER'] = NETWORK_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///networks.db'
@@ -86,7 +86,7 @@ def addNetwork(file, path, name):
     db.session.add(newNetwork)
     db.session.commit()
     file.save(path)
-    return 'successfull'
+    return 'successful'
 
 
 # Loads the list of known networks to the application
@@ -119,13 +119,16 @@ def saveNetwork():
     return
 
 
-# TODO
+# Opens the network with requested ID and adds it to the dictionary of network objects.
+# If there already exists a network object with the requested ID, the function simply returns.
 @app.route('/openNetwork', methods=["POST"])
 def openNetwork():
     selectedNetwork = int(request.get_json())
-    network = NetworkData.query.get(selectedNetwork)
-    path = network.filePath
-    network = Network(path)
+    if selectedNetwork not in OPEN_NETWORKS.keys():
+        network = NetworkData.query.get(selectedNetwork)
+        path = network.filePath
+        new_network = Network(path)
+        OPEN_NETWORKS[selectedNetwork] = new_network
     return ''
 
 

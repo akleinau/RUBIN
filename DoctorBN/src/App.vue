@@ -1,5 +1,5 @@
 <template>
-  <ChooseNet v-if="page === 'chooseNet'" @changePage="page = 'interface'"></ChooseNet>
+  <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork"></ChooseNet>
   <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'"/>
 </template>
 
@@ -15,7 +15,14 @@ export default {
   },
   data () {
     return {
-      page: "interface"
+      page: "interface",
+      selectedNetwork: null
+    }
+  },
+  methods: {
+    loadNetwork(selectedID) {
+      this.page = 'interface'
+      this.selectedNetwork = selectedID
     }
   }
 }
