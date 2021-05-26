@@ -45,6 +45,12 @@ def calcOptions():
     s = Scenario("endomcancerlast.bif", evidences=relevanceEvidences, goals=data['goals'])
     relevance = s.compute_relevancies_for_goals()
     nodes = s.compute_all_nodes()
+    e = Scenario("endomcancerlast.bif", evidences=data['evidences'], goals=data['goals'])
+    explanation = e.compute_explanation_of_goals(data['options'])
+
+    return {'relevance': relevance, 'nodes': nodes, 'explanation': explanation}
+
+
 # Database object
 class NetworkData(db.Model):
     netId = db.Column(db.Integer, primary_key=True)
@@ -68,10 +74,7 @@ def doesPathExist(filePath):
         return True
     return False
 
-    e = Scenario("endomcancerlast.bif", evidences=data['evidences'], goals=data['goals'])
-    explanation = e.compute_explanation_of_goals(data['options'])
 
-    return {'relevance': relevance, 'nodes': nodes, 'explanation': explanation}
 # Returns the next network id available
 def getNextId():
     return NetworkData.query.count()
@@ -83,7 +86,7 @@ def addNetwork(file, path, name):
     db.session.add(newNetwork)
     db.session.commit()
     file.save(path)
-    return 'successful'
+    return 'successfull'
 
 
 # Loads the list of known networks to the application
