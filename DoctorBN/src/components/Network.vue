@@ -3,7 +3,7 @@
     <TabPanel header="Relevance explanation">
       <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
     </TabPanel>
-    <TabPanel header="Causal explanation">
+    <TabPanel header="Reasoning explanation">
       <sugiyama :edges="getExEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="compact network">
