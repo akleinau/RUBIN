@@ -19,7 +19,10 @@ export default {
           label: 'Load Patient'
         },
         {
-          label: 'Save Patient'
+          label: 'Save Patient',
+          command: () => {
+            this.exportCSV()
+          }
         },
         {
           label: 'Settings',
@@ -40,6 +43,9 @@ export default {
     },
     reset() {
       this.$emit('reset')
+    },
+    exportCSV() {
+      this.$emit('exportCSV')
     }
   }
 }

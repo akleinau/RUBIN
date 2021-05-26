@@ -1,6 +1,6 @@
 <template>
 
-  <Header @changePage="changePage()" @reset="reset()"/>
+  <Header @changePage="changePage()" @reset="reset()" @exportCSV="exportCSV()"/>
   <div class=" p-grid p-flex-column nested-grid">
     <div class="p-grid p-ai-stretch vertical-container" style="height:400px">
       <div class="p-col-2 box-stretched">
@@ -232,6 +232,25 @@ export default {
       else {
         this.calculateOption()
       }
+    },
+    exportCSV() {
+      var csv = ''
+      this.evidence.forEach(ev => {
+        csv += "evidence; " + ev.name + "; " + ev.selected.name + "\n"
+      })
+      this.targets.forEach(ev => {
+        csv += "target; " + ev.name + "\n"
+      })
+      this.goals.forEach(ev => {
+        csv += "goal; " + ev.name + "; " + ev.selected.name + "\n"
+      })
+      console.log(csv)
+
+      const anchor = document.createElement('a');
+      anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      anchor.target = '_blank';
+      anchor.download = 'patient.csv';
+      anchor.click();
     }
   },
   created: async function () {
