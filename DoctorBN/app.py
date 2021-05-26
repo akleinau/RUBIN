@@ -22,13 +22,15 @@ CORS(app)
 
 @app.route('/cancernet')
 def getCancerNet():
-    network = Network("endomcancerlast.bif")
+    data = request
+    network = OPEN_NETWORKS[int(data.args.get('network'))]
     return {'states': network.states, 'edges': network.edges}
 
 @app.route('/calcTargetForGoals', methods=['POST'])
 def calcTargetForGoals():
     data = request.get_json()
-    s = Scenario("endomcancerlast.bif", evidences=data['evidences'], targets=data['target'], goals=data['goals'])
+    network = OPEN_NETWORKS[int(data['network'])]
+    s = Scenario(network, evidences=data['evidences'], targets=data['target'], goals=data['goals'])
     results = s.compute_target_combs_for_goals()
     likely_results = s.compute_goals()
     return {'optionResults': results, 'likelyResults': likely_results}
@@ -42,10 +44,11 @@ def calcOptions():
     for op in data['options']:
         relevanceEvidences[op] = data['options'][op]
 
-    s = Scenario("endomcancerlast.bif", evidences=relevanceEvidences, goals=data['goals'])
+    network = OPEN_NETWORKS[int(data['network'])]
+    s = Scenario(network, evidences=relevanceEvidences, goals=data['goals'])
     relevance = s.compute_relevancies_for_goals()
     nodes = s.compute_all_nodes()
-    e = Scenario("endomcancerlast.bif", evidences=data['evidences'], goals=data['goals'])
+    e = Scenario(network, evidences=data['evidences'], goals=data['goals'])
     explanation = e.compute_explanation_of_goals(data['options'])
 
     return {'relevance': relevance, 'nodes': nodes, 'explanation': explanation}

@@ -50,6 +50,9 @@ export default {
     Network,
     TherapyOptions
   },
+  props: [
+      "network"
+  ],
   data() {
     return {
       targets: [],
@@ -71,7 +74,7 @@ export default {
       this.$emit("changePage")
     },
     loadNodes: async function(){
-        const gResponse = await fetch("http://localhost:5000/cancernet");
+        const gResponse = await fetch("http://localhost:5000/cancernet?network=" + this.network);
       const network = await gResponse.json();
       let nodes = []
       for (var key in network.states) {
@@ -136,6 +139,7 @@ export default {
             'content-type': 'application/json'
           },
           body: JSON.stringify({
+            network: this.network,
             evidences: evidences,
             target: targets,
             goals: goals
@@ -175,6 +179,7 @@ export default {
           'content-type': 'application/json'
         },
         body: JSON.stringify({
+          network: this.network,
           evidences: evidences,
           options: this.selectedOption.option,
           goals: goals
