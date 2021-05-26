@@ -1,6 +1,6 @@
-from flask import Flask, flash, request, redirect, jsonify, render_template, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, flash, request, redirect, jsonify, make_response, render_template, url_for
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 from pgmpy.models import BayesianModel
 from pgmpy.readwrite import BIFReader
 from pgmpy import inference
@@ -11,12 +11,13 @@ import os
 
 NETWORK_FOLDER = './Networks'
 ALLOWED_EXTENSIONS = ['.bif']
+TEMPLATE_FOLDER = os.path.abspath('./src')
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(__name__, template_folder=TEMPLATE_FOLDER)
 app.config['NETWORK_FOLDER'] = NETWORK_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///networks.db'
 db = SQLAlchemy(app)
+CORS(app)
 
 
 @app.route('/cancernet')
@@ -44,12 +45,91 @@ def calcOptions():
     s = Scenario("endomcancerlast.bif", evidences=relevanceEvidences, goals=data['goals'])
     relevance = s.compute_relevancies_for_goals()
     nodes = s.compute_all_nodes()
+# Database object
+class NetworkData(db.Model):
+    netId = db.Column(db.Integer, primary_key=True)
+    filePath = db.Column(db.String(), nullable=False)
+    displayName = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return self.displayName
+
+
+# checks if the network name passed on already exists
+def doesNetworkNameExist(newDisplayName):
+    if NetworkData.query.filter_by(displayName=newDisplayName).first() is not None:
+        return True
+    return False
+
+
+# Checks if the file already exists in the path
+def doesPathExist(filePath):
+    if os.path.exists(filePath):
+        return True
+    return False
 
     e = Scenario("endomcancerlast.bif", evidences=data['evidences'], goals=data['goals'])
     explanation = e.compute_explanation_of_goals(data['options'])
 
     return {'relevance': relevance, 'nodes': nodes, 'explanation': explanation}
+# Returns the next network id available
+def getNextId():
+    return NetworkData.query.count()
+
+
+# Adds a new network's data to the database and saves the file to the designated path
+def addNetwork(file, path, name):
+    newNetwork = NetworkData(netId=getNextId(), filePath=path, displayName=name)
+    db.session.add(newNetwork)
+    db.session.commit()
+    file.save(path)
+    return 'successful'
+
+
+# Loads the list of known networks to the application
+# returns a python dict object
+@app.route('/loadNetList')
+def getNetworkList():
+    networks = NetworkData.query.order_by(NetworkData.netId).all()
+    netList = {}
+    for network in networks:
+        netList[network.netId] = network.displayName
+    return netList
+
+
+# Save file upload from application
+@app.route('/uploadNetwork', methods=["POST"])
+def saveNetwork():
+    displayName = request.form['displayName']
+    file = request.files['file']
+    # if the display name the user entered is already in use, return with error
+    if doesNetworkNameExist(displayName):
+        return
+    # get file name and path
+    filename = secure_filename(file.filename)
+    filePath = os.path.join(app.config['NETWORK_FOLDER'], filename)
+    # if the file name of the uploaded network already exists in the networks folder, return with error
+    if doesPathExist(filePath):
+        return
+    # add new network to database and save it
+    addNetwork(file, filePath, displayName)
+    return
+
+
+# TODO
+@app.route('/openNetwork', methods=["POST"])
+def openNetwork():
+    selectedNetwork = int(request.get_json())
+    network = NetworkData.query.get(selectedNetwork)
+    path = network.filePath
+    network = Network(path)
+    return ''
+
+
+@app.route('/')
+def home():
+    render_template('App.vue')
+
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
-
+    app.run(host='localhost', debug=True, port=5000)

@@ -1,33 +1,35 @@
 <template>
   <!-- Form to upload a network file -->
-  <form action="/uploadNetwork" method="POST" enctype="multipart/form-data">
+  <form @submit.prevent="upload" id = "upload-form" enctype="multipart/form-data">
     <h3>Upload new network</h3>
-    <span>Network name: <input name = "net_name" type = "text" v-model="networks.name"/> <br></span>
-    <input name = "net_upload" type = "file" ref="netFile" @change="selectFile"/> <br>
-    <input name = "net_submit" type = "submit" value = "Upload Network"/>
+    <span>Network name:<input id = "net-name" type = "text" required/> <br></span>
+    <input name = "net-upload" type = "file" accept=".bif" required/> <br>
+    <input name = "net-submit" type = "submit" value = "Upload Network"/>
   </form>
-  <Button @click="changePage()">open</Button>
 </template>
 
 <script>
 export default {
   name: "UploadNetwork",
-  data() {
-    return {
-      networks: []
-    }
-  },
   methods: {
-    addNewNetwork: function() {
-      this.networks.push({
-        name: this.networks.name
-      })
-      console.log(this.networks)
-    },
-    changePage() {
-      this.$emit("changePage")
-}
-    //TODO: Method that adds saved networks to list
+    upload: async function() {
+      let uploadForm = document.getElementById('upload-form');
+      let displayName = document.getElementById('net-name').value;
+      let fileField = uploadForm.querySelector('input[type="file"]');
+      let formData = new FormData();
+      formData.append('displayName', displayName)
+      formData.append('file', fileField.files[0])
+      let options = {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      delete options.headers['Content-Type']
+      fetch('http://localhost:5000//uploadNetwork', options)
+      this.$emit("reloadNetList")
+    }
   }
 }
 

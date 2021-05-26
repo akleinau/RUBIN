@@ -1,17 +1,49 @@
 <template>
-  <div>
-    <h4>Select a network</h4>
-    <table>
-      <tr>
-        <td></td>
-      </tr>
-    </table>
-  </div>
+  <form @submit.prevent="openNetwork" method="POST" id="selectNetForm" name="selectNetForm">
+    <dropdown v-model="selectedNetwork" ref="selectMenu" :filter="true" empty-message="No networks, upload one above" emptyFilterMessage="No networks found" :options="networks" option-label="name" placeholder="Select a network" required/>
+    <br>
+    <Button type="submit">Open network</Button>
+  </form>
 </template>
 
 <script>
 export default {
-  name: "LoadNetworkList"
+  name: "LoadNetworkList",
+  data() {
+    return {
+      networks: [],
+      selectedNetwork: ''
+    }
+  },
+  methods: {
+    openNetwork: async function () {
+      if (typeof(this.$refs.selectMenu.modelValue.netID) == 'undefined') {
+        alert("No network selected")
+        return
+      }
+      let selected = this.$refs.selectMenu.modelValue.netID
+      console.log(selected)
+      fetch('http://localhost:5000/openNetwork', {
+        method: 'POST',
+        body: JSON.stringify(selected),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      this.$emit("changePage")
+    },
+    loadNetList: async function () {
+      const gResponse = await fetch("http://localhost:5000//loadNetList");
+      const netList = await gResponse.json();
+      this.networks = []
+      for (const key in netList) {
+        this.networks.push({netID: key, name: netList[key]})
+      }
+    }
+  },
+  created: function () {
+    this.loadNetList()
+  }
 }
 </script>
 
