@@ -13,10 +13,6 @@
       voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
       sanctus est Lorem ipsum dolor sit amet.
     </Panel>
-    <Panel id="pubmed" v-if="view === 'pubmed'" header="pubmed"></Panel>
-    <Panel id="change" v-if="view === 'change'" header='How can I change the result?'>
-      <Change/>
-    </Panel>
     <Panel id="compare" v-if="view === 'compare'" header="Compare to saved configurations">
       <Compare/>
     </Panel>
@@ -30,14 +26,12 @@
 <script>
 import Feedback from './additional/Feedback.vue'
 import Compare from './additional/Compare.vue'
-import Change from './additional/Change.vue'
 
 export default {
   name: "additional",
   components: {
     Feedback,
-    Compare,
-    Change
+    Compare
   },
   data() {
     return {
@@ -46,16 +40,6 @@ export default {
         {
           label: 'Network description', command: () => {
             this.view = "network"
-          }
-        },
-        {
-          label: 'Pubmed', command: () => {
-            this.view = "pubmed"
-          }
-        },
-        {
-          label: 'How can I change the result?', command: () => {
-            this.view = "change"
           }
         },
         {
