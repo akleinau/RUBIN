@@ -12,7 +12,7 @@ import os
 NETWORK_FOLDER = './Networks'
 ALLOWED_EXTENSIONS = ['.bif']
 TEMPLATE_FOLDER = os.path.abspath('./src')
-OPEN_NETWORKS = {}
+NETWORKS = {}
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER)
 app.config['NETWORK_FOLDER'] = NETWORK_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///networks.db'
@@ -23,13 +23,13 @@ CORS(app)
 @app.route('/cancernet')
 def getCancerNet():
     data = request
-    network = OPEN_NETWORKS[int(data.args.get('network'))]
+    network = Network(NETWORKS[int(data.args.get('network'))])
     return {'states': network.states, 'edges': network.edges}
 
 @app.route('/calcTargetForGoals', methods=['POST'])
 def calcTargetForGoals():
     data = request.get_json()
-    network = OPEN_NETWORKS[int(data['network'])]
+    network = NETWORKS[int(data['network'])]
     s = Scenario(network, evidences=data['evidences'], targets=data['target'], goals=data['goals'])
     results = s.compute_target_combs_for_goals()
     likely_results = s.compute_goals()
@@ -44,7 +44,7 @@ def calcOptions():
     for op in data['options']:
         relevanceEvidences[op] = data['options'][op]
 
-    network = OPEN_NETWORKS[int(data['network'])]
+    network = NETWORKS[int(data['network'])]
     s = Scenario(network, evidences=relevanceEvidences, goals=data['goals'])
     relevance = s.compute_relevancies_for_goals()
     nodes = s.compute_all_nodes()
@@ -127,11 +127,10 @@ def saveNetwork():
 @app.route('/openNetwork', methods=["POST"])
 def openNetwork():
     selectedNetwork = int(request.get_json())
-    if selectedNetwork not in OPEN_NETWORKS.keys():
+    if selectedNetwork not in NETWORKS.keys():
         network = NetworkData.query.get(selectedNetwork)
         path = network.filePath
-        new_network = Network(path)
-        OPEN_NETWORKS[selectedNetwork] = new_network
+        NETWORKS[selectedNetwork] = path
     return ''
 
 
