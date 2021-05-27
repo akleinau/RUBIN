@@ -25,9 +25,6 @@
       <div class="p-col">
         <Network :relevance = "relevance" :goals="newGoals" :edges="edges" :nodes="states" :explanation="explanation"/>
       </div>
-      <div class="p-col-3">
-        <Additional/>
-      </div>
     </div>
   </div>
 </template>
@@ -36,7 +33,6 @@
 import Header from "./components/Header";
 import NodeInput from "./components/NodeInput";
 import Therapy from "./components/Therapy";
-import Additional from "./components/additional";
 import Network from "./components/Network";
 import TherapyOptions from "@/components/TherapyOptions";
 
@@ -46,7 +42,6 @@ export default {
     Header,
     NodeInput,
     Therapy,
-    Additional,
     Network,
     TherapyOptions
   },

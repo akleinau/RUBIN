@@ -22,7 +22,7 @@
       </DataTable>
       <Button id="addButton" icon="pi pi-plus" @click="overlay = true"></Button>
     </div>
-    <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%">
+    <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%" modal="yes">
       <Button class="p-mb-1" :label="'Add ' + title" style="width: 100%" @click="addNodesFromOverlay()"/>
       <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
         <template #option="slotProps">

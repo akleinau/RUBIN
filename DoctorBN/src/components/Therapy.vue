@@ -16,7 +16,7 @@
       <Button id="AddButton" icon="pi pi-plus" @click="overlay = true"></Button>
     </Panel>
 
-    <Dialog header="Add Interventions" v-model:visible="overlay" style="width: 50%">
+    <Dialog header="Add Interventions" v-model:visible="overlay" style="width: 50%" modal="yes">
       <Button class="p-mb-1" label="Add Interventions" style="width: 100%" @click="addTargetsFromOverlay()"/>
       <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
         <template #option="slotProps">

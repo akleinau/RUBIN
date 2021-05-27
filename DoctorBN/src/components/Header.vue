@@ -1,13 +1,37 @@
 <template>
   <Menubar :model="items"/>
   <div id="logo">DoctorBN</div>
+  <Dialog header="Feedback" v-model:visible="showFeedback"  style="width: 50%" modal="yes">
+    <Feedback></Feedback>
+  </Dialog>
+    <Dialog header="Network Description" v-model:visible="showNetworkDescription" style="width: 50%" modal="yes">
+          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+      dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+      kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+      sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+      voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+      sanctus est Lorem ipsum dolor sit amet.
+  </Dialog>
+  <Dialog header="Compare to saved configurations" v-model:visible="showConfigs" style="width: 50%" modal="yes">
+    <Compare />
+  </Dialog>
+
 </template>
 
 <script>
+import Feedback from "@/components/additional/Feedback";
+import Compare from "@/components/additional/Compare";
 export default {
   name: "Header",
+  components: {
+    Feedback,
+    Compare
+  },
   data() {
     return {
+      showFeedback: false,
+      showNetworkDescription: false,
+      showConfigs: false,
       items: [
         {
           label: 'Reset',
@@ -29,6 +53,24 @@ export default {
           items: [{label: 'change theme'}, {label: 'change language'}]
         },
         {
+          label: 'Send Feedback',
+          command: () => {
+            this.showFeedback = true
+          }
+        },
+        {
+          label: 'Network Description',
+          command: () => {
+            this.showNetworkDescription = true
+          }
+        },
+        {
+          label: 'saved configurations',
+          command: () => {
+            this.showConfigs = true
+          }
+        },
+        {
           label: 'back to network selection',
           command: () => {
             this.changePage()
@@ -46,7 +88,7 @@ export default {
     },
     exportCSV() {
       this.$emit('exportCSV')
-    }
+    },
   }
 }
 </script>
