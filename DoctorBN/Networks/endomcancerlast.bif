@@ -1,0 +1,370 @@
+network unknown {
+}
+variable Cytology {
+  type discrete [ 2 ] { no, yes };
+}
+variable MyometrialInvasion {
+  type discrete [ 3 ] { no, lt_50, ge_50 };
+}
+variable PrimaryTumor {
+  type discrete [ 3 ] { grade_1, grade_2, grade_3 };
+}
+variable Histology {
+  type discrete [ 3 ] { grade_1, grade_2, grade_3 };
+}
+variable Therapy {
+  type discrete [ 4 ] { no, radiotx, chemotx, chemoradiotx };
+}
+variable LVSI {
+  type discrete [ 2 ] { no, yes };
+}
+variable LNM {
+  type discrete [ 2 ] { no, yes };
+}
+variable CA125 {
+  type discrete [ 2 ] { lt_35, ge_35 };
+}
+variable Recurrence {
+  type discrete [ 3 ] { no, regional_distant, local };
+}
+variable Survival5yr {
+  type discrete [ 2 ] { yes, no };
+}
+variable Platelets {
+  type discrete [ 2 ] { lt_400, ge_400 };
+}
+variable ER {
+  type discrete [ 2 ] { positive, negative };
+}
+variable CTMRI {
+  type discrete [ 2 ] { no, yes };
+}
+variable Survival3yr {
+  type discrete [ 2 ] { yes, no };
+}
+variable PR {
+  type discrete [ 2 ] { positive, negative };
+}
+variable L1CAM {
+  type discrete [ 2 ] { negative, positive };
+}
+variable p53 {
+  type discrete [ 2 ] { wildtype, mutant };
+}
+variable Survival1yr {
+  type discrete [ 2 ] { yes, no };
+}
+probability ( Cytology ) {
+  table 0.96330275, 0.03669725;
+}
+probability ( MyometrialInvasion ) {
+  table 0.07601573, 0.55176933, 0.37221494;
+}
+probability ( PrimaryTumor ) {
+  table 0.5806029, 0.2319790, 0.1874181;
+}
+probability ( Histology | Cytology, MyometrialInvasion, PrimaryTumor ) {
+  (no, no, grade_1) 0.8222222, 0.1777778, 0.0000000;
+  (yes, no, grade_1) 1.0, 0.0, 0.0;
+  (no, lt_50, grade_1) 0.68217054, 0.31007752, 0.00775194;
+  (yes, lt_50, grade_1) 0.0, 0.5, 0.5;
+  (no, ge_50, grade_1) 0.44274809, 0.48091603, 0.07633588;
+  (yes, ge_50, grade_1) 0.25, 0.50, 0.25;
+  (no, no, grade_2) 0.1428571, 0.8571429, 0.0000000;
+  (yes, no, grade_2) 0.3333333, 0.3333333, 0.3333333;
+  (no, lt_50, grade_2) 0.26086957, 0.65217391, 0.08695652;
+  (yes, lt_50, grade_2) 0.0000000, 0.6666667, 0.3333333;
+  (no, ge_50, grade_2) 0.1764706, 0.6176470, 0.2058824;
+  (yes, ge_50, grade_2) 0.0000000, 0.5714286, 0.4285714;
+  (no, no, grade_3) 0.0, 0.0, 1.0;
+  (yes, no, grade_3) 0.3333333, 0.3333333, 0.3333333;
+  (no, lt_50, grade_3) 0.09836066, 0.21311475, 0.68852459;
+  (yes, lt_50, grade_3) 0.0000000, 0.3333333, 0.6666667;
+  (no, ge_50, grade_3) 0.01470588, 0.08823529, 0.89705883;
+  (yes, ge_50, grade_3) 0.0, 0.0, 1.0;
+}
+probability ( Therapy | Histology ) {
+  (grade_1) 0.64984227, 0.33123028, 0.00630915, 0.01261830;
+  (grade_2) 0.55709342, 0.38754325, 0.02076125, 0.03460208;
+  (grade_3) 0.31210191, 0.42038217, 0.19108280, 0.07643312;
+}
+probability ( LVSI | Cytology, Histology, Therapy ) {
+  (no, grade_1, no) 0.96585366, 0.03414634;
+  (yes, grade_1, no) 1.0, 0.0;
+  (no, grade_2, no) 0.91194969, 0.08805031;
+  (yes, grade_2, no) 1.0, 0.0;
+  (no, grade_3, no) 0.6666667, 0.3333333;
+  (yes, grade_3, no) 0.1428571, 0.8571429;
+  (no, grade_1, radiotx) 0.875, 0.125;
+  (yes, grade_1, radiotx) 1.0, 0.0;
+  (no, grade_2, radiotx) 0.8971963, 0.1028037;
+  (yes, grade_2, radiotx) 0.6, 0.4;
+  (no, grade_3, radiotx) 0.7258065, 0.2741935;
+  (yes, grade_3, radiotx) 0.25, 0.75;
+  (no, grade_1, chemotx) 0.0, 1.0;
+  (yes, grade_1, chemotx) 0.5, 0.5;
+  (no, grade_2, chemotx) 1.0, 0.0;
+  (yes, grade_2, chemotx) 1.0, 0.0;
+  (no, grade_3, chemotx) 0.3333333, 0.6666667;
+  (yes, grade_3, chemotx) 0.0, 1.0;
+  (no, grade_1, chemoradiotx) 0.75, 0.25;
+  (yes, grade_1, chemoradiotx) 0.5, 0.5;
+  (no, grade_2, chemoradiotx) 0.4285714, 0.5714286;
+  (yes, grade_2, chemoradiotx) 0.0, 1.0;
+  (no, grade_3, chemoradiotx) 0.3636364, 0.6363636;
+  (yes, grade_3, chemoradiotx) 1.0, 0.0;
+}
+probability ( LNM | Histology, LVSI, MyometrialInvasion, Therapy ) {
+  (grade_1, no, no, no) 1.0, 0.0;
+  (grade_2, no, no, no) 1.0, 0.0;
+  (grade_3, no, no, no) 1.0, 0.0;
+  (grade_1, yes, no, no) 0.5, 0.5;
+  (grade_2, yes, no, no) 0.5, 0.5;
+  (grade_3, yes, no, no) 1.0, 0.0;
+  (grade_1, no, lt_50, no) 1.0, 0.0;
+  (grade_2, no, lt_50, no) 1.0, 0.0;
+  (grade_3, no, lt_50, no) 1.0, 0.0;
+  (grade_1, yes, lt_50, no) 1.0, 0.0;
+  (grade_2, yes, lt_50, no) 0.6666667, 0.3333333;
+  (grade_3, yes, lt_50, no) 0.5714286, 0.4285714;
+  (grade_1, no, ge_50, no) 1.0, 0.0;
+  (grade_2, no, ge_50, no) 0.97297297, 0.02702703;
+  (grade_3, no, ge_50, no) 1.0, 0.0;
+  (grade_1, yes, ge_50, no) 0.5, 0.5;
+  (grade_2, yes, ge_50, no) 0.8, 0.2;
+  (grade_3, yes, ge_50, no) 0.0, 1.0;
+  (grade_1, no, no, radiotx) 1.0, 0.0;
+  (grade_2, no, no, radiotx) 1.0, 0.0;
+  (grade_3, no, no, radiotx) 0.5, 0.5;
+  (grade_1, yes, no, radiotx) 0.5, 0.5;
+  (grade_2, yes, no, radiotx) 0.5, 0.5;
+  (grade_3, yes, no, radiotx) 0.5, 0.5;
+  (grade_1, no, lt_50, radiotx) 1.0, 0.0;
+  (grade_2, no, lt_50, radiotx) 0.94736842, 0.05263158;
+  (grade_3, no, lt_50, radiotx) 1.0, 0.0;
+  (grade_1, yes, lt_50, radiotx) 1.0, 0.0;
+  (grade_2, yes, lt_50, radiotx) 1.0, 0.0;
+  (grade_3, yes, lt_50, radiotx) 1.0, 0.0;
+  (grade_1, no, ge_50, radiotx) 0.97297297, 0.02702703;
+  (grade_2, no, ge_50, radiotx) 0.95, 0.05;
+  (grade_3, no, ge_50, radiotx) 0.93103448, 0.06896552;
+  (grade_1, yes, ge_50, radiotx) 1.0, 0.0;
+  (grade_2, yes, ge_50, radiotx) 0.5, 0.5;
+  (grade_3, yes, ge_50, radiotx) 0.8666667, 0.1333333;
+  (grade_1, no, no, chemotx) 0.5, 0.5;
+  (grade_2, no, no, chemotx) 0.5, 0.5;
+  (grade_3, no, no, chemotx) 0.5, 0.5;
+  (grade_1, yes, no, chemotx) 0.5, 0.5;
+  (grade_2, yes, no, chemotx) 0.5, 0.5;
+  (grade_3, yes, no, chemotx) 0.5, 0.5;
+  (grade_1, no, lt_50, chemotx) 0.5, 0.5;
+  (grade_2, no, lt_50, chemotx) 0.3333333, 0.6666667;
+  (grade_3, no, lt_50, chemotx) 0.0, 1.0;
+  (grade_1, yes, lt_50, chemotx) 0.5, 0.5;
+  (grade_2, yes, lt_50, chemotx) 0.5, 0.5;
+  (grade_3, yes, lt_50, chemotx) 0.6666667, 0.3333333;
+  (grade_1, no, ge_50, chemotx) 0.5, 0.5;
+  (grade_2, no, ge_50, chemotx) 0.3333333, 0.6666667;
+  (grade_3, no, ge_50, chemotx) 0.6, 0.4;
+  (grade_1, yes, ge_50, chemotx) 1.0, 0.0;
+  (grade_2, yes, ge_50, chemotx) 0.5, 0.5;
+  (grade_3, yes, ge_50, chemotx) 0.06666667, 0.93333333;
+  (grade_1, no, no, chemoradiotx) 0.5, 0.5;
+  (grade_2, no, no, chemoradiotx) 0.5, 0.5;
+  (grade_3, no, no, chemoradiotx) 0.5, 0.5;
+  (grade_1, yes, no, chemoradiotx) 0.5, 0.5;
+  (grade_2, yes, no, chemoradiotx) 0.5, 0.5;
+  (grade_3, yes, no, chemoradiotx) 0.5, 0.5;
+  (grade_1, no, lt_50, chemoradiotx) 1.0, 0.0;
+  (grade_2, no, lt_50, chemoradiotx) 1.0, 0.0;
+  (grade_3, no, lt_50, chemoradiotx) 1.0, 0.0;
+  (grade_1, yes, lt_50, chemoradiotx) 0.0, 1.0;
+  (grade_2, yes, lt_50, chemoradiotx) 0.6666667, 0.3333333;
+  (grade_3, yes, lt_50, chemoradiotx) 1.0, 0.0;
+  (grade_1, no, ge_50, chemoradiotx) 0.5, 0.5;
+  (grade_2, no, ge_50, chemoradiotx) 1.0, 0.0;
+  (grade_3, no, ge_50, chemoradiotx) 0.5, 0.5;
+  (grade_1, yes, ge_50, chemoradiotx) 0.5, 0.5;
+  (grade_2, yes, ge_50, chemoradiotx) 0.75, 0.25;
+  (grade_3, yes, ge_50, chemoradiotx) 0.25, 0.75;
+}
+probability ( CA125 | LNM ) {
+  (no) 0.8791367, 0.1208633;
+  (yes) 0.2794118, 0.7205882;
+}
+probability ( Recurrence | CA125, Histology, LNM, LVSI ) {
+  (lt_35, grade_1, no, no) 0.98127341, 0.01872659, 0.00000000;
+  (ge_35, grade_1, no, no) 0.96153846, 0.00000000, 0.03846154;
+  (lt_35, grade_2, no, no) 0.90134529, 0.08071749, 0.01793722;
+  (ge_35, grade_2, no, no) 0.77272727, 0.18181818, 0.04545455;
+  (lt_35, grade_3, no, no) 0.91935484, 0.08064516, 0.00000000;
+  (ge_35, grade_3, no, no) 0.625, 0.375, 0.000;
+  (lt_35, grade_1, yes, no) 1.0, 0.0, 0.0;
+  (ge_35, grade_1, yes, no) 0.3333333, 0.3333333, 0.3333333;
+  (lt_35, grade_2, yes, no) 1.0, 0.0, 0.0;
+  (ge_35, grade_2, yes, no) 0.375, 0.625, 0.000;
+  (lt_35, grade_3, yes, no) 0.2, 0.4, 0.4;
+  (ge_35, grade_3, yes, no) 0.3333333, 0.5000000, 0.1666667;
+  (lt_35, grade_1, no, yes) 1.0, 0.0, 0.0;
+  (ge_35, grade_1, no, yes) 0.25, 0.75, 0.00;
+  (lt_35, grade_2, no, yes) 0.7894737, 0.2105263, 0.0000000;
+  (ge_35, grade_2, no, yes) 0.6666667, 0.3333333, 0.0000000;
+  (lt_35, grade_3, no, yes) 0.5384615, 0.4615385, 0.0000000;
+  (ge_35, grade_3, no, yes) 0.6666667, 0.3333333, 0.0000000;
+  (lt_35, grade_1, yes, yes) 0.3333333, 0.3333333, 0.3333333;
+  (ge_35, grade_1, yes, yes) 0.0, 1.0, 0.0;
+  (lt_35, grade_2, yes, yes) 1.0, 0.0, 0.0;
+  (ge_35, grade_2, yes, yes) 0.8, 0.0, 0.2;
+  (lt_35, grade_3, yes, yes) 0.4285714, 0.5714286, 0.0000000;
+  (ge_35, grade_3, yes, yes) 0.4827586, 0.5172414, 0.0000000;
+}
+probability ( Survival5yr | Recurrence, Therapy ) {
+  (no, no) 0.99204244, 0.00795756;
+  (regional_distant, no) 0.5588235, 0.4411765;
+  (local, no) 0.6, 0.4;
+  (no, radiotx) 0.996, 0.004;
+  (regional_distant, radiotx) 0.5, 0.5;
+  (local, radiotx) 1.0, 0.0;
+  (no, chemotx) 1.0, 0.0;
+  (regional_distant, chemotx) 0.1904762, 0.8095238;
+  (local, chemotx) 0.0, 1.0;
+  (no, chemoradiotx) 1.0, 0.0;
+  (regional_distant, chemoradiotx) 0.5555556, 0.4444444;
+  (local, chemoradiotx) 0.5, 0.5;
+}
+probability ( Platelets | LNM ) {
+  (no) 0.96978417, 0.03021583;
+  (yes) 0.94117647, 0.05882353;
+}
+probability ( ER | Histology, LNM ) {
+  (grade_1, no) 0.96507937, 0.03492063;
+  (grade_2, no) 0.93333333, 0.06666667;
+  (grade_3, no) 0.7272727, 0.2727273;
+  (grade_1, yes) 1.0, 0.0;
+  (grade_2, yes) 0.94736842, 0.05263158;
+  (grade_3, yes) 0.6595745, 0.3404255;
+}
+probability ( CTMRI | CA125, LNM ) {
+  (lt_35, no) 0.98854337, 0.01145663;
+  (ge_35, no) 0.7857143, 0.2142857;
+  (lt_35, yes) 0.8947368, 0.1052632;
+  (ge_35, yes) 0.7755102, 0.2244898;
+}
+probability ( Survival3yr | Recurrence, Therapy, Survival5yr ) {
+  (no, no, yes) 1.0, 0.0;
+  (regional_distant, no, yes) 1.0, 0.0;
+  (local, no, yes) 1.0, 0.0;
+  (no, radiotx, yes) 1.0, 0.0;
+  (regional_distant, radiotx, yes) 1.0, 0.0;
+  (local, radiotx, yes) 1.0, 0.0;
+  (no, chemotx, yes) 1.0, 0.0;
+  (regional_distant, chemotx, yes) 1.0, 0.0;
+  (local, chemotx, yes) 0.5, 0.5;
+  (no, chemoradiotx, yes) 1.0, 0.0;
+  (regional_distant, chemoradiotx, yes) 1.0, 0.0;
+  (local, chemoradiotx, yes) 0.5, 0.5;
+  (no, no, no) 1.0, 0.0;
+  (regional_distant, no, no) 0.2, 0.8;
+  (local, no, no) 1.0, 0.0;
+  (no, radiotx, no) 0.0, 1.0;
+  (regional_distant, radiotx, no) 0.2666667, 0.7333333;
+  (local, radiotx, no) 0.5, 0.5;
+  (no, chemotx, no) 0.5, 0.5;
+  (regional_distant, chemotx, no) 0.1764706, 0.8235294;
+  (local, chemotx, no) 0.0, 1.0;
+  (no, chemoradiotx, no) 0.5, 0.5;
+  (regional_distant, chemoradiotx, no) 0.25, 0.75;
+  (local, chemoradiotx, no) 0.5, 0.5;
+}
+probability ( PR | ER, Histology, LNM ) {
+  (positive, grade_1, no) 0.91447368, 0.08552632;
+  (negative, grade_1, no) 0.4545455, 0.5454545;
+  (positive, grade_2, no) 0.90079365, 0.09920635;
+  (negative, grade_2, no) 0.2222222, 0.7777778;
+  (positive, grade_3, no) 0.775, 0.225;
+  (negative, grade_3, no) 0.1333333, 0.8666667;
+  (positive, grade_1, yes) 1.0, 0.0;
+  (negative, grade_1, yes) 0.5, 0.5;
+  (positive, grade_2, yes) 0.94444444, 0.05555556;
+  (negative, grade_2, yes) 0.0, 1.0;
+  (positive, grade_3, yes) 0.8064516, 0.1935484;
+  (negative, grade_3, yes) 0.0625, 0.9375;
+}
+probability ( L1CAM | Histology, LNM, PR ) {
+  (grade_1, no, positive) 0.98939929, 0.01060071;
+  (grade_2, no, positive) 0.95238095, 0.04761905;
+  (grade_3, no, positive) 0.8484848, 0.1515152;
+  (grade_1, yes, positive) 1.0, 0.0;
+  (grade_2, yes, positive) 0.8235294, 0.1764706;
+  (grade_3, yes, positive) 0.7692308, 0.2307692;
+  (grade_1, no, negative) 0.8125, 0.1875;
+  (grade_2, no, negative) 0.8205128, 0.1794872;
+  (grade_3, no, negative) 0.5227273, 0.4772727;
+  (grade_1, yes, negative) 0.5, 0.5;
+  (grade_2, yes, negative) 0.5, 0.5;
+  (grade_3, yes, negative) 0.4285714, 0.5714286;
+}
+probability ( p53 | Histology, L1CAM, LNM ) {
+  (grade_1, negative, no) 0.94771242, 0.05228758;
+  (grade_2, negative, no) 0.90079365, 0.09920635;
+  (grade_3, negative, no) 0.7088608, 0.2911392;
+  (grade_1, positive, no) 0.8888889, 0.1111111;
+  (grade_2, positive, no) 0.6111111, 0.3888889;
+  (grade_3, positive, no) 0.2903226, 0.7096774;
+  (grade_1, negative, yes) 0.5, 0.5;
+  (grade_2, negative, yes) 0.6666667, 0.3333333;
+  (grade_3, negative, yes) 0.8275862, 0.1724138;
+  (grade_1, positive, yes) 0.5, 0.5;
+  (grade_2, positive, yes) 0.5, 0.5;
+  (grade_3, positive, yes) 0.2222222, 0.7777778;
+}
+probability ( Survival1yr | Recurrence, Therapy, Survival3yr, Survival5yr ) {
+  (no, no, yes, yes) 1.0, 0.0;
+  (regional_distant, no, yes, yes) 1.0, 0.0;
+  (local, no, yes, yes) 1.0, 0.0;
+  (no, radiotx, yes, yes) 1.0, 0.0;
+  (regional_distant, radiotx, yes, yes) 1.0, 0.0;
+  (local, radiotx, yes, yes) 1.0, 0.0;
+  (no, chemotx, yes, yes) 1.0, 0.0;
+  (regional_distant, chemotx, yes, yes) 1.0, 0.0;
+  (local, chemotx, yes, yes) 0.5, 0.5;
+  (no, chemoradiotx, yes, yes) 1.0, 0.0;
+  (regional_distant, chemoradiotx, yes, yes) 1.0, 0.0;
+  (local, chemoradiotx, yes, yes) 0.5, 0.5;
+  (no, no, no, yes) 0.5, 0.5;
+  (regional_distant, no, no, yes) 0.5, 0.5;
+  (local, no, no, yes) 0.5, 0.5;
+  (no, radiotx, no, yes) 0.5, 0.5;
+  (regional_distant, radiotx, no, yes) 0.5, 0.5;
+  (local, radiotx, no, yes) 0.5, 0.5;
+  (no, chemotx, no, yes) 0.5, 0.5;
+  (regional_distant, chemotx, no, yes) 0.5, 0.5;
+  (local, chemotx, no, yes) 0.5, 0.5;
+  (no, chemoradiotx, no, yes) 0.5, 0.5;
+  (regional_distant, chemoradiotx, no, yes) 0.5, 0.5;
+  (local, chemoradiotx, no, yes) 0.5, 0.5;
+  (no, no, yes, no) 1.0, 0.0;
+  (regional_distant, no, yes, no) 1.0, 0.0;
+  (local, no, yes, no) 1.0, 0.0;
+  (no, radiotx, yes, no) 0.5, 0.5;
+  (regional_distant, radiotx, yes, no) 1.0, 0.0;
+  (local, radiotx, yes, no) 0.5, 0.5;
+  (no, chemotx, yes, no) 0.5, 0.5;
+  (regional_distant, chemotx, yes, no) 1.0, 0.0;
+  (local, chemotx, yes, no) 0.5, 0.5;
+  (no, chemoradiotx, yes, no) 0.5, 0.5;
+  (regional_distant, chemoradiotx, yes, no) 1.0, 0.0;
+  (local, chemoradiotx, yes, no) 0.5, 0.5;
+  (no, no, no, no) 0.5, 0.5;
+  (regional_distant, no, no, no) 0.5833333, 0.4166667;
+  (local, no, no, no) 0.5, 0.5;
+  (no, radiotx, no, no) 1.0, 0.0;
+  (regional_distant, radiotx, no, no) 0.5454545, 0.4545455;
+  (local, radiotx, no, no) 0.5, 0.5;
+  (no, chemotx, no, no) 0.5, 0.5;
+  (regional_distant, chemotx, no, no) 0.6428571, 0.3571429;
+  (local, chemotx, no, no) 1.0, 0.0;
+  (no, chemoradiotx, no, no) 0.5, 0.5;
+  (regional_distant, chemoradiotx, no, no) 0.6666667, 0.3333333;
+  (local, chemoradiotx, no, no) 0.5, 0.5;
+}

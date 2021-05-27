@@ -45,112 +45,115 @@ export default {
       const width = 450
       const height = 110
 
-      let links = JSON.parse(JSON.stringify(this.edges))
-      let nodes = JSON.parse(JSON.stringify(this.nodes))
+      if (this.nodes !== null && this.edges !== null) {
 
-      const simulation = d3.forceSimulation(nodes)
-          .force("link", d3.forceLink(links).id(d => d.name))
-          .force('collision', d3.forceCollide().radius(15))
-          .force("center", d3.forceCenter(width / 2, height / 2))
-          .force("y", d3.forceY(height/2))
+        let links = JSON.parse(JSON.stringify(this.edges))
+        let nodes = JSON.parse(JSON.stringify(this.nodes))
 
-      d3.select(this.$refs.container).selectAll("*").remove()
+        const simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.name))
+            .force('collision', d3.forceCollide().radius(15))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("y", d3.forceY(height / 2))
 
-      var svg = d3.select(this.$refs.container)
-          .append("svg")
-          .attr("viewBox", [0, 0, width, height]);
+        d3.select(this.$refs.container).selectAll("*").remove()
 
-      // Define the arrowhead marker variables
-      const markerBoxWidth = 4;
-      const markerBoxHeight = 4;
-      const refX = markerBoxWidth / 2;
-      const refY = markerBoxHeight / 2;
-      const arrowPoints = [[0, 0], [0, 4], [4, 2]];
+        var svg = d3.select(this.$refs.container)
+            .append("svg")
+            .attr("viewBox", [0, 0, width, height]);
 
-      svg
-          .append('defs')
-          .append('marker')
-          .attr('id', 'arrow')
-          .attr('viewBox', [0, 0, markerBoxWidth, markerBoxHeight])
-          .attr('refX', refX)
-          .attr('refY', refY)
-          .attr('markerWidth', markerBoxWidth)
-          .attr('markerHeight', markerBoxHeight)
-          .attr('orient', 'auto-start-reverse')
-          .append('path')
-          .attr('d', d3.line()(arrowPoints))
-          .attr('stroke', 'black');
+        // Define the arrowhead marker variables
+        const markerBoxWidth = 4;
+        const markerBoxHeight = 4;
+        const refX = markerBoxWidth / 2;
+        const refY = markerBoxHeight / 2;
+        const arrowPoints = [[0, 0], [0, 4], [4, 2]];
 
-      const link = svg.append("g")
-          .attr("stroke", "black")
-          .attr("stroke-opacity", 0.6)
-          .selectAll("path")
-          .data(links)
-          .join("line")
-          .attr("stroke-width", 0.5)
-          .attr('d', link)
-          .attr('marker-end', 'url(#arrow)')
-          .attr('stroke', 'black')
-          .attr('fill', 'none');
+        svg
+            .append('defs')
+            .append('marker')
+            .attr('id', 'arrow')
+            .attr('viewBox', [0, 0, markerBoxWidth, markerBoxHeight])
+            .attr('refX', refX)
+            .attr('refY', refY)
+            .attr('markerWidth', markerBoxWidth)
+            .attr('markerHeight', markerBoxHeight)
+            .attr('orient', 'auto-start-reverse')
+            .append('path')
+            .attr('d', d3.line()(arrowPoints))
+            .attr('stroke', 'black');
+
+        const link = svg.append("g")
+            .attr("stroke", "black")
+            .attr("stroke-opacity", 0.6)
+            .selectAll("path")
+            .data(links)
+            .join("line")
+            .attr("stroke-width", 0.5)
+            .attr('d', link)
+            .attr('marker-end', 'url(#arrow)')
+            .attr('stroke', 'black')
+            .attr('fill', 'none');
 
 
-      var colorScale = d3.scaleQuantize()
-          .domain([0, 1])
-          .range(["red", "darkGoldenRod", "green"]);
+        var colorScale = d3.scaleQuantize()
+            .domain([0, 1])
+            .range(["red", "darkGoldenRod", "green"]);
 
-      var color = d => {
-        if (d === 1) return "black"
-        else return colorScale(d)
+        var color = d => {
+          if (d === 1) return "black"
+          else return colorScale(d)
+        }
+
+        const node = svg.append("g")
+            .attr("stroke-width", 0.5)
+            .selectAll("rect")
+            .data(nodes)
+            .join("rect")
+            .attr("width", 25)
+            .attr("height", 10)
+            .attr('fill', "white")
+            .attr("stroke", d => color(d.probability))
+            .attr("rx", 2)
+            .attr("ry", 2)
+
+
+        // Text to nodes
+        const text = svg.append("g")
+            .attr("class", "text")
+            .attr('font-size', '4px')
+            .selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+
+        const textName = text.append("tspan")
+            .text(d => d.name.substring(0, 10) + ": ")
+        const textState = text.append("tspan")
+            .text(d => String(d.state).substring(0, 10))
+            .attr("dy", 5)
+
+        simulation.on("tick", () => {
+          link
+              .attr("x1", d => d.source.x)
+              .attr("y1", d => d.source.y)
+              .attr("x2", d => d.target.x - 15 * ((d.target.x - d.source.x) / this.normalVect(d.target, d.source)))
+              .attr("y2", d => d.target.y - 7 * ((d.target.y - d.source.y) / this.normalVect(d.target, d.source)));
+
+          node
+              .attr("x", d => d.x - 12.5)
+              .attr("y", d => d.y - 5);
+
+          text.attr("x", d => d.x) //position of the lower left point of the text
+              .attr("y", d => d.y - 1); //position of the lower left point of the text
+
+          textState.attr("x", d => d.x - 10)
+          textName.attr("x", d => d.x - 10)
+
+        });
+
+        console.log(this.nodes)
+        console.log(this.edges)
       }
-
-      const node = svg.append("g")
-          .attr("stroke-width", 0.5)
-          .selectAll("rect")
-          .data(nodes)
-          .join("rect")
-          .attr("width", 25)
-          .attr("height", 10)
-          .attr('fill', "white")
-          .attr("stroke", d => color(d.probability))
-          .attr("rx", 2)
-          .attr("ry", 2)
-
-
-      // Text to nodes
-      const text = svg.append("g")
-          .attr("class", "text")
-          .attr('font-size', '4px')
-          .selectAll("text")
-          .data(nodes)
-          .enter().append("text")
-
-      const textName = text.append("tspan")
-          .text(d => d.name.substring(0, 10) + ": ")
-      const textState = text.append("tspan")
-          .text(d => String(d.state).substring(0, 10))
-          .attr("dy", 5)
-
-      simulation.on("tick", () => {
-        link
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x - 15*((d.target.x-d.source.x)/ this.normalVect(d.target,d.source)))
-            .attr("y2", d => d.target.y - 7*((d.target.y-d.source.y)/this.normalVect(d.target, d.source)));
-
-        node
-            .attr("x", d => d.x -12.5)
-            .attr("y", d => d.y -5);
-
-        text.attr("x", d => d.x) //position of the lower left point of the text
-            .attr("y", d => d.y -1); //position of the lower left point of the text
-
-        textState.attr("x", d => d.x-10)
-        textName.attr("x", d => d.x-10)
-
-      });
-
-      console.log(this.nodes)
-      console.log(this.edges)
     }
   }
 }
