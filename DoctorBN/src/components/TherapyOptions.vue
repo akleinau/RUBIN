@@ -1,4 +1,11 @@
-<template>
+<template style="position:relative">
+  <Panel header="Available options" >
+    <h3 class="p-text-left">Interventions:</h3>
+  <Therapy :nodes="nodes" :selection="targets"
+     @addNodes="this.$emit('addTargets',$event)" @deleteNode="this.$emit('deleteTarget',$event)" />
+  <div>
+    <h3 class="p-text-left">Results:</h3>
+  </div>
   <TabView header="Options">
     <TabPanel header="table">
       <DataTable :value="results" :scrollable="true" scrollHeight="400px"
@@ -53,22 +60,27 @@
     </TabPanel>
 
   </TabView>
+    </Panel>
 </template>
 
 <script>
 import bar from "@/components/visualisations/bar";
 import twoSidedBar from "@/components/visualisations/twoSidedBar";
+import Therapy from "@/components/Therapy";
 
 export default {
   name: "TherapyOptions",
   components: {
     bar,
-    twoSidedBar
+    twoSidedBar,
+    Therapy
   },
   props: [
     "results",
     "goals",
-    "goalResults"
+    "goalResults",
+      "nodes",
+      "targets"
   ],
   data() {
     return {
@@ -102,8 +114,18 @@ export default {
 }
 </script>
 
-<style scoped>
-.p-tabview-panel {
-  height: 300px
+<style lang="scss" scoped>
+
+.p-panel {
+  color: red;
+  height: 100% !important;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
+
+::v-deep(.p-panel-content) {
+height: 100% !important;
+}
+
 </style>

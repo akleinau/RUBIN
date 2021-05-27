@@ -113,10 +113,8 @@ export default {
 }
 
 #addButton {
-  width: 90%;
-  position: absolute;
-  left: 5%;
-  bottom: 5%;
+  width: 100%;
+  position: relative;
 }
 
 #table{
@@ -127,6 +125,19 @@ export default {
 ::v-deep(#table .p-datatable-thead){
   display: None !important
 }
+
+.p-panel {
+  color: red;
+  height: 100% !important;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+::v-deep(.p-panel-content) {
+height: 100% !important;
+}
+
 
 
 </style>

@@ -47,8 +47,6 @@ body, html {
   background-color: #6eb5be;
 }
 
-.p-panel-content {
-  height: 200px
-}
+
 
 </style>
