@@ -16,17 +16,20 @@
       <Button id="AddButton" icon="pi pi-plus" @click="overlay = true"></Button>
     </Panel>
 
-    <Dialog header="Add Evidence" v-model:visible="overlay" style="width: 50%">
-      <Button class="p-mb-1" label="Add evidences" style="width: 100%" @click="addTargetsFromOverlay()"/>
+    <Dialog header="Add Interventions" v-model:visible="overlay" style="width: 50%" modal="yes">
+      <Button class="p-mb-1" label="Add Interventions" style="width: 100%" @click="addTargetsFromOverlay()"/>
       <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
         <template #option="slotProps">
           <div>
             {{ slotProps.option.name }}
+            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
+              @click="deleteNodeFromOverlay(slotProps.option)"/>
           </div>
         </template>
       </Listbox>
-      <Listbox v-model="selected" :options="nodes" optionLabel="name" emptyMessage="choose evidences to add"
-               :filter="true" filterPlaceholder="Search" @change="addTarget()" listStyle="max-height:500px">
+      <Listbox v-model="selected" :options="overlayNodes" optionLabel="name" emptyMessage="choose evidences to add"
+               :filter="true" filterPlaceholder="Search"
+               @change="addTarget()" listStyle="max-height:500px">
           <template #option="slotProps">
           <div v-tooltip.bottom="'Add as target'">
             {{ slotProps.option.name }}
@@ -53,6 +56,11 @@ export default {
       nodesToAdd: []
     }
   },
+    computed: {
+    overlayNodes: function() {
+      return this.nodes.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
+    }
+  },
   methods: {
     addTarget() {
       this.nodesToAdd.push(this.selected);
@@ -65,6 +73,9 @@ export default {
     },
     deleteNode(node) {
       this.$emit("deleteNode", node)
+    },
+    deleteNodeFromOverlay(node) {
+      this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
     }
   }
 }

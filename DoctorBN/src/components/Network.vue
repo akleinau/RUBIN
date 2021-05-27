@@ -3,7 +3,7 @@
     <TabPanel header="Relevance explanation">
       <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
     </TabPanel>
-    <TabPanel header="Causal explanation">
+    <TabPanel header="Reasoning explanation">
       <sugiyama :edges="getExEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="compact network">
@@ -15,6 +15,9 @@
     <TabPanel header="sugiyama">
       <sugiyama :edges="edges" :nodes="nodes"/>
     </TabPanel>
+    <TabPanel header="list">
+      <NodeList :nodes="nodes" />
+    </TabPanel>
   </TabView>
 
 </template>
@@ -23,6 +26,7 @@
 import Relevance from "./Relevance";
 import BNvis from "@/components/visualisations/BNvis";
 import sugiyama from "@/components/visualisations/sugiyama";
+import NodeList from "@/components/additional/NodeList";
 
 export default {
   name: "Network",
@@ -30,7 +34,8 @@ export default {
   components: {
     Relevance,
     BNvis,
-    sugiyama
+    sugiyama,
+    NodeList
   },
   data() {
     return {

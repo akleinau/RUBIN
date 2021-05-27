@@ -1,9 +1,7 @@
 <template>
   <Panel :header="title" style="position: relative">
     <div>
-      <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="300px"
-                 dataKey="id" v-model:filters="filters" filterDisplay="menu"
-                 :globalFilterFields="['name']">
+      <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="300px">
         <Column field="name">
           <template #header class="table-header">
             <span class="p-input-icon-left">
@@ -24,16 +22,27 @@
       </DataTable>
       <Button id="addButton" icon="pi pi-plus" @click="overlay = true"></Button>
     </div>
-    <Dialog :header="'Add ' + title" v-model:visible="overlay">
-      <Button class="p-mb-1" label="Add evidences" style="width: 100%" @click="addNodesFromOverlay()"/>
+    <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%" modal="yes">
+      <Button class="p-mb-1" :label="'Add ' + title" style="width: 100%" @click="addNodesFromOverlay()"/>
       <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
         <template #option="slotProps">
           <div>
             {{ slotProps.option.name }}: {{ slotProps.option.selected.name }}
+              <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
+              @click="deleteNodeFromOverlay(slotProps.option)"/>
           </div>
         </template>
       </Listbox>
-      <DataTable :value="nodes" :scrollable="true" scrollHeight="500px">
+      <DataTable :value="overlayNodes" :scrollable="true" scrollHeight="500px"
+                 v-model:filters="filters" filterDisplay="menu" data-key="name">
+        <template #header>
+            <div class="p-d-flex p-jc-between">
+                <span class="p-input-icon-right" style="width:100%">
+                    <InputText style="width:100%" v-model="filters['name'].value" placeholder="Search" />
+                  <i class="pi pi-search"/>
+                </span>
+            </div>
+        </template>
         <Column field="name" :header="title"></Column>
         <Column field="options">
           <template #body="slotProps">
@@ -51,7 +60,7 @@
 
 
 <script>
-import {FilterMatchMode,FilterOperator} from 'primevue/api';
+import {FilterMatchMode} from 'primevue/api';
 export default {
   name: "Evidence",
   props: [
@@ -64,9 +73,13 @@ export default {
       overlay: false,
       selected: null,
       filters: {
-        'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-        'name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]}},
+        'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}},
       nodesToAdd: []
+    }
+  },
+  computed: {
+    overlayNodes: function() {
+      return this.nodes.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
     }
   },
   methods: {
@@ -77,6 +90,7 @@ export default {
         options: slotProps.data.options
       }
       this.nodesToAdd.push(item);
+      this.filters.name.value = null
     },
     addNodesFromOverlay() {
       this.$emit("addNodes", this.nodesToAdd);
@@ -85,6 +99,9 @@ export default {
     },
     deleteNode(node) {
       this.$emit("deleteNode", node);
+    },
+     deleteNodeFromOverlay(node) {
+      this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
     }
   }
 }
@@ -111,8 +128,5 @@ export default {
   display: None !important
 }
 
-::v-deep(.p-datatable-tbody) {
-  float: right
-}
 
 </style>
