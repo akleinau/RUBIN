@@ -29,7 +29,6 @@
       <div class="p-col">
         <Network :relevance = "relevance" :goals="newGoals" :edges="edges" :nodes="states" :explanation="explanation"/>
       </div>
-    </div>
   </div>
 </template>
 
