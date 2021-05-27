@@ -116,7 +116,7 @@ def saveNetwork():
         return
     # add new network to database and save it
     addNetwork(file, filePath, displayName)
-    return
+    return ''
 
 
 # Opens the network with requested ID and adds it to the dictionary of network objects.
