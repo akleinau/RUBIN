@@ -16,7 +16,7 @@ class Scenario:
 
         self.patient = Patient()
 
-        self.network = network
+        self.network = Network(network)
         if evidences is not None: self.patient.evidences = evidences
         if targets is not None: self.patient.targets = targets
         if goals is not None: self.patient.goals = goals
