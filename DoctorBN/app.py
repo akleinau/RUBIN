@@ -110,16 +110,16 @@ def saveNetwork():
     file = request.files['file']
     # if the display name the user entered is already in use, return with error
     if doesNetworkNameExist(displayName):
-        return
+        return jsonify('error1')
     # get file name and path
     filename = secure_filename(file.filename)
     filePath = os.path.join(app.config['NETWORK_FOLDER'], filename)
     # if the file name of the uploaded network already exists in the networks folder, return with error
     if doesPathExist(filePath):
-        return
+        return jsonify('error2')
     # add new network to database and save it
     addNetwork(file, filePath, displayName)
-    return ''
+    return jsonify('successful')
 
 
 # Opens the network with requested ID and adds it to the dictionary of network objects.
