@@ -257,7 +257,7 @@ export default {
   created: async function () {
     await this.loadNodes()
 
-    if (this.network === 0) {
+    if (this.network === '0') {
       //add example nodes
       let CA125 = this.nodes.find(x => x.name === "CA125")
       CA125["selected"] = {"name": "lt_35"}
