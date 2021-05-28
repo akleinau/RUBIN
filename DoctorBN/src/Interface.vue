@@ -1,7 +1,7 @@
 <template>
 
   <Header @changePage="changePage()" @reset="reset()" @exportCSV="exportCSV()"/>
-  <div class=" p-grid  nested-grid  vertical-container ">
+  <div class=" p-grid  nested-grid  vertical-container " style="height:100%">
     <div class="p-grid p-col-3 p-flex-column ">
            <div class="p-col">
         <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="goals"

@@ -66,13 +66,13 @@ name: "sugiyama",
             .coord(dag.coordCenter())
             .nodeSize((node) => {
               const size = node instanceof dag.SugiDummyNode ? 2 : 11;
-              return [size * 1.8, size * 3];
+              return [size * 3, size * 1.8];
             })
 
         layout(graph)
 
-        const width = 450
-        const height = 110
+        const width = this.nodes.length* 12
+        const height = this.nodes.length* 13
 
         var colorScale = d3.scaleQuantize()
             .domain([0, 1])
@@ -104,15 +104,15 @@ name: "sugiyama",
               const dy = start.y - end.y;
               const normal = Math.sqrt(dx * dx + dy * dy);
               // This is the angle of the last line segment
-              const angle = Math.atan2(-dx, -dy) * 180 / Math.PI + 90;
-              return `translate(${end.y + 15 * dy / normal}, ${end.x + 17 * dx / normal}) rotate(${angle})`;
+              const angle = Math.atan2(-dy, -dx) * 180 / Math.PI + 90;
+              return `translate(${end.x + 7 * dx / normal}, ${end.y + 7* dy / normal}) rotate(${angle})`;
             })
             .attr('fill', "black")
 
         const line = d3.line()
             .curve(d3.curveCatmullRom)
-            .x(d => d.y)
-            .y(d => d.x)
+            .x(d => d.x)
+            .y(d => d.y)
 
         svg.append('g')
             .selectAll('path')
@@ -130,7 +130,7 @@ name: "sugiyama",
             .data(graph.descendants())
             .enter()
             .append('g')
-            .attr('transform', ({x, y}) => `translate(${y}, ${x})`)
+            .attr('transform', ({x, y}) => `translate(${x}, ${y})`)
 
         nodes.append('rect')
             .attr("width", 25)

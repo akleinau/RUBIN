@@ -1,6 +1,6 @@
-<template>
-<DataTable :value="nodes">
-  <Column header="node" field="name" />
+<template style="position:relative">
+<DataTable :value="nodes" :scrollable="true" scrollHeight="600px">
+  <Column header="node" field="name" :sortable="true" />
   <Column header="state" field="state">
     <template #body="slotProps">
       <div :style="{color: color(slotProps.data.probability)}"> {{slotProps.data.state}} </div>

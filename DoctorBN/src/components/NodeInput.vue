@@ -1,5 +1,5 @@
 <template>
-  <Panel :header="title" style="position: relative">
+  <Panel :header="title" style="position: relative" :class="title">
     <div>
       <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="300px">
         <Column field="name">
