@@ -1,5 +1,9 @@
 <template style="position:relative">
-  <Panel header="Available options" >
+  <Card>
+    <template #title>
+      Available options
+    </template>
+    <template #content>
     <h3 class="p-text-left">Interventions:</h3>
   <Therapy :nodes="nodes" :selection="targets"
      @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)" />
@@ -60,7 +64,8 @@
     </TabPanel>
 
   </TabView>
-    </Panel>
+      </template>
+    </Card>
 </template>
 
 <script>
@@ -116,7 +121,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.p-panel {
+.p-card {
   height: 100% !important;
 
   display: grid;

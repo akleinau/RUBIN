@@ -1,5 +1,9 @@
 <template >
-  <Panel header="Explanation" style="position: relative">
+  <Card style="position: relative">
+    <template #title>
+      Explanation
+    </template>
+    <template #content>
   <TabView>
     <TabPanel header="Relevance">
       <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
@@ -20,7 +24,8 @@
       <NodeList :nodes="nodes" />
     </TabPanel>
   </TabView>
-</Panel>
+      </template>
+</Card>
 </template>
 
 <script>
@@ -84,8 +89,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.p-panel {
-  color: red;
+.p-card {
   height: 100% !important;
 
   display: grid;
