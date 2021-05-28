@@ -58,7 +58,6 @@ name: "sugiyama",
       if (this.nodes !== null && this.edges !== null) {
 
         var graph = dag.dagConnect()(this.edgeList)
-        console.log(graph)
 
         const layout = dag.sugiyama()
             .layering(dag.layeringSimplex())
@@ -69,10 +68,10 @@ name: "sugiyama",
               return [size * 3, size * 1.8];
             })
 
-        layout(graph)
+        let {width, height} = layout(graph)
 
-        const width = this.nodes.length* 12
-        const height = this.nodes.length* 13
+        if (width > height) height = width; else width = height //makes the view quadratic so it fits in our layout
+
 
         var colorScale = d3.scaleQuantize()
             .domain([0, 1])
@@ -105,7 +104,7 @@ name: "sugiyama",
               const normal = Math.sqrt(dx * dx + dy * dy);
               // This is the angle of the last line segment
               const angle = Math.atan2(-dy, -dx) * 180 / Math.PI + 90;
-              return `translate(${end.x + 7 * dx / normal}, ${end.y + 7* dy / normal}) rotate(${angle})`;
+              return `translate(${end.x + 6 * dx / normal}, ${end.y + 6* dy / normal}) rotate(${angle})`;
             })
             .attr('fill', "black")
 
