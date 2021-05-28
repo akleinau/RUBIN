@@ -43,8 +43,8 @@ export default {
         },
         {
           label: 'Load Patient',
-          command: () => {
-            this.loadPatient()
+          command: (event) => {
+            this.loadPatient(event.originalEvent)
           }
         },
         {
@@ -91,8 +91,8 @@ export default {
     reset() {
       this.$emit('reset')
     },
-    loadPatient() {
-      this.$emit('loadPatient')
+    loadPatient(event) {
+      this.$emit('loadPatient', event)
     },
     exportCSV() {
       this.$emit('exportCSV')
