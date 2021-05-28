@@ -1,6 +1,9 @@
 <template>
-  <Panel :header="title" style="position: relative" :class="title">
-    <div>
+  <Card>
+    <template #title style="position: relative" :class="title">
+      {{title}}
+    </template>
+    <template #content>
       <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="300px">
         <Column field="name">
           <template #header class="table-header">
@@ -20,8 +23,6 @@
           </template>
         </Column>
       </DataTable>
-      <Button id="addButton" icon="pi pi-plus" @click="overlay = true"></Button>
-    </div>
     <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%" modal="yes">
       <Button class="p-mb-1" :label="'Add ' + title" style="width: 100%" @click="addNodesFromOverlay()"/>
       <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
@@ -55,7 +56,11 @@
         </Column>
       </DataTable>
     </Dialog>
-  </Panel>
+    </template>
+    <template #footer>
+      <Button id="addButton" icon="pi pi-plus" @click="overlay = true"></Button>
+    </template>
+  </Card>
 </template>
 
 
@@ -126,7 +131,7 @@ export default {
   display: None !important
 }
 
-.p-panel {
+.p-card {
   height: 100% !important;
 
   display: grid;
