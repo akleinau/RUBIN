@@ -1,6 +1,11 @@
 <template>
 
-  <Header @changePage="changePage()" @reset="reset()" @exportCSV="exportCSV()"/>
+  <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)" @exportCSV="exportCSV()"/>
+
+  <OverlayPanel ref="panel">
+    <load-patient></load-patient>
+  </OverlayPanel>
+
   <div class=" p-grid p-flex-column nested-grid">
     <div class="p-grid p-ai-stretch vertical-container" style="height:400px">
       <div class="p-col-2 box-stretched">
@@ -35,6 +40,8 @@ import NodeInput from "./components/NodeInput";
 import Therapy from "./components/Therapy";
 import Network from "./components/Network";
 import TherapyOptions from "@/components/TherapyOptions";
+import LoadPatient from "@/components/LoadPatient";
+import OverlayPanel from "primevue/overlaypanel";
 
 export default {
   name: "Interface",
@@ -43,7 +50,9 @@ export default {
     NodeInput,
     Therapy,
     Network,
-    TherapyOptions
+    TherapyOptions,
+    LoadPatient,
+    OverlayPanel
   },
   props: [
       "network"
@@ -61,12 +70,16 @@ export default {
       relevance: null,
       edges: null,
       states: null,
-      explanation: null
+      explanation: null,
+      patientCases: []
     }
   },
   methods: {
     changePage() {
       this.$emit("changePage")
+    },
+    openLoadForm(event) {
+      this.$refs.panel.toggle(event)
     },
     loadNodes: async function(){
         const gResponse = await fetch("http://localhost:5000/cancernet?network=" + this.network);
@@ -87,7 +100,7 @@ export default {
         edges.push({"source": edge[0], "target": edge[1]})
       })
       this.edges = edges
-      console.log("edges: " )
+      console.log("edges: ")
       console.log(edges)
     },
     reset() {

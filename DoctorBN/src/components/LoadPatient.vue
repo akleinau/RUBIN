@@ -12,16 +12,25 @@ export default {
   data() {
     return {
       patient: {
-        evidence: null
+        evidence: [],
+        targets: [],
+        goals: [],
       }
     }
   },
   methods: {
     load(patientData) {
-      let type = ''
       for (var row in patientData) {
+        let node = {
+            'name': row[1],
+            'option': row[2]
+        }
         if (row[0] === 'evidence') {
-
+          this.evidence.push(node)
+        } else if (row[0] === 'target') {
+          this.targets.push(node)
+        } else {
+          this.goals.push(node)
         }
       }
     },
@@ -32,12 +41,13 @@ export default {
       reader.onload = function (event) {
         const text = event.target.result;
         const patientData = this.csvToArray(text, ';')
-        load(patientData)
+        console.log(patientData)
+        this.load(patientData)
       };
       reader.readAsText(csvFile);
     },
     csvToArray(str, delimiter) {
-      const headers = ['type', 'node', 'value']
+      const headers = ['type', 'name', 'option']
       const rows = str.slice(str.indexOf("\n") + 1).split("\n");
       return rows.map(function (row) {
         const values = row.split(delimiter);
