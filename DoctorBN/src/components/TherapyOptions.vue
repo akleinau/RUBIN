@@ -1,7 +1,14 @@
-<template>
+<template style="position:relative">
+  <Panel header="Available options" >
+    <h3 class="p-text-left">Interventions:</h3>
+  <Therapy :nodes="nodes" :selection="targets"
+     @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)" />
+  <div>
+    <h3 class="p-text-left">Results:</h3>
+  </div>
   <TabView header="Options">
     <TabPanel header="table">
-      <DataTable :value="results" :scrollable="true" scrollHeight="300px"
+      <DataTable :value="results" :scrollable="true" scrollHeight="400px"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
                  @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
         <Column header="option" field="option">
@@ -53,22 +60,27 @@
     </TabPanel>
 
   </TabView>
+    </Panel>
 </template>
 
 <script>
 import bar from "@/components/visualisations/bar";
 import twoSidedBar from "@/components/visualisations/twoSidedBar";
+import Therapy from "@/components/Therapy";
 
 export default {
   name: "TherapyOptions",
   components: {
     bar,
-    twoSidedBar
+    twoSidedBar,
+    Therapy
   },
   props: [
     "results",
     "goals",
-    "goalResults"
+    "goalResults",
+      "nodes",
+      "targets"
   ],
   data() {
     return {
@@ -102,8 +114,17 @@ export default {
 }
 </script>
 
-<style scoped>
-.p-tabview-panel {
-  height: 300px
+<style lang="scss" scoped>
+
+.p-panel {
+  height: 100% !important;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
+
+::v-deep(.p-panel-content) {
+height: 100% !important;
+}
+
 </style>

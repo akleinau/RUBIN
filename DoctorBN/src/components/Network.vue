@@ -1,9 +1,10 @@
-<template>
+<template >
+  <Panel header="Explanation" style="position: relative">
   <TabView>
-    <TabPanel header="Relevance explanation">
+    <TabPanel header="Relevance">
       <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
     </TabPanel>
-    <TabPanel header="Reasoning explanation">
+    <TabPanel header="Reasoning">
       <sugiyama :edges="getExEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="compact network">
@@ -19,7 +20,7 @@
       <NodeList :nodes="nodes" />
     </TabPanel>
   </TabView>
-
+</Panel>
 </template>
 
 <script>
@@ -81,8 +82,18 @@ export default {
 }
 </script>
 
-<style scoped>
-img {
-  height: 100%;
+<style lang="scss" scoped>
+
+.p-panel {
+  color: red;
+  height: 100% !important;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
+
+::v-deep(.p-panel-content) {
+height: 100% !important;
+}
+
 </style>

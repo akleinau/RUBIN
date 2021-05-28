@@ -1,38 +1,40 @@
 <template>
 
   <Header @changePage="changePage()" @reset="reset()" @exportCSV="exportCSV()"/>
-  <div class=" p-grid p-flex-column nested-grid">
-    <div class="p-grid p-ai-stretch vertical-container" style="height:400px">
-      <div class="p-col-2 box-stretched">
-        <NodeInput title="Evidence" :nodes="nodes" :selection="evidence"
+  <div class=" p-grid  nested-grid  vertical-container ">
+    <div class="p-grid p-col-3 p-flex-column ">
+           <div class="p-col">
+        <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="goals"
+                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
+      </div>
+      <div class="p-col box box-stretched ">
+        <NodeInput    title="Evidence" :nodes="nodes" :selection="evidence"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
       </div>
-      <div class="p-col-2 box box-stretched">
-        <Therapy :nodes="nodes" :selection="targets"
+
+
+
+    </div>
+    <div class="p-col p-grid p-flex-column" style="position:relative">
+
+            <div class="p-col box-stretched" >
+        <TherapyOptions :results="options" :goals="newGoals" :goalResults="goalResults"
+                        @update="selectedOptionUpdated($event)"
+                  :nodes="nodes" :targets="targets"
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
       </div>
-      <div class="p-col-2 box-stretched">
-        <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="goals"
-                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)"/>
       </div>
-      <div class="p-col box-stretched">
-        <TherapyOptions :results="options" :goals="newGoals" :goalResults="goalResults"
-                        @update="selectedOptionUpdated($event)"/>
-      </div>
-    </div>
-    <div class="p-grid p-d-flex">
-
-      <div class="p-col">
+      <div class="p-col p-grid p-flex-column" style="position:relative">
+        <div class="p-col box-stretched">
         <Network :relevance = "relevance" :goals="newGoals" :edges="edges" :nodes="states" :explanation="explanation"/>
+          </div>
       </div>
-    </div>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header";
 import NodeInput from "./components/NodeInput";
-import Therapy from "./components/Therapy";
 import Network from "./components/Network";
 import TherapyOptions from "@/components/TherapyOptions";
 
@@ -41,7 +43,6 @@ export default {
   components: {
     Header,
     NodeInput,
-    Therapy,
     Network,
     TherapyOptions
   },
@@ -269,20 +270,26 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .p-grid {
-  margin-top: 0px;
-  margin-bottom: 10px
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 0
 }
 
 .box-stretched {
         height: 100%;
     }
 
+
+
 #arrow {
   width: 100%;
   height: 30%;
 }
+
+
+
 
 </style>
