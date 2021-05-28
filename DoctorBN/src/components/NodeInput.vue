@@ -16,7 +16,7 @@
         <Column field="value" class="optionCol">
           <template #body="slotProps">
             <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
-                      placeholder="slotProps.data.selected" @change="onNodeChange()" >
+                      placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)" >
             </Dropdown>
             <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text"
                     @click="deleteNode(slotProps.data)" />
@@ -107,6 +107,9 @@ export default {
     },
      deleteNodeFromOverlay(node) {
       this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
+    },
+    onNodeChange(node) {
+    this.$emit("addNodes", [node])
     }
   }
 }
