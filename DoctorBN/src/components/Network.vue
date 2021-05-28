@@ -1,10 +1,10 @@
 <template >
   <Panel header="Explanation" style="position: relative">
   <TabView>
-    <TabPanel header="Relevance explanation">
+    <TabPanel header="Relevance">
       <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
     </TabPanel>
-    <TabPanel header="Reasoning explanation">
+    <TabPanel header="Reasoning">
       <sugiyama :edges="getExEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="compact network">

@@ -3,9 +3,9 @@
   <Header @changePage="changePage()" @reset="reset()" @exportCSV="exportCSV()"/>
   <div class=" p-grid  nested-grid  vertical-container ">
     <div class="p-grid p-col-3 p-flex-column ">
-           <div class="p-col ">
+           <div class="p-col">
         <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="goals"
-                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)"/>
+                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
       </div>
       <div class="p-col box box-stretched ">
         <NodeInput    title="Evidence" :nodes="nodes" :selection="evidence"
@@ -273,9 +273,9 @@ export default {
 <style lang="scss" scoped>
 
 .p-grid {
-  margin-top: 0px;
-  margin-bottom: 10px;
-  margin-right: 10px
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 0
 }
 
 .box-stretched {

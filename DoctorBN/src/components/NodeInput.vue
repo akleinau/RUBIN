@@ -127,7 +127,6 @@ export default {
 }
 
 .p-panel {
-  color: red;
   height: 100% !important;
 
   display: grid;

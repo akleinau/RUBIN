@@ -2,7 +2,7 @@
   <Panel header="Available options" >
     <h3 class="p-text-left">Interventions:</h3>
   <Therapy :nodes="nodes" :selection="targets"
-     @addNodes="this.$emit('addTargets',$event)" @deleteNode="this.$emit('deleteTarget',$event)" />
+     @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)" />
   <div>
     <h3 class="p-text-left">Results:</h3>
   </div>
@@ -117,7 +117,6 @@ export default {
 <style lang="scss" scoped>
 
 .p-panel {
-  color: red;
   height: 100% !important;
 
   display: grid;
