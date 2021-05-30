@@ -3,7 +3,7 @@
   <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)" @exportCSV="exportCSV()"/>
 
   <OverlayPanel ref="panel">
-    <load-patient></load-patient>
+    <load-patient @loaded="loadPatient"></load-patient>
   </OverlayPanel>
 
   <div class=" p-grid p-flex-column nested-grid">
@@ -81,8 +81,31 @@ export default {
     openLoadForm(event) {
       this.$refs.panel.toggle(event)
     },
+    loadPatient: async function(patientData) {
+      await this.reset()
+      let evidenceNodes = this.getCorrespondingNode(patientData.evidence)
+      let targetNodes = this.getCorrespondingNode(patientData.targets)
+      let goalNodes = this.getCorrespondingNode(patientData.goals)
+      this.addEvidences(evidenceNodes)
+      this.addTargets(targetNodes)
+      this.addGoals(goalNodes)
+      this.$refs.panel.toggle()
+    },
+    getCorrespondingNode(nodeArr) {
+      let correspondingNodes = []
+      nodeArr.forEach(node => {
+        let correspondingNode = this.nodes.find(x => x.name === node.name)
+        let item = {
+          name: correspondingNode.name,
+          selected: {name: correspondingNode.options.find(x => x.name === node.option)},
+          options: correspondingNode.options
+        }
+        correspondingNodes.push(item)
+      })
+      return correspondingNodes
+    },
     loadNodes: async function(){
-        const gResponse = await fetch("http://localhost:5000/cancernet?network=" + this.network);
+      const gResponse = await fetch("http://localhost:5000/cancernet?network=" + this.network);
       const network = await gResponse.json();
       let nodes = []
       for (var key in network.states) {
@@ -103,7 +126,7 @@ export default {
       console.log("edges: ")
       console.log(edges)
     },
-    reset() {
+    reset: async function() {
       this.targets= []
       this.evidence= []
       this.goals= []
@@ -117,7 +140,7 @@ export default {
       this.states= null
       this.explanation= null
 
-      this.loadNodes()
+      await this.loadNodes()
     },
     calculate: async function () {
       if (this.evidence.length !== 0 && this.targets.length !== 0 && this.goals.length !== 0) {
@@ -247,15 +270,15 @@ export default {
       }
     },
     exportCSV() {
-      var csv = ''
+      var csv = "Type; Variable; Option"
       this.evidence.forEach(ev => {
-        csv += "evidence; " + ev.name + "; " + ev.selected.name + "\n"
+        csv += "\nevidence; " + ev.name + "; " + ev.selected.name
       })
       this.targets.forEach(ev => {
-        csv += "target; " + ev.name + "\n"
+        csv += "\ntarget; " + ev.name
       })
       this.goals.forEach(ev => {
-        csv += "goal; " + ev.name + "; " + ev.selected.name + "\n"
+        csv += "\ngoal; " + ev.name + "; " + ev.selected.name
       })
       console.log(csv)
 

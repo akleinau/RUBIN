@@ -4,6 +4,7 @@
     <input id = "patient-case" type = "file" accept=".csv" required/> <br>
     <input name = "patient-submit" type = "submit" value = "Load case"/>
   </form>
+  <input id="storeStr" type="text" hidden>
 </template>
 
 <script>
@@ -14,48 +15,50 @@ export default {
       patient: {
         evidence: [],
         targets: [],
-        goals: [],
+        goals: []
       }
     }
   },
   methods: {
-    load(patientData) {
-      for (var row in patientData) {
-        let node = {
-            'name': row[1],
-            'option': row[2]
-        }
-        if (row[0] === 'evidence') {
-          this.evidence.push(node)
-        } else if (row[0] === 'target') {
-          this.targets.push(node)
-        } else {
-          this.goals.push(node)
-        }
-      }
-    },
     read() {
       let fileField = document.getElementById('patient-case')
       const csvFile = fileField.files[0];
       const reader = new FileReader();
-      reader.onload = function (event) {
-        const text = event.target.result;
-        const patientData = this.csvToArray(text, ';')
-        console.log(patientData)
+      reader.onload = (event) => {
+        const str = event.target.result
+        const delimiter = '; '
+        const headers = ['type', 'name', 'option']
+        const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+        const patientData = rows.map(function (row) {
+          const values = row.split(delimiter);
+          return headers.reduce(function (object, header, index) {
+            object[header] = values[index];
+            return object;
+          }, {});
+        });
         this.load(patientData)
-      };
-      reader.readAsText(csvFile);
+      }
+      reader.readAsText(csvFile)
     },
-    csvToArray(str, delimiter) {
-      const headers = ['type', 'name', 'option']
-      const rows = str.slice(str.indexOf("\n") + 1).split("\n");
-      return rows.map(function (row) {
-        const values = row.split(delimiter);
-        return headers.reduce(function (object, header, index) {
-          object[header] = values[index];
-          return object;
-        }, {});
-      });
+    load(patientData) {
+      for (var row in patientData) {
+        let item = patientData[row]
+        let node = {
+          name: item.name,
+          option: item.option
+        }
+        if (item.type === 'evidence') {
+          console.log(this)
+          this.patient.evidence.push(node)
+        } else if (item.type === 'target') {
+          this.patient.targets.push(node)
+        } else if (item.type === 'goal') {
+          this.patient.goals.push({
+            name: item.name
+          })
+        }
+      }
+      this.$emit('loaded', this.patient)
     }
   }
 }
@@ -64,3 +67,13 @@ export default {
 <style scoped>
 
 </style>
+
+
+
+addEvidences(nodes) {
+      nodes.forEach(node => {
+        this.evidence.push(node)
+        this.nodes = this.nodes.filter(x => x.name !== node.name)
+      })
+      this.calculate()
+    },
