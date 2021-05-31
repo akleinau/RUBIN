@@ -1,10 +1,6 @@
 <template>
-  <form @submit.prevent="read" id = "load-patient-form" enctype="multipart/form-data">
-    <h3>Upload a patient case</h3>
-    <input id = "patient-case" type = "file" accept=".csv" required/> <br>
-    <input name = "patient-submit" type = "submit" value = "Load case"/>
-  </form>
-  <input id="storeStr" type="text" hidden>
+   <FileUpload name = "net-upload" url="./Patientupload" accept=".csv" :customUpload="true"
+                mode="basic" auto="true" @uploader="read($event)"  />
 </template>
 
 <script>
@@ -20,8 +16,7 @@ export default {
     }
   },
   methods: {
-    read() {
-      let fileField = document.getElementById('patient-case')
+    read(fileField) {
       const csvFile = fileField.files[0];
       const reader = new FileReader();
       reader.onload = (event) => {
