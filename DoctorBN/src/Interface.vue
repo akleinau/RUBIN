@@ -245,8 +245,9 @@ export default {
     },
     addEvidences(nodes) {
       nodes.forEach(node => {
-        this.patient.evidence.push(node)
+        this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
         this.nodes = this.nodes.filter(x => x.name !== node.name)
+        this.patient.evidence.push(node)
       })
       this.calculate()
     },
@@ -269,8 +270,9 @@ export default {
     },
     addGoals(nodes) {
       nodes.forEach(node => {
-        this.patient.goals.push(node)
+        this.patient.goals = this.patient.goals.filter(x => x.name !== node.name)
         this.nodes = this.nodes.filter(x => x.name !== node.name)
+        this.patient.goals.push(node)
       })
       this.calculate()
     },
