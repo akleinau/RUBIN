@@ -21,7 +21,7 @@
         <Column header="option" field="node_name"/>
         <Column header="overall relevance" field="overall_relevance">
           <template #body="slotProps">
-            <bar :value="slotProps.data.overall_relevance" color="midnightblue"
+            <bar :value="slotProps.data.overall_relevance" color="#004d80"
             v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
