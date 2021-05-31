@@ -1,6 +1,6 @@
 <template>
 
-  <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)" @exportCSV="exportCSV()"/>
+  <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)" @exportCSV="exportCSV($event)"/>
 
   <OverlayPanel ref="panel">
     <load-patient @loaded="loadPatient"></load-patient>
@@ -290,7 +290,7 @@ export default {
         this.calculateOption()
       }
     },
-    exportCSV() {
+    exportCSV(name) {
       var csv = "Type; Variable; Option"
       this.patient.evidence.forEach(ev => {
         csv += "\nevidence; " + ev.name + "; " + ev.selected.name
@@ -306,7 +306,7 @@ export default {
       const anchor = document.createElement('a');
       anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
       anchor.target = '_blank';
-      anchor.download = 'patient.csv';
+      anchor.download = name + '.csv';
       anchor.click();
     }
   },

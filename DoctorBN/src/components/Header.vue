@@ -16,6 +16,12 @@
     <Compare />
   </Dialog>
 
+  <OverlayPanel ref="exportOverlay">
+    <label> name: </label>
+    <InputText type="text" v-model="patientName"></InputText>
+    <Button label="save" @click="exportCSV()"/>
+  </OverlayPanel>
+
 </template>
 
 <script>
@@ -34,6 +40,7 @@ export default {
       showFeedback: false,
       showNetworkDescription: false,
       showConfigs: false,
+      patientName: null,
       items: [
         {
           label: 'Reset',
@@ -49,8 +56,8 @@ export default {
         },
         {
           label: 'Save Patient',
-          command: () => {
-            this.exportCSV()
+          command: (event) => {
+            this.exportPatientOverlay(event.originalEvent)
           }
         },
         {
@@ -94,8 +101,12 @@ export default {
     loadPatient(event) {
       this.$emit('loadPatient', event)
     },
+    exportPatientOverlay(event) {
+      this.$refs.exportOverlay.toggle(event)
+    },
     exportCSV() {
-      this.$emit('exportCSV')
+      this.$emit('exportCSV', this.patientName)
+      this.$refs.exportOverlay.toggle()
     },
   }
 }
