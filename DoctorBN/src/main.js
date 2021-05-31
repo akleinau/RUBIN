@@ -24,6 +24,7 @@ import InputText from 'primevue/inputtext';
 import Tooltip from 'primevue/tooltip';
 import Card from 'primevue/card';
 import Chip from 'primevue/chip';
+import FileUpload from 'primevue/fileupload';
 import 'primevue/resources/themes/saga-blue/theme.css';       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css'
@@ -56,6 +57,7 @@ createApp(App)
     .component('InputText', InputText)
     .component('Card', Card)
     .component('Chip', Chip)
+    .component('FileUpload', FileUpload)
     .directive('tooltip', Tooltip)
       .mount('#app')
 

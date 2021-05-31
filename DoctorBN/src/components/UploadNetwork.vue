@@ -1,24 +1,32 @@
 <template>
   <!-- Form to upload a network file -->
   <form @submit.prevent="upload" id = "upload-form" enctype="multipart/form-data">
-    <h3>Upload new network</h3>
-    <span>Network name:<input id = "net-name" type = "text" required/> <br></span>
-    <input name = "net-upload" type = "file" accept=".bif" required/> <br>
-    <input name = "net-submit" type = "submit" value = "Upload Network"/>
+    <label>Network name: <InputText id = "net-name" type = "text" required/> </label>
+    <br><br>
+    <FileUpload name = "net-upload" url="./upload" accept=".bif" :customUpload="true"
+                auto="true" :showUploadButton="false" @uploader="file = $event.files"  required/>
+
+    <br>
+    <Button name = "net-submit" type = "submit" label = "Upload Network" @click="upload()"/>
   </form>
 </template>
 
 <script>
 export default {
   name: "UploadNetwork",
+  data() {
+    return {
+      file: null,
+    }
+  },
   methods: {
     upload: async function() {
       let uploadForm = document.getElementById('upload-form');
       let displayName = document.getElementById('net-name').value;
-      let fileField = uploadForm.querySelector('input[type="file"]');
+      let fileField = this.file;
       let formData = new FormData();
       formData.append('displayName', displayName);
-      formData.append('file', fileField.files[0]);
+      formData.append('file', fileField[0]);
       let options = {
         method: 'POST',
         body: formData,

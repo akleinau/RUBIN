@@ -1,14 +1,14 @@
 <template>
-  <div class="p-grid p-nested-grid p-flex-column">
-    <Card class="p-m-2 p-col">
-      <template #title>
-        <div id="logo">DoctorBN</div>
+  <div class="p-grid p-nested-grid p-flex-column p-mx-1" >
+    <Card class="p-col">
+      <template #content>
+        <div id="logo"> <img src="./assets/Logo.jpg" style="height: 100px" /> </div>
       </template>
     </Card>
 
-    <div class="p-col p-grid vertical-container " style="position:relative; height:100%">
-      <div class="p-col box-stretched" style="position:relative">
-        <Card class="p-m-2 box-stretched" style="position:relative">
+    <div class="p-col p-grid vertical-container " style="height:100%">
+      <div class="p-col box-stretched" >
+        <Card class=" box-stretched" >
           <template #title>
             Upload a new network
           </template>
@@ -19,8 +19,8 @@
           </template>
         </Card>
       </div>
-      <div class="p-col  box-stretched" style="position:relative">
-        <Card class="p-m-2 box-stretched" style="position:relative">
+      <div class="p-col  box-stretched" >
+        <Card class=" box-stretched" >
           <template #title>
             Select a network
           </template>
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <Card class="p-m-2 p-col">
+    <Card class=" p-col">
       <template #title >
         <div class="p-text-left">FAQ</div>
       </template>
@@ -77,10 +77,6 @@ export default {
 </script>
 
 <style scoped>
-#logo {
-  font-size: 2em;
-  color: teal
-}
 
 .box-stretched {
   height: 100%
