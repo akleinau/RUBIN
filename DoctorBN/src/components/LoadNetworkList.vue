@@ -1,6 +1,8 @@
 <template>
   <form @submit.prevent="openNetwork" method="POST" id="selectNetForm" name="selectNetForm">
-    <dropdown v-model="selectedNetwork" ref="selectMenu" :filter="true" empty-message="No networks, upload one above" emptyFilterMessage="No networks found" :options="networks" option-label="name" placeholder="Select a network" required/>
+    <Listbox v-model="selectedNetwork" ref="selectMenu" :filter="true" empty-message="No networks, upload one above"
+             emptyFilterMessage="No networks found" :options="networks" option-label="name"
+             placeholder="Select a network" required/>
     <br>
     <Button type="submit">Open network</Button>
   </form>
