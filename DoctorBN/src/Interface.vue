@@ -9,11 +9,11 @@
   <div class=" p-grid  nested-grid  vertical-container " style="height:100%">
     <div class="p-grid p-col-3 p-flex-column ">
            <div class="p-col">
-        <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="goals"
+        <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="patient.goals"
                    @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
       </div>
       <div class="p-col box box-stretched ">
-        <NodeInput    title="Evidence" :nodes="nodes" :selection="evidence"
+        <NodeInput    title="Evidence" :nodes="nodes" :selection="patient.evidence"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
       </div>
 
@@ -25,7 +25,7 @@
             <div class="p-col box-stretched" >
         <TherapyOptions :results="options" :goals="newGoals" :goalResults="goalResults"
                         @update="selectedOptionUpdated($event)"
-                  :nodes="nodes" :targets="targets"
+                  :nodes="nodes" :targets="patient.targets"
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
       </div>
       </div>
@@ -60,9 +60,11 @@ export default {
   ],
   data() {
     return {
-      targets: [],
-      evidence: [],
-      goals: [],
+      patient: {
+        targets: [],
+        evidence: [],
+        goals: [],
+      },
       newGoals: null,
       nodes: [],
       options: null,
@@ -128,9 +130,9 @@ export default {
       console.log(edges)
     },
     reset: async function() {
-      this.targets= []
-      this.evidence= []
-      this.goals= []
+      this.patient.targets= []
+      this.patient.evidence= []
+      this.patient.goals= []
       this.newGoals= null
       this.nodes= []
       this.options= null
@@ -144,21 +146,21 @@ export default {
       await this.loadNodes()
     },
     calculate: async function () {
-      if (this.evidence.length !== 0 && this.targets.length !== 0 && this.goals.length !== 0) {
+      if (this.patient.evidence.length !== 0 && this.patient.targets.length !== 0 && this.patient.goals.length !== 0) {
         console.log("doing calculation for:")
 
         let evidences = {}
-        for (var ev in this.evidence) {
-          evidences[this.evidence[ev].name] = this.evidence[ev].selected.name;
+        for (var ev in this.patient.evidence) {
+          evidences[this.patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
         }
         let goals = {}
-        for (var goal in this.goals) {
-          goals[this.goals[goal].name] = this.goals[goal].selected.name;
+        for (var goal in this.patient.goals) {
+          goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
         }
 
         let targets = []
-        for (var target in this.targets) {
-          targets.push(this.targets[target].name)
+        for (var target in this.patient.targets) {
+          targets.push(this.patient.targets[target].name)
         }
 
         console.log(targets)
@@ -193,14 +195,14 @@ export default {
       console.log(this.selectedOption)
 
       let evidences = {}
-      for (var ev in this.evidence) {
-        evidences[this.evidence[ev].name] = this.evidence[ev].selected.name;
+      for (var ev in this.patient.evidence) {
+        evidences[this.patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
       }
       console.log(evidences)
 
       let goals = {}
-      for (var goal in this.goals) {
-        goals[this.goals[goal].name] = this.goals[goal].selected.name;
+      for (var goal in this.patient.goals) {
+        goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
       }
 
       console.log(goals)
@@ -229,37 +231,37 @@ export default {
     },
     addEvidences(nodes) {
       nodes.forEach(node => {
-        this.evidence.push(node)
+        this.patient.evidence.push(node)
         this.nodes = this.nodes.filter(x => x.name !== node.name)
       })
       this.calculate()
     },
     deleteEvidence(node) {
-      this.evidence = this.evidence.filter(x => x.name !== node.name)
+      this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
       this.nodes.push({name: node.name, options: node.options})
       this.calculate()
     },
     addTargets(nodes) {
       nodes.forEach(node => {
-        this.targets.push(node)
+        this.patient.targets.push(node)
         this.nodes = this.nodes.filter(x => x.name !== node.name)
       })
       this.calculate()
     },
     deleteTarget(node) {
-      this.targets = this.targets.filter(x => x.name !== node.name)
+      this.patient.targets = this.patient.targets.filter(x => x.name !== node.name)
       this.nodes.push(node)
       this.calculate()
     },
     addGoals(nodes) {
       nodes.forEach(node => {
-        this.goals.push(node)
+        this.patient.goals.push(node)
         this.nodes = this.nodes.filter(x => x.name !== node.name)
       })
       this.calculate()
     },
     deleteGoal(node) {
-      this.goals = this.goals.filter(x => x.name !== node.name)
+      this.patient.goals = this.patient.goals.filter(x => x.name !== node.name)
       this.nodes.push({name: node.name, options: node.options})
       this.calculate()
     },
@@ -272,13 +274,13 @@ export default {
     },
     exportCSV() {
       var csv = "Type; Variable; Option"
-      this.evidence.forEach(ev => {
+      this.patient.evidence.forEach(ev => {
         csv += "\nevidence; " + ev.name + "; " + ev.selected.name
       })
-      this.targets.forEach(ev => {
+      this.patient.targets.forEach(ev => {
         csv += "\ntarget; " + ev.name
       })
-      this.goals.forEach(ev => {
+      this.patient.goals.forEach(ev => {
         csv += "\ngoal; " + ev.name + "; " + ev.selected.name
       })
       console.log(csv)
