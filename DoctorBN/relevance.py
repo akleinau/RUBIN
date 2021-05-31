@@ -3,6 +3,7 @@ from scipy.spatial import distance
 from pgmpy import inference
 from TargetNode import TargetNode
 import numpy as np
+import sumNDimensionalArray as sumND
 
 #calculates the dissimilarity of two probability distributions (states) of a node
 # == computes global relevance
@@ -70,12 +71,14 @@ def get_influence_of_evidences_on_goals(network, evidences, goals):
                                                              #distribution_wo)
 
         for goal in goals.keys():
-            distribution1 = infer.query([goal], evidence=evidences)
-            optionNum1 = distribution1.name_to_no[goal][goals[goal]]
-            value1 = distribution1.values[optionNum1]
-            distribution2 = infer.query([goal], evidence=evidences_wo)
-            optionNum2 = distribution2.name_to_no[goal][goals[goal]]
-            value2 = distribution2.values[optionNum2]
+            dimension = distribution_all.variables.index(goal)
+            distribution1 = sumND.getMarginalProbability(distribution_all.values, dimension)
+            optionNum1 = distribution_all.name_to_no[goal][goals[goal]]
+            value1 = distribution1[optionNum1]
+            dimension2 = distribution_wo.variables.index(goal)
+            distribution2 = sumND.getMarginalProbability(distribution_wo.values, dimension2)
+            optionNum2 = distribution_wo.name_to_no[goal][goals[goal]]
+            value2 = distribution2[optionNum2]
 
             rel_of_ev_obj["relevancies"][str(goal) + ": " + str(goals[goal])] = value1 - value2
 

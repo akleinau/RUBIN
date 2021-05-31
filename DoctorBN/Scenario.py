@@ -4,6 +4,7 @@ from pgmpy import inference
 import relevance
 import explanation
 import numpy as np
+import sumNDimensionalArray as sumND
 
 from TargetNode import TargetNode
 
@@ -48,8 +49,9 @@ class Scenario:
         for i, goal in enumerate(distribution.variables):
             optionNum = distribution.name_to_no[goal][self.patient.goals[goal]]
             value = value[optionNum]
-            singleGoalDist = infer.query([goal], evidence=self.patient.evidences)
-            goalValues[goal] = singleGoalDist.values[singleGoalDist.name_to_no[goal][self.patient.goals[goal]]]
+            dimension = distribution.variables.index(goal)
+            singleGoalDist = sumND.getMarginalProbability(distribution.values, dimension)
+            goalValues[goal] = singleGoalDist[optionNum]
 
         return {'value': value, 'goalValues': goalValues}
 
@@ -113,8 +115,9 @@ class Scenario:
             for i, goal in enumerate(distribution.variables):
                 optionNum =distribution.name_to_no[goal][self.patient.goals[goal]]
                 value = value[optionNum]
-                singleGoalDist = infer.query([goal], evidence=simEvidence)
-                goalValues[goal] = singleGoalDist.values[singleGoalDist.name_to_no[goal][self.patient.goals[goal]]]
+                dimension = distribution.variables.index(goal)
+                singleGoalDist = sumND.getMarginalProbability(distribution.values, dimension)
+                goalValues[goal] = singleGoalDist[optionNum]
 
             results.append({'option': option, 'value': value, 'goalValues': goalValues})
 
@@ -123,14 +126,23 @@ class Scenario:
     def compute_all_nodes(self):
         infer = inference.BeliefPropagation(self.network.model)
         nodes = []
+        calcNodes = []
         for node in self.network.states:
             if node in self.patient.evidences:
                 nodes.append({"name": node, "state": self.patient.evidences[node], "probability": 1})
             else:
-                distribution = infer.query([node], evidence=self.patient.evidences)
-                state = infer.map_query([node], evidence=self.patient.evidences)
-                numberState = distribution.name_to_no[node][state[node]]
-                nodes.append({"name": node, "state": state[node], "probability": distribution.values[numberState]})
+                calcNodes.append(node)
+
+        #this gives back as distribution.values an n-dim array with one dimension per calculated node
+        #now we calculate the marginal probabilities per dimension to get the individual state probabilities of that node
+        distribution = infer.query(calcNodes, evidence=self.patient.evidences)
+        for node in calcNodes:
+            dimension = distribution.variables.index(node)
+            stateProbabilities = sumND.getMarginalProbability(distribution.values, dimension)
+            maxProbability = np.amax(stateProbabilities)
+            state = np.where(stateProbabilities == maxProbability)[0][0]
+            stateName = distribution.no_to_name[node][state]
+            nodes.append({"name": node, "state": stateName, "probability": maxProbability})
 
 
         return nodes

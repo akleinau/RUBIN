@@ -18,13 +18,6 @@ def getMarginalProbability(array, axis):
     for i in range(dim):
         if dim-i-1 != axis:
             array = array.sum(dim-i-1)
-            if axis > i+1:
+            if axis > dim-i-1:
                 axis -= 1
     return array
-
-array = np.array([[[1, 0], [2,0]],
-        [[3,0],[4,0]]])
-
-##result for dimension 3 column 0 should be 10
-
-print(getMarginalProbability(array, 3, 0))

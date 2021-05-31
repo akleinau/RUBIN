@@ -26,14 +26,20 @@ class SupportNode(NodeMixin, Support):
 
 def find_changed_set(root, set, evidences, network):
     infer = inference.VariableElimination(network)
+    query_set = []
     reduced_set = []
     for item in set:
         if item in evidences.keys():
             reduced_set.append(item)
         else:
-            withEvidence = infer.map_query([item], evidence=evidences)
-            standard = infer.map_query([item])
-            if withEvidence != standard:
+            query_set.append(item)
+
+
+    withEvidence = infer.map_query(query_set, evidence=evidences)
+    standard = infer.map_query(query_set)
+
+    for item in query_set:
+            if withEvidence[item] != standard[item]:
                 reduced_set.append(item)
     return reduced_set
 
