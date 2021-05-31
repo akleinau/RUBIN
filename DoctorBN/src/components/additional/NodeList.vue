@@ -1,4 +1,12 @@
 <template style="position:relative">
+      <div>
+    The network is:
+    <Chip  class="p-mx-1" style="background-color:black" label="sure"> </Chip>
+    <Chip  class="p-mx-1" style="background-color:green" label="very sure"> </Chip>
+    <Chip  class="p-mx-1" style="background-color:darkgoldenrod" label="less sure"></Chip>
+    <Chip  class="p-mx-1" style="background-color:red" label="not sure"></Chip>
+    with it's prognosis
+  </div>
 <DataTable :value="nodes" :scrollable="true" scrollHeight="600px">
   <Column header="node" field="name" :sortable="true" />
   <Column header="state" field="state">
@@ -26,7 +34,7 @@ name: "NodeList",
       if (probability === 1) return "black"
       const colorScale = d3.scaleQuantize()
             .domain([0, 1])
-             .range(["red", "chocolate", "darkGoldenRod", "yellowgreen", "green"]);
+             .range(["red", "darkGoldenRod", "green"]);
         return colorScale(probability)
     }
   }
@@ -34,5 +42,7 @@ name: "NodeList",
 </script>
 
 <style scoped>
-
+.p-chip {
+  color: white;
+}
 </style>

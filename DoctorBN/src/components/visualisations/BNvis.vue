@@ -169,6 +169,6 @@ export default {
 
 <style scoped>
 .p-chip {
-  color: aliceblue;
+  color: white;
 }
 </style>

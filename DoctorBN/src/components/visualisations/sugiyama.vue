@@ -179,7 +179,7 @@ name: "sugiyama",
 <style scoped>
 
 .p-chip {
-  color: aliceblue;
+  color: white;
 }
 
 </style>
