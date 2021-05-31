@@ -108,10 +108,12 @@ export default {
     getCorrespondingNode(nodeArr) {
       let correspondingNodes = []
       nodeArr.forEach(node => {
+        console.log("selectedOption:")
+        console.log(node)
         let correspondingNode = this.nodes.find(x => x.name === node.name)
         let item = {
           name: correspondingNode.name,
-          selected: {name: correspondingNode.options.find(x => x.name === node.option)},
+          selected: {name: node.option},
           options: correspondingNode.options
         }
         correspondingNodes.push(item)

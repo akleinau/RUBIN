@@ -50,10 +50,10 @@ export default {
         if (item.type === 'evidence') {
           console.log(this)
           this.patient.evidence.push(node)
-        } else if (item.type === 'target') {
-          this.patient.targets.push(node)
         } else if (item.type === 'goal') {
-          this.patient.goals.push({
+          this.patient.goals.push(node)
+        } else if (item.type === 'target') {
+          this.patient.targets.push({
             name: item.name
           })
         }
