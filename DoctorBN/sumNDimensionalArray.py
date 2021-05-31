@@ -21,3 +21,5 @@ def getMarginalProbability(array, axis):
             if axis > dim-i-1:
                 axis -= 1
     return array
+
+
