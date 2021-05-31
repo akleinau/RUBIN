@@ -6,10 +6,14 @@
     <load-patient @loaded="loadPatient"></load-patient>
   </OverlayPanel>
 
-  <div class=" p-grid p-flex-column nested-grid">
-    <div class="p-grid p-ai-stretch vertical-container" style="height:400px">
-      <div class="p-col-2 box-stretched">
-        <NodeInput title="Evidence" :nodes="nodes" :selection="evidence"
+  <div class=" p-grid  nested-grid  vertical-container " style="height:100%">
+    <div class="p-grid p-col-3 p-flex-column ">
+           <div class="p-col">
+        <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="goals"
+                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
+      </div>
+      <div class="p-col box box-stretched ">
+        <NodeInput    title="Evidence" :nodes="nodes" :selection="evidence"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
       </div>
 
