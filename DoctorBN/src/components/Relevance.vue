@@ -4,7 +4,8 @@
         <Column header="option" field="node_name"/>
         <Column header="overall relevance" field="overall_relevance">
           <template #body="slotProps">
-            <bar :value="slotProps.data.overall_relevance" color="midnightblue"></bar>
+            <bar :value="slotProps.data.overall_relevance" color="#004d80"
+            v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
       </DataTable>
@@ -20,12 +21,14 @@
         <Column header="option" field="node_name"/>
         <Column header="overall relevance" field="overall_relevance">
           <template #body="slotProps">
-            <bar :value="slotProps.data.overall_relevance" color="midnightblue"></bar>
+            <bar :value="slotProps.data.overall_relevance" color="midnightblue"
+            v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal" >
           <template #body="slotProps">
-            <twoSidedBar :value="slotProps.data.relevancies[goal]"></twoSidedBar>
+            <twoSidedBar :value="slotProps.data.relevancies[goal]"
+            v-tooltip="slotProps.data.relevancies[goal].toFixed(2)*100 + '%'"></twoSidedBar>
           </template>
         </Column>
 </DataTable>

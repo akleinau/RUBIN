@@ -1,4 +1,12 @@
 <template>
+    <div>
+    The network is:
+    <Chip  class="p-mx-1" style="background-color:black" label="sure"> </Chip>
+    <Chip  class="p-mx-1" style="background-color:green" label="very sure"> </Chip>
+    <Chip  class="p-mx-1" style="background-color:darkgoldenrod" label="less sure"></Chip>
+    <Chip  class="p-mx-1" style="background-color:red" label="not sure"></Chip>
+    with it's prognosis
+  </div>
   <div ref="container"/>
 </template>
 
@@ -160,7 +168,7 @@ export default {
 </script>
 
 <style scoped>
-div {
-
+.p-chip {
+  color: aliceblue;
 }
 </style>

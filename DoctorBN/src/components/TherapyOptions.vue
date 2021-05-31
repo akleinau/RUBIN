@@ -26,12 +26,14 @@
         </Column>
         <Column header="value" field="value">
           <template #body="slotProps">
-            <bar :value=slotProps.data.value color="RebeccaPurple"></bar>
+            <bar :value=slotProps.data.value color="RebeccaPurple"
+                 v-tooltip="slotProps.data.value.toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
           <template #body="slotProps">
-            <bar :value="slotProps.data.goalValues[String(goal)]" color="RebeccaPurple"></bar>
+            <bar :value="slotProps.data.goalValues[String(goal)]" color="RebeccaPurple"
+            v-tooltip="slotProps.data.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
       </DataTable>
