@@ -18,4 +18,4 @@ def getMarginalProbability(array, axis):
     for i in range(dim):
         if i != axis:
             array = array.sum(i)
-    return array
+    return array.tolist()
