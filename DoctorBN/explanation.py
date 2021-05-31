@@ -110,17 +110,19 @@ def add_markov_children(root, network, evidences=None, variables=None, subsetFun
     for node in small_blanket:
         forbidden_set = [x for x in root.forbidden_set]  # copy by value
         forbidden_set.append(node)
+
         # check if it's a parent of root
         if root.name in network.get_parents(node):
             for parent in network.get_parents(node):
                 if parent not in forbidden_set:
                     forbidden_set.append(parent)
+
         # check if it's a child of a parent of root
-        childparents = []
         for c in network.get_children(node):
             if root.name in network.get_parents(c):
                 if c not in forbidden_set:
                     forbidden_set.append(c)
+
 
         if not evidences or node not in evidences.keys():
             sn = SupportNode(node, parent=root, forbidden_set=forbidden_set)
@@ -134,15 +136,12 @@ def deleteUseless(root, network, evidences, variables):
     if root.name in evidences.keys():
         return 1
 
-    if root.name in variables.keys():
-        return 1
-
     # if roots children are useless, delete them
     for c in root.children:
         deleteUseless(c, network, evidences, variables)
 
     # if root is no evidence, but has no children, delete
-    if not root.children:
+    if not root.children and root.name not in variables.keys():
         root.parent = None
 
 

@@ -1,6 +1,6 @@
 <template>
   <div style="position:relative">
-    <Panel header="Interventions">
+
 
       <Listbox :options="selection" optionLabel="name" listStyle="max-height:300px"
                emptyMessage="choose therapy nodes">
@@ -13,8 +13,8 @@
 
         </template>
       </Listbox>
-      <Button id="AddButton" icon="pi pi-plus" @click="overlay = true"></Button>
-    </Panel>
+      <Button id="AddButton" icon="pi pi-plus" class="p-button-secondary" @click="overlay = true"></Button>
+
 
     <Dialog header="Add Interventions" v-model:visible="overlay" style="width: 50%" modal="yes">
       <Button class="p-mb-1" label="Add Interventions" style="width: 100%" @click="addTargetsFromOverlay()"/>
@@ -97,10 +97,8 @@ align-items: center;
 }
 
 #AddButton {
-  width: 90%;
-  position: absolute;
-  left: 5%;
-  bottom: 5%;
+  width: 100%;
+  position: relative;
 }
 
 .xButton {

@@ -16,8 +16,11 @@
         <NodeInput    title="Evidence" :nodes="nodes" :selection="patient.evidence"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
       </div>
+
+
+
     </div>
-    <div class="p-grid p-d-flex">
+    <div class="p-col p-grid p-flex-column" style="position:relative">
 
             <div class="p-col box-stretched" >
         <TherapyOptions :results="options.options" :goals="newGoals" :goalResults="options.optionResults"
@@ -31,14 +34,12 @@
         <Network :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states" :explanation="explain.explanation"/>
           </div>
       </div>
-    </div>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header";
 import NodeInput from "./components/NodeInput";
-import Therapy from "./components/Therapy";
 import Network from "./components/Network";
 import TherapyOptions from "@/components/TherapyOptions";
 import LoadPatient from "@/components/LoadPatient";
@@ -49,7 +50,6 @@ export default {
   components: {
     Header,
     NodeInput,
-    Therapy,
     Network,
     TherapyOptions,
     LoadPatient,
@@ -313,33 +313,40 @@ export default {
   created: async function () {
     await this.loadNodes()
 
-    //add example nodes
-    let CA125 = this.nodes.find(x => x.name === "CA125")
-    CA125["selected"] = {"name":"lt_35"}
-    this.addEvidences([CA125])
-    this.addTargets([this.nodes.find(x => x.name === "Therapy")])
-    let surv = this.nodes.find(x => x.name === "Survival1yr")
-    surv["selected"] = {"name": "yes"}
-    this.addGoals([surv])
-
+    if (this.network === '0') {
+      //add example nodes
+      let CA125 = this.nodes.find(x => x.name === "CA125")
+      CA125["selected"] = {"name": "lt_35"}
+      this.addEvidences([CA125])
+      this.addTargets([this.nodes.find(x => x.name === "Therapy")])
+      let surv = this.nodes.find(x => x.name === "Survival1yr")
+      surv["selected"] = {"name": "yes"}
+      this.addGoals([surv])
+    }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .p-grid {
-  margin-top: 0px;
-  margin-bottom: 10px
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 0
 }
 
 .box-stretched {
         height: 100%;
     }
 
+
+
 #arrow {
   width: 100%;
   height: 30%;
 }
+
+
+
 
 </style>

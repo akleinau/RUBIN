@@ -50,8 +50,8 @@ export default {
       return Math.sqrt(xq + yq)
     },
     visualise() {
-      const width = 450
-      const height = 110
+      const width = 200
+      const height = 200
 
       if (this.nodes !== null && this.edges !== null) {
 

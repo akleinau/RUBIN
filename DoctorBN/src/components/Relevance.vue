@@ -1,6 +1,6 @@
 <template>
-  <div class="p-d-flex p-grid  p-ai-center vertical-container" v-if="onlyGlobal===true">
-    <DataTable class="p-col-8" :value="relevance" :scrollable="true" scrollHeight="500px">
+  <div class="p-d-flex p-dir-col" v-if="onlyGlobal===true">
+    <DataTable class="p-col" :value="relevance" :scrollable="true" scrollHeight="500px">
         <Column header="option" field="node_name"/>
         <Column header="overall relevance" field="overall_relevance">
           <template #body="slotProps">
@@ -9,10 +9,10 @@
           </template>
         </Column>
       </DataTable>
-    <dif class="p-col-1">
-      <i class="pi pi-chevron-right" style="fontSize: 5rem"></i>
+    <dif class="p-col">
+      <i class="pi pi-chevron-down" style="fontSize: 5rem"></i>
     </dif>
-    <dif class="p-col-3">
+    <dif class="p-col">
       <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{goal}}</div>
     </dif>
 </div>
