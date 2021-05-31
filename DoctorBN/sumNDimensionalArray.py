@@ -16,9 +16,11 @@ def getMarginalProbability(array, axis):
     array = np.array(array)
     dim = array.ndim
     for i in range(dim):
-        if i != axis:
-            array = array.sum(i)
-    return array.tolist()
+        if dim-i-1 != axis:
+            array = array.sum(dim-i-1)
+            if axis > i+1:
+                axis -= 1
+    return array
 
 array = np.array([[[1, 0], [2,0]],
         [[3,0],[4,0]]])
