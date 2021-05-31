@@ -19,3 +19,10 @@ def getMarginalProbability(array, axis):
         if i != axis:
             array = array.sum(i)
     return array.tolist()
+
+array = np.array([[[1, 0], [2,0]],
+        [[3,0],[4,0]]])
+
+##result for dimension 3 column 0 should be 10
+
+print(getMarginalProbability(array, 3, 0))
