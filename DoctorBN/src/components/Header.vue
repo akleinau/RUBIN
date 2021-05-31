@@ -1,5 +1,5 @@
 <template>
-  <Menubar :model="items"/>
+  <Menubar :model="items" ref="menu"/>
   <div id="logo">DoctorBN</div>
   <Dialog header="Feedback" v-model:visible="showFeedback"  style="width: 50%" modal="yes">
     <Feedback></Feedback>
@@ -21,6 +21,8 @@
 <script>
 import Feedback from "@/components/additional/Feedback";
 import Compare from "@/components/additional/Compare";
+
+
 export default {
   name: "Header",
   components: {
@@ -40,7 +42,10 @@ export default {
           }
         },
         {
-          label: 'Load Patient'
+          label: 'Load Patient',
+          command: (event) => {
+            this.loadPatient(event.originalEvent)
+          }
         },
         {
           label: 'Save Patient',
@@ -85,6 +90,9 @@ export default {
     },
     reset() {
       this.$emit('reset')
+    },
+    loadPatient(event) {
+      this.$emit('loadPatient', event)
     },
     exportCSV() {
       this.$emit('exportCSV')

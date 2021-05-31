@@ -1,14 +1,15 @@
 <template>
 
-  <Header @changePage="changePage()" @reset="reset()" @exportCSV="exportCSV()"/>
-  <div class=" p-grid  nested-grid  vertical-container " style="height:100%">
-    <div class="p-grid p-col-3 p-flex-column ">
-           <div class="p-col">
-        <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="goals"
-                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
-      </div>
-      <div class="p-col box box-stretched ">
-        <NodeInput    title="Evidence" :nodes="nodes" :selection="evidence"
+  <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)" @exportCSV="exportCSV()"/>
+
+  <OverlayPanel ref="panel">
+    <load-patient @loaded="loadPatient"></load-patient>
+  </OverlayPanel>
+
+  <div class=" p-grid p-flex-column nested-grid">
+    <div class="p-grid p-ai-stretch vertical-container" style="height:400px">
+      <div class="p-col-2 box-stretched">
+        <NodeInput title="Evidence" :nodes="nodes" :selection="evidence"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
       </div>
 
@@ -37,6 +38,8 @@ import Header from "./components/Header";
 import NodeInput from "./components/NodeInput";
 import Network from "./components/Network";
 import TherapyOptions from "@/components/TherapyOptions";
+import LoadPatient from "@/components/LoadPatient";
+import OverlayPanel from "primevue/overlaypanel";
 
 export default {
   name: "Interface",
@@ -44,7 +47,9 @@ export default {
     Header,
     NodeInput,
     Network,
-    TherapyOptions
+    TherapyOptions,
+    LoadPatient,
+    OverlayPanel
   },
   props: [
       "network"
@@ -62,15 +67,42 @@ export default {
       relevance: null,
       edges: null,
       states: null,
-      explanation: null
+      explanation: null,
+      patientCases: []
     }
   },
   methods: {
     changePage() {
       this.$emit("changePage")
     },
+    openLoadForm(event) {
+      this.$refs.panel.toggle(event)
+    },
+    loadPatient: async function(patientData) {
+      await this.reset()
+      let evidenceNodes = this.getCorrespondingNode(patientData.evidence)
+      let targetNodes = this.getCorrespondingNode(patientData.targets)
+      let goalNodes = this.getCorrespondingNode(patientData.goals)
+      this.addEvidences(evidenceNodes)
+      this.addTargets(targetNodes)
+      this.addGoals(goalNodes)
+      this.$refs.panel.toggle()
+    },
+    getCorrespondingNode(nodeArr) {
+      let correspondingNodes = []
+      nodeArr.forEach(node => {
+        let correspondingNode = this.nodes.find(x => x.name === node.name)
+        let item = {
+          name: correspondingNode.name,
+          selected: {name: correspondingNode.options.find(x => x.name === node.option)},
+          options: correspondingNode.options
+        }
+        correspondingNodes.push(item)
+      })
+      return correspondingNodes
+    },
     loadNodes: async function(){
-        const gResponse = await fetch("http://localhost:5000/cancernet?network=" + this.network);
+      const gResponse = await fetch("http://localhost:5000/cancernet?network=" + this.network);
       const network = await gResponse.json();
       let nodes = []
       for (var key in network.states) {
@@ -88,10 +120,10 @@ export default {
         edges.push({"source": edge[0], "target": edge[1]})
       })
       this.edges = edges
-      console.log("edges: " )
+      console.log("edges: ")
       console.log(edges)
     },
-    reset() {
+    reset: async function() {
       this.targets= []
       this.evidence= []
       this.goals= []
@@ -105,7 +137,7 @@ export default {
       this.states= null
       this.explanation= null
 
-      this.loadNodes()
+      await this.loadNodes()
     },
     calculate: async function () {
       if (this.evidence.length !== 0 && this.targets.length !== 0 && this.goals.length !== 0) {
@@ -235,15 +267,15 @@ export default {
       }
     },
     exportCSV() {
-      var csv = ''
+      var csv = "Type; Variable; Option"
       this.evidence.forEach(ev => {
-        csv += "evidence; " + ev.name + "; " + ev.selected.name + "\n"
+        csv += "\nevidence; " + ev.name + "; " + ev.selected.name
       })
       this.targets.forEach(ev => {
-        csv += "target; " + ev.name + "\n"
+        csv += "\ntarget; " + ev.name
       })
       this.goals.forEach(ev => {
-        csv += "goal; " + ev.name + "; " + ev.selected.name + "\n"
+        csv += "\ngoal; " + ev.name + "; " + ev.selected.name
       })
       console.log(csv)
 
