@@ -23,7 +23,7 @@
     <div class="p-col p-grid p-flex-column" style="position:relative">
 
             <div class="p-col box-stretched" >
-        <TherapyOptions :results="options" :goals="newGoals" :goalResults="goalResults"
+        <TherapyOptions :results="options.options" :goals="newGoals" :goalResults="options.optionResults"
                         @update="selectedOptionUpdated($event)"
                   :nodes="nodes" :targets="patient.targets"
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
@@ -31,7 +31,7 @@
       </div>
       <div class="p-col p-grid p-flex-column" style="position:relative">
         <div class="p-col box-stretched">
-        <Network :relevance = "relevance" :goals="newGoals" :edges="edges" :nodes="states" :explanation="explanation"/>
+        <Network :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states" :explanation="explain.explanation"/>
           </div>
       </div>
   </div>
@@ -60,20 +60,31 @@ export default {
   ],
   data() {
     return {
+      //data that is specific to the patient
       patient: {
         targets: [],
         evidence: [],
         goals: [],
       },
-      newGoals: null,
-      nodes: [],
-      options: null,
-      goalResults: null,
-      selectedOption: null,
-      relevance: null,
-      edges: null,
-      states: null,
-      explanation: null,
+
+      //available options to treat the patient given the interventions
+      options: {
+        options: null,
+        optionResults: null,
+        selectedOption: null,
+      },
+
+      newGoals: null, //helper property to let the data tables update TODO: replace
+      nodes: [], //nodes of the network that are neither evidence, goals, nor targets
+      edges: null, //edges of the network
+
+      //explaining calculations for the chosen option
+      explain: {
+        explanation: null,
+        relevance: null,
+        states: null,
+      },
+
       patientCases: []
     }
   },
@@ -133,15 +144,18 @@ export default {
       this.patient.targets= []
       this.patient.evidence= []
       this.patient.goals= []
-      this.newGoals= null
-      this.nodes= []
-      this.options= null
-      this.goalResults= null
-      this.selectedOption= null
-      this.relevance= null
+
+      this.options.options= null
+      this.options.optionResults= null
+      this.options.selectedOption= null
+
       this.edges= null
-      this.states= null
-      this.explanation= null
+      this.nodes= []
+      this.newGoals= null
+
+      this.explain.relevance= null
+      this.explain.states= null
+      this.explain.explanation= null
 
       await this.loadNodes()
     },
@@ -182,9 +196,9 @@ export default {
         let nodeDict = await gResponse.json();
         console.log('results: ')
         console.log(nodeDict.optionResults)
-        this.options = nodeDict.optionResults
+        this.options.options = nodeDict.optionResults
         console.log(nodeDict.likelyResults)
-        this.goalResults = nodeDict.likelyResults
+        this.options.optionResults = nodeDict.likelyResults
 
         this.newGoals = goals
 
@@ -192,7 +206,7 @@ export default {
     },
     calculateOption: async function () {
       console.log("calculating relevance for:")
-      console.log(this.selectedOption)
+      console.log(this.options.selectedOption)
 
       let evidences = {}
       for (var ev in this.patient.evidence) {
@@ -215,19 +229,19 @@ export default {
         body: JSON.stringify({
           network: this.network,
           evidences: evidences,
-          options: this.selectedOption.option,
+          options: this.options.selectedOption.option,
           goals: goals
         })
       });
       let nodeDict = await gResponse.json();
       console.log('relevance: ')
-      this.relevance = nodeDict.relevance
-      console.log(this.relevance)
+      this.explain.relevance = nodeDict.relevance
+      console.log(this.explain.relevance)
       this.newGoals = goals
-      this.states = nodeDict.nodes
-      console.log(this.states)
-      this.explanation = nodeDict.explanation
-      console.log(this.explanation)
+      this.explain.states = nodeDict.nodes
+      console.log(this.explain.states)
+      this.explain.explanation = nodeDict.explanation
+      console.log(this.explain.explanation)
     },
     addEvidences(nodes) {
       nodes.forEach(node => {
@@ -266,8 +280,8 @@ export default {
       this.calculate()
     },
     selectedOptionUpdated(option) {
-      this.selectedOption = option
-      if (option === []) this.relevance = null
+      this.options.selectedOption = option
+      if (option === []) this.explain.relevance = null
       else {
         this.calculateOption()
       }
