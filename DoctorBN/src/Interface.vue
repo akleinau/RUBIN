@@ -24,7 +24,7 @@
 
             <div class="p-col box-stretched" >
         <TherapyOptions :results="options.options" :goals="newGoals" :goalResults="options.optionResults"
-                        @update="selectedOptionUpdated($event)"
+                        :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
                   :nodes="nodes" :targets="patient.targets"
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
       </div>

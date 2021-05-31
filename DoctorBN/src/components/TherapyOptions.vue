@@ -13,7 +13,7 @@
   <TabView header="Options">
     <TabPanel header="table">
       <DataTable :value="results" :scrollable="true" scrollHeight="400px"
-                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
+                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
                  @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
         <Column header="option" field="option">
           <template #body="slotProps">
@@ -38,7 +38,7 @@
     </TabPanel>
     <TabPanel header="compare">
       <DataTable :value="results" :scrollable="true" scrollHeight="300px"
-                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
+                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
                  @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
         <Column header="option" field="option">
                     <template #body="slotProps">
@@ -85,13 +85,19 @@ export default {
     "goals",
     "goalResults",
       "nodes",
-      "targets"
+      "targets",
+      "selectedOption"
   ],
+  watch: {
+    selectedOption: function () {
+      this.selected = this.selectedOption
+    }
+  },
   data() {
     return {
       columns: [],
       normal: 0.9,
-      selectedOption: null
+      selected: null
     }
   },
   methods: {
@@ -110,10 +116,10 @@ export default {
 
     },
     onRowSelect() {
-      this.$emit("update", this.selectedOption);
+      this.$emit("update", this.selected);
     },
     onRowUnselect() {
-      this.$emit("update", this.selectedOption);
+      this.$emit("update", this.selected);
     }
   }
 }
