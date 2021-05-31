@@ -1,14 +1,9 @@
-<template >
-  <Card style="position: relative">
-    <template #title>
-      Explanation
-    </template>
-    <template #content>
+<template>
   <TabView>
-    <TabPanel header="Relevance">
+    <TabPanel header="Relevance explanation">
       <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
     </TabPanel>
-    <TabPanel header="Reasoning">
+    <TabPanel header="Reasoning explanation">
       <sugiyama :edges="getExEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="compact network">
@@ -24,8 +19,7 @@
       <NodeList :nodes="nodes" />
     </TabPanel>
   </TabView>
-      </template>
-</Card>
+
 </template>
 
 <script>
@@ -46,15 +40,17 @@ export default {
   data() {
     return {
       onlyGlobal: true,
-      compactEdges: null,
-      exNodes: null
     }
   },
-  watch: {
-    explanation: function() {
+  methods: {
+    getExEdges() {
       if (this.explanation != null) {
-        //nodes
-        let explanationNodes = []
+        return this.explanation["edges"]
+      }
+    },
+    getExNodes() {
+     if (this.explanation != null) {
+       let explanationNodes = []
        this.explanation["nodes"].forEach(node => {
          let originalNode = this.nodes.find(n => n.name === node)
          if (originalNode != null) {
@@ -64,80 +60,29 @@ export default {
            explanationNodes.push({"name": node, "probability": "1.0"})
          }
        })
-
-        //edges
-        let edges = []
-
-        let connectedNodes = new Set()
-        this.edges.forEach(edge => {
-          if (this.explanation["nodes"].includes(edge["source"]) && this.explanation["nodes"].includes(edge["target"])) {
-            edges.push(edge)
-            connectedNodes.add(edge["source"])
-            connectedNodes.add(edge["target"])
-          }
-        })
-        let notConnectedNodes = this.explanation["nodes"].filter(x => !connectedNodes.has(x))
-        console.log("not connected:")
-        console.log(notConnectedNodes)
-        notConnectedNodes.forEach(node => {
-          let neighborNodes = this.nodes.filter(n =>
-              this.edges.find(e => e["source"] === node && e["target"] === n.name) != null)
-          neighborNodes.forEach(n => {
-            let otherEdges = this.edges.filter(e => e["target"] === n.name)
-            otherEdges.forEach(oe => {
-              if (oe["source"] !== node && this.explanation["nodes"].includes(oe["source"])) {
-                if (!explanationNodes.includes(n)) {
-                  explanationNodes.push(n)
-                }
-                  edges.push({"source": node, "target": n.name})
-                  edges.push(oe)
-              }
-            })
-          })
-
-        })
-        //remove duplicates
-        console.log("found:")
-        console.log(edges)
-        edges = edges.filter(e => edges.find(e2 => e2["source"] === e["source"] && e2["target"] === e["target"]) === e)
-        console.log(edges)
-
-        this.compactEdges = edges
-        this.exNodes = explanationNodes
-      }
-    }
-  },
-  methods: {
-    getExEdges() {
-      if (this.explanation != null) {
-        return this.explanation["edges"]
-      }
+       return explanationNodes
+     }
     },
     getCompactEdges() {
-      if (this.compactEdges != null) {
-        return this.compactEdges
-      }
-    },
-    getExNodes() {
-      if (this.exNodes != null) {
-        return this.exNodes
+      if (this.explanation != null) {
+        let edges = []
+        console.log(this.edges)
+        this.edges.forEach(edge => {
+          if (this.explanation["nodes"].includes(edge["source"]) && this.explanation["nodes"].includes(edge["target"])) {
+            console.log(edge)
+            console.log(this.explanation["nodes"])
+            edges.push(edge)
+          }
+        })
+        return edges
       }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-.p-card {
-  height: 100% !important;
-
-  display: grid;
-  grid-template-rows: auto 1fr;
+<style scoped>
+img {
+  height: 100%;
 }
-
-::v-deep(.p-panel-content) {
-height: 100% !important;
-}
-
 </style>

@@ -1,9 +1,6 @@
 <template>
-  <Card>
-    <template #title style="position: relative" :class="title">
-      {{title}}
-    </template>
-    <template #content>
+  <Panel :header="title" style="position: relative">
+    <div>
       <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="300px">
         <Column field="name">
           <template #header class="table-header">
@@ -16,13 +13,15 @@
         <Column field="value" class="optionCol">
           <template #body="slotProps">
             <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
-                      placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)" >
+                      placeholder="slotProps.data.selected" @change="onNodeChange()" >
             </Dropdown>
             <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text"
                     @click="deleteNode(slotProps.data)" />
           </template>
         </Column>
       </DataTable>
+      <Button id="addButton" icon="pi pi-plus" @click="overlay = true"></Button>
+    </div>
     <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%" modal="yes">
       <Button class="p-mb-1" :label="'Add ' + title" style="width: 100%" @click="addNodesFromOverlay()"/>
       <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
@@ -56,11 +55,7 @@
         </Column>
       </DataTable>
     </Dialog>
-    </template>
-    <template #footer>
-      <Button id="addButton" icon="pi pi-plus" @click="overlay = true"></Button>
-    </template>
-  </Card>
+  </Panel>
 </template>
 
 
@@ -107,9 +102,6 @@ export default {
     },
      deleteNodeFromOverlay(node) {
       this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
-    },
-    onNodeChange(node) {
-    this.$emit("addNodes", [node])
     }
   }
 }
@@ -121,8 +113,10 @@ export default {
 }
 
 #addButton {
-  width: 100%;
-  position: relative;
+  width: 90%;
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
 }
 
 #table{
@@ -133,18 +127,6 @@ export default {
 ::v-deep(#table .p-datatable-thead){
   display: None !important
 }
-
-.p-card {
-  height: 100% !important;
-
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
-
-::v-deep(.p-panel-content) {
-height: 100% !important;
-}
-
 
 
 </style>
