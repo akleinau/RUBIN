@@ -1,8 +1,5 @@
-from pgmpy.models import BayesianModel
-from pgmpy.readwrite import BIFReader
 from pgmpy import inference
 from anytree import NodeMixin, RenderTree, PreOrderIter
-from anytree.exporter import DotExporter
 import itertools
 
 

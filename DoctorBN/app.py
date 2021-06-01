@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
-from Network import Network
-from Scenario import Scenario
+from py_src.Network import Network
+from py_src.Scenario import Scenario
 import os
 
 NETWORK_FOLDER = './Networks'
@@ -17,8 +17,8 @@ db = SQLAlchemy(app)
 CORS(app)
 
 
-@app.route('/cancernet')
-def getCancerNet():
+@app.route('/getNetwork')
+def getNetwork():
     data = request
     network = openNetwork(data.args.get('network'))
     return {'states': network.states, 'edges': network.edges}

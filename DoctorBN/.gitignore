@@ -26,3 +26,4 @@ pnpm-debug.log*
 .idea/*
 venv/*
 __pycache__/*
+py_src/__pycache__/*

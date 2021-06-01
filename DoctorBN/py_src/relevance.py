@@ -1,7 +1,6 @@
 import numpy
 from scipy.spatial import distance
 from pgmpy import inference
-from TargetNode import TargetNode
 import numpy as np
 import sumNDimensionalArray as sumND
 

@@ -151,7 +151,7 @@ export default {
       return correspondingNodes
     },
     loadNodes: async function(){
-      const gResponse = await fetch("http://localhost:5000/cancernet?network=" + this.network);
+      const gResponse = await fetch("http://localhost:5000/getNetwork?network=" + this.network);
       const network = await gResponse.json();
       let nodes = []
       for (var key in network.states) {
