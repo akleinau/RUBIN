@@ -44,9 +44,9 @@
 
 <script>
 import Header from "./components/Header";
-import NodeInput from "./InputFields/NodeInput";
+import NodeInput from "./components/InputFields/NodeInput";
 import Explanation from "./components/Explanation";
-import TherapyOptions from "@/InputFields/TherapyOptions";
+import TherapyOptions from "@/components/InputFields/TherapyOptions";
 import LoadPatient from "@/components/Header/LoadPatient";
 import OverlayPanel from "primevue/overlaypanel";
 

@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import Relevance from "./Relevance";
+import Relevance from "@/components/explanation/Relevance";
 import BNvis from "@/components/visualisations/BNvis";
 import sugiyama from "@/components/visualisations/sugiyama";
-import NodeList from "@/components/additional/NodeList";
+import NodeList from "@/components/explanation/NodeList";
 
 export default {
   name: "Network",

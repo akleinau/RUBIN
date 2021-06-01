@@ -74,7 +74,7 @@
 <script>
 import bar from "@/components/visualisations/bar";
 import twoSidedBar from "@/components/visualisations/twoSidedBar";
-import TherapyInput from "@/InputFields/TherapyInput";
+import TherapyInput from "@/components/InputFields/TherapyInput";
 
 export default {
   name: "TherapyOptions",
