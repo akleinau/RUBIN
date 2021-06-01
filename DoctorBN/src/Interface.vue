@@ -1,6 +1,8 @@
 <template>
 
-  <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)" @exportCSV="exportCSV($event)"/>
+  <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
+          @exportCSV="exportCSV($event)" @saveConfig="saveConfig($event)" @compareTo="compareTo($event)"
+          :configurations="configurations"/>
 
   <OverlayPanel ref="panel">
     <load-patient @loaded="loadPatient"></load-patient>
@@ -31,7 +33,9 @@
       </div>
       <div class="p-col p-grid p-flex-column" style="position:relative">
         <div class="p-col box-stretched">
-        <Network :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states" :explanation="explain.explanation"/>
+        <Network :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states"
+                 :explanation="explain.explanation" :compareConfig="selectedConfig == null? null: selectedConfig.config.explain" />
+
           </div>
       </div>
   </div>
@@ -85,10 +89,32 @@ export default {
         states: null,
       },
 
+      configurations: [],
+      selectedConfig: null,
       patientCases: []
     }
   },
   methods: {
+    saveConfig(name) {
+      this.configurations.push({
+        "name": name,
+        "config": {
+          "patient": JSON.parse(JSON.stringify(this.patient)),
+          "options": JSON.parse(JSON.stringify(this.options)),
+          "explain": JSON.parse(JSON.stringify(this.explain)),
+          "nodes": JSON.parse(JSON.stringify(this.nodes)),
+          "newGoals": JSON.parse(JSON.stringify(this.newGoals))
+        }
+      })
+    },
+    compareTo(name) {
+      if (name === null) {
+        this.selectedConfig = null
+      }
+      this.selectedConfig = this.configurations.find(a => a.name === name)
+      console.log("Comparing to:")
+      console.log(this.selectedConfig)
+    },
     changePage() {
       this.$emit("changePage")
     },
