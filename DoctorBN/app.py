@@ -75,6 +75,7 @@ def openNetwork(selectedNet: str):
 class NetworkData(db.Model):
     filePath = db.Column(db.String(), nullable=False)
     displayName = db.Column(db.String(), primary_key=True, nullable=False)
+    description = db.Column(db.String(), nullable=True)
 
     def __repr__(self):
         return self.displayName
@@ -94,9 +95,12 @@ def doesPathExist(filePath):
     return False
 
 
+#def hasDescription(description):
+
+
 # Adds a new network's data to the database and saves the file to the designated path
-def addNetwork(file, path, name):
-    newNetwork = NetworkData(filePath=path, displayName=name)
+def addNetwork(file, path, name, des=None):
+    newNetwork = NetworkData(filePath=path, displayName=name, description=des)
     db.session.add(newNetwork)
     db.session.commit()
     file.save(path)

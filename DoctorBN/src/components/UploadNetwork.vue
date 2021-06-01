@@ -5,8 +5,8 @@
     <br><br>
     <FileUpload name = "net-upload" url="./upload" accept=".bif" :customUpload="true"
                 auto="true" :showUploadButton="false" @uploader="file = $event.files"  required/>
-
     <br>
+    <label><Textarea id = "net-description"></Textarea></label>
     <Button name = "net-submit" type = "submit" label = "Upload Network" @click="upload()"/>
   </form>
 </template>
@@ -23,10 +23,12 @@ export default {
     upload: async function() {
       let uploadForm = document.getElementById('upload-form');
       let displayName = document.getElementById('net-name').value;
+      let netDescription = document.getElementById('net-description').value;
       let fileField = this.file;
       let formData = new FormData();
       formData.append('displayName', displayName);
       formData.append('file', fileField[0]);
+      formData.append('netDescription', netDescription);
       let options = {
         method: 'POST',
         body: formData,
