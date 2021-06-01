@@ -9,6 +9,7 @@
      @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)" />
   <div>
     <h3 class="p-text-left">Results:</h3>
+    <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em" />
   </div>
   <TabView header="Options">
     <TabPanel header="table">
@@ -88,7 +89,8 @@ export default {
     "goalResults",
       "nodes",
       "targets",
-      "selectedOption"
+      "selectedOption",
+      "loading"
   ],
   watch: {
     selectedOption: function () {

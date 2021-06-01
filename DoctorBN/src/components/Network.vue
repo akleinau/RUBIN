@@ -4,6 +4,7 @@
       Explanation
     </template>
     <template #content>
+      <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
   <TabView>
     <TabPanel header="Relevance">
       <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
@@ -36,7 +37,7 @@ import NodeList from "@/components/additional/NodeList";
 
 export default {
   name: "Network",
-  props: ['relevance', 'goals', "edges", "nodes", "explanation", "compareConfig"],
+  props: ['relevance', 'goals', "edges", "nodes", "explanation", "compareConfig", "loading"],
   components: {
     Relevance,
     BNvis,
