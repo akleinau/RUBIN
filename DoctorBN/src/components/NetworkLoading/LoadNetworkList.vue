@@ -40,8 +40,9 @@ export default {
       const netList = await gResponse.json();
       this.networks = []
       for (const key in netList) {
-        this.networks.push({netID: key, name: netList[key]})
+        this.networks.push({name: netList[key]})
       }
+      this.$emit('updated')
     }
   },
   created: function () {

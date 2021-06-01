@@ -13,7 +13,7 @@
             Upload a new network
           </template>
           <template #content>
-            <Upload ref="uploadField" @reloadNetList="this.$refs.netList.loadNetList()"></Upload>
+            <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()"></Upload>
             <br>
 
           </template>
@@ -25,7 +25,7 @@
             Select a network
           </template>
           <template #content>
-            <Networklist ref="netList" @changePage="changePage"></Networklist>
+            <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage"></Networklist>
           </template>
         </Card>
 

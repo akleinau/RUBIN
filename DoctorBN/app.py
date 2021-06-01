@@ -12,6 +12,7 @@ TEMPLATE_FOLDER = os.path.abspath('./src')
 app = Flask(__name__, template_folder=TEMPLATE_FOLDER)
 app.config['NETWORK_FOLDER'] = NETWORK_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///networks.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 CORS(app)
 
@@ -95,11 +96,11 @@ def doesPathExist(filePath):
     return False
 
 
-#def hasDescription(description):
+# def hasDescription(description):
 
 
 # Adds a new network's data to the database and saves the file to the designated path
-def addNetwork(file, path, name, des=None):
+def addNetwork(file, path, name, des):
     newNetwork = NetworkData(filePath=path, displayName=name, description=des)
     db.session.add(newNetwork)
     db.session.commit()
@@ -123,6 +124,7 @@ def getNetworkList():
 def saveNetwork():
     displayName = request.form['displayName']
     file = request.files['file']
+    description = request.form['netDescription']
     # if the display name the user entered is already in use, return with error
     if doesNetworkNameExist(displayName):
         return jsonify('error1')
@@ -133,7 +135,7 @@ def saveNetwork():
     if doesPathExist(filePath):
         return jsonify('error2')
     # add new network to database and save it
-    addNetwork(file, filePath, displayName)
+    addNetwork(file, filePath, displayName, description)
     return jsonify('successful')
 
 
