@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
-from Network import Network
-from Scenario import Scenario
+from py_src.Network import Network
+from py_src.Scenario import Scenario
 import os
 
 NETWORK_FOLDER = './Networks'
@@ -16,8 +16,8 @@ db = SQLAlchemy(app)
 CORS(app)
 
 
-@app.route('/cancernet')
-def getCancerNet():
+@app.route('/getNetwork')
+def getNetwork():
     data = request
     network = openNetwork(data.args.get('network'))
     return {'states': network.states, 'edges': network.edges}
@@ -26,7 +26,7 @@ def getCancerNet():
 @app.route('/calcTargetForGoals', methods=['POST'])
 def calcTargetForGoals():
     data = request.get_json()
-    network = openNetwork(data['network'])
+    network = getNetworkInDatabase(data['network']).filePath
     s = Scenario(network, evidences=data['evidences'], targets=data['target'], goals=data['goals'])
     results = s.compute_target_combs_for_goals()
     likely_results = s.compute_goals()
@@ -42,7 +42,7 @@ def calcOptions():
     for op in data['options']:
         relevanceEvidences[op] = data['options'][op]
 
-    network = openNetwork(data['network'])
+    network = getNetworkInDatabase(data['network']).filePath
     s = Scenario(network, evidences=relevanceEvidences, goals=data['goals'])
     relevance = s.compute_relevancies_for_goals()
     nodes = s.compute_all_nodes()
@@ -111,10 +111,10 @@ def addNetwork(file, path, name, des=None):
 # returns a python dict object
 @app.route('/loadNetList')
 def getNetworkList():
-    networks = NetworkData.query.order_by(NetworkData.netId).all()
+    networks = NetworkData.query.order_by(NetworkData.displayName).all()
     netList = {}
-    for network in networks:
-        netList[network.netId] = network.displayName
+    for i, network in enumerate(networks):
+        netList[i] = network.displayName
     return netList
 
 

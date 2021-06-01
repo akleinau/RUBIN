@@ -1,13 +1,10 @@
-from Patient import Patient
-from Network import Network
+from py_src.Patient import Patient
+from py_src.Network import Network
 from pgmpy import inference
-import relevance
-import explanation
+import py_src.relevance as relevance
+import py_src.explanation as explanation
 import numpy as np
-import sumNDimensionalArray as sumND
-
-from TargetNode import TargetNode
-
+import py_src.sumNDimensionalArray as sumND
 
 class Scenario:
     targets = []
@@ -21,15 +18,6 @@ class Scenario:
         if evidences is not None: self.patient.evidences = evidences
         if targets is not None: self.patient.targets = targets
         if goals is not None: self.patient.goals = goals
-
-    #adds a target node
-    def add_target(self, name):
-        self.patient.targets[name] = (TargetNode(name))
-
-    #adds multiple targets
-    def add_target_list(self, list):
-        for name in list:
-            self.patient.targets[name] = (TargetNode(name))
 
     #computes the values for the targets
     def compute_targets(self):
@@ -55,9 +43,6 @@ class Scenario:
 
         return {'value': value, 'goalValues': goalValues}
 
-    def print_targets(self):
-        for t in self.patient.targets.keys():
-            print(str(self.patient.targets[t]))
 
     def compute_relevancies_for_goals(self):
         return relevance.get_influence_of_evidences_on_goals(self.network.model,
@@ -66,9 +51,9 @@ class Scenario:
 
     def compute_explanation_of_goals(self, interventions):
         return explanation.compute_explanation_of_target(self.network.model,
-                                                  self.patient.evidences,
-                                                  interventions,
-                                                  self.patient.goals)
+                                                         self.patient.evidences,
+                                                         interventions,
+                                                         self.patient.goals)
 
     #clique-inspired: if A,B is worse then A, then A,B,C won't be better then AC
     def compute_target_combs_for_goals(self):

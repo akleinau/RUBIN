@@ -1,9 +1,8 @@
 import numpy
 from scipy.spatial import distance
 from pgmpy import inference
-from TargetNode import TargetNode
 import numpy as np
-import sumNDimensionalArray as sumND
+import py_src.sumNDimensionalArray as sumND
 
 #calculates the dissimilarity of two probability distributions (states) of a node
 # == computes global relevance

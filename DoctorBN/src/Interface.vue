@@ -27,14 +27,15 @@
             <div class="p-col box-stretched" >
         <TherapyOptions :results="options.options" :goals="newGoals" :goalResults="options.optionResults"
                         :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
-                  :nodes="nodes" :targets="patient.targets"
+                  :nodes="nodes" :targets="patient.targets" :loading="optionsLoading"
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
       </div>
       </div>
       <div class="p-col p-grid p-flex-column" style="position:relative">
         <div class="p-col box-stretched">
-        <Network :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states"
-                 :explanation="explain.explanation" :compareConfig="selectedConfig == null? null: selectedConfig.config.explain" />
+        <Explanation :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states"
+                 :explanation="explain.explanation" :loading="explanationLoading"
+                 :compareConfig="selectedConfig == null? null: selectedConfig.config.explain" />
 
           </div>
       </div>
@@ -43,10 +44,10 @@
 
 <script>
 import Header from "./components/Header";
-import NodeInput from "./components/NodeInput";
-import Network from "./components/Network";
-import TherapyOptions from "@/components/TherapyOptions";
-import LoadPatient from "@/components/LoadPatient";
+import NodeInput from "./components/InputFields/NodeInput";
+import Explanation from "./components/Explanation";
+import TherapyOptions from "@/components/InputFields/TherapyOptions";
+import LoadPatient from "@/components/Header/LoadPatient";
 import OverlayPanel from "primevue/overlaypanel";
 
 export default {
@@ -54,7 +55,7 @@ export default {
   components: {
     Header,
     NodeInput,
-    Network,
+    Explanation,
     TherapyOptions,
     LoadPatient,
     OverlayPanel
@@ -91,7 +92,10 @@ export default {
 
       configurations: [],
       selectedConfig: null,
-      patientCases: []
+      patientCases: [],
+
+      optionsLoading: false,
+      explanationLoading: false
     }
   },
   methods: {
@@ -147,7 +151,7 @@ export default {
       return correspondingNodes
     },
     loadNodes: async function(){
-      const gResponse = await fetch("http://localhost:5000/cancernet?network=" + this.network);
+      const gResponse = await fetch("http://localhost:5000/getNetwork?network=" + this.network);
       const network = await gResponse.json();
       let nodes = []
       for (var key in network.states) {
@@ -189,6 +193,8 @@ export default {
     },
     calculate: async function () {
       if (this.patient.evidence.length !== 0 && this.patient.targets.length !== 0 && this.patient.goals.length !== 0) {
+        this.optionsLoading = true
+        this.explanationLoading = true
         console.log("doing calculation for:")
 
         let evidences = {}
@@ -225,14 +231,17 @@ export default {
         console.log('results: ')
         console.log(nodeDict.optionResults)
         this.options.options = nodeDict.optionResults
+        this.options.selectedOption = nodeDict.optionResults[0]
         console.log(nodeDict.likelyResults)
         this.options.optionResults = nodeDict.likelyResults
 
         this.newGoals = goals
-
+        this.optionsLoading = false
+        this.calculateOption()
       }
     },
     calculateOption: async function () {
+      this.explanationLoading = true
       console.log("calculating relevance for:")
       console.log(this.options.selectedOption)
 
@@ -270,6 +279,7 @@ export default {
       console.log(this.explain.states)
       this.explain.explanation = nodeDict.explanation
       console.log(this.explain.explanation)
+      this.explanationLoading = false
     },
     addEvidences(nodes) {
       nodes.forEach(node => {
@@ -339,7 +349,7 @@ export default {
   created: async function () {
     await this.loadNodes()
 
-    if (this.network === '0') {
+    if (this.network === 'Endometric cancer') {
       //add example nodes
       let CA125 = this.nodes.find(x => x.name === "CA125")
       CA125["selected"] = {"name": "lt_35"}

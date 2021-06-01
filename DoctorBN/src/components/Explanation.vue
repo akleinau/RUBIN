@@ -4,6 +4,7 @@
       Explanation
     </template>
     <template #content>
+      <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
   <TabView>
     <TabPanel header="Relevance">
       <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
@@ -29,14 +30,14 @@
 </template>
 
 <script>
-import Relevance from "./Relevance";
+import Relevance from "@/components/explanation/Relevance";
 import BNvis from "@/components/visualisations/BNvis";
 import sugiyama from "@/components/visualisations/sugiyama";
-import NodeList from "@/components/additional/NodeList";
+import NodeList from "@/components/explanation/NodeList";
 
 export default {
   name: "Network",
-  props: ['relevance', 'goals', "edges", "nodes", "explanation", "compareConfig"],
+  props: ['relevance', 'goals', "edges", "nodes", "explanation", "compareConfig", "loading"],
   components: {
     Relevance,
     BNvis,

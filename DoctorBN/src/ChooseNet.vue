@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import Upload from "./components/UploadNetwork";
-import Networklist from "./components/LoadNetworkList"
+import Upload from "./components/NetworkLoading/UploadNetwork";
+import Networklist from "./components/NetworkLoading/LoadNetworkList"
 
 export default {
   name: "ChooseNet",

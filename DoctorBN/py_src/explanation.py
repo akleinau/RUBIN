@@ -1,8 +1,5 @@
-from pgmpy.models import BayesianModel
-from pgmpy.readwrite import BIFReader
 from pgmpy import inference
 from anytree import NodeMixin, RenderTree, PreOrderIter
-from anytree.exporter import DotExporter
 import itertools
 
 
@@ -17,12 +14,6 @@ class SupportNode(NodeMixin, Support):
         if children:
             self.children = children
         self.forbidden_set = forbidden_set
-
-    def print_tree(self):
-        for pre, fill, node in RenderTree(self):
-            treestr = u"%s%s" % (pre, node.name)
-            print(treestr.ljust(8), node.forbidden_set if node.forbidden_set else "")
-
 
 def find_changed_set(root, set, evidences, network):
     infer = inference.VariableElimination(network)
