@@ -69,8 +69,8 @@ export default {
     Networklist
   },
   methods: {
-    changePage(selectedID) {
-      this.$emit("changePage", selectedID)
+    changePage(selectedNet) {
+      this.$emit("changePage", selectedNet)
     }
   }
 }

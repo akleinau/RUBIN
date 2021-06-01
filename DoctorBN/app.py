@@ -1,9 +1,6 @@
-from flask import Flask, flash, request, redirect, jsonify, make_response, render_template, url_for
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from pgmpy.models import BayesianModel
-from pgmpy.readwrite import BIFReader
-from pgmpy import inference
 from werkzeug.utils import secure_filename
 from Network import Network
 from Scenario import Scenario
@@ -23,17 +20,19 @@ CORS(app)
 @app.route('/cancernet')
 def getCancerNet():
     data = request
-    network = Network(NETWORKS[int(data.args.get('network'))])
+    network = openNetwork(data.args.get('network'))
     return {'states': network.states, 'edges': network.edges}
+
 
 @app.route('/calcTargetForGoals', methods=['POST'])
 def calcTargetForGoals():
     data = request.get_json()
-    network = NETWORKS[int(data['network'])]
+    network = openNetwork(data['network'])
     s = Scenario(network, evidences=data['evidences'], targets=data['target'], goals=data['goals'])
     results = s.compute_target_combs_for_goals()
     likely_results = s.compute_goals()
     return {'optionResults': results, 'likelyResults': likely_results}
+
 
 @app.route('/calcOptions', methods=['POST'])
 def calcOptions():
@@ -44,7 +43,7 @@ def calcOptions():
     for op in data['options']:
         relevanceEvidences[op] = data['options'][op]
 
-    network = NETWORKS[int(data['network'])]
+    network = openNetwork(data['network'])
     s = Scenario(network, evidences=relevanceEvidences, goals=data['goals'])
     relevance = s.compute_relevancies_for_goals()
     nodes = s.compute_all_nodes()
@@ -54,11 +53,29 @@ def calcOptions():
     return {'relevance': relevance, 'nodes': nodes, 'explanation': explanation}
 
 
+def getNetworkInDatabase(network: str):
+    """
+    Queries the network name in the database and returns the corresponding entry
+    :param network: network name
+    :return: database entry
+    """
+    return NetworkData.query.get(network)
+
+
+def openNetwork(selectedNet: str):
+    """
+    Opens a network based on the network name
+    :param selectedNet: the network name as in the database
+    :return: opened PGMPy network
+    """
+    network = getNetworkInDatabase(selectedNet)
+    return Network(network.filePath)
+
+
 # Database object
 class NetworkData(db.Model):
-    netId = db.Column(db.Integer, primary_key=True)
     filePath = db.Column(db.String(), nullable=False)
-    displayName = db.Column(db.String(30), nullable=False)
+    displayName = db.Column(db.String(), primary_key=True, nullable=False)
 
     def __repr__(self):
         return self.displayName
@@ -78,14 +95,9 @@ def doesPathExist(filePath):
     return False
 
 
-# Returns the next network id available
-def getNextId():
-    return NetworkData.query.count()
-
-
 # Adds a new network's data to the database and saves the file to the designated path
 def addNetwork(file, path, name):
-    newNetwork = NetworkData(netId=getNextId(), filePath=path, displayName=name)
+    newNetwork = NetworkData(filePath=path, displayName=name)
     db.session.add(newNetwork)
     db.session.commit()
     file.save(path)
@@ -122,16 +134,18 @@ def saveNetwork():
     return jsonify('successful')
 
 
+"""
 # Opens the network with requested ID and adds it to the dictionary of network objects.
 # If there already exists a network object with the requested ID, the function simply returns.
 @app.route('/openNetwork', methods=["POST"])
 def openNetwork():
-    selectedNetwork = int(request.get_json())
+    selectedNetwork = request.get_json()
     if selectedNetwork not in NETWORKS.keys():
         network = NetworkData.query.get(selectedNetwork)
         path = network.filePath
         NETWORKS[selectedNetwork] = path
     return ''
+"""
 
 
 @app.route('/')

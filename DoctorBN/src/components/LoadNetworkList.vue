@@ -19,19 +19,21 @@ export default {
   },
   methods: {
     openNetwork: async function () {
-      if (typeof(this.$refs.selectMenu.modelValue.netID) == 'undefined') {
+      if (typeof(this.$refs.selectMenu.modelValue.name) == 'undefined') {
         alert("No network selected")
         return
       }
-      let selectedID = this.$refs.selectMenu.modelValue.netID
+      let selectedNet = this.$refs.selectMenu.modelValue.name
+      /*
       fetch('http://localhost:5000/openNetwork', {
         method: 'POST',
-        body: JSON.stringify(selectedID),
+        body: JSON.stringify(selectedNet),
         headers: {
           'Content-Type': 'application/json'
         }
       })
-      this.$emit("changePage", selectedID)
+      */
+      this.$emit("changePage", selectedNet)
     },
     loadNetList: async function () {
       const gResponse = await fetch("http://localhost:5000//loadNetList");

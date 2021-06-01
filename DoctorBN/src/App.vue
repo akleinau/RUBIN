@@ -20,9 +20,9 @@ export default {
     }
   },
   methods: {
-    loadNetwork(selectedID) {
+    loadNetwork(selectedNet) {
       this.page = 'interface'
-      this.selectedNetwork = selectedID
+      this.selectedNetwork = selectedNet
     }
   }
 }
