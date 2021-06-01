@@ -1,10 +1,10 @@
-from Patient import Patient
-from Network import Network
+from py_src.Patient import Patient
+from py_src.Network import Network
 from pgmpy import inference
-import relevance
-import explanation
+import py_src.relevance as relevance
+import py_src.explanation as explanation
 import numpy as np
-import sumNDimensionalArray as sumND
+import py_src.sumNDimensionalArray as sumND
 
 class Scenario:
     targets = []
@@ -51,9 +51,9 @@ class Scenario:
 
     def compute_explanation_of_goals(self, interventions):
         return explanation.compute_explanation_of_target(self.network.model,
-                                                  self.patient.evidences,
-                                                  interventions,
-                                                  self.patient.goals)
+                                                         self.patient.evidences,
+                                                         interventions,
+                                                         self.patient.goals)
 
     #clique-inspired: if A,B is worse then A, then A,B,C won't be better then AC
     def compute_target_combs_for_goals(self):

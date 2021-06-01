@@ -15,12 +15,6 @@ class SupportNode(NodeMixin, Support):
             self.children = children
         self.forbidden_set = forbidden_set
 
-    def print_tree(self):
-        for pre, fill, node in RenderTree(self):
-            treestr = u"%s%s" % (pre, node.name)
-            print(treestr.ljust(8), node.forbidden_set if node.forbidden_set else "")
-
-
 def find_changed_set(root, set, evidences, network):
     infer = inference.VariableElimination(network)
     query_set = []
