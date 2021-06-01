@@ -33,7 +33,7 @@
       </div>
       <div class="p-col p-grid p-flex-column" style="position:relative">
         <div class="p-col box-stretched">
-        <Network :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states"
+        <Explanation :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states"
                  :explanation="explain.explanation" :loading="explanationLoading"
                  :compareConfig="selectedConfig == null? null: selectedConfig.config.explain" />
 
@@ -44,10 +44,10 @@
 
 <script>
 import Header from "./components/Header";
-import NodeInput from "./components/NodeInput";
-import Network from "./components/Network";
-import TherapyOptions from "@/components/TherapyOptions";
-import LoadPatient from "@/components/LoadPatient";
+import NodeInput from "./InputFields/NodeInput";
+import Explanation from "./components/Explanation";
+import TherapyOptions from "@/InputFields/TherapyOptions";
+import LoadPatient from "@/components/Header/LoadPatient";
 import OverlayPanel from "primevue/overlaypanel";
 
 export default {
@@ -55,7 +55,7 @@ export default {
   components: {
     Header,
     NodeInput,
-    Network,
+    Explanation,
     TherapyOptions,
     LoadPatient,
     OverlayPanel

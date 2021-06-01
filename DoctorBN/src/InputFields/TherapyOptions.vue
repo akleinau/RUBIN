@@ -5,7 +5,7 @@
     </template>
     <template #content>
     <h3 class="p-text-left">Interventions:</h3>
-  <Therapy :nodes="nodes" :selection="targets"
+  <TherapyInput :nodes="nodes" :selection="targets"
      @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)" />
   <div>
     <h3 class="p-text-left">Results:</h3>
@@ -74,14 +74,14 @@
 <script>
 import bar from "@/components/visualisations/bar";
 import twoSidedBar from "@/components/visualisations/twoSidedBar";
-import Therapy from "@/components/Therapy";
+import TherapyInput from "@/InputFields/TherapyInput";
 
 export default {
   name: "TherapyOptions",
   components: {
     bar,
     twoSidedBar,
-    Therapy
+    TherapyInput
   },
   props: [
     "results",

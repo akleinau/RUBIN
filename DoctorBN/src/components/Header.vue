@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import Feedback from "@/components/additional/Feedback";
-import Compare from "@/components/additional/Compare";
+import Feedback from "@/components/Header/Feedback";
+import Compare from "@/components/Header/Compare";
 
 
 export default {
