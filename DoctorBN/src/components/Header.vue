@@ -12,9 +12,9 @@
       voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
       sanctus est Lorem ipsum dolor sit amet.
   </Dialog>
-  <Dialog header="Compare to saved configurations" v-model:visible="showConfigs" style="width: 50%" modal="yes">
-    <Compare />
-  </Dialog>
+  <OverlayPanel header="Compare to saved configurations" ref="compareOverlay">
+    <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"/>
+  </OverlayPanel>
 
   <OverlayPanel ref="exportOverlay">
     <label> name: </label>
@@ -35,12 +35,15 @@ export default {
     Feedback,
     Compare
   },
+  props: [
+      "configurations"
+  ],
   data() {
     return {
       showFeedback: false,
       showNetworkDescription: false,
-      showConfigs: false,
       patientName: null,
+      configLabel: "saved configurations",
       items: [
         {
           label: 'Reset',
@@ -77,9 +80,10 @@ export default {
           }
         },
         {
-          label: 'saved configurations',
-          command: () => {
-            this.showConfigs = true
+          key: "configItem",
+          label: "saved configurations",
+          command: (event) => {
+            this.$refs.compareOverlay.toggle(event.originalEvent)
           }
         },
         {
@@ -108,6 +112,29 @@ export default {
       this.$emit('exportCSV', this.patientName)
       this.$refs.exportOverlay.toggle()
     },
+    compareTo(name) {
+      let configItem = this.items.find(a => a.key === "configItem")
+      configItem.label = "comparing to " + name
+      configItem.icon="pi pi-fw pi-times"
+      configItem.command = () => {
+        this.stopComparing()
+      }
+      this.$emit("compareTo", name)
+      this.$refs.compareOverlay.toggle()
+    },
+    stopComparing() {
+      let configItem = this.items.find(a => a.key === "configItem")
+      configItem.label = "saved configurations"
+      configItem.icon=""
+      configItem.command = (event) => {
+            this.$refs.compareOverlay.toggle(event.originalEvent)
+          }
+      this.$emit("compareTo", null)
+    },
+    saveConfig(name) {
+      this.$emit('saveConfig', name)
+      this.$refs.compareOverlay.toggle()
+    }
   }
 }
 </script>

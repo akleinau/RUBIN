@@ -1,6 +1,8 @@
 <template>
 
-  <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)" @exportCSV="exportCSV($event)"/>
+  <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
+          @exportCSV="exportCSV($event)" @saveConfig="saveConfig($event)" @compareTo="compareTo($event)"
+          :configurations="configurations"/>
 
   <OverlayPanel ref="panel">
     <load-patient @loaded="loadPatient"></load-patient>
@@ -85,10 +87,27 @@ export default {
         states: null,
       },
 
+      configurations: [],
+      selectedConfig: null,
       patientCases: []
     }
   },
   methods: {
+    saveConfig(name) {
+      this.configurations.push({
+        "name": name,
+        "config": {
+          "patient": this.patient,
+          "options": this.options,
+          "explain": this.explain,
+          "nodes": this.nodes,
+          "newGoals": this.newGoals
+        }
+      })
+    },
+    compareTo(name) {
+      this.selectedConfig = this.configurations.find(a => a.name === name)
+    },
     changePage() {
       this.$emit("changePage")
     },
