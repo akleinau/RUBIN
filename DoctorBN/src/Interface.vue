@@ -33,7 +33,9 @@
       </div>
       <div class="p-col p-grid p-flex-column" style="position:relative">
         <div class="p-col box-stretched">
-        <Network :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states" :explanation="explain.explanation"/>
+        <Network :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states"
+                 :explanation="explain.explanation" :compareConfig="selectedConfig == null? null: selectedConfig.config.explain" />
+
           </div>
       </div>
   </div>
@@ -97,11 +99,11 @@ export default {
       this.configurations.push({
         "name": name,
         "config": {
-          "patient": this.patient,
-          "options": this.options,
-          "explain": this.explain,
-          "nodes": this.nodes,
-          "newGoals": this.newGoals
+          "patient": JSON.parse(JSON.stringify(this.patient)),
+          "options": JSON.parse(JSON.stringify(this.options)),
+          "explain": JSON.parse(JSON.stringify(this.explain)),
+          "nodes": JSON.parse(JSON.stringify(this.nodes)),
+          "newGoals": JSON.parse(JSON.stringify(this.newGoals))
         }
       })
     },

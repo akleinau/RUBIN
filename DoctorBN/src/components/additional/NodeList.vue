@@ -7,11 +7,17 @@
     <Chip  class="p-mx-1" style="background-color:red" label="not sure"></Chip>
     with it's prognosis
   </div>
-<DataTable :value="nodes" :scrollable="true" scrollHeight="600px">
+<DataTable :value="data" :scrollable="true" scrollHeight="600px">
   <Column header="node" field="name" :sortable="true" />
   <Column header="state" field="state">
     <template #body="slotProps">
       <div :style="{color: color(slotProps.data.probability)}"> {{slotProps.data.state}} </div>
+    </template>
+  </Column>
+   <Column header="" field="beforeState">
+    <template #body="slotProps">
+      <div v-if="slotProps.data.beforeState !== ''">previous: &nbsp; </div>
+      <div :style="{color: color(slotProps.data.beforeProb)}">  {{slotProps.data.beforeState}} </div>
     </template>
   </Column>
 </DataTable>
@@ -22,12 +28,46 @@ import * as d3 from "d3";
 export default {
 name: "NodeList",
   props: [
-      "nodes"
+      "nodes",
+      "compareConfig"
   ],
   data() {
   return {
     c1: "blue"
   }
+  },
+  computed: {
+     data: function () {
+       console.log(this.compareConfig)
+        if (this.nodes === null) return null
+        if (this.compareConfig == null) {
+          let data = []
+          this.nodes.forEach(a => {
+            data.push({
+              "name": a.name,
+              "state": a.state,
+              "probability": a.probability,
+              "beforeState": "",
+              "beforeProb": 0
+            })
+          })
+          return data
+        }
+        else {
+          let data = []
+          this.nodes.forEach( a => {
+            let compareNode = this.compareConfig.find(n => n.name === a.name)
+            data.push({
+              "name": a.name,
+              "state": a.state,
+              "probability": a.probability,
+              "beforeState": a.state === compareNode.state ? "" : compareNode.state,
+              "beforeProb": a.state === compareNode.state ? 0 : compareNode.probability
+            })
+          })
+          return data
+        }
+      }
   },
   methods: {
     color(probability) {

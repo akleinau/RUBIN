@@ -15,13 +15,13 @@
       <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="full network">
-      <BNvis :edges="edges" :nodes="nodes"/>
+      <BNvis :edges="edges" :nodes="nodes" />
     </TabPanel>
     <TabPanel header="sugiyama">
       <sugiyama :edges="edges" :nodes="nodes"/>
     </TabPanel>
     <TabPanel header="list">
-      <NodeList :nodes="nodes" />
+      <NodeList :nodes="nodes" :compareConfig="compareConfig == null? null: compareConfig.states" />
     </TabPanel>
   </TabView>
       </template>
@@ -36,7 +36,7 @@ import NodeList from "@/components/additional/NodeList";
 
 export default {
   name: "Network",
-  props: ['relevance', 'goals', "edges", "nodes", "explanation"],
+  props: ['relevance', 'goals', "edges", "nodes", "explanation", "compareConfig"],
   components: {
     Relevance,
     BNvis,
