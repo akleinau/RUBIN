@@ -106,7 +106,12 @@ export default {
       })
     },
     compareTo(name) {
+      if (name === null) {
+        this.selectedConfig = null
+      }
       this.selectedConfig = this.configurations.find(a => a.name === name)
+      console.log("Comparing to:")
+      console.log(this.selectedConfig)
     },
     changePage() {
       this.$emit("changePage")
