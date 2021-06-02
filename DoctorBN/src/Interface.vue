@@ -2,7 +2,7 @@
 
   <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
           @exportCSV="exportCSV($event)" @saveConfig="saveConfig($event)" @compareTo="compareTo($event)"
-          :configurations="configurations"/>
+          :configurations="configurations" @load="loadConfig($event)" @deleteConfig="deleteConfig($event)"/>
 
   <OverlayPanel ref="panel">
     <load-patient @loaded="loadPatient"></load-patient>
@@ -110,6 +110,17 @@ export default {
           "newGoals": JSON.parse(JSON.stringify(this.newGoals))
         }
       })
+    },
+    deleteConfig(name) {
+      this.configurations = this.configurations.filter(a => a.name !== name)
+    },
+    loadConfig(name) {
+      let configuration = this.configurations.find(a => a.name === name)
+      this.patient = configuration.config.patient
+      this.options = configuration.config.options
+      this.explain = configuration.config.explain
+      this.nodes = configuration.config.nodes
+      this.newGoals = configuration.config.newGoals
     },
     compareTo(name) {
       if (name === null) {

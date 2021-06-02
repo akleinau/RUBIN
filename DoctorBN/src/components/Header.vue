@@ -13,7 +13,8 @@
       sanctus est Lorem ipsum dolor sit amet.
   </Dialog>
   <OverlayPanel header="Compare to saved configurations" ref="compareOverlay">
-    <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"/>
+    <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"
+    @load="load($event)" @deleteConfig="deleteConfig($event)"/>
   </OverlayPanel>
 
   <OverlayPanel ref="exportOverlay">
@@ -130,6 +131,14 @@ export default {
             this.$refs.compareOverlay.toggle(event.originalEvent)
           }
       this.$emit("compareTo", null)
+    },
+    load(name) {
+      this.$emit('load', name)
+      this.$refs.compareOverlay.toggle()
+    },
+    deleteConfig(name) {
+      this.$emit('deleteConfig', name)
+      this.$refs.compareOverlay.toggle()
     },
     saveConfig(name) {
       this.$emit('saveConfig', name)
