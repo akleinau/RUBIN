@@ -2,7 +2,7 @@
   <div class="p-grid p-nested-grid p-flex-column p-mx-1" >
     <Card class="p-col">
       <template #content>
-        <div id="logo"> <img src="./assets/Logo.jpg" style="height: 100px" /> </div>
+        <div id="logo"> <img src="./assets/DoctorBN_Logo.png" style="height: 100px" /> </div>
       </template>
     </Card>
 
