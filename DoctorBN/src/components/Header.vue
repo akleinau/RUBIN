@@ -1,6 +1,6 @@
 <template>
   <Menubar :model="items" ref="menu"/>
-  <div id="logo">DoctorBN</div>
+   <div id="logo"> <img src="../assets/Logo.jpg" style="height: 20px" /> </div>
   <Dialog header="Feedback" v-model:visible="showFeedback"  style="width: 50%" modal="yes">
     <Feedback></Feedback>
   </Dialog>
