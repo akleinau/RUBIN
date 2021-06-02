@@ -1,5 +1,6 @@
 <template>
   <Menubar :model="items" ref="menu"/>
+  <div id="name"> Network: <b>{{NetworkName}}</b></div>
   <div id="logo"> <img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
   <Dialog header="Feedback" v-model:visible="showFeedback"  style="width: 50%" modal="yes">
     <Feedback></Feedback>
@@ -37,7 +38,7 @@ export default {
     Compare
   },
   props: [
-      "configurations"
+      "configurations", "NetworkName"
   ],
   data() {
     return {
@@ -156,6 +157,13 @@ export default {
   left: 90%;
   font-size: 2em;
   color: teal
+}
+
+#name {
+  position: absolute;
+  top: 2%;
+  left: 70%;
+  color: grey;
 }
 
 </style>

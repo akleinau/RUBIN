@@ -2,7 +2,8 @@
 
   <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
           @exportCSV="exportCSV($event)" @saveConfig="saveConfig($event)" @compareTo="compareTo($event)"
-          :configurations="configurations" @load="loadConfig($event)" @deleteConfig="deleteConfig($event)"/>
+          :configurations="configurations" @load="loadConfig($event)" @deleteConfig="deleteConfig($event)"
+          :NetworkName="network" />
 
   <OverlayPanel ref="panel">
     <load-patient @loaded="loadPatient"></load-patient>
