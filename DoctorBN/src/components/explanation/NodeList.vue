@@ -15,9 +15,9 @@
           <i class="pi pi-circle-on p-ml-3" :style="{color: color(slotProps.data.probability)}"></i>
     </template>
   </Column>
-   <Column header="" field="beforeState">
+   <Column header="" field="beforeState" v-if="compareConfig">
     <template #body="slotProps">
-      <div v-if="slotProps.data.beforeState !== ''">previous: &nbsp; </div>
+      <div v-if="slotProps.data.beforeState !== ''">{{compareConfig.name}}: &nbsp; </div>
       <div :style="{color: color(slotProps.data.beforeProb)}">  {{slotProps.data.beforeState}} </div>
     </template>
   </Column>
@@ -39,7 +39,6 @@ name: "NodeList",
   },
   computed: {
      data: function () {
-       console.log(this.compareConfig)
         if (this.nodes === null) return null
         if (this.compareConfig == null) {
           let data = []
@@ -57,7 +56,7 @@ name: "NodeList",
         else {
           let data = []
           this.nodes.forEach( a => {
-            let compareNode = this.compareConfig.find(n => n.name === a.name)
+            let compareNode = this.compareConfig.config.explain.states.find(n => n.name === a.name)
             data.push({
               "name": a.name,
               "state": a.state,

@@ -7,10 +7,10 @@
       <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
   <TabView>
     <TabPanel header="Relevance">
-      <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
+      <Relevance :relevance="relevance" :goals="goals" :nodes="nodes" :compareConfig="compareConfig"/>
     </TabPanel>
     <TabPanel header="all predictions">
-      <NodeList :nodes="nodes" :compareConfig="compareConfig == null? null: compareConfig.states" />
+      <NodeList :nodes="nodes" :compareConfig="compareConfig" />
     </TabPanel>
     <TabPanel header="compact network">
       <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>

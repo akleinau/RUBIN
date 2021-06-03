@@ -37,7 +37,7 @@
         <div class="p-col box-stretched">
         <Explanation :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states"
                  :explanation="explain.explanation" :loading="explanationLoading"
-                 :compareConfig="selectedConfig == null? null: selectedConfig.config.explain" />
+                 :compareConfig="selectedConfig" />
 
           </div>
       </div>
