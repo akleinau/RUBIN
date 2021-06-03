@@ -15,9 +15,17 @@
         <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="patient.goals"
                    @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
       </div>
+       <div v-if="selectedConfig">
+                  <NodeInput    title="Desired Outcomes" :nodes="selectedConfig.config.nodes"
+                                :selection="selectedConfig.config.patient.goals"/>
+        </div>
       <div class="p-col box box-stretched ">
         <NodeInput    title="Evidence" :nodes="nodes" :selection="patient.evidence"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
+        <div v-if="selectedConfig">
+                  <NodeInput    title="Evidence" :nodes="selectedConfig.config.nodes"
+                                :selection="selectedConfig.config.patient.evidence"/>
+        </div>
       </div>
 
 
