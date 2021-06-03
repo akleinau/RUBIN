@@ -1,9 +1,9 @@
 <template>
-      <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="300px">
-        <Column field="name">
-          <template #header class="table-header">
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"/>
+      <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="200px">
+        <Column field="name" style="padding: 0; border: 0;">
+          <template #header class="table-header" v-if="title === 'Evidence'" >
+            <span class="p-input-icon-left" >
+              <i class="pi pi-search" />
               <InputText v-model="filters['name'].name" placeholder="Search..." style="width: 200%"/>
             </span>
           </template>
@@ -129,8 +129,16 @@ export default {
   margin: 0
 }
 
-::v-deep(#table .p-datatable-thead){
-  display: None !important
+.p-card {
+  height: 100% !important;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.p-datatable-thead{
+  padding: 0;
+  border: 0;
 }
 
 

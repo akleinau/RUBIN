@@ -9,16 +9,16 @@
     <load-patient @loaded="loadPatient"></load-patient>
   </OverlayPanel>
 
-  <div class=" p-grid  nested-grid  vertical-container " style="height:100%">
-    <div class="p-grid p-col-3 p-flex-column ">
-           <div class="p-col">
+  <div class=" p-grid  nested-grid   " style="height:100%; position:relative">
+    <div class="p-grid p-col-3 p-ai-start vertical-container" style="position:relative">
+           <div class="p-col" style="height: 30%;">
         <GoalInput  :nodes="nodes" :selection="patient.goals" :compareConfig="selectedConfig"
                    @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
       </div>
 
-      <div class="p-col box box-stretched ">
+      <div class="p-col box box-stretched " style="position:relative; height:70%">
         <EvidenceInput  :nodes="nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
-                   @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
+                   @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)" />
     </div>
 
 

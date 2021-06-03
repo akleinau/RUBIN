@@ -44,4 +44,8 @@ export default {
 height: 100% !important;
 }
 
+::v-deep(.p-datatable-thead){
+  display: None !important
+}
+
 </style>
