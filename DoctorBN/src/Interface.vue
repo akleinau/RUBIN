@@ -12,29 +12,21 @@
   <div class=" p-grid  nested-grid  vertical-container " style="height:100%">
     <div class="p-grid p-col-3 p-flex-column ">
            <div class="p-col">
-        <NodeInput title="Desired Outcomes" :nodes="nodes" :selection="patient.goals"
+        <GoalInput  :nodes="nodes" :selection="patient.goals" :compareConfig="selectedConfig"
                    @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
       </div>
-       <div v-if="selectedConfig">
-                  <NodeInput    title="Desired Outcomes" :nodes="selectedConfig.config.nodes"
-                                :selection="selectedConfig.config.patient.goals"/>
-        </div>
-      <div class="p-col box box-stretched ">
-        <NodeInput    title="Evidence" :nodes="nodes" :selection="patient.evidence"
-                   @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
-        <div v-if="selectedConfig">
-                  <NodeInput    title="Evidence" :nodes="selectedConfig.config.nodes"
-                                :selection="selectedConfig.config.patient.evidence"/>
-        </div>
-      </div>
 
+      <div class="p-col box box-stretched ">
+        <EvidenceInput  :nodes="nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
+                   @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
+    </div>
 
 
     </div>
     <div class="p-col p-grid p-flex-column" style="position:relative">
 
             <div class="p-col box-stretched" >
-        <TherapyOptions :results="options.options" :goals="newGoals" :goalResults="options.optionResults"
+        <TherapyOptions :results="options.options" :goals="newGoals"
                         :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
                   :nodes="nodes" :targets="patient.targets" :loading="optionsLoading"
                         :compareConfig="selectedConfig"
@@ -54,21 +46,23 @@
 
 <script>
 import Header from "./components/Header";
-import NodeInput from "./components/InputFields/NodeInput";
 import Explanation from "./components/Explanation";
 import TherapyOptions from "@/components/InputFields/TherapyOptions";
 import LoadPatient from "@/components/Header/LoadPatient";
 import OverlayPanel from "primevue/overlaypanel";
+import EvidenceInput from "@/components/InputFields/EvidenceInput";
+import GoalInput from "@/components/InputFields/GoalInput";
 
 export default {
   name: "Interface",
   components: {
     Header,
-    NodeInput,
     Explanation,
     TherapyOptions,
     LoadPatient,
-    OverlayPanel
+    OverlayPanel,
+    EvidenceInput,
+    GoalInput
   },
   props: [
       "network"
