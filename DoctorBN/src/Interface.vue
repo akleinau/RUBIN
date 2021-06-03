@@ -29,6 +29,7 @@
         <TherapyOptions :results="options.options" :goals="newGoals" :goalResults="options.optionResults"
                         :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
                   :nodes="nodes" :targets="patient.targets" :loading="optionsLoading"
+                        :compareConfig="selectedConfig"
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
       </div>
       </div>
@@ -76,7 +77,6 @@ export default {
       //available options to treat the patient given the interventions
       options: {
         options: null,
-        optionResults: null,
         selectedOption: null,
       },
 
@@ -190,7 +190,6 @@ export default {
       this.patient.goals= []
 
       this.options.options= null
-      this.options.optionResults= null
       this.options.selectedOption= null
 
       this.edges= null
@@ -244,8 +243,6 @@ export default {
         console.log(nodeDict.optionResults)
         this.options.options = nodeDict.optionResults
         this.options.selectedOption = nodeDict.optionResults[0]
-        console.log(nodeDict.likelyResults)
-        this.options.optionResults = nodeDict.likelyResults
 
         this.newGoals = goals
         this.optionsLoading = false

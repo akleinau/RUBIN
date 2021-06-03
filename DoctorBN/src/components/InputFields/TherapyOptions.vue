@@ -11,87 +11,41 @@
     <h3 class="p-text-left">Decision Ratings:</h3>
     <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em" />
   </div>
-      <DataTable :value="results" :scrollable="true" scrollHeight="400px"
-                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
-                 @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
-        <Column header="decision" field="option">
-          <template #body="slotProps">
-            <div>
-            <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
-               {{o}}: {{slotProps.data.option[o]}}
-            </div>
-              </div>
-          </template>
-        </Column>
-        <Column header="joined probability" field="value">
-          <template #body="slotProps">
-            <bar :value=slotProps.data.value color="RebeccaPurple"
-                 v-tooltip="slotProps.data.value.toFixed(2)*100 + '%'"></bar>
-          </template>
-        </Column>
-        <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
-          <template #body="slotProps">
-            <bar :value="slotProps.data.goalValues[String(goal)]" color="RebeccaPurple"
-            v-tooltip="slotProps.data.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
-          </template>
-        </Column>
-      </DataTable>
+      <optionsTable :results="results" :goals="goals"
+                @update="update($event)" :selectedOption="selectedOption"></optionsTable>
+      <div v-if="compareConfig">
+        <h3> {{compareConfig.name}}:</h3>
+        <optionsTable :results="compareConfig.config.options.options"
+                :goals="compareConfig.config.newGoals" @update="update($event)" :selectedOption="selectedOption" />
+      </div>
+
       </template>
     </Card>
 </template>
 
 <script>
-import bar from "@/components/visualisations/bar";
 import TherapyInput from "@/components/InputFields/TherapyInput";
+import optionsTable from "@/components/InputFields/optionsTable"
 
 export default {
   name: "TherapyOptions",
   components: {
-    bar,
-    TherapyInput
+    TherapyInput,
+    optionsTable
   },
   props: [
     "results",
     "goals",
-    "goalResults",
       "nodes",
       "targets",
       "selectedOption",
-      "loading"
+      "loading",
+      "compareConfig"
   ],
-  watch: {
-    selectedOption: function () {
-      this.selected = this.selectedOption
-    }
-  },
-  data() {
-    return {
-      columns: [],
-      normal: 0.9,
-      selected: null
-    }
-  },
   methods: {
-    getOptionLabel(option) {
-      if (option == null) return null
-      let label = ""
-      Object.keys(option).forEach(d => {
-        label = label + d + ": " + option[d] + "; "
-      })
-      return label
+    update(name) {
+      this.$emit("update", name);
     },
-    getGoalKeys() {
-      if (this.goals != null) {
-        return Object.keys(this.goals)
-      }
-
-    },
-    onRowSelect() {
-      this.$emit("update", this.selected);
-    },
-    onRowUnselect() {
-      this.$emit("update", this.selected);
-    }
   }
 }
 </script>
