@@ -1,17 +1,18 @@
 <template style="position:relative">
-      <div>
+  <div>
     The network is:
-    <Chip  class="p-mx-1" style="background-color:black" label="sure"> </Chip>
     <Chip  class="p-mx-1" style="background-color:green" label="very sure"> </Chip>
     <Chip  class="p-mx-1" style="background-color:darkgoldenrod" label="less sure"></Chip>
     <Chip  class="p-mx-1" style="background-color:red" label="not sure"></Chip>
-    with it's prognosis
+    , or the value is
+    <Chip  class="p-mx-1" style="background-color:black" label="given"> </Chip>
   </div>
 <DataTable :value="data" :scrollable="true" scrollHeight="600px">
   <Column header="node" field="name" :sortable="true" />
-  <Column header="state" field="state">
+  <Column header="prediction" field="state"></Column>
+  <Column header="likeliness">
     <template #body="slotProps">
-      <div :style="{color: color(slotProps.data.probability)}"> {{slotProps.data.state}} </div>
+          <i class="pi pi-circle-on p-ml-3" :style="{color: color(slotProps.data.probability)}"></i>
     </template>
   </Column>
    <Column header="" field="beforeState">

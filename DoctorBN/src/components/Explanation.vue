@@ -9,20 +9,16 @@
     <TabPanel header="Relevance">
       <Relevance :relevance="relevance" :goals="goals" :nodes="nodes"/>
     </TabPanel>
-    <TabPanel header="Reasoning">
-      <sugiyama :edges="getExEdges()" :nodes="getExNodes()"/>
+    <TabPanel header="all predictions">
+      <NodeList :nodes="nodes" :compareConfig="compareConfig == null? null: compareConfig.states" />
     </TabPanel>
     <TabPanel header="compact network">
       <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
     </TabPanel>
     <TabPanel header="full network">
-      <BNvis :edges="edges" :nodes="nodes" />
-    </TabPanel>
-    <TabPanel header="sugiyama">
-      <sugiyama :edges="edges" :nodes="nodes"/>
-    </TabPanel>
-    <TabPanel header="list">
-      <NodeList :nodes="nodes" :compareConfig="compareConfig == null? null: compareConfig.states" />
+      <BNvis v-if="fullNetworkLayout" :edges="edges" :nodes="nodes" />
+      <sugiyama v-else :edges="edges" :nodes="nodes"/>
+      <Button label="change layout" @click="fullNetworkLayout = !fullNetworkLayout" />
     </TabPanel>
   </TabView>
       </template>
@@ -48,7 +44,8 @@ export default {
     return {
       onlyGlobal: true,
       compactEdges: null,
-      exNodes: null
+      exNodes: null,
+      fullNetworkLayout: true
     }
   },
   watch: {

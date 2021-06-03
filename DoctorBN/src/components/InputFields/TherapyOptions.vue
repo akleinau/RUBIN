@@ -8,15 +8,13 @@
   <TherapyInput :nodes="nodes" :selection="targets"
      @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)" />
   <div>
-    <h3 class="p-text-left">Results:</h3>
+    <h3 class="p-text-left">Decision Ratings:</h3>
     <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em" />
   </div>
-  <TabView header="Options">
-    <TabPanel header="table">
       <DataTable :value="results" :scrollable="true" scrollHeight="400px"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
                  @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
-        <Column header="option" field="option">
+        <Column header="decision" field="option">
           <template #body="slotProps">
             <div>
             <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
@@ -25,7 +23,7 @@
               </div>
           </template>
         </Column>
-        <Column header="value" field="value">
+        <Column header="joined probability" field="value">
           <template #body="slotProps">
             <bar :value=slotProps.data.value color="RebeccaPurple"
                  v-tooltip="slotProps.data.value.toFixed(2)*100 + '%'"></bar>
@@ -38,49 +36,18 @@
           </template>
         </Column>
       </DataTable>
-    </TabPanel>
-    <TabPanel header="compare">
-      <DataTable :value="results" :scrollable="true" scrollHeight="300px"
-                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
-                 @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
-        <Column header="option" field="option">
-                    <template #body="slotProps">
-            <div>
-            <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
-               {{o}}: {{slotProps.data.option[o]}}
-            </div>
-              </div>
-          </template>
-        </Column>
-        <Column header="value" field="value">
-          <template #body="slotProps">
-            <twoSidedBar :value="slotProps.data.value - goalResults.value"></twoSidedBar>
-          </template>
-        </Column>
-        <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
-          <template #body="slotProps">
-            <twoSidedBar
-                :value="slotProps.data.goalValues[String(goal)] - goalResults.goalValues[String(goal)]"></twoSidedBar>
-          </template>
-        </Column>
-      </DataTable>
-    </TabPanel>
-
-  </TabView>
       </template>
     </Card>
 </template>
 
 <script>
 import bar from "@/components/visualisations/bar";
-import twoSidedBar from "@/components/visualisations/twoSidedBar";
 import TherapyInput from "@/components/InputFields/TherapyInput";
 
 export default {
   name: "TherapyOptions",
   components: {
     bar,
-    twoSidedBar,
     TherapyInput
   },
   props: [
