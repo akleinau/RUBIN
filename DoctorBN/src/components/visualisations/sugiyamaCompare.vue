@@ -1,7 +1,7 @@
 <template>
-      in <u style="text-decoration-color:red"> changed nodes</u> , the different states are color coded:
+      in <span style="border:1px solid red; border-radius:5px"> changed nodes</span>  the different states are color coded:
     <Chip  class="p-mx-1" style="background-color:black" label="current"> </Chip>
-    <Chip  class="p-mx-1" style="background-color:darkblue" :label="name2"></Chip>
+    <Chip  class="p-mx-1" style="background-color:#6d00bf" :label="name2"></Chip>
 <div ref="container"/>
 </template>
 
@@ -164,7 +164,7 @@ name: "sugiyamaCompare",
             .attr('font-size', '4px')
             .attr('text-anchor', 'middle')
             .attr("dy", 10)
-            .attr('fill', "darkblue")
+            .attr('fill', "#6d00bf")
 
 
       }

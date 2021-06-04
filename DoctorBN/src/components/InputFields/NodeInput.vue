@@ -1,5 +1,5 @@
 <template>
-      <DataTable id="table" :value="selection" >
+      <DataTable :class="{NoHeader: hideHeader}"   id="table" :value="selection" class="p-datatable-sm">
         <Column field="name" style="padding: 0; border: 0;">
           <template #header class="table-header" v-if="title === 'Evidence'" >
             <span class="p-input-icon-left" >
@@ -70,7 +70,8 @@ export default {
     "title",
       "nodes",
       "selection",
-      "changeable"
+      "changeable",
+      "hideHeader"
   ],
   data() {
     return {
@@ -136,6 +137,9 @@ export default {
 }
 
 
+  .NoHeader ::v-deep(.p-datatable-thead){
+  display: None !important
+  }
 
 
 

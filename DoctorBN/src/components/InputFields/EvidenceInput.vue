@@ -5,32 +5,37 @@
     </template>
     <template #content>
       <ScrollPanel  style="height:100%">
-      <NodeInput    title="Evidence" :nodes="nodes" :selection="selection" :changeable="true"
+      <NodeInput  v-if="compareConfig == null"  title="Evidence" :nodes="nodes" :selection="selection" :changeable="true"
                    @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
-      <div v-if="compareConfig">
-        <divider />
-        <h3> {{compareConfig.name}}:</h3>
-      <NodeInput    title="Evidence" :nodes="compareConfig.config.nodes"
-                    :selection="compareConfig.config.patient.evidence" :changeable="false"/>
-      </div>
+
+      <NodeInputCompare  v-else  title="Evidence" :nodes="nodes" :name2="compareConfig.name"
+                    :selection="selection" :selection2="compareConfig.config.patient.evidence" :changeable="false"/>
       </ScrollPanel>
     </template>
+
   </Card>
 </template>
 
 <script>
 import NodeInput from "@/components/InputFields/NodeInput";
+import NodeInputCompare from "@/components/InputFields/NodeInputCompare";
 
 export default {
 name: "EvidenceInput",
   components: {
-  NodeInput
+  NodeInput,
+    NodeInputCompare
   },
     props: [
       "nodes",
       "selection",
         "compareConfig"
   ],
+  data() {
+  return {
+    editMode: true
+  }
+  }
 }
 </script>
 

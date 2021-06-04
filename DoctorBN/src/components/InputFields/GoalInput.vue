@@ -5,13 +5,13 @@
     </template>
     <template #content style="height:100%">
       <ScrollPanel  style="height:100%">
-      <NodeInput    title="Desired Outcomes" :nodes="nodes" :selection="selection" :changeable="true"
+        <div v-if="compareConfig == null">
+      <NodeInput  title="Desired Outcomes" :nodes="nodes" :selection="selection" :changeable="true" :hideHeader="true"
                    @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
-      <div v-if="compareConfig">
-        <divider />
-        <h3> {{compareConfig.name}}:</h3>
-        <NodeInput    title="Desired Outcomes" :nodes="compareConfig.config.nodes"
-                    :selection="compareConfig.config.patient.goals" :changeable="false"/>
+        </div>
+      <div v-else>
+        <NodeInputCompare    title="Desired Outcomes" :nodes="nodes" :selection="selection" :name2="compareConfig.name"
+                    :selection2="compareConfig.config.patient.goals" :changeable="false"/>
       </div>
         </ScrollPanel>
     </template>
@@ -20,11 +20,13 @@
 
 <script>
 import NodeInput from "@/components/InputFields/NodeInput";
+import NodeInputCompare from "@/components/InputFields/NodeInputCompare";
 
 export default {
   name: "GoalInput",
   components: {
-  NodeInput
+  NodeInput,
+    NodeInputCompare
   },
     props: [
       "nodes",
@@ -40,9 +42,9 @@ export default {
 
 }
 
-::v-deep(.p-datatable-thead){
-  display: None !important
-}
+
+
+
 
 
 </style>
