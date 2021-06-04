@@ -66,10 +66,6 @@ export default {
           }
         },
         {
-          label: 'Settings',
-          items: [{label: 'change theme'}, {label: 'change language'}]
-        },
-        {
           label: 'Send Feedback',
           command: () => {
             this.showFeedback = true

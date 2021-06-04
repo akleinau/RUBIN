@@ -11,10 +11,11 @@
         <h3 class="p-text-left">Interventions:</h3>
         <TherapyInput :nodes="nodes" :selection="targets"
                       @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)"/>
-        <div>
+        <div class="p-d-flex  p-jc-between p-ai-center">
           <h3 class="p-text-left">Decision Ratings:</h3>
-          <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
+          <Button label="show more" @click="showLocal = true" ></Button>
         </div>
+        <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
         <optionsTable :results="results" :goals="goals"
                       @update="update($event)" :selectedOption="selectedOption"></optionsTable>
         <div v-if="compareConfig">
@@ -25,8 +26,20 @@
         </div>
       </div>
         </ScrollPanel>
-    </template>
 
+    <Dialog header="local relevance" v-model:visible="showLocal" style="width:90%; height:90%; background-color:white"
+    modal="true">
+      <optionsTable :results="results" :goals="goals" showLocal="true"
+                      @update="update($event)" :selectedOption="selectedOption"></optionsTable>
+        <div v-if="compareConfig">
+          <h3> {{ compareConfig.name }}:</h3>
+          <optionsTable :results="compareConfig.config.options.options" showLocal="true"
+                        :goals="compareConfig.config.newGoals" @update="update($event)"
+                        :selectedOption="selectedOption"/>
+        </div>
+    </Dialog>
+
+    </template>
   </Card>
 
 </template>
@@ -48,8 +61,13 @@ export default {
     "targets",
     "selectedOption",
     "loading",
-    "compareConfig"
+    "compareConfig",
   ],
+  data() {
+    return {
+      "showLocal": false
+    }
+  },
   methods: {
     update(name) {
       this.$emit("update", name);

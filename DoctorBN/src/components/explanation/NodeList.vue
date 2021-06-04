@@ -1,18 +1,11 @@
 <template style="position:relative">
-  <div>
-    The network is:
-    <Chip  class="p-mx-1" style="background-color:green" label="very sure"> </Chip>
-    <Chip  class="p-mx-1" style="background-color:darkgoldenrod" label="less sure"></Chip>
-    <Chip  class="p-mx-1" style="background-color:red" label="not sure"></Chip>
-    , or the value is
-    <Chip  class="p-mx-1" style="background-color:black" label="given"> </Chip>
-  </div>
 <DataTable :value="data">
   <Column header="node" field="name" :sortable="true" />
   <Column header="prediction" field="state"></Column>
   <Column header="likeliness">
     <template #body="slotProps">
-          <i class="pi pi-circle-on p-ml-3" :style="{color: color(slotProps.data.probability)}"></i>
+          <Chip class="p-mx-1" :style="{backgroundColor: color(slotProps.data.probability)}"
+                :label="getLabel(slotProps.data.probability)"/>
     </template>
   </Column>
    <Column header="" field="beforeState" v-if="compareConfig">
@@ -76,6 +69,13 @@ name: "NodeList",
             .domain([0, 1])
              .range(["red", "darkGoldenRod", "green"]);
         return colorScale(probability)
+    },
+    getLabel(probability) {
+      if (probability === 1) return "given"
+      const labelScale = d3.scaleQuantize()
+            .domain([0, 1])
+             .range(["not sure", "less sure", "very sure"]);
+        return labelScale(probability)
     }
   }
 }

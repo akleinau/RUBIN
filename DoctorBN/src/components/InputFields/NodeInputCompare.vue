@@ -15,12 +15,14 @@
         </div>
       </template>
       <template v-else #body="slotProps">
-        {{ slotProps.data.selected.name }}
+        <div v-if="slotProps.data.selected === ''"></div>
+        <div v-else> {{ slotProps.data.selected.name }} </div>
       </template>
     </Column>
     <Column field="value2" class="optionCol" :header="name2">
       <template #body="slotProps">
-        {{ slotProps.data.selected2.name }}
+        <div v-if="slotProps.data.selected2 === ''"></div>
+        <div v-else> {{ slotProps.data.selected2.name }} </div>
       </template>
     </Column>
   </DataTable>
@@ -94,6 +96,7 @@ export default {
     },
     table: function () {
       let table = JSON.parse(JSON.stringify(this.selection))
+      table.forEach(n => n.selected2 = '')
       this.selection2.forEach(n => {
         let foundNode = table.find(a => a.name === n.name)
         if (foundNode == null) {

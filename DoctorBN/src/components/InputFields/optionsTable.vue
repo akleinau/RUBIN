@@ -1,5 +1,5 @@
 <template>
- <DataTable :value="results" :scrollable="true" scrollHeight="400px"
+ <DataTable :value="results" class="p-datatable-sm"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
                  @rowSelect="update" @rowUnselect="update">
         <Column header="decision" field="option">
@@ -19,7 +19,7 @@
         </Column>
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
           <template #body="slotProps">
-            <bar :value="slotProps.data.goalValues[String(goal)]" color="RebeccaPurple"
+            <bar :value="slotProps.data.goalValues[String(goal)]" color="teal"
             v-tooltip="slotProps.data.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
@@ -42,7 +42,8 @@ export default {
   props: [
     "results",
       "goals",
-      "selectedOption"
+      "selectedOption",
+      "showLocal"
   ],
     watch: {
     selectedOption: function () {
@@ -51,7 +52,7 @@ export default {
   },
   methods: {
     getGoalKeys() {
-      if (this.goals != null) {
+      if (this.goals != null && this.showLocal) {
         return Object.keys(this.goals)
       }},
     getOptionLabel(option) {
