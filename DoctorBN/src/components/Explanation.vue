@@ -13,11 +13,25 @@
       <NodeList :nodes="nodes" :compareConfig="compareConfig" />
     </TabPanel>
     <TabPanel header="compact network">
-      <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
+      <div v-if="compareConfig==null">
+        <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
+      </div>
+      <div v-else>
+         <sugiyamaCompare :edges="getCompactEdges()" :nodes="getExNodes()" :nodes2="compareConfig.config.explain.states"
+              :name2="compareConfig.name"/>
+      </div>
     </TabPanel>
     <TabPanel header="full network">
-      <BNvis v-if="fullNetworkLayout" :edges="edges" :nodes="nodes" />
-      <sugiyama v-else :edges="edges" :nodes="nodes"/>
+      <div v-if="compareConfig==null">
+            <BNvis v-if="fullNetworkLayout" :edges="edges" :nodes="nodes" />
+           <sugiyama v-else :edges="edges" :nodes="nodes"/>
+      </div>
+      <div v-else>
+          <BNvisCompare v-if="fullNetworkLayout" :edges="edges" :nodes="nodes" :nodes2="compareConfig.config.explain.states"
+              :name2="compareConfig.name"/>
+          <sugiyamaCompare v-else :edges="edges" :nodes="nodes" :nodes2="compareConfig.config.explain.states"
+              :name2="compareConfig.name"/>
+      </div>
       <Button label="change layout" @click="fullNetworkLayout = !fullNetworkLayout" />
     </TabPanel>
   </TabView>
@@ -30,6 +44,8 @@ import Relevance from "@/components/explanation/Relevance";
 import BNvis from "@/components/visualisations/BNvis";
 import sugiyama from "@/components/visualisations/sugiyama";
 import NodeList from "@/components/explanation/NodeList";
+import sugiyamaCompare from "@/components/visualisations/sugiyamaCompare";
+import BNvisCompare from "@/components/visualisations/BNvisCompare";
 
 export default {
   name: "Network",
@@ -38,7 +54,9 @@ export default {
     Relevance,
     BNvis,
     sugiyama,
-    NodeList
+    NodeList,
+    sugiyamaCompare,
+    BNvisCompare
   },
   data() {
     return {

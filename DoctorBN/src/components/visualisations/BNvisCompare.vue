@@ -1,0 +1,174 @@
+<template>
+  in <u style="text-decoration-color:red"> changed nodes</u> , the different states are color coded:
+    <Chip  class="p-mx-1" style="background-color:black" label="current"> </Chip>
+    <Chip  class="p-mx-1" style="background-color:darkblue" :label="name2"></Chip>
+  <div ref="container"/>
+</template>
+
+<script>
+import * as d3 from "d3";
+
+export default {
+  name: "BNvisCompare",
+  props: [
+    "nodes",
+    "edges",
+      "nodes2",
+      "name2"
+  ],
+  mounted() {
+  if (this.nodes != null && this.edges != null && this.nodes2 != null) {
+      this.visualise()
+    }
+  },
+  watch :{
+    nodes: function() {
+      this.visualise()
+    },
+    nodes2: function() {
+      this.visualise()
+    },
+    edges: function() {
+      this.visualise()
+    }
+  },
+  methods: {
+    normalVect(v1, v2) {
+      let x = v1.x - v2.x
+      let y = v1.y - v2.y
+      let xq = Math.pow(x,2)
+      let yq = Math.pow(y, 2)
+      return Math.sqrt(xq + yq)
+    },
+        isChanged(node) {
+      let node1 = this.nodes.find(d => d.name === node.name).state
+      let node2 = this.nodes2.find(d => d.name === node.name).state
+      return node1 === node2? 0:1
+    },
+    getState2(node) {
+      if (this.isChanged(node)) return "(" + this.nodes2.find(d => d.name === node.name).state + ")"
+      else return ""
+    },
+    visualise() {
+      const width = 200
+      const height = 200
+
+      if (this.nodes !== null && this.edges !== null && this.nodes2 !== null) {
+
+        let links = JSON.parse(JSON.stringify(this.edges))
+        let nodes = JSON.parse(JSON.stringify(this.nodes))
+
+        const simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.name))
+            .force('collision', d3.forceCollide().radius(15))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("y", d3.forceY(height / 2))
+
+        d3.select(this.$refs.container).selectAll("*").remove()
+
+        var svg = d3.select(this.$refs.container)
+            .append("svg")
+            .attr("viewBox", [0, 0, width, height]);
+
+        // Define the arrowhead marker variables
+        const markerBoxWidth = 4;
+        const markerBoxHeight = 4;
+        const refX = markerBoxWidth / 2;
+        const refY = markerBoxHeight / 2;
+        const arrowPoints = [[0, 0], [0, 4], [4, 2]];
+
+        svg
+            .append('defs')
+            .append('marker')
+            .attr('id', 'arrow')
+            .attr('viewBox', [0, 0, markerBoxWidth, markerBoxHeight])
+            .attr('refX', refX)
+            .attr('refY', refY)
+            .attr('markerWidth', markerBoxWidth)
+            .attr('markerHeight', markerBoxHeight)
+            .attr('orient', 'auto-start-reverse')
+            .append('path')
+            .attr('d', d3.line()(arrowPoints))
+            .attr('stroke', 'black');
+
+        const link = svg.append("g")
+            .attr("stroke", "black")
+            .attr("stroke-opacity", 0.6)
+            .selectAll("path")
+            .data(links)
+            .join("line")
+            .attr("stroke-width", 0.5)
+            .attr('d', link)
+            .attr('marker-end', 'url(#arrow)')
+            .attr('stroke', 'black')
+            .attr('fill', 'none');
+
+
+      var color = d3.scaleQuantize()
+            .domain([0, 1])
+            .range(["black", "red"]);
+
+        const node = svg.append("g")
+            .attr("stroke-width", 0.5)
+            .selectAll("rect")
+            .data(nodes)
+            .join("rect")
+            .attr("width", 25)
+            .attr("height", d => 10*(this.isChanged(d)+1))
+            .attr('fill', "white")
+            .attr("stroke", d => color(this.isChanged(d)))
+            .attr("rx", 2)
+            .attr("ry", 2)
+
+
+        // Text to nodes
+        const text = svg.append("g")
+            .attr("class", "text")
+            .attr('font-size', '4px')
+            .selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+
+        const textName = text.append("tspan")
+            .text(d => d.name.substring(0, 10) + ": ")
+        const textState = text.append("tspan")
+            .text(d => String(d.state).substring(0, 10))
+            .attr("dy", 5)
+        const textState2 = text.append("tspan")
+            .text(d => this.getState2(d).substring(0,10))
+            .attr("dy", 7)
+            .attr('fill', "darkblue")
+
+        simulation.on("tick", () => {
+          link
+              .attr("x1", d => d.source.x)
+              .attr("y1", d => d.source.y)
+              .attr("x2", d => d.target.x - 15 * ((d.target.x - d.source.x) / this.normalVect(d.target, d.source)))
+              .attr("y2", d => d.target.y - 7 * ((d.target.y - d.source.y) / this.normalVect(d.target, d.source)));
+
+          node
+              .attr("x", d => d.x - 12.5)
+              .attr("y", d => d.y - 5);
+
+          text.attr("x", d => d.x) //position of the lower left point of the text
+              .attr("y", d => d.y - 1); //position of the lower left point of the text
+
+          textState.attr("x", d => d.x - 10)
+          textState2.attr("x", d => d.x - 10)
+          textName.attr("x", d => d.x - 10)
+
+        });
+
+        console.log(this.nodes)
+        console.log(this.edges)
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.p-chip {
+  color: white;
+}
+</style>
