@@ -1,9 +1,10 @@
 <template>
  <Card>
-    <template #title style="position: relative" :class="DesiredOutcomes">
+    <template #title style="height:100%" :class="DesiredOutcomes">
       Desired Outcomes
     </template>
-    <template #content>
+    <template #content style="height:100%">
+      <ScrollPanel  style="height:100%">
       <NodeInput    title="Desired Outcomes" :nodes="nodes" :selection="selection" :changeable="true"
                    @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
       <div v-if="compareConfig">
@@ -12,6 +13,7 @@
         <NodeInput    title="Desired Outcomes" :nodes="compareConfig.config.nodes"
                     :selection="compareConfig.config.patient.goals" :changeable="false"/>
       </div>
+        </ScrollPanel>
     </template>
   </Card>
 </template>
@@ -32,20 +34,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .p-card {
   height: 100% !important;
 
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
-
-::v-deep(.p-panel-content) {
-height: 100% !important;
 }
 
 ::v-deep(.p-datatable-thead){
   display: None !important
 }
+
 
 </style>

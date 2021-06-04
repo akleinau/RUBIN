@@ -10,22 +10,22 @@
   </OverlayPanel>
 
   <div class=" p-grid  nested-grid   " style="height:100%; position:relative">
-    <div class="p-grid p-col-3 p-ai-start vertical-container" style="position:relative">
-           <div class="p-col" style="height: 30%;">
+    <div class="p-col-3 p-ai-start p-flex-column" style="height:100%">
+           <div class="p-pb-2 p-d-flex" style="height: 30%;">
         <GoalInput  :nodes="nodes" :selection="patient.goals" :compareConfig="selectedConfig"
                    @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
       </div>
 
-      <div class="p-col box box-stretched " style="position:relative; height:70%">
+      <div class=" box-stretched " style="height:70%">
         <EvidenceInput  :nodes="nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)" />
     </div>
 
 
     </div>
-    <div class="p-col p-grid p-flex-column" style="position:relative">
+    <div class="p-col " style="height:100%">
 
-            <div class="p-col box-stretched" >
+            <div class="box-stretched" style="height:100%">
         <TherapyOptions :results="options.options" :goals="newGoals"
                         :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
                   :nodes="nodes" :targets="patient.targets" :loading="optionsLoading"
@@ -33,8 +33,8 @@
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
       </div>
       </div>
-      <div class="p-col p-grid p-flex-column" style="position:relative">
-        <div class="p-col box-stretched">
+      <div class="p-col "  style="height:100%">
+        <div class=" box-stretched"  style="height:100%">
         <Explanation :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states"
                  :explanation="explain.explanation" :loading="explanationLoading"
                  :compareConfig="selectedConfig" />
@@ -386,7 +386,13 @@ export default {
         height: 100%;
     }
 
+::v-deep(.p-card-content) {
+  height: 90% !important;
+}
 
+::v-deep(.p-card-body) {
+  height: 100% !important;
+}
 
 #arrow {
   width: 100%;

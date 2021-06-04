@@ -4,6 +4,7 @@
       Evidence
     </template>
     <template #content>
+      <ScrollPanel  style="height:100%">
       <NodeInput    title="Evidence" :nodes="nodes" :selection="selection" :changeable="true"
                    @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
       <div v-if="compareConfig">
@@ -12,6 +13,7 @@
       <NodeInput    title="Evidence" :nodes="compareConfig.config.nodes"
                     :selection="compareConfig.config.patient.evidence" :changeable="false"/>
       </div>
+      </ScrollPanel>
     </template>
   </Card>
 </template>
@@ -35,12 +37,7 @@ name: "EvidenceInput",
 <style scoped>
 .p-card {
   height: 100% !important;
-
-  display: grid;
-  grid-template-rows: auto 1fr;
 }
 
-::v-deep(.p-panel-content) {
-height: 100% !important;
-}
+
 </style>

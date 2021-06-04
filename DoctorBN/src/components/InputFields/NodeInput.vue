@@ -1,5 +1,5 @@
 <template>
-      <DataTable id="table" :value="selection" :scrollable="true" scrollHeight="200px">
+      <DataTable id="table" :value="selection" >
         <Column field="name" style="padding: 0; border: 0;">
           <template #header class="table-header" v-if="title === 'Evidence'" >
             <span class="p-input-icon-left" >
@@ -129,12 +129,6 @@ export default {
   margin: 0
 }
 
-.p-card {
-  height: 100% !important;
-
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
 
 .p-datatable-thead{
   padding: 0;

@@ -1,42 +1,47 @@
-<template >
-  <Card style="position: relative">
+<template>
+  <Card>
     <template #title>
       Explanation
     </template>
     <template #content>
-      <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
-  <TabView>
-    <TabPanel header="Relevance">
-      <Relevance :relevance="relevance" :goals="goals" :nodes="nodes" :compareConfig="compareConfig"/>
-    </TabPanel>
-    <TabPanel header="all predictions">
-      <NodeList :nodes="nodes" :compareConfig="compareConfig" />
-    </TabPanel>
-    <TabPanel header="compact network">
-      <div v-if="compareConfig==null">
-        <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
-      </div>
-      <div v-else>
-         <sugiyamaCompare :edges="getCompactEdges()" :nodes="getExNodes()" :nodes2="compareConfig.config.explain.states"
-              :name2="compareConfig.name"/>
-      </div>
-    </TabPanel>
-    <TabPanel header="full network">
-      <div v-if="compareConfig==null">
-            <BNvis v-if="fullNetworkLayout" :edges="edges" :nodes="nodes" />
-           <sugiyama v-else :edges="edges" :nodes="nodes"/>
-      </div>
-      <div v-else>
-          <BNvisCompare v-if="fullNetworkLayout" :edges="edges" :nodes="nodes" :nodes2="compareConfig.config.explain.states"
-              :name2="compareConfig.name"/>
-          <sugiyamaCompare v-else :edges="edges" :nodes="nodes" :nodes2="compareConfig.config.explain.states"
-              :name2="compareConfig.name"/>
-      </div>
-      <Button label="change layout" @click="fullNetworkLayout = !fullNetworkLayout" />
-    </TabPanel>
-  </TabView>
-      </template>
-</Card>
+      <ScrollPanel style="height:100%">
+        <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
+        <TabView>
+          <TabPanel header="Relevance">
+            <Relevance :relevance="relevance" :goals="goals" :nodes="nodes" :compareConfig="compareConfig"/>
+          </TabPanel>
+          <TabPanel header="all predictions">
+            <NodeList :nodes="nodes" :compareConfig="compareConfig"/>
+          </TabPanel>
+          <TabPanel header="compact network">
+            <div v-if="compareConfig==null">
+              <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
+            </div>
+            <div v-else>
+              <sugiyamaCompare :edges="getCompactEdges()" :nodes="getExNodes()"
+                               :nodes2="compareConfig.config.explain.states"
+                               :name2="compareConfig.name"/>
+            </div>
+          </TabPanel>
+          <TabPanel header="full network">
+            <Button label="change layout" class="p-button-secondary" @click="fullNetworkLayout = !fullNetworkLayout"/>
+            <divider />
+            <div v-if="compareConfig==null">
+              <BNvis v-if="fullNetworkLayout" :edges="edges" :nodes="nodes"/>
+              <sugiyama v-else :edges="edges" :nodes="nodes"/>
+            </div>
+            <div v-else>
+              <BNvisCompare v-if="fullNetworkLayout" :edges="edges" :nodes="nodes"
+                            :nodes2="compareConfig.config.explain.states"
+                            :name2="compareConfig.name"/>
+              <sugiyamaCompare v-else :edges="edges" :nodes="nodes" :nodes2="compareConfig.config.explain.states"
+                               :name2="compareConfig.name"/>
+            </div>
+          </TabPanel>
+        </TabView>
+      </ScrollPanel>
+    </template>
+  </Card>
 </template>
 
 <script>
@@ -67,19 +72,18 @@ export default {
     }
   },
   watch: {
-    explanation: function() {
+    explanation: function () {
       if (this.explanation != null) {
         //nodes
         let explanationNodes = []
-       this.explanation["nodes"].forEach(node => {
-         let originalNode = this.nodes.find(n => n.name === node)
-         if (originalNode != null) {
-           explanationNodes.push(originalNode)
-         }
-        else {
-           explanationNodes.push({"name": node, "probability": "1.0"})
-         }
-       })
+        this.explanation["nodes"].forEach(node => {
+          let originalNode = this.nodes.find(n => n.name === node)
+          if (originalNode != null) {
+            explanationNodes.push(originalNode)
+          } else {
+            explanationNodes.push({"name": node, "probability": "1.0"})
+          }
+        })
 
         //edges
         let edges = []
@@ -105,8 +109,8 @@ export default {
                 if (!explanationNodes.includes(n)) {
                   explanationNodes.push(n)
                 }
-                  edges.push({"source": node, "target": n.name})
-                  edges.push(oe)
+                edges.push({"source": node, "target": n.name})
+                edges.push(oe)
               }
             })
           })
@@ -147,13 +151,6 @@ export default {
 
 .p-card {
   height: 100% !important;
-
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
-
-::v-deep(.p-panel-content) {
-height: 100% !important;
 }
 
 </style>

@@ -1,26 +1,34 @@
-<template style="position:relative">
-  <Card>
+<template>
+
+  <Card style="height:100%">
+
     <template #title>
       Available options
     </template>
-    <template #content>
-    <h3 class="p-text-left">Interventions:</h3>
-  <TherapyInput :nodes="nodes" :selection="targets"
-     @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)" />
-  <div>
-    <h3 class="p-text-left">Decision Ratings:</h3>
-    <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em" />
-  </div>
-      <optionsTable :results="results" :goals="goals"
-                @update="update($event)" :selectedOption="selectedOption"></optionsTable>
-      <div v-if="compareConfig">
-        <h3> {{compareConfig.name}}:</h3>
-        <optionsTable :results="compareConfig.config.options.options"
-                :goals="compareConfig.config.newGoals" @update="update($event)" :selectedOption="selectedOption" />
+    <template #content >
+      <ScrollPanel style="height:100%">
+      <div>
+        <h3 class="p-text-left">Interventions:</h3>
+        <TherapyInput :nodes="nodes" :selection="targets"
+                      @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)"/>
+        <div>
+          <h3 class="p-text-left">Decision Ratings:</h3>
+          <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
+        </div>
+        <optionsTable :results="results" :goals="goals"
+                      @update="update($event)" :selectedOption="selectedOption"></optionsTable>
+        <div v-if="compareConfig">
+          <h3> {{ compareConfig.name }}:</h3>
+          <optionsTable :results="compareConfig.config.options.options"
+                        :goals="compareConfig.config.newGoals" @update="update($event)"
+                        :selectedOption="selectedOption"/>
+        </div>
       </div>
+        </ScrollPanel>
+    </template>
 
-      </template>
-    </Card>
+  </Card>
+
 </template>
 
 <script>
@@ -36,11 +44,11 @@ export default {
   props: [
     "results",
     "goals",
-      "nodes",
-      "targets",
-      "selectedOption",
-      "loading",
-      "compareConfig"
+    "nodes",
+    "targets",
+    "selectedOption",
+    "loading",
+    "compareConfig"
   ],
   methods: {
     update(name) {
@@ -51,16 +59,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.p-card {
-  height: 100% !important;
-
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
-
-::v-deep(.p-panel-content) {
-height: 100% !important;
-}
 
 </style>

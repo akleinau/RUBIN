@@ -7,7 +7,7 @@
     , or the value is
     <Chip  class="p-mx-1" style="background-color:black" label="given"> </Chip>
   </div>
-<DataTable :value="data" :scrollable="true" scrollHeight="600px">
+<DataTable :value="data">
   <Column header="node" field="name" :sortable="true" />
   <Column header="prediction" field="state"></Column>
   <Column header="likeliness">
