@@ -12,12 +12,12 @@
   <div class=" p-grid  nested-grid   " style="height:100%; position:relative">
     <div class="p-col-3 p-ai-start p-flex-column" style="height:100%">
            <div class="p-pb-2 p-d-flex" style="height: 30%;">
-        <GoalInput  :nodes="nodes" :selection="patient.goals" :compareConfig="selectedConfig"
+        <GoalInput  :nodes="patient.nodes" :selection="patient.goals" :compareConfig="selectedConfig"
                    @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
       </div>
 
       <div class=" box-stretched " style="height:70%">
-        <EvidenceInput  :nodes="nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
+        <EvidenceInput  :nodes="patient.nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)" />
     </div>
 
@@ -28,15 +28,14 @@
             <div class="box-stretched" style="height:100%">
         <TherapyOptions :results="options.options" :goals="newGoals"
                         :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
-                  :nodes="nodes" :targets="patient.targets" :loading="optionsLoading"
+                  :nodes="patient.nodes" :targets="patient.targets" :loading="optionsLoading"
                         :compareConfig="selectedConfig"
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
       </div>
       </div>
       <div class="p-col "  style="height:100%">
         <div class=" box-stretched"  style="height:100%">
-        <Explanation :relevance = "explain.relevance" :goals="newGoals" :edges="edges" :nodes="explain.states"
-                 :explanation="explain.explanation" :loading="explanationLoading"
+        <Explanation  :goals="newGoals" :edges="edges" :explain="explain" :loading="explanationLoading"
                  :compareConfig="selectedConfig" />
 
           </div>
@@ -74,6 +73,7 @@ export default {
         targets: [],
         evidence: [],
         goals: [],
+        nodes: [], //nodes of the network that are neither evidence, goals, nor targets
       },
 
       //available options to treat the patient given the interventions
@@ -83,7 +83,6 @@ export default {
       },
 
       newGoals: null, //helper property to let the data tables update TODO: replace
-      nodes: [], //nodes of the network that are neither evidence, goals, nor targets
       edges: null, //edges of the network
 
       //explaining calculations for the chosen option
@@ -109,7 +108,6 @@ export default {
           "patient": JSON.parse(JSON.stringify(this.patient)),
           "options": JSON.parse(JSON.stringify(this.options)),
           "explain": JSON.parse(JSON.stringify(this.explain)),
-          "nodes": JSON.parse(JSON.stringify(this.nodes)),
           "newGoals": JSON.parse(JSON.stringify(this.newGoals))
         }
       })
@@ -122,16 +120,10 @@ export default {
       this.patient = configuration.config.patient
       this.options = configuration.config.options
       this.explain = configuration.config.explain
-      this.nodes = configuration.config.nodes
       this.newGoals = configuration.config.newGoals
     },
     compareTo(name) {
-      if (name === null) {
-        this.selectedConfig = null
-      }
       this.selectedConfig = this.configurations.find(a => a.name === name)
-      console.log("Comparing to:")
-      console.log(this.selectedConfig)
     },
     changePage() {
       this.$emit("changePage")
@@ -152,9 +144,7 @@ export default {
     getCorrespondingNode(nodeArr) {
       let correspondingNodes = []
       nodeArr.forEach(node => {
-        console.log("selectedOption:")
-        console.log(node)
-        let correspondingNode = this.nodes.find(x => x.name === node.name)
+        let correspondingNode = this.patient.nodes.find(x => x.name === node.name)
         let item = {
           name: correspondingNode.name,
           selected: {name: node.option},
@@ -175,27 +165,25 @@ export default {
         })
         nodes.push({'name': key, 'options': options})
       }
-      this.nodes = nodes
-      console.log(nodes)
+      this.patient.nodes = nodes
 
       let edges = []
       network.edges.forEach(edge => {
         edges.push({"source": edge[0], "target": edge[1]})
       })
       this.edges = edges
-      console.log("edges: ")
-      console.log(edges)
+
     },
     reset: async function() {
       this.patient.targets= []
       this.patient.evidence= []
       this.patient.goals= []
+      this.patient.nodes= []
 
       this.options.options= null
       this.options.selectedOption= null
 
       this.edges= null
-      this.nodes= []
       this.newGoals= null
 
       this.explain.relevance= null
@@ -208,7 +196,6 @@ export default {
       if (this.patient.evidence.length !== 0 && this.patient.targets.length !== 0 && this.patient.goals.length !== 0) {
         this.optionsLoading = true
         this.explanationLoading = true
-        console.log("doing calculation for:")
 
         let evidences = {}
         for (var ev in this.patient.evidence) {
@@ -224,10 +211,6 @@ export default {
           targets.push(this.patient.targets[target].name)
         }
 
-        console.log(targets)
-        console.log(evidences)
-        console.log(goals)
-
         const gResponse = await fetch("http://localhost:5000/calcTargetForGoals", {
           method: 'POST',
           headers: {
@@ -241,8 +224,6 @@ export default {
           })
         });
         let nodeDict = await gResponse.json();
-        console.log('results: ')
-        console.log(nodeDict.optionResults)
         this.options.options = nodeDict.optionResults
         this.options.selectedOption = nodeDict.optionResults[0]
 
@@ -253,21 +234,16 @@ export default {
     },
     calculateOption: async function () {
       this.explanationLoading = true
-      console.log("calculating relevance for:")
-      console.log(this.options.selectedOption)
 
       let evidences = {}
       for (var ev in this.patient.evidence) {
         evidences[this.patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
       }
-      console.log(evidences)
 
       let goals = {}
       for (var goal in this.patient.goals) {
         goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
       }
-
-      console.log(goals)
 
       const gResponse = await fetch("http://localhost:5000/calcOptions", {
         method: 'POST',
@@ -282,52 +258,48 @@ export default {
         })
       });
       let nodeDict = await gResponse.json();
-      console.log('relevance: ')
       this.explain.relevance = nodeDict.relevance
-      console.log(this.explain.relevance)
       this.newGoals = goals
       this.explain.states = nodeDict.nodes
-      console.log(this.explain.states)
       this.explain.explanation = nodeDict.explanation
-      console.log(this.explain.explanation)
       this.explanationLoading = false
     },
     addEvidences(nodes) {
       nodes.forEach(node => {
         this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
-        this.nodes = this.nodes.filter(x => x.name !== node.name)
+        this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
         this.patient.evidence.push(node)
       })
       this.calculate()
     },
     deleteEvidence(node) {
       this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
-      this.nodes.push({name: node.name, options: node.options})
+      this.patient.nodes.push({name: node.name, options: node.options})
       this.calculate()
     },
     addTargets(nodes) {
       nodes.forEach(node => {
         this.patient.targets.push(node)
-        this.nodes = this.nodes.filter(x => x.name !== node.name)
+        this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
       })
       this.calculate()
     },
     deleteTarget(node) {
       this.patient.targets = this.patient.targets.filter(x => x.name !== node.name)
-      this.nodes.push(node)
+      this.patient.nodes.push(node)
       this.calculate()
     },
     addGoals(nodes) {
       nodes.forEach(node => {
         this.patient.goals = this.patient.goals.filter(x => x.name !== node.name)
-        this.nodes = this.nodes.filter(x => x.name !== node.name)
+        this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
         this.patient.goals.push(node)
       })
       this.calculate()
     },
     deleteGoal(node) {
       this.patient.goals = this.patient.goals.filter(x => x.name !== node.name)
-      this.nodes.push({name: node.name, options: node.options})
+      this.patient.nodes.push({name: node.name, options: node.options})
       this.calculate()
     },
     selectedOptionUpdated(option) {
@@ -348,7 +320,6 @@ export default {
       this.patient.goals.forEach(ev => {
         csv += "\ngoal; " + ev.name + "; " + ev.selected.name
       })
-      console.log(csv)
 
       const anchor = document.createElement('a');
       anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
@@ -362,11 +333,11 @@ export default {
 
     if (this.network === 'Endometric cancer') {
       //add example nodes
-      let CA125 = this.nodes.find(x => x.name === "CA125")
+      let CA125 = this.patient.nodes.find(x => x.name === "CA125")
       CA125["selected"] = {"name": "lt_35"}
       this.addEvidences([CA125])
-      this.addTargets([this.nodes.find(x => x.name === "Therapy")])
-      let surv = this.nodes.find(x => x.name === "Survival1yr")
+      this.addTargets([this.patient.nodes.find(x => x.name === "Therapy")])
+      let surv = this.patient.nodes.find(x => x.name === "Survival1yr")
       surv["selected"] = {"name": "yes"}
       this.addGoals([surv])
     }

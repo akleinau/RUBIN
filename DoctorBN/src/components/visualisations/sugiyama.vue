@@ -26,7 +26,6 @@ name: "sugiyama",
       this.edges.forEach(d => {
         list.push([d["source"], d["target"]])
       })
-      console.log(list)
       return list
     }
   },

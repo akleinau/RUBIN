@@ -8,10 +8,10 @@
         <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
         <TabView>
           <TabPanel header="Relevance">
-            <Relevance :relevance="relevance" :goals="goals" :nodes="nodes" :compareConfig="compareConfig"/>
+            <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states" :compareConfig="compareConfig"/>
           </TabPanel>
           <TabPanel header="all predictions">
-            <NodeList :nodes="nodes" :compareConfig="compareConfig"/>
+            <NodeList :nodes="explain.states" :compareConfig="compareConfig"/>
           </TabPanel>
           <TabPanel header="compact network">
             <div v-if="compareConfig==null">
@@ -27,14 +27,14 @@
             <Button label="change layout" class="p-button-secondary" @click="fullNetworkLayout = !fullNetworkLayout"/>
             <divider />
             <div v-if="compareConfig==null">
-              <BNvis v-if="fullNetworkLayout" :edges="edges" :nodes="nodes"/>
-              <sugiyama v-else :edges="edges" :nodes="nodes"/>
+              <BNvis v-if="fullNetworkLayout" :edges="edges" :nodes="explain.states"/>
+              <sugiyama v-else :edges="edges" :nodes="explain.states"/>
             </div>
             <div v-else>
-              <BNvisCompare v-if="fullNetworkLayout" :edges="edges" :nodes="nodes"
+              <BNvisCompare v-if="fullNetworkLayout" :edges="edges" :nodes="explain.states"
                             :nodes2="compareConfig.config.explain.states"
                             :name2="compareConfig.name"/>
-              <sugiyamaCompare v-else :edges="edges" :nodes="nodes" :nodes2="compareConfig.config.explain.states"
+              <sugiyamaCompare v-else :edges="edges" :nodes="explain.states" :nodes2="compareConfig.config.explain.states"
                                :name2="compareConfig.name"/>
             </div>
           </TabPanel>
@@ -54,7 +54,7 @@ import BNvisCompare from "@/components/visualisations/BNvisCompare";
 
 export default {
   name: "Network",
-  props: ['relevance', 'goals', "edges", "nodes", "explanation", "compareConfig", "loading"],
+  props: ['goals', "edges", "explain", "compareConfig", "loading"],
   components: {
     Relevance,
     BNvis,
@@ -71,13 +71,17 @@ export default {
       fullNetworkLayout: true
     }
   },
-  watch: {
-    explanation: function () {
-      if (this.explanation != null) {
+  computed: {
+    compactNetwork: function () {
+
+      if (this.explain.explanation == null) {
+        return null
+      }
         //nodes
+
         let explanationNodes = []
-        this.explanation["nodes"].forEach(node => {
-          let originalNode = this.nodes.find(n => n.name === node)
+        this.explain.explanation["nodes"].forEach(node => {
+          let originalNode = this.explain.states.find(n => n.name === node)
           if (originalNode != null) {
             explanationNodes.push(originalNode)
           } else {
@@ -90,22 +94,20 @@ export default {
 
         let connectedNodes = new Set()
         this.edges.forEach(edge => {
-          if (this.explanation["nodes"].includes(edge["source"]) && this.explanation["nodes"].includes(edge["target"])) {
+          if (this.explain.explanation["nodes"].includes(edge["source"]) && this.explain.explanation["nodes"].includes(edge["target"])) {
             edges.push(edge)
             connectedNodes.add(edge["source"])
             connectedNodes.add(edge["target"])
           }
         })
-        let notConnectedNodes = this.explanation["nodes"].filter(x => !connectedNodes.has(x))
-        console.log("not connected:")
-        console.log(notConnectedNodes)
+        let notConnectedNodes = this.explain.explanation["nodes"].filter(x => !connectedNodes.has(x))
         notConnectedNodes.forEach(node => {
-          let neighborNodes = this.nodes.filter(n =>
+          let neighborNodes = this.explain.states.filter(n =>
               this.edges.find(e => e["source"] === node && e["target"] === n.name) != null)
           neighborNodes.forEach(n => {
             let otherEdges = this.edges.filter(e => e["target"] === n.name)
             otherEdges.forEach(oe => {
-              if (oe["source"] !== node && this.explanation["nodes"].includes(oe["source"])) {
+              if (oe["source"] !== node && this.explain.explanation["nodes"].includes(oe["source"])) {
                 if (!explanationNodes.includes(n)) {
                   explanationNodes.push(n)
                 }
@@ -117,30 +119,28 @@ export default {
 
         })
         //remove duplicates
-        console.log("found:")
-        console.log(edges)
         edges = edges.filter(e => edges.find(e2 => e2["source"] === e["source"] && e2["target"] === e["target"]) === e)
-        console.log(edges)
 
-        this.compactEdges = edges
-        this.exNodes = explanationNodes
-      }
+        return  {
+          "compactEdges": edges,
+          "compactNodes": explanationNodes
+        }
     }
   },
   methods: {
     getExEdges() {
-      if (this.explanation != null) {
-        return this.explanation["edges"]
+      if (this.explain.explanation != null) {
+        return this.explain.explanation["edges"]
       }
     },
     getCompactEdges() {
-      if (this.compactEdges != null) {
-        return this.compactEdges
+      if (this.compactNetwork != null) {
+        return this.compactNetwork.compactEdges
       }
     },
     getExNodes() {
-      if (this.exNodes != null) {
-        return this.exNodes
+      if (this.compactNetwork != null) {
+        return this.compactNetwork.compactNodes
       }
     }
   }

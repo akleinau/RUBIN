@@ -159,8 +159,6 @@ export default {
 
         });
 
-        console.log(this.nodes)
-        console.log(this.edges)
       }
     }
   }
