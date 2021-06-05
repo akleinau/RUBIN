@@ -1,8 +1,9 @@
 <template>
-  <div class="p-d-flex p-jc-between p-ai-center" style="background-color:white">
+  <div class="p-d-flex p-jc-between p-ai-center" style="background-color:#f8f9fa">
       <Menubar :model="items" ref="menu"/>
   <div id="name"> Network: <b>{{NetworkName}}</b>,
-    Patient: <InputText type="text" v-model="SavePatientName" @change="$emit('setName', SavePatientName)"/></div>
+    Patient: <InputText type="text" v-model="SavePatientName" @change="$emit('setName', SavePatientName)"
+    style="background-color:#fefefe"/></div>
   <div id="logo" class="p-mr-2"> <img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
   </div>
 

@@ -1,7 +1,9 @@
 <template>
- <Card>
+ <Card style="position:relative">
     <template #title style="position: relative" :class="Evidence">
       Evidence
+      <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
+      <OverlayPanel ref="op" > Choose which variables are already set to a value. </OverlayPanel>
     </template>
     <template #content>
       <ScrollPanel  style="height:100%">
@@ -44,5 +46,9 @@ name: "EvidenceInput",
   height: 100% !important;
 }
 
+.help {
+  position:absolute;
+  right:5%
+}
 
 </style>

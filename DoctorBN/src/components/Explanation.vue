@@ -2,6 +2,8 @@
   <Card>
     <template #title>
       Explanation
+      <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
+      <OverlayPanel ref="op" > Here different types of explanation and additional information are displayed. </OverlayPanel>
     </template>
     <template #content>
       <ScrollPanel style="height:100%">
@@ -68,7 +70,7 @@ export default {
       onlyGlobal: true,
       compactEdges: null,
       exNodes: null,
-      fullNetworkLayout: true
+      fullNetworkLayout: true,
     }
   },
   computed: {
@@ -153,5 +155,9 @@ export default {
   height: 100% !important;
 }
 
+.help {
+  position:absolute;
+  right:5%
+}
 
 </style>

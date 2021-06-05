@@ -4,6 +4,8 @@
 
     <template #title>
       Available options
+      <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
+      <OverlayPanel ref="op" > Choose which variables you can change. </OverlayPanel>
     </template>
     <template #content >
       <ScrollPanel style="height:100%">
@@ -77,5 +79,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.help {
+  position:absolute;
+  right:5%
+}
 
 </style>

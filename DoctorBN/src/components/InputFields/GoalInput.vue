@@ -2,6 +2,8 @@
  <Card>
     <template #title style="height:100%" :class="DesiredOutcomes">
       Desired Outcomes
+      <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
+      <OverlayPanel ref="op" > Choose which variables you want to have a specific value. </OverlayPanel>
     </template>
     <template #content style="height:100%">
       <ScrollPanel  style="height:100%">
@@ -42,7 +44,10 @@ export default {
 
 }
 
-
+.help {
+  position:absolute;
+  right:5%
+}
 
 
 
