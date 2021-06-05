@@ -7,8 +7,8 @@
     </Card>
 
     <div class="p-col p-grid vertical-container " style="height:100%">
-      <div class="p-col box-stretched" >
-        <Card class=" box-stretched" >
+      <div class="p-col stretched" >
+        <Card class=" stretched" >
           <template #title>
             Upload a new network
           </template>
@@ -19,8 +19,8 @@
           </template>
         </Card>
       </div>
-      <div class="p-col  box-stretched" >
-        <Card class=" box-stretched" >
+      <div class="p-col  stretched" >
+        <Card class=" stretched" >
           <template #title>
             Select a network
           </template>
@@ -78,7 +78,7 @@ export default {
 
 <style scoped>
 
-.box-stretched {
+.stretched {
   height: 100%
 }
 

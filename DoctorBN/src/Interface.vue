@@ -9,36 +9,32 @@
     <load-patient @loaded="loadPatient"></load-patient>
   </OverlayPanel>
 
-  <div class=" p-grid  nested-grid   " style="height:100%; position:relative">
-    <div class="p-col-3 p-ai-start p-flex-column" style="height:100%">
+  <div class=" p-grid stretched " style=" position:relative">
+    <div class="p-col-3 p-ai-start p-flex-column stretched" >
            <div class="p-pb-2 p-d-flex" style="height: 30%;">
         <GoalInput  :nodes="patient.nodes" :selection="patient.goals" :compareConfig="selectedConfig"
                    @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
       </div>
 
-      <div class=" box-stretched " style="height:70%">
+      <div  style="height:70%">
         <EvidenceInput  :nodes="patient.nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)" />
     </div>
 
 
     </div>
-    <div class="p-col " style="height:100%">
-
-            <div class="box-stretched" style="height:100%">
+    <div class="p-col stretched" >
         <TherapyOptions :results="options.options" :goals="newGoals"
                         :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
                   :nodes="patient.nodes" :targets="patient.targets" :loading="optionsLoading"
                         :compareConfig="selectedConfig"
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
+
       </div>
-      </div>
-      <div class="p-col "  style="height:100%">
-        <div class=" box-stretched"  style="height:100%">
+      <div class="p-col stretched" >
         <Explanation  :goals="newGoals" :edges="edges" :explain="explain" :loading="explanationLoading"
                  :compareConfig="selectedConfig" />
 
-          </div>
       </div>
   </div>
 </template>
@@ -353,7 +349,7 @@ export default {
   margin-right: 0
 }
 
-.box-stretched {
+.stretched {
         height: 100%;
     }
 
