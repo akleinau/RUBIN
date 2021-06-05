@@ -23,9 +23,12 @@ name: "sugiyama",
   computed: {
     edgeList: function(){
       const list = []
-      this.edges.forEach(d => {
+      if (this.edges) {
+         this.edges.forEach(d => {
         list.push([d["source"], d["target"]])
       })
+      }
+
       return list
     }
   },
@@ -62,7 +65,7 @@ name: "sugiyama",
     },
     visualise() {
 
-      if (this.nodes !== null && this.edges !== null) {
+      if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
 
         var graph = dag.dagConnect()(this.edgeList)
 

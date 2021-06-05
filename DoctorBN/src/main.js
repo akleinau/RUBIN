@@ -26,6 +26,7 @@ import Card from 'primevue/card';
 import Chip from 'primevue/chip';
 import FileUpload from 'primevue/fileupload';
 import ProgressBar from 'primevue/progressbar';
+import BlockUI from 'primevue/blockui';
 import 'primevue/resources/themes/saga-blue/theme.css';       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css'
@@ -60,6 +61,7 @@ createApp(App)
     .component('Chip', Chip)
     .component('FileUpload', FileUpload)
     .component('ProgressBar', ProgressBar)
+    .component('BlockUI', BlockUI)
     .directive('tooltip', Tooltip)
       .mount('#app')
 

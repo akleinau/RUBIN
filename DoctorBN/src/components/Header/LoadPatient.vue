@@ -18,6 +18,7 @@ export default {
   methods: {
     read(fileField) {
       const csvFile = fileField.files[0];
+      const name = csvFile.name.replace('.csv', '')
       const reader = new FileReader();
       reader.onload = (event) => {
         const str = event.target.result
@@ -31,11 +32,11 @@ export default {
             return object;
           }, {});
         });
-        this.load(patientData)
+        this.load(patientData, name)
       }
       reader.readAsText(csvFile)
     },
-    load(patientData) {
+    load(patientData, name) {
       for (var row in patientData) {
         let item = patientData[row]
         let node = {
@@ -53,7 +54,7 @@ export default {
           })
         }
       }
-      this.$emit('loaded', this.patient)
+      this.$emit('loaded', this.patient, name)
     }
   }
 }

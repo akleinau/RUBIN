@@ -1,7 +1,11 @@
 <template>
-  <Menubar :model="items" ref="menu"/>
-  <div id="name"> Network: <b>{{NetworkName}}</b></div>
-  <div id="logo"> <img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
+  <div class="p-d-flex p-jc-between p-ai-center" style="background-color:white">
+      <Menubar :model="items" ref="menu"/>
+  <div id="name"> Network: <b>{{NetworkName}}</b>,
+    Patient: <InputText type="text" v-model="SavePatientName" @change="$emit('setName', SavePatientName)"/></div>
+  <div id="logo" class="p-mr-2"> <img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
+  </div>
+
   <Dialog header="Feedback" v-model:visible="showFeedback"  style="width: 50%" modal="yes">
     <Feedback></Feedback>
   </Dialog>
@@ -20,7 +24,7 @@
 
   <OverlayPanel ref="exportOverlay">
     <label> name: </label>
-    <InputText type="text" v-model="patientName"></InputText>
+    <InputText type="text" v-model="SavePatientName" ></InputText>
     <Button label="save" @click="exportCSV()"/>
   </OverlayPanel>
 
@@ -38,13 +42,13 @@ export default {
     Compare
   },
   props: [
-      "configurations", "NetworkName"
+      "configurations", "NetworkName", "PatientName"
   ],
   data() {
     return {
       showFeedback: false,
       showNetworkDescription: false,
-      patientName: null,
+      SavePatientName: null,
       configLabel: "saved configurations",
       items: [
         {
@@ -93,6 +97,11 @@ export default {
       ]
     }
   },
+  watch: {
+    PatientName: function() {
+      this.SavePatientName = this.PatientName
+    }
+  },
   methods: {
     changePage() {
       this.$emit('changePage')
@@ -107,7 +116,7 @@ export default {
       this.$refs.exportOverlay.toggle(event)
     },
     exportCSV() {
-      this.$emit('exportCSV', this.patientName)
+      this.$emit('exportCSV', this.SavePatientName)
       this.$refs.exportOverlay.toggle()
     },
     compareTo(name) {
@@ -147,18 +156,9 @@ export default {
 
 <style scoped>
 
-#logo {
-  position: absolute;
-  top: 1%;
-  left: 90%;
-  font-size: 2em;
-  color: teal
-}
+
 
 #name {
-  position: absolute;
-  top: 2%;
-  left: 70%;
   color: grey;
 }
 

@@ -1,9 +1,11 @@
 <template>
 
+  <tutorial @setBlock="block = $event" />
+
   <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
           @exportCSV="exportCSV($event)" @saveConfig="saveConfig($event)" @compareTo="compareTo($event)"
           :configurations="configurations" @load="loadConfig($event)" @deleteConfig="deleteConfig($event)"
-          :NetworkName="network" />
+          :NetworkName="network" :PatientName="patient.name" @setName="patient.name = $event"/>
 
   <OverlayPanel ref="panel">
     <load-patient @loaded="loadPatient"></load-patient>
@@ -11,31 +13,31 @@
 
   <div class=" p-grid stretched " style=" position:relative">
     <div class="p-col-3 p-ai-start p-flex-column stretched" >
-           <div class="p-pb-2 p-d-flex" style="height: 30%;">
+           <BlockUI class="p-pb-2 p-d-flex" style="height: 30%;" :blocked="block.goals" ref="goal">
         <GoalInput  :nodes="patient.nodes" :selection="patient.goals" :compareConfig="selectedConfig"
                    @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
-      </div>
+      </BlockUI>
 
-      <div  style="height:70%">
+      <BlockUI  style="height:70%" :blocked="block.evidence">
         <EvidenceInput  :nodes="patient.nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
                    @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)" />
-    </div>
+    </BlockUI>
 
 
     </div>
-    <div class="p-col stretched" >
+    <BlockUI class="p-col stretched" :blocked="block.options">
         <TherapyOptions :results="options.options" :goals="newGoals"
                         :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
                   :nodes="patient.nodes" :targets="patient.targets" :loading="optionsLoading"
                         :compareConfig="selectedConfig"
                  @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
 
-      </div>
-      <div class="p-col stretched" >
+      </BlockUI>
+      <BlockUI class="p-col stretched" :blocked="block.explain">
         <Explanation  :goals="newGoals" :edges="edges" :explain="explain" :loading="explanationLoading"
                  :compareConfig="selectedConfig" />
 
-      </div>
+      </BlockUI>
   </div>
 </template>
 
@@ -47,6 +49,7 @@ import LoadPatient from "@/components/Header/LoadPatient";
 import OverlayPanel from "primevue/overlaypanel";
 import EvidenceInput from "@/components/InputFields/EvidenceInput";
 import GoalInput from "@/components/InputFields/GoalInput";
+import tutorial from "@/components/tutorial";
 
 export default {
   name: "Interface",
@@ -57,7 +60,8 @@ export default {
     LoadPatient,
     OverlayPanel,
     EvidenceInput,
-    GoalInput
+    GoalInput,
+    tutorial
   },
   props: [
       "network"
@@ -70,6 +74,7 @@ export default {
         evidence: [],
         goals: [],
         nodes: [], //nodes of the network that are neither evidence, goals, nor targets
+        name: ""
       },
 
       //available options to treat the patient given the interventions
@@ -93,7 +98,14 @@ export default {
       patientCases: [],
 
       optionsLoading: false,
-      explanationLoading: false
+      explanationLoading: false,
+
+      block: {
+        goals: false,
+        evidence: true,
+        options: true,
+        explain: true
+      }
     }
   },
   methods: {
@@ -125,9 +137,10 @@ export default {
       this.$emit("changePage")
     },
     openLoadForm(event) {
+      console.log(event)
       this.$refs.panel.toggle(event)
     },
-    loadPatient: async function(patientData) {
+    loadPatient: async function(patientData, name) {
       await this.reset()
       let evidenceNodes = this.getCorrespondingNode(patientData.evidence)
       let targetNodes = this.getCorrespondingNode(patientData.targets)
@@ -135,6 +148,8 @@ export default {
       this.addEvidences(evidenceNodes)
       this.addTargets(targetNodes)
       this.addGoals(goalNodes)
+      this.patient.name = name
+      console.log("Patient: " + name)
       this.$refs.panel.toggle()
     },
     getCorrespondingNode(nodeArr) {
@@ -175,6 +190,7 @@ export default {
       this.patient.evidence= []
       this.patient.goals= []
       this.patient.nodes= []
+      this.patient.name = ""
 
       this.options.options= null
       this.options.selectedOption= null
@@ -306,6 +322,7 @@ export default {
       }
     },
     exportCSV(name) {
+      this.patient.name = name
       var csv = "Type; Variable; Option"
       this.patient.evidence.forEach(ev => {
         csv += "\nevidence; " + ev.name + "; " + ev.selected.name
