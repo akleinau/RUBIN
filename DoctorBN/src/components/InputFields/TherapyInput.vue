@@ -1,8 +1,8 @@
 <template>
   <div style="position:relative">
 
-
-      <Listbox :options="selection" optionLabel="name" listStyle="max-height:300px"
+  <div v-if="compareConfig == null">
+          <Listbox :options="selection" optionLabel="name" listStyle="max-height:300px"
                emptyMessage="choose therapy nodes">
         <template #option="slotProps">
           <div class="p-text-center rowContent">
@@ -10,10 +10,15 @@
           <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
               @click="deleteNode(slotProps.option)"/>
           </div>
-
         </template>
       </Listbox>
       <Button id="AddButton" icon="pi pi-plus" class="p-button-secondary" @click="overlay = true"></Button>
+  </div>
+  <div v-else>
+    current: <span v-for="sel in selection" :key="sel">{{sel.name}}, </span>
+    <br>
+    {{ compareConfig.name }}: <span v-for="sel in compareConfig.config.patient.targets" :key="sel">{{sel.name}}, </span>
+  </div>
 
 
     <Dialog header="Add Interventions" v-model:visible="overlay" style="width: 50%" modal="yes">
@@ -46,7 +51,8 @@ export default {
   name: "Target",
   props: [
     "nodes",
-      "selection"
+      "selection",
+      "compareConfig"
   ],
   data() {
     return {

@@ -9,7 +9,7 @@
       <ScrollPanel style="height:100%">
       <div>
         <h3 class="p-text-left">Interventions:</h3>
-        <TherapyInput :nodes="nodes" :selection="targets"
+        <TherapyInput :nodes="nodes" :selection="targets" :compareConfig="compareConfig"
                       @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)"/>
         <div class="p-d-flex  p-jc-between p-ai-center">
           <h3 class="p-text-left">Decision Ratings:</h3>
