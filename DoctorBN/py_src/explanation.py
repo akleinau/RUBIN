@@ -128,21 +128,27 @@ def add_markov_children(root, network, evidences=None, variables=None, subsetFun
             sn = SupportNode(node, parent=root)
 
 
-def deleteUseless(root, network, evidences, variables):
+def deleteUseless(root, network, evidences, variables, most_relevant_nodes):
     # if root is evidence itself, don't delete
-    if root.name in evidences.keys():
+    evidence_list = []
+    if most_relevant_nodes:
+        evidence_list = most_relevant_nodes
+    else:
+        evidence_list = evidences.keys()
+
+    if root.name in evidence_list:
         return 1
 
     # if roots children are useless, delete them
     for c in root.children:
-        deleteUseless(c, network, evidences, variables)
+        deleteUseless(c, network, evidences, variables, most_relevant_nodes)
 
     # if root is no evidence, but has no children, delete
     if not root.children and root.name not in variables.keys():
         root.parent = None
 
 
-def compute_explanation_of_target(network, evidences, variables, outcomes):
+def compute_explanation_of_target(network, evidences, variables, outcomes, most_relevant_nodes):
     rootNodes = []
     # create node list
     nodes = []
@@ -150,9 +156,9 @@ def compute_explanation_of_target(network, evidences, variables, outcomes):
 
     for outcome in outcomes:
         outcome_node = SupportNode(outcome, forbidden_set=[outcome])
-        add_markov_children(outcome_node, network, evidences=evidences, variables=variables,
-                            subsetFunc=find_changed_set)  # , subsetFunc=find_smallest_set)
-        deleteUseless(outcome_node, network, evidences, variables)
+        add_markov_children(outcome_node, network, evidences=evidences, variables=variables)
+                            #subsetFunc=find_changed_set)  # , subsetFunc=find_smallest_set)
+        deleteUseless(outcome_node, network, evidences, variables, most_relevant_nodes)
         rootNodes.append(outcome_node)
 
         for node in PreOrderIter(outcome_node):

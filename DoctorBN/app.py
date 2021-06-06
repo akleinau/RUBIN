@@ -34,21 +34,25 @@ def calcTargetForGoals():
     return {'optionResults': results, 'likelyResults': likely_results}
 
 
+#calculates the explanation of the chosen option
 @app.route('/calcOptions', methods=['POST'])
 def calcOptions():
+    #data prep
     data = request.get_json()
     relevanceEvidences = {}
     for ev in data['evidences']:
         relevanceEvidences[ev] = data['evidences'][ev]
     for op in data['options']:
         relevanceEvidences[op] = data['options'][op]
-
     network = getNetworkInDatabase(data['network']).filePath
+
+    #explanation calculation
     s = Scenario(network, evidences=relevanceEvidences, goals=data['goals'])
     relevance = s.compute_relevancies_for_goals()
+    most_relevant_nodes = list(map(lambda a: a['node_name'], filter(lambda n: n['overall_relevance'] >= 0.2, relevance)))
     nodes = s.compute_all_nodes()
-    e = Scenario(network, evidences=data['evidences'], goals=data['goals'])
-    explanation = e.compute_explanation_of_goals(data['options'])
+    e = Scenario(network, evidences=relevanceEvidences, goals=data['goals'])
+    explanation = e.compute_explanation_of_goals({}, most_relevant_nodes)
 
     return {'relevance': relevance, 'nodes': nodes, 'explanation': explanation}
 
