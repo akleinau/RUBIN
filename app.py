@@ -160,7 +160,7 @@ def openNetwork():
 
 @app.route('/')
 def home():
-    render_template('App.vue')
+    return 'this is the flask backend'
 
 
 if __name__ == '__main__':
