@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "start": "node server.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -15,6 +16,7 @@
     "d3-dag": "^0.7.0",
     "equal-vue": "^0.74.0",
     "eslint": "^7.26.0",
+    "express": "^4.17.1",
     "postcss": "^8.2.15",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
