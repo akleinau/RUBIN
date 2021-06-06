@@ -7,8 +7,8 @@ import py_src.sumNDimensionalArray as sumND
 #calculates the dissimilarity of two probability distributions (states) of a node
 # == computes global relevance
 def compute_jensen_shannon_divergence(distribution_1, distribution_2):
-    dist1 = np.array(distribution_1.values).flatten()
-    dist2 = np.array(distribution_2.values).flatten()
+    dist1 = np.array(distribution_1).flatten()
+    dist2 = np.array(distribution_2).flatten()
 
     p1 = []
     p2 = []
@@ -38,7 +38,7 @@ def compute_relevancies_for_outcome_states(distribution_1, distribution_2):
 
     return all_rel_objects_for_current_node
 
-
+#nodes includes distributions with and without evidence for all nodes
 def get_influence_of_evidences_on_goals(network, evidences, goals):
 
     all_relevance_of_evidence_objects = []  # list with all evidences and their relevances
@@ -59,8 +59,8 @@ def get_influence_of_evidences_on_goals(network, evidences, goals):
         distribution_wo = infer.query(list(goals.keys()), evidence=evidences_wo)
 
         # global relevance
-        jensen_shannon_value = compute_jensen_shannon_divergence(distribution_all,
-                                                             distribution_wo)
+        jensen_shannon_value = compute_jensen_shannon_divergence(distribution_all.values,
+                                                             distribution_wo.values)
 
         rel_of_ev_obj["overall_relevance"] = jensen_shannon_value
         sum_of_all_overall_relevancies += jensen_shannon_value

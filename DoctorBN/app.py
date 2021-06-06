@@ -48,11 +48,12 @@ def calcOptions():
 
     #explanation calculation
     s = Scenario(network, evidences=relevanceEvidences, goals=data['goals'])
-    relevance = s.compute_relevancies_for_goals()
-    most_relevant_nodes = list(map(lambda a: a['node_name'], filter(lambda n: n['overall_relevance'] >= 0.2, relevance)))
     nodes = s.compute_all_nodes()
-    e = Scenario(network, evidences=relevanceEvidences, goals=data['goals'])
-    explanation = e.compute_explanation_of_goals({}, most_relevant_nodes)
+    relevance = s.compute_relevancies_for_goals()
+    most_relevant_nodes = list(map(lambda a: a['node_name'],
+                                   filter(lambda n: n['overall_relevance'] >= 0.2 or n['node_name'] in data['options'].keys(),
+                                          relevance)))
+    explanation = s.compute_explanation_of_goals({}, most_relevant_nodes, nodes)
 
     return {'relevance': relevance, 'nodes': nodes, 'explanation': explanation}
 

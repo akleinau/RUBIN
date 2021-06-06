@@ -15,7 +15,7 @@ class SupportNode(NodeMixin, Support):
             self.children = children
         self.forbidden_set = forbidden_set
 
-def find_changed_set(root, set, evidences, network):
+def find_changed_set(root, set, evidences, network, nodes):
     infer = inference.VariableElimination(network)
     query_set = []
     reduced_set = []
@@ -34,9 +34,30 @@ def find_changed_set(root, set, evidences, network):
                 reduced_set.append(item)
     return reduced_set
 
+def find_differing_set(root, set, evidences, network, nodes):
+    reduced_set = []
+    parent_divergence = 0
+    for node in nodes:
+        if node['name'] == root.name:
+            parent_divergence = node['divergence']
+            break
+
+    for item in set:
+        if item in evidences.keys():
+            reduced_set.append(item)
+        else:
+            item_divergence = 0
+            for node in nodes:
+                if node['name'] == item:
+                    item_divergence = node['divergence']
+                    break
+            if (item_divergence - parent_divergence) > 0.03:
+                reduced_set.append(item)
+
+    return reduced_set
 
 # reduce markov blanket to smallest set of elements, that still gets the same classifications
-def find_smallest_set(root, set, evidences, network):
+def find_smallest_set(root, set, evidences, network, nodes):
     #smallest set of an evidence is empty set
     if root.name in evidences: return []
 
@@ -85,7 +106,7 @@ def find_smallest_set(root, set, evidences, network):
     return set
 
 
-def add_markov_children(root, network, evidences=None, variables=None, subsetFunc=None):
+def add_markov_children(root, network, evidences=None, variables=None, subsetFunc=None, nodes=None):
     blanket = network.get_markov_blanket(root.name)
 
     # find smallest set of nodes
@@ -101,7 +122,7 @@ def add_markov_children(root, network, evidences=None, variables=None, subsetFun
             subset_evidence[ev] = evidences[ev]
         for var in variables:
             subset_evidence[var] = variables[var]
-        small_blanket = subsetFunc(root, cleanedBlanket, subset_evidence, network)
+        small_blanket = subsetFunc(root, cleanedBlanket, subset_evidence, network, nodes)
 
     # construct forbidden sets and add nodes
     for node in small_blanket:
@@ -123,7 +144,7 @@ def add_markov_children(root, network, evidences=None, variables=None, subsetFun
 
         if not evidences or node not in evidences.keys():
             sn = SupportNode(node, parent=root, forbidden_set=forbidden_set)
-            add_markov_children(sn, network, evidences, variables, subsetFunc)
+            add_markov_children(sn, network, evidences, variables, subsetFunc, nodes)
         else:
             sn = SupportNode(node, parent=root)
 
@@ -148,7 +169,7 @@ def deleteUseless(root, network, evidences, variables, most_relevant_nodes):
         root.parent = None
 
 
-def compute_explanation_of_target(network, evidences, variables, outcomes, most_relevant_nodes):
+def compute_explanation_of_target(network, evidences, variables, outcomes, most_relevant_nodes, states):
     rootNodes = []
     # create node list
     nodes = []
@@ -156,8 +177,8 @@ def compute_explanation_of_target(network, evidences, variables, outcomes, most_
 
     for outcome in outcomes:
         outcome_node = SupportNode(outcome, forbidden_set=[outcome])
-        add_markov_children(outcome_node, network, evidences=evidences, variables=variables)
-                            #subsetFunc=find_changed_set)  # , subsetFunc=find_smallest_set)
+        add_markov_children(outcome_node, network, evidences=evidences, variables=variables,
+                            subsetFunc=find_differing_set, nodes=states)  #find_changed_set)  # , subsetFunc=find_smallest_set)
         deleteUseless(outcome_node, network, evidences, variables, most_relevant_nodes)
         rootNodes.append(outcome_node)
 

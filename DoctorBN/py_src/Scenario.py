@@ -49,25 +49,28 @@ class Scenario:
                                                              self.patient.evidences,
                                                              self.patient.goals)
 
-    def compute_explanation_of_goals(self, interventions, most_relevant_nodes):
+    def compute_explanation_of_goals(self, interventions, most_relevant_nodes, nodes):
         return explanation.compute_explanation_of_target(self.network.model,
                                                          self.patient.evidences,
                                                          interventions,
                                                          self.patient.goals,
-                                                         most_relevant_nodes)
+                                                         most_relevant_nodes,
+                                                         nodes)
 
-    #clique-inspired: if A,B is worse then A, then A,B,C won't be better then AC
+
     def compute_target_combs_for_goals(self):
-        n = pow(2, len(self.patient.targets))
+        #n = pow(2, len(self.patient.targets))
         results = []
-        for i in range(1, n):
-            chosenTargets = []
-            value = i
-            for target in self.patient.targets:
-                if int(value%2) == 1: chosenTargets.append(target)
-                value = value / 2
+        # clique-inspired: if A,B is worse then A, then A,B,C won't be better then AC
+        # for i in range(1, n):
+        #     chosenTargets = []
+        #     value = i
+        #     for target in self.patient.targets:
+        #         if int(value%2) == 1: chosenTargets.append(target)
+        #         value = value / 2
 
-            results = results + self.compute_target_for_goals(chosenTargets)
+        #no clique for computation speed
+        results = results + self.compute_target_for_goals(self.patient.targets)
 
         results.sort(key=lambda a: a['value'], reverse=True)
         return results
@@ -122,13 +125,17 @@ class Scenario:
         #this gives back as distribution.values an n-dim array with one dimension per calculated node
         #now we calculate the marginal probabilities per dimension to get the individual state probabilities of that node
         distribution = infer.query(calcNodes, evidence=self.patient.evidences)
+        distribution_wo_evidence = infer.query(calcNodes)
         for node in calcNodes:
             dimension = distribution.variables.index(node)
             stateProbabilities = sumND.getMarginalProbability(distribution.values, dimension)
+            dimension_wo_evidence = distribution_wo_evidence.variables.index(node)
+            stateProbabilities_wo_evidence = sumND.getMarginalProbability(distribution_wo_evidence.values, dimension_wo_evidence)
+            divergence = relevance.compute_jensen_shannon_divergence(stateProbabilities, stateProbabilities_wo_evidence)
             maxProbability = np.amax(stateProbabilities)
             state = np.where(stateProbabilities == maxProbability)[0][0]
             stateName = distribution.no_to_name[node][state]
-            nodes.append({"name": node, "state": stateName, "probability": maxProbability})
-
+            nodes.append({"name": node, "state": stateName, "probability": maxProbability, "divergence": divergence,
+                          "distribution": list(stateProbabilities), "distribution_wo_evidence": list(stateProbabilities_wo_evidence)})
 
         return nodes
