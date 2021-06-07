@@ -21,8 +21,3 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-#python
-.idea/*
-venv/*
-__pycache__/*
-py_src/__pycache__/*
