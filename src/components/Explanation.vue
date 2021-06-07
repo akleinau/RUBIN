@@ -3,7 +3,19 @@
     <template #title>
       Explanation
       <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
-      <OverlayPanel ref="op" > Here different types of explanation and additional information are displayed. </OverlayPanel>
+      <OverlayPanel ref="op" style="width: 500px">
+        Here different types of explanation and additional information are displayed.
+
+          <h3>Relevance</h3> This view displays the importance of all evidences and interventions for the desired
+          outcomes. Changing nodes with a higher relevance will impact the result more, than changing nodes with lesser
+          relevance.
+          <h3>All predictions</h3>This view displays the predictions of the network for all nodes. The network
+          additionally provides information on how sure it is with this prediction.
+          <h3> compact network</h3> This view displays the network in a compact way, showing only the most
+          important nodes.
+          <h3> full network</h3> This view displays the full network with all nodes and edges. Two different
+          views of the network are provided, please send feedback which you like more!
+      </OverlayPanel>
     </template>
     <template #content>
       <ScrollPanel style="height:100%">
@@ -158,6 +170,10 @@ export default {
 .help {
   position:absolute;
   right:5%
+}
+
+li {
+  margin:5px
 }
 
 </style>

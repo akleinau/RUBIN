@@ -3,9 +3,18 @@
   <Card style="height:100%">
 
     <template #title>
-      Available options
+      Treatment
       <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
-      <OverlayPanel ref="op" > Choose which variables you can change. </OverlayPanel>
+      <OverlayPanel ref="op" style="width: 500px"> This view is intended to find the best treatment for the chosen patient.
+        <h3>Interventions</h3>
+        You can add different nodes that you are willing to change, eg the therapy or medication of the patient.
+        <h3>Decision ratings</h3>
+        Then, the network calculates all combinations of these nodes to find the best treatment decisions. The decisions
+        are rated by their 'joined probability', which is the probability that the decision will fulfill all desired
+        outcomes.
+        <br><br>
+        Choose one to get additional information in the 'explanation' view!
+      </OverlayPanel>
     </template>
     <template #content >
       <ScrollPanel style="height:100%">

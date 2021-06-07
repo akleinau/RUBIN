@@ -3,7 +3,10 @@
     <template #title style="position: relative" :class="Evidence">
       Evidence
       <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
-      <OverlayPanel ref="op" > Choose which variables are already set to a value. </OverlayPanel>
+      <OverlayPanel ref="op" style="width:500px">
+        Choose which variables are already set to a value. This will typically be your evidence and what you already
+        know about the patient. Eg symptoms he shows, results of tests and personal information like age and gender.
+      </OverlayPanel>
     </template>
     <template #content>
       <ScrollPanel  style="height:100%">

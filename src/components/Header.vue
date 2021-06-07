@@ -11,12 +11,7 @@
     <Feedback></Feedback>
   </Dialog>
     <Dialog header="Network Description" v-model:visible="showNetworkDescription" style="width: 50%" modal="yes">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-      dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-      kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-      sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-      voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-      sanctus est Lorem ipsum dolor sit amet.
+      Network descriptions can already be added to networks and will be displayed here soon.
   </Dialog>
   <OverlayPanel header="Compare to saved configurations" ref="compareOverlay">
     <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"
