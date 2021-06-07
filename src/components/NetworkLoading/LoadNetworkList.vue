@@ -36,7 +36,7 @@ export default {
       this.$emit("changePage", selectedNet)
     },
     loadNetList: async function () {
-      const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/loadNetList");
+      const gResponse = await fetch("http://localhost:5000/loadNetList");
       const netList = await gResponse.json();
       this.networks = []
       for (const key in netList) {

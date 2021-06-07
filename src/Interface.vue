@@ -166,7 +166,7 @@ export default {
       return correspondingNodes
     },
     loadNodes: async function(){
-      const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getNetwork?network=" + this.network);
+      const gResponse = await fetch("http://localhost:5000/getNetwork?network=" + this.network);
       const network = await gResponse.json();
       let nodes = []
       for (var key in network.states) {
@@ -223,7 +223,7 @@ export default {
           targets.push(this.patient.targets[target].name)
         }
 
-        const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcTargetForGoals", {
+        const gResponse = await fetch("http://localhost:5000/calcTargetForGoals", {
           method: 'POST',
           headers: {
             'content-type': 'application/json'
@@ -257,7 +257,7 @@ export default {
         goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
       }
 
-      const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcOptions", {
+      const gResponse = await fetch("http://localhost:5000/calcOptions", {
         method: 'POST',
         headers: {
           'content-type': 'application/json'
