@@ -43,7 +43,7 @@ export default {
           }
         }
         delete options.headers['Content-Type'];
-        let res = await fetch('http://localhost:5000//uploadNetwork', options);
+        let res = await fetch('https://doctorbn-backend.herokuapp.com/uploadNetwork', options);
         let resData = await res.json()
         if (resData === 'error1') {
           alert("ERROR: The network name already exists, try again");
