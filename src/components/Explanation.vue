@@ -3,7 +3,19 @@
     <template #title>
       Explanation
       <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
-      <OverlayPanel ref="op" > Here different types of explanation and additional information are displayed. </OverlayPanel>
+      <OverlayPanel ref="op" style="width: 500px">
+        Here different types of explanation and additional information are displayed.
+
+          <h3>Relevance</h3> This view displays the importance of all evidences and interventions for the desired
+          outcomes. Changing nodes with a higher relevance will impact the result more, than changing nodes with lesser
+          relevance.
+          <h3>All predictions</h3>This view displays the predictions of the network for all nodes. The network
+          additionally provides information on how sure it is with this prediction.
+          <h3> compact network</h3> This view displays the network in a compact way, showing only the most
+          important nodes.
+          <h3> full network</h3> This view displays the full network with all nodes and edges. Two different
+          views of the network are provided, please send feedback which you like more!
+      </OverlayPanel>
     </template>
     <template #content>
       <ScrollPanel style="height:100%">
@@ -26,14 +38,13 @@
             </div>
           </TabPanel>
           <TabPanel header="full network">
-            <Button label="change layout" class="p-button-secondary" @click="fullNetworkLayout = !fullNetworkLayout"/>
-            <divider />
+            <Dropdown v-model="fullNetworkLayout" :options="layouts" optionLabel="name" class="p-mb-2"/>
             <div v-if="compareConfig==null">
-              <BNvis v-if="fullNetworkLayout" :edges="edges" :nodes="explain.states"/>
+              <BNvis v-if="fullNetworkLayout === 'Force-directed'" :edges="edges" :nodes="explain.states"/>
               <sugiyama v-else :edges="edges" :nodes="explain.states"/>
             </div>
             <div v-else>
-              <BNvisCompare v-if="fullNetworkLayout" :edges="edges" :nodes="explain.states"
+              <BNvisCompare v-if="fullNetworkLayout === 'Force-directed'" :edges="edges" :nodes="explain.states"
                             :nodes2="compareConfig.config.explain.states"
                             :name2="compareConfig.name"/>
               <sugiyamaCompare v-else :edges="edges" :nodes="explain.states" :nodes2="compareConfig.config.explain.states"
@@ -70,7 +81,11 @@ export default {
       onlyGlobal: true,
       compactEdges: null,
       exNodes: null,
-      fullNetworkLayout: true,
+      fullNetworkLayout: {name: 'Sugiyama'},
+      layouts: [
+        {name: 'Sugiyama'},
+        {name: 'Force-directed'}
+      ]
     }
   },
   computed: {
@@ -158,6 +173,10 @@ export default {
 .help {
   position:absolute;
   right:5%
+}
+
+li {
+  margin:5px
 }
 
 </style>

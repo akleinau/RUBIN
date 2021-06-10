@@ -11,7 +11,7 @@
               </div>
           </template>
         </Column>
-        <Column header="joined probability" field="value">
+        <Column header="certainty of desired outcomes" field="value">
           <template #body="slotProps">
             <bar :value=slotProps.data.value color="RebeccaPurple"
                  v-tooltip="slotProps.data.value.toFixed(2)*100 + '%'"></bar>

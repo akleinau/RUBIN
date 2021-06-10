@@ -37,15 +37,20 @@
         <div class="p-text-left">FAQ</div>
       </template>
       <template #content>
-        <Accordion>
+        <Accordion class="p-text-left">
           <AccordionTab header="What is DoctorBN?">
-            Content
+            DoctorBN is a tool to use bayesian networks in clinical decision support. Bayesian networks provide a
+            knowledge base about a specific topic. The clinician can input data
+            about his current patient and what he wants to achieve. DoctorBN will then provide information on what
+            the network thinks would be the best treatment for the patient, to achieve these goals.
           </AccordionTab>
           <AccordionTab header="What are bayesian networks?">
-            Content
+            Bayesian networks are a type of artificial intelligence that is especially equipped to handle probabilities.
+            In clinical decision support, bayesian networks can provide clinicians with a second opinion which intervention
+            would be the best option for their patient.
           </AccordionTab>
           <AccordionTab header="Who is the team behind DoctorBN?">
-            Content
+            DoctorBN is a bachelor project currently in development.
           </AccordionTab>
         </Accordion>
       </template>
