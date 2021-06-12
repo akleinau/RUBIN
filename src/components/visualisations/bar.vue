@@ -14,6 +14,14 @@ export default {
   mounted() {
     this.visualise()
   },
+   watch :{
+    value: function() {
+      this.visualise()
+    },
+    color: function() {
+      this.visualise()
+    }
+  },
   methods: {
     visualise() {
       let width = 300
@@ -33,6 +41,8 @@ export default {
         color = colorScale(this.value)
       }
       else color = this.color
+
+      d3.select(this.$refs.container).selectAll("*").remove()
 
       var svg = d3.select(this.$refs.container)
           .append("svg")
