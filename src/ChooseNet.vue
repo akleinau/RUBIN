@@ -14,8 +14,9 @@
           </template>
           <template #content>
             <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()"></Upload>
-            <br>
-
+            <br> <br>
+          Please be aware that an uploaded network will currently be saved on our server and therefore be accessible
+            to everyone who visits this website.
           </template>
         </Card>
       </div>
