@@ -35,7 +35,7 @@
       </BlockUI>
       <BlockUI class="p-col stretched" :blocked="block.explain">
         <Explanation  :goals="newGoals" :edges="edges" :explain="explain" :loading="explanationLoading"
-                 :compareConfig="selectedConfig" />
+                 :compareConfig="selectedConfig" :selectedOption="options.selectedOption" />
 
       </BlockUI>
   </div>
