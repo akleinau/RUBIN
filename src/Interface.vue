@@ -392,5 +392,9 @@ export default {
 
 }
 
+::v-deep(.p-card-content) {
+padding-top: 0 !important;
+}
+
 
 </style>

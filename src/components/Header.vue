@@ -1,11 +1,16 @@
 <template>
-  <div class="p-d-flex p-jc-between p-ai-center" style="background-color:#f8f9fa">
-      <Menubar :model="items" ref="menu"/>
-  <div id="name"> Network: <b>{{NetworkName}}</b>,
+
+      <Menubar :model="items" ref="menu" class="p-p-0 p-m-0">
+      <template #end>
+      <div class="p-d-flex p-jc-between p-ai-center p-mt-0" style="background-color:#f8f9fa">
+          <div id="name"> Network: <b>{{NetworkName}}</b>,
     Patient: <InputText type="text" v-model="SavePatientName" @change="$emit('setName', SavePatientName)"
     style="background-color:#fefefe"/></div>
   <div id="logo" class="p-mr-2"> <img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
   </div>
+      </template>
+      </Menubar>
+
 
   <Dialog header="Feedback" v-model:visible="showFeedback"  style="width: 50%" modal="yes">
     <Feedback></Feedback>

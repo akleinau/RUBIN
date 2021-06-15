@@ -9,7 +9,7 @@
     <label>Description (optional): <Textarea id = "net-description"></Textarea></label>
     <br><br>
   </form>
-  <Button name = "net-submit" type = "submit" label = "Upload Network" @click="upload()"/>
+  <Button name = "net-submit" type = "submit" label = "Upload Network" @click="upload()" disabled="disabled"/>
 </template>
 
 <script>

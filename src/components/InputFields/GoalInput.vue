@@ -1,6 +1,6 @@
 <template>
  <Card>
-    <template #title style="height:100%" :class="DesiredOutcomes">
+    <template #title style="height:100%" :class="DesiredOutcomes" class="p-m-0 p-p-0">
       Desired Outcomes
       <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
       <OverlayPanel ref="op" style="width:500px">
@@ -8,7 +8,7 @@
         choose the 'Survival' node and set it to 'yes'. The network will consider this in it's calculations.
       </OverlayPanel>
     </template>
-    <template #content style="height:100%">
+    <template #content style="height:100%" class="p-m-0 p-p-0">
       <ScrollPanel  style="height:100%">
         <div v-if="compareConfig == null">
       <NodeInput  title="Desired Outcomes" :nodes="nodes" :selection="selection" :changeable="true" :hideHeader="true"
