@@ -14,11 +14,11 @@
             </div>
           </template>
         </Column>
-       <Column>
-         <template #body="slotProps">
-              <Chip v-if="slotProps.index === 0" label="recommended" />
-         </template>
-       </Column>
+        <Column >
+          <template #body="slotProps">
+            <Icon v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" v-tooltip="'best option'"/>
+          </template>
+        </Column>
         <Column header="certainty of desired outcomes" field="value" style="width:40%">
           <template #body="slotProps">
             <bar :value=slotProps.data.value color="RebeccaPurple"
