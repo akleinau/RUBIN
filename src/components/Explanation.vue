@@ -22,7 +22,8 @@
         <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
         <TabView>
           <TabPanel header="Relevance">
-            <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states" :compareConfig="compareConfig"/>
+            <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states"
+            :compareConfig="compareConfig" :selectedOption="selectedOption"/>
           </TabPanel>
           <TabPanel header="all predictions">
             <NodeList :nodes="explain.states" :compareConfig="compareConfig"/>
@@ -40,11 +41,11 @@
           <TabPanel header="full network">
             <Dropdown v-model="fullNetworkLayout" :options="layouts" optionLabel="name" class="p-mb-2"/>
             <div v-if="compareConfig==null">
-              <BNvis v-if="fullNetworkLayout === 'Force-directed'" :edges="edges" :nodes="explain.states"/>
+              <BNvis v-if="fullNetworkLayout.name === 'Force-directed'" :edges="edges" :nodes="explain.states"/>
               <sugiyama v-else :edges="edges" :nodes="explain.states"/>
             </div>
             <div v-else>
-              <BNvisCompare v-if="fullNetworkLayout === 'Force-directed'" :edges="edges" :nodes="explain.states"
+              <BNvisCompare v-if="fullNetworkLayout.name === 'Force-directed'" :edges="edges" :nodes="explain.states"
                             :nodes2="compareConfig.config.explain.states"
                             :name2="compareConfig.name"/>
               <sugiyamaCompare v-else :edges="edges" :nodes="explain.states" :nodes2="compareConfig.config.explain.states"
@@ -67,7 +68,7 @@ import BNvisCompare from "@/components/visualisations/BNvisCompare";
 
 export default {
   name: "Network",
-  props: ['goals', "edges", "explain", "compareConfig", "loading"],
+  props: ['goals', "edges", "explain", "compareConfig", "loading", "selectedOption"],
   components: {
     Relevance,
     BNvis,

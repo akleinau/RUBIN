@@ -1,17 +1,25 @@
 <template>
- <DataTable :value="results" class="p-datatable-sm"
+ <DataTable :value="results" class="p-datatable-sm" :autoLayout="true"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
                  @rowSelect="update" @rowUnselect="update">
-        <Column header="decision" field="option">
+        <Column>
           <template #body="slotProps">
-            <div>
-            <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
-               {{o}}: {{slotProps.data.option[o]}}
-            </div>
-              </div>
+              {{slotProps.index +1}}.
           </template>
         </Column>
-        <Column header="certainty of desired outcomes" field="value">
+        <Column header="decision" field="option">
+          <template #body="slotProps">
+            <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
+              {{o}}: {{slotProps.data.option[o]}}
+            </div>
+          </template>
+        </Column>
+        <Column >
+          <template #body="slotProps">
+            <Icon v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" v-tooltip="'best option'"/>
+          </template>
+        </Column>
+        <Column header="certainty of desired outcomes" field="value" style="width:40%">
           <template #body="slotProps">
             <bar :value=slotProps.data.value color="RebeccaPurple"
                  v-tooltip="slotProps.data.value.toFixed(2)*100 + '%'"></bar>
@@ -36,7 +44,8 @@ export default {
   },
   data() {
     return {
-      "selected": null
+      "selected": null,
+      optionCount: 0
     }
   },
   props: [

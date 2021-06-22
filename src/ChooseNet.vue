@@ -14,8 +14,8 @@
           </template>
           <template #content>
             <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()"></Upload>
-            <br>
-
+            <br> <br>
+          Uploading networks is disabled in this version.
           </template>
         </Card>
       </div>
@@ -43,6 +43,9 @@
             knowledge base about a specific topic. The clinician can input data
             about his current patient and what he wants to achieve. DoctorBN will then provide information on what
             the network thinks would be the best treatment for the patient, to achieve these goals.
+            <br> <br>
+            DoctorBN is currently in development, feedback is welcome and appreciated!
+            The best way to reach us is through the person that sent you the link to this website.
           </AccordionTab>
           <AccordionTab header="What are bayesian networks?">
             Bayesian networks are a type of artificial intelligence that is especially equipped to handle probabilities.
@@ -50,7 +53,7 @@
             would be the best option for their patient.
           </AccordionTab>
           <AccordionTab header="Who is the team behind DoctorBN?">
-            DoctorBN is a bachelor project currently in development.
+            DoctorBN is the bachelor project of Alex Mo and Anna Kleinau.
           </AccordionTab>
         </Accordion>
       </template>

@@ -83,7 +83,8 @@ export default {
     "relevance",
     "goals",
     "nodes",
-    "compareConfig"
+    "compareConfig",
+    "selectedOption"
   ],
   data() {
     return {
@@ -102,13 +103,13 @@ export default {
       }
     },
     getGoalForSummary() {
-      if (this.goals != null && this.nodes != null) {
+      if (this.goals != null && this.selectedOption != null) {
         let goalnames = []
         Object.keys(this.goals).forEach(goal => {
           goalnames.push(goal + " - " + this.goals[goal] + ": " +
-              (this.nodes.find(d => d.name === goal)).probability.toFixed(2) * 100 + "%")
+              this.selectedOption.goalValues[goal].toFixed(2) * 100 + "%")
         })
-
+        console.log(this.selectedOption)
         return goalnames
       }
     }

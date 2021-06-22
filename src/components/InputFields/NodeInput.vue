@@ -13,7 +13,7 @@
             <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
                       placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)" >
             </Dropdown>
-            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text"
+            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-p-0 p-m-0"
                     @click="deleteNode(slotProps.data)" />
           </template>
           <template v-else #body="slotProps">
@@ -33,7 +33,7 @@
           </div>
         </template>
       </Listbox>
-      <DataTable :value="overlayNodes" :scrollable="true" scrollHeight="500px"
+      <DataTable :value="overlayNodes" :scrollable="true" scrollHeight="500px" class="p-datatable-sm"
                  v-model:filters="filters" filterDisplay="menu" data-key="name">
         <template #header>
             <div class="p-d-flex p-jc-between">
@@ -141,6 +141,9 @@ export default {
   display: None !important
   }
 
-
+::v-deep(.p-dropdown-label){
+    padding-right: 0;
+    margin: 0;
+}
 
 </style>
