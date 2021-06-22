@@ -5,7 +5,8 @@
   <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
           @exportCSV="exportCSV($event)" @saveConfig="saveConfig($event)" @compareTo="compareTo($event)"
           :configurations="configurations" @load="loadConfig($event)" @deleteConfig="deleteConfig($event)"
-          :NetworkName="network" :PatientName="patient.name" @setName="patient.name = $event"/>
+          :NetworkName="network" :PatientName="patient.name" @setName="patient.name = $event"
+          :description="description"/>
 
   <OverlayPanel ref="panel">
     <load-patient @loaded="loadPatient"></load-patient>
@@ -105,7 +106,9 @@ export default {
         evidence: true,
         options: true,
         explain: true
-      }
+      },
+
+      description: "no description"
     }
   },
   methods: {
@@ -184,6 +187,7 @@ export default {
       })
       this.edges = edges
 
+      this.description = network.description
     },
     reset: async function() {
       this.patient.targets= []

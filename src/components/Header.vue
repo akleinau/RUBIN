@@ -16,7 +16,7 @@
     <Feedback></Feedback>
   </Dialog>
     <Dialog header="Network Description" v-model:visible="showNetworkDescription" style="width: 50%" modal="yes">
-      Network descriptions can already be added to networks and will be displayed here soon.
+      {{description}}
   </Dialog>
   <OverlayPanel header="Compare to saved configurations" ref="compareOverlay">
     <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"
@@ -43,7 +43,7 @@ export default {
     Compare
   },
   props: [
-      "configurations", "NetworkName", "PatientName"
+      "configurations", "NetworkName", "PatientName", "description"
   ],
   data() {
     return {
