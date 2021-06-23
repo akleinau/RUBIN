@@ -1,44 +1,44 @@
 <template>
 
-  <tutorial @setBlock="block = $event" />
+  <tutorial @setBlock="block = $event"/>
 
   <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
           @exportCSV="exportCSV($event)" @saveConfig="saveConfig($event)" @compareTo="compareTo($event)"
           :configurations="configurations" @load="loadConfig($event)" @deleteConfig="deleteConfig($event)"
           :NetworkName="network" :PatientName="patient.name" @setName="patient.name = $event"
-          :description="description"/>
+          :description="description" @sendFeedback="sendFeedback($event)"/>
 
   <OverlayPanel ref="panel">
     <load-patient @loaded="loadPatient"></load-patient>
   </OverlayPanel>
 
   <div class=" p-grid stretched " style=" position:relative">
-    <div class="p-col-3 p-ai-start p-flex-column stretched" >
-           <BlockUI class="p-pb-2 p-d-flex" style="height: 30%;" :blocked="block.goals" ref="goal">
-        <GoalInput  :nodes="patient.nodes" :selection="patient.goals" :compareConfig="selectedConfig"
-                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" />
+    <div class="p-col-3 p-ai-start p-flex-column stretched">
+      <BlockUI class="p-pb-2 p-d-flex" style="height: 30%;" :blocked="block.goals" ref="goal">
+        <GoalInput :nodes="patient.nodes" :selection="patient.goals" :compareConfig="selectedConfig"
+                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)"/>
       </BlockUI>
 
-      <BlockUI  style="height:70%" :blocked="block.evidence">
-        <EvidenceInput  :nodes="patient.nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
-                   @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)" />
-    </BlockUI>
+      <BlockUI style="height:70%" :blocked="block.evidence">
+        <EvidenceInput :nodes="patient.nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
+                       @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
+      </BlockUI>
 
 
     </div>
     <BlockUI class="p-col stretched" :blocked="block.options">
-        <TherapyOptions :results="options.options" :goals="newGoals"
-                        :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
-                  :nodes="patient.nodes" :targets="patient.targets" :loading="optionsLoading"
-                        :compareConfig="selectedConfig"
-                 @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
+      <TherapyOptions :results="options.options" :goals="newGoals"
+                      :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
+                      :nodes="patient.nodes" :targets="patient.targets" :loading="optionsLoading"
+                      :compareConfig="selectedConfig"
+                      @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
 
-      </BlockUI>
-      <BlockUI class="p-col stretched" :blocked="block.explain">
-        <Explanation  :goals="newGoals" :edges="edges" :explain="explain" :loading="explanationLoading"
-                 :compareConfig="selectedConfig" :selectedOption="options.selectedOption" />
+    </BlockUI>
+    <BlockUI class="p-col stretched" :blocked="block.explain">
+      <Explanation :goals="newGoals" :edges="edges" :explain="explain" :loading="explanationLoading"
+                   :compareConfig="selectedConfig" :selectedOption="options.selectedOption"/>
 
-      </BlockUI>
+    </BlockUI>
   </div>
 </template>
 
@@ -65,7 +65,7 @@ export default {
     tutorial
   },
   props: [
-      "network"
+    "network"
   ],
   data() {
     return {
@@ -143,7 +143,7 @@ export default {
       console.log(event)
       this.$refs.panel.toggle(event)
     },
-    loadPatient: async function(patientData, name) {
+    loadPatient: async function (patientData, name) {
       await this.reset()
       let evidenceNodes = this.getCorrespondingNode(patientData.evidence)
       let targetNodes = this.getCorrespondingNode(patientData.targets)
@@ -168,7 +168,7 @@ export default {
       })
       return correspondingNodes
     },
-    loadNodes: async function(){
+    loadNodes: async function () {
       const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getNetwork?network=" + this.network);
       const network = await gResponse.json();
       let nodes = []
@@ -189,22 +189,22 @@ export default {
 
       this.description = network.description
     },
-    reset: async function() {
-      this.patient.targets= []
-      this.patient.evidence= []
-      this.patient.goals= []
-      this.patient.nodes= []
+    reset: async function () {
+      this.patient.targets = []
+      this.patient.evidence = []
+      this.patient.goals = []
+      this.patient.nodes = []
       this.patient.name = ""
 
-      this.options.options= null
-      this.options.selectedOption= null
+      this.options.options = null
+      this.options.selectedOption = null
 
-      this.edges= null
-      this.newGoals= null
+      this.edges = null
+      this.newGoals = null
 
-      this.explain.relevance= null
-      this.explain.states= null
-      this.explain.explanation= null
+      this.explain.relevance = null
+      this.explain.states = null
+      this.explain.explanation = null
 
       await this.loadNodes()
     },
@@ -325,8 +325,7 @@ export default {
         this.calculateOption()
       }
     },
-    exportCSV(name) {
-      this.patient.name = name
+    createCSVcontent() {
       var csv = "Type; Variable; Option"
       this.patient.evidence.forEach(ev => {
         csv += "\nevidence; " + ev.name + "; " + ev.selected.name
@@ -337,12 +336,33 @@ export default {
       this.patient.goals.forEach(ev => {
         csv += "\ngoal; " + ev.name + "; " + ev.selected.name
       })
+      return csv
+    },
+    exportCSV(name) {
+      this.patient.name = name
+      const csv = this.createCSVcontent();
 
       const anchor = document.createElement('a');
       anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
       anchor.target = '_blank';
       anchor.download = name + '.csv';
       anchor.click();
+    },
+    async sendFeedback(description) {
+      const csv = this.createCSVcontent();
+
+      const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/sendFeedback", {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          description: description,
+          csv: csv
+        })
+      });
+      const response = await gResponse;
+      console.log(response)
     }
   },
   created: async function () {
@@ -371,8 +391,8 @@ export default {
 }
 
 .stretched {
-        height: 100%;
-    }
+  height: 100%;
+}
 
 ::v-deep(.p-card-content) {
   height: 90% !important;
@@ -388,16 +408,16 @@ export default {
 }
 
 ::v-deep(.p-scrollpanel) {
-      .p-scrollpanel-bar {
-        background-color: #b3b3b3;
-        opacity: 1;
-        transition: background-color .2s;
-      }
+  .p-scrollpanel-bar {
+    background-color: #b3b3b3;
+    opacity: 1;
+    transition: background-color .2s;
+  }
 
 }
 
 ::v-deep(.p-card-content) {
-padding-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 

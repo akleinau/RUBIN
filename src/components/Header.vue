@@ -13,7 +13,7 @@
 
 
   <Dialog header="Feedback" v-model:visible="showFeedback"  style="width: 50%" modal="yes">
-    <Feedback></Feedback>
+    <Feedback @sendFeedback="sendFeedback($event)"></Feedback>
   </Dialog>
     <Dialog header="Network Description" v-model:visible="showNetworkDescription" style="width: 50%" modal="yes">
       {{description}}
@@ -150,6 +150,9 @@ export default {
     saveConfig(name) {
       this.$emit('saveConfig', name)
       this.$refs.compareOverlay.toggle()
+    },
+    sendFeedback(description) {
+      this.$emit("sendFeedback", description)
     }
   }
 }
