@@ -23,7 +23,7 @@ export default {
   methods: {
     sendFeedback() {
 
-      this.$emit("sendFeedback", this.description)
+      this.$emit("sendFeedback", this.description, this.sendConfig)
 
     }
   }

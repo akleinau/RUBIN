@@ -153,6 +153,7 @@ export default {
     },
     sendFeedback(description) {
       this.$emit("sendFeedback", description)
+      this.showFeedback = false
     }
   }
 }

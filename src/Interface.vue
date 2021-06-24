@@ -348,8 +348,11 @@ export default {
       anchor.download = name + '.csv';
       anchor.click();
     },
-    async sendFeedback(description) {
-      const csv = this.createCSVcontent();
+    async sendFeedback(description, addConfig) {
+      let csv = "NONE"
+      if (addConfig) {
+        csv = this.createCSVcontent();
+      }
 
       const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/sendFeedback", {
         method: 'POST',
