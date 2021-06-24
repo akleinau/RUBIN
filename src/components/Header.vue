@@ -1,31 +1,33 @@
 <template>
 
-      <Menubar :model="items" ref="menu" class="p-p-0 p-m-0">
-      <template #end>
+  <Menubar :model="items" ref="menu" class="p-p-0 p-m-0" style="position:relative; z-index:10">
+    <template #end>
       <div class="p-d-flex p-jc-between p-ai-center p-mt-0" style="background-color:#f8f9fa">
-          <div id="name"> Network: <b>{{NetworkName}}</b>,
-    Patient: <InputText type="text" v-model="SavePatientName" @change="$emit('setName', SavePatientName)"
-    style="background-color:#fefefe"/></div>
-  <div id="logo" class="p-mr-2"> <img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
-  </div>
-      </template>
-      </Menubar>
+        <div id="name"> Network: <b>{{ NetworkName }}</b>,
+          Patient:
+          <InputText type="text" v-model="SavePatientName" @change="$emit('setName', SavePatientName)"
+                     style="background-color:#fefefe"/>
+        </div>
+        <div id="logo" class="p-mr-2"><img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
+      </div>
+    </template>
+  </Menubar>
 
 
-  <Dialog header="Feedback" v-model:visible="showFeedback"  style="width: 50%" modal="yes">
+  <Dialog header="Feedback" v-model:visible="showFeedback" style="width: 50%" modal="yes">
     <Feedback @sendFeedback="sendFeedback($event)"></Feedback>
   </Dialog>
-    <Dialog header="Network Description" v-model:visible="showNetworkDescription" style="width: 50%" modal="yes">
-      {{description}}
+  <Dialog header="Network Description" v-model:visible="showNetworkDescription" style="width: 50%" modal="yes">
+    {{ description }}
   </Dialog>
   <OverlayPanel header="Compare to saved configurations" ref="compareOverlay">
     <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"
-    @load="load($event)" @deleteConfig="deleteConfig($event)"/>
+             @load="load($event)" @deleteConfig="deleteConfig($event)"/>
   </OverlayPanel>
 
   <OverlayPanel ref="exportOverlay">
     <label> name: </label>
-    <InputText type="text" v-model="SavePatientName" ></InputText>
+    <InputText type="text" v-model="SavePatientName"></InputText>
     <Button label="save" @click="exportCSV()"/>
   </OverlayPanel>
 
@@ -43,7 +45,7 @@ export default {
     Compare
   },
   props: [
-      "configurations", "NetworkName", "PatientName", "description"
+    "configurations", "NetworkName", "PatientName", "description"
   ],
   data() {
     return {
@@ -53,10 +55,28 @@ export default {
       configLabel: "saved configurations",
       items: [
         {
-          label: 'Reset',
-          command: () => {
-            this.reset()
-          }
+          label: 'Settings',
+          items: [
+            {
+              label: 'Reset',
+              command: () => {
+                this.reset()
+              }
+            },
+            {
+              label: 'change language',
+              items: [
+                {
+                  label: 'english'
+                },
+                {
+                  label: 'dutch'
+                },
+                {
+                  label: 'german'
+                }
+              ]
+            }]
         },
         {
           label: 'Load Patient',
@@ -99,7 +119,7 @@ export default {
     }
   },
   watch: {
-    PatientName: function() {
+    PatientName: function () {
       this.SavePatientName = this.PatientName
     }
   },
@@ -123,7 +143,7 @@ export default {
     compareTo(name) {
       let configItem = this.items.find(a => a.key === "configItem")
       configItem.label = "comparing to " + name
-      configItem.icon="pi pi-fw pi-times"
+      configItem.icon = "pi pi-fw pi-times"
       configItem.command = () => {
         this.stopComparing()
       }
@@ -133,10 +153,10 @@ export default {
     stopComparing() {
       let configItem = this.items.find(a => a.key === "configItem")
       configItem.label = "saved configurations"
-      configItem.icon=""
+      configItem.icon = ""
       configItem.command = (event) => {
-            this.$refs.compareOverlay.toggle(event.originalEvent)
-          }
+        this.$refs.compareOverlay.toggle(event.originalEvent)
+      }
       this.$emit("compareTo", null)
     },
     load(name) {
@@ -160,7 +180,6 @@ export default {
 </script>
 
 <style scoped>
-
 
 
 #name {
