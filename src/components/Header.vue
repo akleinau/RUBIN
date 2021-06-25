@@ -3,8 +3,8 @@
   <Menubar :model="items" ref="menu" class="p-p-0 p-m-0" style="position:relative; z-index:10">
     <template #end>
       <div class="p-d-flex p-jc-between p-ai-center p-mt-0" style="background-color:#f8f9fa">
-        <div id="name"> Network: <b>{{ NetworkName }}</b>,
-          Patient:
+        <div id="name"> {{ $t('Network') }}: <b>{{ NetworkName }}</b>,
+          {{ $t('Patient') }}:
           <InputText type="text" v-model="SavePatientName" @change="$emit('setName', SavePatientName)"
                      style="background-color:#fefefe"/>
         </div>
@@ -55,16 +55,16 @@ export default {
       configLabel: "saved configurations",
       items: [
         {
-          label: 'Settings',
+          label: this.$t('Settings'),
           items: [
             {
-              label: 'Reset',
+              label: this.$t('Reset'),
               command: () => {
                 this.reset()
               }
             },
             {
-              label: 'change language',
+              label: this.$t('ChangeLanguage'),
               items: [
                 {
                   label: 'english'
@@ -79,38 +79,38 @@ export default {
             }]
         },
         {
-          label: 'Load Patient',
+          label: this.$t('LoadPatient'),
           command: (event) => {
             this.loadPatient(event.originalEvent)
           }
         },
         {
-          label: 'Save Patient',
+          label: this.$t('SavePatient'),
           command: (event) => {
             this.exportPatientOverlay(event.originalEvent)
           }
         },
         {
-          label: 'Send Feedback',
+          label: this.$t('SendFeedback'),
           command: () => {
             this.showFeedback = true
           }
         },
         {
-          label: 'Network Description',
+          label: this.$t('NetworkDescription'),
           command: () => {
             this.showNetworkDescription = true
           }
         },
         {
           key: "configItem",
-          label: "saved configurations",
+          label: this.$t("savedConfigurations"),
           command: (event) => {
             this.$refs.compareOverlay.toggle(event.originalEvent)
           }
         },
         {
-          label: 'back to network selection',
+          label: this.$t("backToNetwork"),
           command: () => {
             this.changePage()
           }

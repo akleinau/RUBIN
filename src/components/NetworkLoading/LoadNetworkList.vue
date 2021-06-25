@@ -4,7 +4,7 @@
              emptyFilterMessage="No networks found" :options="networks" option-label="name"
              placeholder="Select a network" required/>
     <br>
-    <Button type="submit">Open network</Button>
+    <Button type="submit">{{$t('openNetwork')}}</Button>
   </form>
 </template>
 

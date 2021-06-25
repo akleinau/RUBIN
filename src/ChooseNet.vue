@@ -10,7 +10,7 @@
       <div class="p-col stretched" >
         <Card class=" stretched" >
           <template #title>
-            Upload a new network
+             {{ $t('uploadNetwork') }}
           </template>
           <template #content>
             <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()"></Upload>
@@ -22,7 +22,7 @@
       <div class="p-col  stretched" >
         <Card class=" stretched" >
           <template #title>
-            Select a network
+            {{  $t('selectNetwork') }}
           </template>
           <template #content>
             <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage"></Networklist>

@@ -33,9 +33,22 @@ import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css';
 
 import Button from 'primevue/button';
+import { createI18n } from 'vue-i18n'
+let enMessages = require('./languages/english.json');
 
-createApp(App)
-      .use(PrimeVue)
+const i18n = createI18n({
+  legacy: false,
+  locale: 'en',
+  globalInjection: true,
+  messages: {
+    en: enMessages
+}
+})
+
+let vueApp = createApp(App)
+
+
+vueApp.use(PrimeVue)
     .component('Dialog', Dialog)
     .component('Button', Button)
     .component('Menubar', Menubar)
@@ -63,5 +76,7 @@ createApp(App)
     .component('ProgressBar', ProgressBar)
     .component('BlockUI', BlockUI)
     .directive('tooltip', Tooltip)
-      .mount('#app')
+
+vueApp.use(i18n)
+vueApp.mount('#app')
 

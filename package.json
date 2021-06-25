@@ -23,6 +23,7 @@
     "primevue": "^3.4.0",
     "sass-loader": "^10.2.0",
     "vue": "^3.0.0",
+    "vue-i18n": "^9.1.6",
     "vue-router": "^4.0.5",
     "vue-select": "^3.11.2"
   },
@@ -32,7 +33,7 @@
     "@vue/cli-service": "~4.5.13",
     "@vue/compiler-sfc": "^3.0.0",
     "eslint-plugin-vue": "^7.0.0",
-    "node-sass": "^6.0.0"
+    "node-sass": "^6.0.1"
   },
   "eslintConfig": {
     "root": true,

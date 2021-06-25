@@ -1,20 +1,14 @@
 <template>
   <Card>
     <template #title>
-      Explanation
+      {{ $t("Explanation") }}
       <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
       <OverlayPanel ref="op" style="width: 500px">
-        Here different types of explanation and additional information are displayed.
-
-          <h3>Relevance</h3> This view displays the importance of all evidences and interventions for the desired
-          outcomes. Changing nodes with a higher relevance will impact the result more, than changing nodes with lesser
-          relevance.
-          <h3>All predictions</h3>This view displays the predictions of the network for all nodes. The network
-          additionally provides information on how sure it is with this prediction.
-          <h3> compact network</h3> This view displays the network in a compact way, showing only the most
-          important nodes.
-          <h3> full network</h3> This view displays the full network with all nodes and edges. Two different
-          views of the network are provided, please send feedback which you like more!
+        {{ $t("ExplanationHelp") }}
+          <h3>{{ $t("Relevance") }}</h3> {{ $t("RelevanceHelp") }}
+          <h3>{{ $t("AllPredictions") }}</h3> {{ $t("AllPredictionsHelp") }}
+          <h3> {{ $t("CompactNetwork") }}</h3> {{ $t("CompactNetworkHelp") }}
+          <h3> {{ $t("FullNetwork") }}</h3> {{ $t("FullNetworkHelp") }}
       </OverlayPanel>
     </template>
     <template #content>
