@@ -7,7 +7,7 @@
               {{slotProps.index +1}}.
           </template>
         </Column>
-        <Column header="decision" field="option">
+        <Column :header="$t('Decision')" field="option">
           <template #body="slotProps">
             <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
               {{o}}: {{slotProps.data.option[o]}}
@@ -16,10 +16,10 @@
         </Column>
         <Column >
           <template #body="slotProps">
-            <Icon v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" v-tooltip="'best option'"/>
+            <Icon v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" :v-tooltip="$t('BestOption')"/>
           </template>
         </Column>
-        <Column header="certainty of desired outcomes" field="value" style="width:40%">
+        <Column :header="$t('OutcomeCertainty')" field="value" style="width:40%">
           <template #body="slotProps">
             <bar :value=slotProps.data.value color="RebeccaPurple"
                  v-tooltip="slotProps.data.value.toFixed(2)*100 + '%'"></bar>

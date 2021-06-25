@@ -1,8 +1,8 @@
 <template>
   <div class="p-d-flex p-dir-col">
     <DataTable class="p-col p-datatable-sm" :value="relevance">
-      <Column header="option" field="node_name"/>
-      <Column header="overall relevance" field="overall_relevance">
+      <Column :header="$t('Node')" field="node_name"/>
+      <Column :header="$t('Relevance')" field="overall_relevance">
         <template #body="slotProps">
           <bar :value="slotProps.data.overall_relevance" color="#004d80"
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
@@ -18,8 +18,8 @@
     <dif class="p-col" v-else>
       <h3> {{ compareConfig.name }}:</h3>
       <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance" >
-        <Column header="option" field="node_name"/>
-        <Column header="overall relevance" field="overall_relevance">
+        <Column :header="$t('Node')" field="node_name"/>
+        <Column :header="$t('Relevance')" field="overall_relevance">
           <template #body="slotProps">
             <bar :value="slotProps.data.overall_relevance" color="#004d80"
                  v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
@@ -29,11 +29,11 @@
     </dif>
   </div>
 
-  <Dialog header="local relevance" v-model:visible="showLocal" style="width:90%; height:90%; background-color:white"
+  <Dialog :header="$t('localRelevance')" v-model:visible="showLocal" style="width:90%; height:90%; background-color:white"
     modal="true">
     <DataTable :value="relevance" class="p-datatable-sm">
-      <Column header="option" field="node_name"/>
-      <Column header="overall relevance" field="overall_relevance">
+      <Column :header="$t('Node')" field="node_name"/>
+      <Column :header="$t('Relevance')" field="overall_relevance">
         <template #body="slotProps">
           <bar :value="slotProps.data.overall_relevance" color="#004d80"
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
@@ -49,8 +49,8 @@
     <h3 v-if="compareConfig"> {{ compareConfig.name }}:</h3>
     <DataTable :value="compareConfig.config.explain.relevance"
                v-if="compareConfig" class="p-datatable-sm">
-      <Column header="option" field="node_name"/>
-      <Column header="overall relevance" field="overall_relevance">
+      <Column :header="$t('Node')" field="node_name"/>
+      <Column :header="$t('Relevance')" field="overall_relevance">
         <template #body="slotProps">
           <bar :value="slotProps.data.overall_relevance" color="#004d80"
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
@@ -65,7 +65,7 @@
     </DataTable>
   </Dialog>
 
-  <Button label="show more" @click="showLocal = true" ></Button>
+  <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>
 
 </template>
 

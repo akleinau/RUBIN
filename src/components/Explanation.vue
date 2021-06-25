@@ -15,14 +15,14 @@
       <ScrollPanel style="height:100%">
         <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
         <TabView>
-          <TabPanel header="Relevance">
+          <TabPanel :header="$t('Relevance')">
             <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states"
             :compareConfig="compareConfig" :selectedOption="selectedOption"/>
           </TabPanel>
-          <TabPanel header="all predictions">
+          <TabPanel :header="$t('AllPredictions')">
             <NodeList :nodes="explain.states" :compareConfig="compareConfig"/>
           </TabPanel>
-          <TabPanel header="compact network">
+          <TabPanel :header="$t('CompactNetwork')">
             <div v-if="compareConfig==null">
               <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
             </div>
@@ -32,7 +32,7 @@
                                :name2="compareConfig.name"/>
             </div>
           </TabPanel>
-          <TabPanel header="full network">
+          <TabPanel :header="$t('FullNetwork')">
             <Dropdown v-model="fullNetworkLayout" :options="layouts" optionLabel="name" class="p-mb-2"/>
             <div v-if="compareConfig==null">
               <BNvis v-if="fullNetworkLayout.name === 'Force-directed'" :edges="edges" :nodes="explain.states"/>
