@@ -2,16 +2,16 @@
   <Menu :model="menu"  :scrollable="true"
            scrollHeight="300px" selectionMode="single"/>
   <br>
-    Save new configuration:
+  {{ $t("SaveConfig") }}:
     <form @submit.prevent="saveConfig">
       <InputText type="text" v-model="patientName" required />
-      <Button  label="Save configuration" @click="saveConfig()"></Button>
+      <Button  :label="$t('save')" @click="saveConfig()"></Button>
     </form>
 
    <OverlayPanel ref="loadOverlay">
-    <Button class="p-mx-1 p-button-secondary" label="compare" @click="compare()"/>
-    <Button class="p-mx-1 p-button-secondary" label="load" @click="load()"/>
-     <Button class="p-mx-1 p-button-secondary" label="delete" @click="deleteConfig()"/>
+    <Button class="p-mx-1 p-button-secondary" :label="$t('compare')" @click="compare()"/>
+    <Button class="p-mx-1 p-button-secondary" :label="$t('load')" @click="load()"/>
+     <Button class="p-mx-1 p-button-secondary" :label="$t('delete')" @click="deleteConfig()"/>
   </OverlayPanel>
 
 </template>
@@ -55,7 +55,7 @@ export default {
         this.$emit("saveConfig", this.patientName)
       }
       else {
-        alert("ERROR: The name already exists, try again");
+        alert(this.$t('ErrName'));
       }
 
     },

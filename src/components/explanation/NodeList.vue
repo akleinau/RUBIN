@@ -71,10 +71,10 @@ name: "NodeList",
         return colorScale(probability)
     },
     getLabel(probability) {
-      if (probability === 1) return "given"
+      if (probability === 1) return this.$t("given")
       const labelScale = d3.scaleQuantize()
             .domain([0, 1])
-             .range(["not sure", "less sure", "very sure"]);
+             .range([this.$t("notSure"), this.$t("lessSure"), this.$t("verySure")]);
         return labelScale(probability)
     }
   }

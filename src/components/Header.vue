@@ -14,21 +14,21 @@
   </Menubar>
 
 
-  <Dialog header="Feedback" v-model:visible="showFeedback" style="width: 50%" modal="yes">
+  <Dialog :header="$t('Feedback')" v-model:visible="showFeedback" style="width: 50%" modal="yes">
     <Feedback @sendFeedback="sendFeedback($event)"></Feedback>
   </Dialog>
-  <Dialog header="Network Description" v-model:visible="showNetworkDescription" style="width: 50%" modal="yes">
+  <Dialog :header="$t('NetworkDescription')" v-model:visible="showNetworkDescription" style="width: 50%" modal="yes">
     {{ description }}
   </Dialog>
-  <OverlayPanel header="Compare to saved configurations" ref="compareOverlay">
+  <OverlayPanel ref="compareOverlay">
     <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"
              @load="load($event)" @deleteConfig="deleteConfig($event)"/>
   </OverlayPanel>
 
   <OverlayPanel ref="exportOverlay">
-    <label> name: </label>
+    <label> {{ $t("name") }}: </label>
     <InputText type="text" v-model="SavePatientName"></InputText>
-    <Button label="save" @click="exportCSV()"/>
+    <Button :label="$t('save')" @click="exportCSV()"/>
   </OverlayPanel>
 
 </template>
@@ -142,7 +142,7 @@ export default {
     },
     compareTo(name) {
       let configItem = this.items.find(a => a.key === "configItem")
-      configItem.label = "comparing to " + name
+      configItem.label = this.$t("ComparingTo") + name
       configItem.icon = "pi pi-fw pi-times"
       configItem.command = () => {
         this.stopComparing()
@@ -152,7 +152,7 @@ export default {
     },
     stopComparing() {
       let configItem = this.items.find(a => a.key === "configItem")
-      configItem.label = "saved configurations"
+      configItem.label = this.$t("savedConfigurations")
       configItem.icon = ""
       configItem.command = (event) => {
         this.$refs.compareOverlay.toggle(event.originalEvent)

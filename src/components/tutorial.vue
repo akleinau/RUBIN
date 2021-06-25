@@ -1,40 +1,36 @@
 <template>
-  <Dialog v-if="i === 0" v-model:visible="display" position="bottom" header="Desired Outcomes" :closable="false">
-    A bayesian network consists of different nodes. Choose here which nodes you want to have a specific value.
+  <Dialog v-if="i === 0" v-model:visible="display" position="bottom" :header="$t('DesiredOutcomes')" :closable="false">
+    {{ $t("Tutorial1a")}}
     <br>
-    Eg: set 'survival' to yes, 'therapy' to no, ...
+    {{ $t("Tutorial1b")}}
     <template #footer>
-      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" label="close tutorial" @click="close"></Button>
-      <Button class="p-mx-2" label="prev" @click="prev"></Button>
-      <Button class="p-mx-2" label="next" @click="next"></Button>
+      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
+      <Button class="p-mx-2" :label="$t('next')" @click="next"></Button>
     </template>
   </Dialog>
-  <Dialog v-if="i === 1" v-model:visible="display" position="bottom" header="Evidence" :closable="false">
-    Choose which variables are already set to a value. This will typically be your evidence and what you already
-    know about the patient.
+  <Dialog v-if="i === 1" v-model:visible="display" position="bottom" :header="$t('Evidence')" :closable="false">
+    {{ $t("Tutorial2")}}
     <template #footer>
-      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" label="close tutorial" @click="close"></Button>
-      <Button class="p-mx-2" label="prev" @click="prev"></Button>
-      <Button class="p-mx-2" label="next" @click="next"></Button>
+      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
+      <Button class="p-mx-2" :label="$t('prev')" @click="prev"></Button>
+      <Button class="p-mx-2" :label="$t('next')" @click="next"></Button>
     </template>
   </Dialog>
-  <Dialog v-if="i === 2" v-model:visible="display" position="bottom" header="options" :closable="false">
-    Choose which variables you can change. <br>
-    Eg: Therapy, medication, smoking, ... <br> <br>
-    The network will then calculate the best combination of these interventions to achieve your desired outcomes.
-    Select one to get additional information.
+  <Dialog v-if="i === 2" v-model:visible="display" position="bottom" :header="$t('Treatment')" :closable="false">
+    {{ $t("Tutorial3a")}}
+     <br> <br>
+    {{ $t("Tutorial3b")}}
     <template #footer>
-      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" label="close tutorial" @click="close"></Button>
-      <Button class="p-mx-2" label="prev" @click="prev"></Button>
-      <Button class="p-mx-2" label="next" @click="next"></Button>
+      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
+      <Button class="p-mx-2" :label="$t('prev')" @click="prev"></Button>
+      <Button class="p-mx-2" :label="$t('next')" @click="next"></Button>
     </template>
   </Dialog>
-  <Dialog v-if="i === 3" v-model:visible="display" position="bottom" header="explanation" :closable="false">
-    Here different types of explanation and additional information for your chosen option are displayed.
+  <Dialog v-if="i === 3" v-model:visible="display" position="bottom" :header="$t('Explanation')" :closable="false">
+    {{ $t("Tutorial4")}}
     <template #footer>
-      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" label="close tutorial" @click="close"></Button>
-      <Button class="p-mx-2" label="prev" @click="prev"></Button>
-      <Button class="p-mx-2" label="finish" @click="next"></Button>
+      <Button class="p-mx-2" :label="$t('prev')" @click="prev"></Button>
+      <Button class="p-mx-2" :label="$t('finish')" @click="next"></Button>
     </template>
   </Dialog>
 
