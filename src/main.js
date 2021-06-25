@@ -35,13 +35,16 @@ import 'primeflex/primeflex.css';
 import Button from 'primevue/button';
 import { createI18n } from 'vue-i18n'
 let enMessages = require('./languages/english.json');
+let deMessages = require('./languages/german.json');
 
 const i18n = createI18n({
   legacy: false,
-  locale: 'en',
+  locale: 'de',
+  fallbackLocale: 'en',
   globalInjection: true,
   messages: {
-    en: enMessages
+    en: enMessages,
+    de: deMessages
 }
 })
 
