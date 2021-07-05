@@ -21,9 +21,9 @@
   </div>
 
 
-    <Dialog header="Add Interventions" v-model:visible="overlay" style="width: 50%" modal="yes">
-      <Button class="p-mb-1" label="Add Interventions" style="width: 100%" @click="addTargetsFromOverlay()"/>
-      <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
+    <Dialog header="  " v-model:visible="overlay" style="width: 50%" modal="yes">
+      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%" @click="addTargetsFromOverlay()"/>
+      <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
         <template #option="slotProps">
           <div>
             {{ slotProps.option.name }}

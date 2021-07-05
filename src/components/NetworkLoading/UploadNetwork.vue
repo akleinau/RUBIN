@@ -1,15 +1,15 @@
 <template>
   <!-- Form to upload a network file -->
   <form @submit.prevent="upload" id = "upload-form" enctype="multipart/form-data">
-    <label>Network name: <InputText id = "net-name" type = "text" required/> </label>
+    <label>{{$t('NetworkName')}}: <InputText id = "net-name" type = "text" required/> </label>
     <br><br>
     <FileUpload name = "net-upload" url="./upload" accept=".bif" :customUpload="true"
                 auto="true" :showUploadButton="false" @uploader="file = $event.files" required/>
     <br>
-    <label>Description (optional): <Textarea id = "net-description"></Textarea></label>
+    <label>{{$t('OptDescription')}}: <Textarea id = "net-description"></Textarea></label>
     <br><br>
   </form>
-  <Button name = "net-submit" type = "submit" label = "Upload Network" @click="upload()" disabled="disabled"/>
+  <Button name = "net-submit" type = "submit" :label = "$t('UploadNet')" @click="upload()" disabled="disabled"/>
 </template>
 
 <script>

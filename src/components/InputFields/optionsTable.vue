@@ -16,7 +16,7 @@
         </Column>
         <Column >
           <template #body="slotProps">
-            <Icon v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" :v-tooltip="$t('BestOption')"/>
+            <Icon v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
           </template>
         </Column>
         <Column :header="$t('OutcomeCertainty')" field="value" style="width:40%">

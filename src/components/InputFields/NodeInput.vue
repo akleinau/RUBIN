@@ -22,9 +22,9 @@
         </Column>
       </DataTable>
 
-    <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%" modal="yes" v-if="changeable">
-      <Button class="p-mb-1" :label="'Add ' + title" style="width: 100%" @click="addNodesFromOverlay()"/>
-      <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
+    <Dialog header="  " v-model:visible="overlay" style="width: 50%" modal="yes" v-if="changeable">
+      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%" @click="addNodesFromOverlay()"/>
+      <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
         <template #option="slotProps">
           <div>
             {{ slotProps.option.name }}: {{ slotProps.option.selected.name }}
@@ -43,7 +43,7 @@
                 </span>
             </div>
         </template>
-        <Column field="name" :header="title"></Column>
+        <Column field="name" :header="$t('Node')"></Column>
         <Column field="options">
           <template #body="slotProps">
             <Button class="p-m-2" v-for="option in slotProps.data.options" :key="option"

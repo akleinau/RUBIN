@@ -36,7 +36,7 @@
       </div>
         </ScrollPanel>
 
-    <Dialog header="local relevance" v-model:visible="showLocal" style="width:90%; height:90%; background-color:white"
+    <Dialog :header="$t('localRelevance')" v-model:visible="showLocal" style="width:90%; height:90%; background-color:white"
     modal="true">
       <optionsTable :results="results" :goals="goals" showLocal="true"
                       @update="update($event)" :selectedOption="selectedOption"></optionsTable>

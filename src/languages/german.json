@@ -1,7 +1,7 @@
 {
   "uploadNetwork": "Lade ein neues Netzwerk hoch",
   "selectNetwork": "Wähle ein Netzwerk aus",
-  "openNetwork": "Öffne das Netzwerk",
+  "openNetwork": "Netzwerk öffnen",
   "Network": "Netzwerk",
   "LoadPatient": "Patient laden",
   "SavePatient": "Patient speichern",
@@ -67,6 +67,9 @@
   "FeedbackInfo": "Wenn das Netwerk einen Fall falsch klassifiziert hat, sende ihn bitte als Feedback.",
   "IncludeConfig": "Sende den Netzwerkzustand mit",
   "send": "senden",
-  "name": "Name"
+  "name": "Name",
+  "NetworkName": "Name des Netzwerks",
+  "OptDescription": "Beschreibung (optional)",
+  "UploadNet": "Netzwerk hochladen"
 
 }
