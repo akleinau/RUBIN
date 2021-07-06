@@ -1,6 +1,7 @@
 <template>
   <div class="p-d-flex p-dir-col">
-    <DataTable class="p-col p-datatable-sm" :value="relevance">
+    <DataTable class="p-col p-datatable-sm" :value="relevance" v-model:expandedRows="expandedRows" dataKey="node_name">
+      <Column :expander="true" headerStyle="width: 3rem"/>
       <Column :header="$t('Node')" field="node_name"/>
       <Column :header="$t('Relevance')" field="overall_relevance">
         <template #body="slotProps">
@@ -8,16 +9,29 @@
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
         </template>
       </Column>
+      <template #expansion="slotProps">
+        <DataTable :value="getGoalKeys()" :key="goal" :rowClass="() => 'smallTable'">
+          <Column header="influence on goals:">
+            <template #body="currGoal">
+             {{currGoal.data}}
+            </template>
+          </Column>
+          <Column >
+            <template #body="currGoal">
+              <twoSidedBar :value="slotProps.data.relevancies[currGoal.data]"
+                           v-tooltip="getDirectionTooltip(currGoal.data)"></twoSidedBar>
+            </template>
+          </Column>
+        </DataTable>
+      </template>
     </DataTable>
-    <dif class="p-col" v-if="compareConfig == null">
-      <i class="pi pi-chevron-down" style="fontSize: 5rem"></i>
-    </dif>
+    <br><br>
     <dif class="p-col" v-if="compareConfig == null">
       <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{ goal }}</div>
     </dif>
     <dif class="p-col" v-else>
       <h3> {{ compareConfig.name }}:</h3>
-      <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance" >
+      <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance">
         <Column :header="$t('Node')" field="node_name"/>
         <Column :header="$t('Relevance')" field="overall_relevance">
           <template #body="slotProps">
@@ -29,8 +43,9 @@
     </dif>
   </div>
 
-  <Dialog :header="$t('localRelevance')" v-model:visible="showLocal" style="width:90%; height:90%; background-color:white"
-    modal="true">
+  <Dialog :header="$t('localRelevance')" v-model:visible="showLocal"
+          style="width:90%; height:90%; background-color:white"
+          modal="true">
     <DataTable :value="relevance" class="p-datatable-sm">
       <Column :header="$t('Node')" field="node_name"/>
       <Column :header="$t('Relevance')" field="overall_relevance">
@@ -65,7 +80,7 @@
     </DataTable>
   </Dialog>
 
-  <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>
+  <Button :label="$t('ShowMore')" @click="showLocal = true"></Button>
 
 </template>
 
@@ -88,7 +103,8 @@ export default {
   ],
   data() {
     return {
-      showLocal: false
+      showLocal: false,
+      expandedRows: []
     }
   },
   methods: {
@@ -112,20 +128,28 @@ export default {
         console.log(this.selectedOption)
         return goalnames
       }
+    },
+    getDirectionTooltip(number) {
+      if (number > 0.1) return "positive influence"
+      else if (number < 0.1) return "negative influence"
+      else return "almost no influence"
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #relevance {
   background-color: white;
 
 }
 
+::v-deep(.smallTable) {
+    background-color: rgba(133, 131, 131, 0.15) !important;
+}
+
 img {
   width: 100%;
 }
-
 
 </style>
