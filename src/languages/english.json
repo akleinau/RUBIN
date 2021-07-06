@@ -70,6 +70,10 @@
   "name": "name",
   "NetworkName": "Network name",
   "OptDescription": "Description (optional)",
-  "UploadNet": "Upload Network"
+  "UploadNet": "Upload Network",
+  "Prediction": "Prediction",
+  "Likeliness": "Likeliness",
+  "Choose": "Choose",
+  "Cancel": "Cancel"
 
 }

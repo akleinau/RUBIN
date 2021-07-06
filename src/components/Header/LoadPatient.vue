@@ -1,6 +1,6 @@
 <template>
    <FileUpload name = "net-upload" url="./Patientupload" accept=".csv" :customUpload="true"
-                mode="basic" auto="true" @uploader="read($event)"  />
+                mode="basic" auto="true" :chooseLabel="$t('Choose')" @uploader="read($event)"  />
 </template>
 
 <script>

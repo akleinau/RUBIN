@@ -1,8 +1,8 @@
 <template style="position:relative">
 <DataTable :value="data">
-  <Column header="node" field="name" :sortable="true" />
-  <Column header="prediction" field="state"></Column>
-  <Column header="likeliness">
+  <Column :header="$t('Node')" field="name" :sortable="true" />
+  <Column :header="$t('Prediction')" field="state"></Column>
+  <Column :header="$t('Likeliness')">
     <template #body="slotProps">
           <Chip class="p-mx-1" :style="{backgroundColor: color(slotProps.data.probability)}"
                 :label="getLabel(slotProps.data.probability)"/>

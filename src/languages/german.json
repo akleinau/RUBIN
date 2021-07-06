@@ -70,6 +70,10 @@
   "name": "Name",
   "NetworkName": "Name des Netzwerks",
   "OptDescription": "Beschreibung (optional)",
-  "UploadNet": "Netzwerk hochladen"
+  "UploadNet": "Netzwerk hochladen",
+  "Prediction": "Vorhersage",
+  "Likeliness": "Wahrscheinlichkeit",
+  "Choose": "Auswählen",
+  "Cancel": "Abbrechen"
 
 }
