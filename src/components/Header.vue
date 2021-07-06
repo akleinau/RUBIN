@@ -32,7 +32,7 @@
   </OverlayPanel>
 
   <OverlayPanel ref="langOverlay" >
-     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale" />
+     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale" @change="langChange()"/>
   </OverlayPanel>
 
 </template>
@@ -60,15 +60,18 @@ export default {
       items: [
         {
           label: this.$t('Settings'),
+          key: 'Settings',
           items: [
             {
               label: this.$t('Reset'),
+              key: 'Reset',
               command: () => {
                 this.reset()
               }
             },
             {
               label: this.$t('ChangeLanguage'),
+              key: 'ChangeLanguage',
               command: (event) => {
                 this.showLanguage(event.originalEvent)
               }
@@ -76,30 +79,34 @@ export default {
         },
         {
           label: this.$t('LoadPatient'),
+          key: 'LoadPatient',
           command: (event) => {
             this.loadPatient(event.originalEvent)
           }
         },
         {
           label: this.$t('SavePatient'),
+          key: 'SavePatient',
           command: (event) => {
             this.exportPatientOverlay(event.originalEvent)
           }
         },
         {
           label: this.$t('SendFeedback'),
+          key: 'SendFeedback',
           command: () => {
             this.showFeedback = true
           }
         },
         {
           label: this.$t('NetworkDescription'),
+          key: 'NetworkDescription',
           command: () => {
             this.showNetworkDescription = true
           }
         },
         {
-          key: "configItem",
+          key: "savedConfigurations",
           label: this.$t("savedConfigurations"),
           command: (event) => {
             this.$refs.compareOverlay.toggle(event.originalEvent)
@@ -107,6 +114,7 @@ export default {
         },
         {
           label: this.$t("backToNetwork"),
+          key: 'backToNetwork',
           command: () => {
             this.changePage()
           }
@@ -137,7 +145,7 @@ export default {
       this.$refs.exportOverlay.toggle()
     },
     compareTo(name) {
-      let configItem = this.items.find(a => a.key === "configItem")
+      let configItem = this.items.find(a => a.key === "savedConfigurations")
       configItem.label = this.$t("ComparingTo") + name
       configItem.icon = "pi pi-fw pi-times"
       configItem.command = () => {
@@ -147,7 +155,7 @@ export default {
       this.$refs.compareOverlay.toggle()
     },
     stopComparing() {
-      let configItem = this.items.find(a => a.key === "configItem")
+      let configItem = this.items.find(a => a.key === "savedConfigurations")
       configItem.label = this.$t("savedConfigurations")
       configItem.icon = ""
       configItem.command = (event) => {
@@ -173,6 +181,11 @@ export default {
     },
     showLanguage(event) {
       this.$refs.langOverlay.toggle(event)
+    },
+    langChange() {
+      this.items.forEach( a => {
+        a.label = this.$t(a.key)
+      })
     }
   }
 }

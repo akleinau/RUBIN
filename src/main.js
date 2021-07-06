@@ -36,6 +36,7 @@ import Button from 'primevue/button';
 import { createI18n } from 'vue-i18n'
 let enMessages = require('./languages/english.json');
 let deMessages = require('./languages/german.json');
+let nlMessages = require('./languages/dutch.json');
 
 const i18n = createI18n({
   legacy: false,
@@ -44,7 +45,9 @@ const i18n = createI18n({
   globalInjection: true,
   messages: {
     en: enMessages,
-    de: deMessages
+    de: deMessages,
+    nl: nlMessages
+
 }
 })
 

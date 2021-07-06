@@ -62,6 +62,12 @@
       </template>
     </Card>
   </div>
+
+  <Dialog v-model:visible="langOverlay" :modal="true">
+    Choose language:
+     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale" />
+  </Dialog>
+
 </template>
 
 <script>
@@ -72,12 +78,16 @@ export default {
   name: "ChooseNet",
   data() {
     return {
-      page: "chooseNet"
+      page: "chooseNet",
+      langOverlay: false
     }
   },
   components: {
     Upload,
     Networklist
+  },
+   mounted() {
+    this.langOverlay = true
   },
   methods: {
     changePage(selectedNet) {
