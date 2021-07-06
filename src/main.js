@@ -39,8 +39,8 @@ let deMessages = require('./languages/german.json');
 
 const i18n = createI18n({
   legacy: false,
-  locale: 'de',
-  fallbackLocale: 'en',
+  locale: 'en',
+  fallbackLocale: 'de',
   globalInjection: true,
   messages: {
     en: enMessages,

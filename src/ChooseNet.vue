@@ -1,28 +1,30 @@
 <template>
-  <div class="p-grid p-nested-grid p-flex-column p-mx-1" >
+  <div class="p-grid p-nested-grid p-flex-column p-mx-1">
     <Card class="p-col">
       <template #content>
-        <div id="logo"> <img src="./assets/DoctorBN_Logo.png" style="height: 100px" /> </div>
+        <div id="logo"><img src="./assets/DoctorBN_Logo.png" style="height: 100px"/></div>
+      <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale"
+      style="position:absolute; right:5%; top: 5%"/>
       </template>
     </Card>
 
     <div class="p-col p-grid vertical-container " style="height:100%">
-      <div class="p-col stretched" >
-        <Card class=" stretched" >
+      <div class="p-col stretched">
+        <Card class=" stretched">
           <template #title>
-             {{ $t('uploadNetwork') }}
+            {{ $t('uploadNetwork') }}
           </template>
           <template #content>
             <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()"></Upload>
             <br> <br>
-          Uploading networks is disabled in this version.
+            Uploading networks is disabled in this version.
           </template>
         </Card>
       </div>
-      <div class="p-col  stretched" >
-        <Card class=" stretched" >
+      <div class="p-col  stretched">
+        <Card class=" stretched">
           <template #title>
-            {{  $t('selectNetwork') }}
+            {{ $t('selectNetwork') }}
           </template>
           <template #content>
             <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage"></Networklist>
@@ -33,7 +35,7 @@
     </div>
 
     <Card class=" p-col">
-      <template #title >
+      <template #title>
         <div class="p-text-left">FAQ</div>
       </template>
       <template #content>
@@ -49,7 +51,8 @@
           </AccordionTab>
           <AccordionTab header="What are bayesian networks?">
             Bayesian networks are a type of artificial intelligence that is especially equipped to handle probabilities.
-            In clinical decision support, bayesian networks can provide clinicians with a second opinion which intervention
+            In clinical decision support, bayesian networks can provide clinicians with a second opinion which
+            intervention
             would be the best option for their patient.
           </AccordionTab>
           <AccordionTab header="Who is the team behind DoctorBN?">

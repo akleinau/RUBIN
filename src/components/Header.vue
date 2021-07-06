@@ -31,6 +31,10 @@
     <Button :label="$t('save')" @click="exportCSV()"/>
   </OverlayPanel>
 
+  <OverlayPanel ref="langOverlay" >
+     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale" />
+  </OverlayPanel>
+
 </template>
 
 <script>
@@ -65,17 +69,9 @@ export default {
             },
             {
               label: this.$t('ChangeLanguage'),
-              items: [
-                {
-                  label: 'english'
-                },
-                {
-                  label: 'dutch'
-                },
-                {
-                  label: 'german'
-                }
-              ]
+              command: (event) => {
+                this.showLanguage(event.originalEvent)
+              }
             }]
         },
         {
@@ -174,6 +170,9 @@ export default {
     sendFeedback(description) {
       this.$emit("sendFeedback", description)
       this.showFeedback = false
+    },
+    showLanguage(event) {
+      this.$refs.langOverlay.toggle(event)
     }
   }
 }
