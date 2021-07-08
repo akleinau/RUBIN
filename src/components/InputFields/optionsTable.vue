@@ -19,7 +19,7 @@
             <Icon v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
           </template>
         </Column>
-        <Column :header="$t('OutcomeCertainty')" field="value" style="width:40%">
+        <Column v-if="false" :header="$t('OutcomeCertainty')" field="value" style="width:40%">
           <template #body="slotProps">
             <bar :value=slotProps.data.value color="RebeccaPurple"
                  v-tooltip="slotProps.data.value.toFixed(2)*100 + '%'"></bar>
@@ -27,7 +27,7 @@
         </Column>
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
           <template #body="slotProps">
-            <bar :value="slotProps.data.goalValues[String(goal)]" color="teal"
+            <bar :value="slotProps.data.goalValues[String(goal)]" color="teal" width="200"
             v-tooltip="slotProps.data.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
@@ -36,6 +36,7 @@
 
 <script>
 import bar from "@/components/visualisations/bar";
+
 
 export default {
   name: "optionsTable",

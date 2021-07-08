@@ -5,7 +5,7 @@
       <Column :header="$t('Node')" field="node_name"/>
       <Column :header="$t('Relevance')" field="overall_relevance">
         <template #body="slotProps">
-          <bar :value="slotProps.data.overall_relevance" color="#004d80"
+          <bar :value="slotProps.data.overall_relevance" color="#004d80" width="300"
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
         </template>
       </Column>
@@ -35,7 +35,7 @@
         <Column :header="$t('Node')" field="node_name"/>
         <Column :header="$t('Relevance')" field="overall_relevance">
           <template #body="slotProps">
-            <bar :value="slotProps.data.overall_relevance" color="#004d80"
+            <bar :value="slotProps.data.overall_relevance" color="#004d80" width="300"
                  v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>

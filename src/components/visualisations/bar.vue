@@ -9,7 +9,8 @@ export default {
   name: "bar",
   props: [
     "value",
-      "color"
+      "color",
+      "width"
   ],
   mounted() {
     this.visualise()
@@ -24,7 +25,7 @@ export default {
   },
   methods: {
     visualise() {
-      let width = 300
+      let width = this.width
       let height = 50
 
       let color = "black"
@@ -46,6 +47,7 @@ export default {
 
       var svg = d3.select(this.$refs.container)
           .append("svg")
+          .attr("height", 25)
           .attr("viewBox", [0, 0, width, height]);
 
       let x = d3.scaleLinear()
