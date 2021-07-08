@@ -9,7 +9,7 @@
     <label>{{$t('OptDescription')}}: <Textarea id = "net-description"></Textarea></label>
     <br><br>
   </form>
-  <Button name = "net-submit" type = "submit" :label = "$t('UploadNet')" @click="upload()" />
+  <Button name = "net-submit" type = "submit" :label = "$t('UploadNet')" @click="upload()" disabled="disabled"/>
 </template>
 
 <script>
