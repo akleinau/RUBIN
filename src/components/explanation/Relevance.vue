@@ -19,7 +19,7 @@
           <Column >
             <template #body="currGoal">
               <twoSidedBar :value="slotProps.data.relevancies[currGoal.data]"
-                           v-tooltip="getDirectionTooltip(currGoal.data)"></twoSidedBar>
+                           v-tooltip="getDirectionTooltip(slotProps.data.relevancies[currGoal.data])"></twoSidedBar>
             </template>
           </Column>
         </DataTable>
@@ -80,7 +80,7 @@
     </DataTable>
   </Dialog>
 
-  <Button :label="$t('ShowMore')" @click="showLocal = true"></Button>
+<!--  <Button :label="$t('ShowMore')" @click="showLocal = true"></Button>-->
 
 </template>
 
@@ -130,9 +130,9 @@ export default {
       }
     },
     getDirectionTooltip(number) {
-      if (number > 0.1) return "positive influence"
-      else if (number < 0.1) return "negative influence"
-      else return "almost no influence"
+      if (number > 0.001) return "positive influence "
+      else if (number < -0.001) return "negative influence "
+      else return "almost no influence "
     }
   }
 }

@@ -22,7 +22,7 @@
                       @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)"/>
         <div class="p-d-flex  p-jc-between p-ai-center">
           <h3 class="p-text-left">{{ $t("DecisionRatings") }}:</h3>
-          <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>
+<!--          <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>-->
         </div>
         <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
         <optionsTable :results="results" :goals="goals" showLocal="true"
