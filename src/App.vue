@@ -1,5 +1,5 @@
 <template>
-  <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork"></ChooseNet>
+  <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork($event)"></ChooseNet>
   <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'" :network="selectedNetwork"/>
 </template>
 

@@ -54,6 +54,7 @@ import tutorial from "@/components/tutorial";
 
 export default {
   name: "Interface",
+  emits: ["changePage"],
   components: {
     Header,
     Explanation,

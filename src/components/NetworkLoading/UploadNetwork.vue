@@ -4,7 +4,7 @@
     <label>{{$t('NetworkName')}}: <InputText id = "net-name" type = "text" required/> </label>
     <br><br>
     <FileUpload name = "net-upload" url="./upload" accept=".bif" :customUpload="true" :chooseLabel="$t('Choose')"
-              :cancelLabel="$t('Cancel')"  auto="true" :showUploadButton="false" @uploader="file = $event.files" required/>
+              :cancelLabel="$t('Cancel')"  :auto="true" :showUploadButton="false" @uploader="file = $event.files" required/>
     <br>
     <label>{{$t('OptDescription')}}: <Textarea id = "net-description"></Textarea></label>
     <br><br>
@@ -15,6 +15,7 @@
 <script>
 export default {
   name: "UploadNetwork",
+  emits: ["reloadNetList"],
   data() {
     return {
       file: null,

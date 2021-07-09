@@ -3,7 +3,7 @@
     <Card class="p-col">
       <template #content>
         <div id="logo"><img src="./assets/DoctorBN_Logo.png" style="height: 100px"/></div>
-      <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale"
+      <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`" :value="$i18n.locale"
       style="position:absolute; right:5%; top: 5%"/>
       </template>
     </Card>
@@ -65,7 +65,7 @@
 
   <Dialog v-model:visible="langOverlay" :modal="true">
     Choose language:
-     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale" />
+     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`" :value="$i18n.locale" />
   </Dialog>
 
 </template>
@@ -76,6 +76,7 @@ import Networklist from "./components/NetworkLoading/LoadNetworkList"
 
 export default {
   name: "ChooseNet",
+  emits: ["changePage"],
   data() {
     return {
       page: "chooseNet",

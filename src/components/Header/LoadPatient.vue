@@ -6,6 +6,7 @@
 <script>
 export default {
   name: "LoadPatient",
+  emits: ["loaded"],
   data() {
     return {
       patient: {

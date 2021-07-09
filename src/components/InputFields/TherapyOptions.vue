@@ -37,7 +37,7 @@
         </ScrollPanel>
 
     <Dialog :header="$t('localRelevance')" v-model:visible="showLocal" style="width:90%; height:90%; background-color:white"
-    modal="true">
+    :modal="true">
       <optionsTable :results="results" :goals="goals" showLocal="true"
                       @update="update($event)" :selectedOption="selectedOption"></optionsTable>
         <div v-if="compareConfig">
@@ -59,6 +59,7 @@ import optionsTable from "@/components/InputFields/optionsTable"
 
 export default {
   name: "TherapyOptions",
+  emits: ["update"],
   components: {
     TherapyInput,
     optionsTable

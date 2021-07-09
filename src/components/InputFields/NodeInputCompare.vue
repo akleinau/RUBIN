@@ -27,7 +27,7 @@
     </Column>
   </DataTable>
 
-  <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%" modal="yes" v-if="changeable">
+  <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%" :modal="true" v-if="changeable">
     <Button class="p-mb-1" :label="'Add ' + title" style="width: 100%" @click="addNodesFromOverlay()"/>
     <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
       <template #option="slotProps">
@@ -72,6 +72,7 @@ import {FilterMatchMode} from 'primevue/api';
 
 export default {
   name: "NodeInputCompare",
+  emits: ["addNodes", "deleteNode"],
   props: [
     "title",
     "nodes",

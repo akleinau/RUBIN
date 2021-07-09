@@ -26,6 +26,7 @@ import NodeInputCompare from "@/components/InputFields/NodeInputCompare";
 
 export default {
 name: "EvidenceInput",
+  emits: ["addNodes","deleteNode"],
   components: {
   NodeInput,
     NodeInputCompare

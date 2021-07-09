@@ -14,6 +14,7 @@
 <script>
 export default {
   name: "Feedback",
+  emits: ["sendFeedback"],
   data() {
     return {
       sendConfig: false,

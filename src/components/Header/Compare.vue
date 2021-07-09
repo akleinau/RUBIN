@@ -19,6 +19,7 @@
 <script>
 export default {
   name: "Compare.vue",
+  emits: ["saveConfig", "load", "compareTo", "deleteConfig"],
   props: [
     "configurations"
   ],

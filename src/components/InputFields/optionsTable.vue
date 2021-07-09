@@ -16,7 +16,7 @@
         </Column>
         <Column >
           <template #body="slotProps">
-            <Icon v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
+            <i v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
           </template>
         </Column>
         <Column v-if="false" :header="$t('OutcomeCertainty')" field="value" style="width:40%">
@@ -40,6 +40,7 @@ import bar from "@/components/visualisations/bar";
 
 export default {
   name: "optionsTable",
+  emits: ["update"],
   components: {
     bar
   },

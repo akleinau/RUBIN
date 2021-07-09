@@ -11,6 +11,7 @@
 <script>
 export default {
   name: "LoadNetworkList",
+  emits: ["changePage", "updated"],
   data() {
     return {
       networks: [],

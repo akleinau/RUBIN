@@ -26,10 +26,10 @@
       </template>
     </DataTable>
     <br><br>
-    <dif class="p-col" v-if="compareConfig == null">
+    <div class="p-col" v-if="compareConfig == null">
       <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{ goal }}</div>
-    </dif>
-    <dif class="p-col" v-else>
+    </div>
+    <div class="p-col" v-else>
       <h3> {{ compareConfig.name }}:</h3>
       <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance">
         <Column :header="$t('Node')" field="node_name"/>
@@ -40,12 +40,12 @@
           </template>
         </Column>
       </DataTable>
-    </dif>
+    </div>
   </div>
 
   <Dialog :header="$t('localRelevance')" v-model:visible="showLocal"
           style="width:90%; height:90%; background-color:white"
-          modal="true">
+          :modal="true">
     <DataTable :value="relevance" class="p-datatable-sm">
       <Column :header="$t('Node')" field="node_name"/>
       <Column :header="$t('Relevance')" field="overall_relevance">

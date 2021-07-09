@@ -28,6 +28,7 @@ import NodeInputCompare from "@/components/InputFields/NodeInputCompare";
 
 export default {
   name: "GoalInput",
+  emits: ["addNodes", "deleteNode"],
   components: {
   NodeInput,
     NodeInputCompare

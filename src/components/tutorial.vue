@@ -39,6 +39,7 @@
 <script>
 export default {
   name: "tutorial",
+  emits: ["setBlock"],
   data() {
     return {
       display: false,

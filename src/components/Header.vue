@@ -14,10 +14,10 @@
   </Menubar>
 
 
-  <Dialog :header="$t('Feedback')" v-model:visible="showFeedback" style="width: 50%" modal="yes">
+  <Dialog :header="$t('Feedback')" v-model:visible="showFeedback" style="width: 50%" :modal="true">
     <Feedback @sendFeedback="sendFeedback($event)"></Feedback>
   </Dialog>
-  <Dialog :header="$t('NetworkDescription')" v-model:visible="showNetworkDescription" style="width: 50%" modal="yes">
+  <Dialog :header="$t('NetworkDescription')" v-model:visible="showNetworkDescription" style="width: 50%" :modal="true">
     {{ description }}
   </Dialog>
   <OverlayPanel ref="compareOverlay">
@@ -44,6 +44,7 @@ import Compare from "@/components/Header/Compare";
 
 export default {
   name: "Header",
+  emits: ["setName", "changePage", "reset", "loadPatient", "exportCSV", "compareTo", "load", "deleteConfig", "sendFeedback", "saveConfig"],
   components: {
     Feedback,
     Compare
