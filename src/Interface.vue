@@ -372,7 +372,7 @@ export default {
   created: async function () {
     await this.loadNodes()
 
-    if (this.network === 'Endometric cancer') {
+    if (this.network === 'endometrial cancer') {
       //add example nodes
       let CA125 = this.patient.nodes.find(x => x.name === "CA125")
       CA125["selected"] = {"name": "lt_35"}
