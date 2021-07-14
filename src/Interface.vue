@@ -27,7 +27,7 @@
 
     </div>
     <BlockUI class="p-col stretched" :blocked="block.options">
-      <TherapyOptions :results="options.options" :goals="newGoals"
+      <TherapyOptions :results="options.options" :goals="newGoals" :likelyResult="options.likelyResult"
                       :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
                       :nodes="patient.nodes" :targets="patient.targets" :loading="optionsLoading"
                       :compareConfig="selectedConfig" :labels="labels"
@@ -82,6 +82,7 @@ export default {
       //available options to treat the patient given the interventions
       options: {
         options: null,
+        likelyResult: null,
         selectedOption: null,
       },
 
@@ -201,6 +202,7 @@ export default {
 
       this.options.options = null
       this.options.selectedOption = null
+      this.options.likelyResult = null
 
       this.edges = null
       this.newGoals = null
@@ -212,7 +214,7 @@ export default {
       await this.loadNodes()
     },
     calculate: async function () {
-      if (this.patient.evidence.length !== 0 && this.patient.targets.length !== 0 && this.patient.goals.length !== 0) {
+      if (this.patient.evidence.length !== 0 && this.patient.goals.length !== 0) {
         this.optionsLoading = true
         this.explanationLoading = true
 
@@ -243,8 +245,17 @@ export default {
           })
         });
         let nodeDict = await gResponse.json();
-        this.options.options = nodeDict.optionResults
-        this.options.selectedOption = nodeDict.optionResults[0]
+        if (this.patient.targets.length !== 0) {
+                  this.options.options = nodeDict.optionResults
+        }
+        else {
+          this.options.options = []
+        }
+        this.options.likelyResult = [{
+          option: [], value: nodeDict.likelyResults.value,
+          goalValues: nodeDict.likelyResults.goalValues
+        }]
+        this.options.selectedOption = this.options.likelyResult[0]
 
         this.newGoals = goals
         this.optionsLoading = false

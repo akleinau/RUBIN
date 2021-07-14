@@ -134,7 +134,6 @@ export default {
           goalnames.push(this.labels[goal] + " - " + this.goals[goal] + ": " +
               this.selectedOption.goalValues[goal].toFixed(2) * 100 + "%")
         })
-        console.log(this.selectedOption)
         return goalnames
       }
     },
