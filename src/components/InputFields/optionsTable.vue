@@ -10,7 +10,7 @@
         <Column :header="$t('Decision')" field="option">
           <template #body="slotProps">
             <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
-              {{o}}: {{slotProps.data.option[o]}}
+              {{labels[o]}}: {{slotProps.data.option[o]}}
             </div>
           </template>
         </Column>
@@ -54,7 +54,8 @@ export default {
     "results",
       "goals",
       "selectedOption",
-      "showLocal"
+      "showLocal",
+      "labels"
   ],
     watch: {
     selectedOption: function () {

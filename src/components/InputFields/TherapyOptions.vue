@@ -18,18 +18,18 @@
       <ScrollPanel style="height:100%">
       <div>
         <h3 class="p-text-left">{{ $t("Interventions") }}:</h3>
-        <TherapyInput :nodes="nodes" :selection="targets" :compareConfig="compareConfig"
+        <TherapyInput :nodes="nodes" :selection="targets" :compareConfig="compareConfig" :labels="labels"
                       @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)"/>
         <div class="p-d-flex  p-jc-between p-ai-center">
           <h3 class="p-text-left">{{ $t("DecisionRatings") }}:</h3>
 <!--          <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>-->
         </div>
         <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
-        <optionsTable :results="results" :goals="goals" showLocal="true"
+        <optionsTable :results="results" :goals="goals" showLocal="true" :labels="labels"
                       @update="update($event)" :selectedOption="selectedOption"></optionsTable>
         <div v-if="compareConfig">
           <h3> {{ compareConfig.name }}:</h3>
-          <optionsTable :results="compareConfig.config.options.options"
+          <optionsTable :results="compareConfig.config.options.options" :labels="labels"
                         :goals="compareConfig.config.newGoals" @update="update($event)"
                         :selectedOption="selectedOption"/>
         </div>
@@ -38,11 +38,11 @@
 
     <Dialog :header="$t('localRelevance')" v-model:visible="showLocal" style="width:90%; height:90%; background-color:white"
     :modal="true">
-      <optionsTable :results="results" :goals="goals" showLocal="true"
+      <optionsTable :results="results" :goals="goals" showLocal="true" :labels="labels"
                       @update="update($event)" :selectedOption="selectedOption"></optionsTable>
         <div v-if="compareConfig">
           <h3> {{ compareConfig.name }}:</h3>
-          <optionsTable :results="compareConfig.config.options.options" showLocal="true"
+          <optionsTable :results="compareConfig.config.options.options" showLocal="true" :labels="labels"
                         :goals="compareConfig.config.newGoals" @update="update($event)"
                         :selectedOption="selectedOption"/>
         </div>
@@ -72,6 +72,7 @@ export default {
     "selectedOption",
     "loading",
     "compareConfig",
+      "labels"
   ],
   data() {
     return {

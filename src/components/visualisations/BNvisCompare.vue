@@ -14,7 +14,8 @@ export default {
     "nodes",
     "edges",
       "nodes2",
-      "name2"
+      "name2",
+      "labels"
   ],
   mounted() {
   if (this.nodes != null && this.edges != null && this.nodes2 != null) {
@@ -130,7 +131,7 @@ export default {
             .enter().append("text")
 
         const textName = text.append("tspan")
-            .text(d => d.name.substring(0, 10) + ": ")
+            .text(d => this.labels[d.name].substring(0, 10) + ": ")
         const textState = text.append("tspan")
             .text(d => String(d.state).substring(0, 10))
             .attr("dy", 5)

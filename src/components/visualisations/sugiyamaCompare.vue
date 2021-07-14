@@ -15,7 +15,8 @@ name: "sugiyamaCompare",
     "nodes",
     "edges",
       "nodes2",
-        "name2"
+        "name2",
+        "labels"
   ],
   computed: {
     edgeList: function(){
@@ -143,7 +144,7 @@ name: "sugiyamaCompare",
 
         // Add text to nodes
         nodes.append('text')
-            .text(d => String(d.data.id).substring(0, 10) + ": ")
+            .text(d => String(this.labels[d.data.id]).substring(0, 10) + ": ")
             .attr("class", "text")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')

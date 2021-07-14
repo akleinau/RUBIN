@@ -1,7 +1,9 @@
 <template>
   <DataTable id="table" :value="table" class="p-datatable-sm">
     <Column field="name" style="padding: 0; border: 0;">
-
+      <template #body="slotProps">
+        {{labels[slotProps.data.name]}}
+      </template>
     </Column>
     <Column field="value" header="current" class="optionCol">
       <template v-if="changeable" #body="slotProps">
@@ -79,7 +81,8 @@ export default {
     "selection",
     "changeable",
     "selection2",
-    "name2"
+    "name2",
+      "labels"
   ],
   data() {
     return {

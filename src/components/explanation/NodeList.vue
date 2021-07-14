@@ -1,6 +1,6 @@
 <template style="position:relative">
 <DataTable :value="data">
-  <Column :header="$t('Node')" field="name" :sortable="true" />
+  <Column :header="$t('Node')" field="label" :sortable="true" />
   <Column :header="$t('Prediction')" field="state"></Column>
   <Column :header="$t('Likeliness')">
     <template #body="slotProps">
@@ -23,7 +23,8 @@ export default {
 name: "NodeList",
   props: [
       "nodes",
-      "compareConfig"
+      "compareConfig",
+      "labels"
   ],
   data() {
   return {
@@ -38,6 +39,7 @@ name: "NodeList",
           this.nodes.forEach(a => {
             data.push({
               "name": a.name,
+              "label": this.labels[a.name],
               "state": a.state,
               "probability": a.probability,
               "beforeState": "",
@@ -53,6 +55,7 @@ name: "NodeList",
             data.push({
               "name": a.name,
               "state": a.state,
+              "label": this.labels[a.name],
               "probability": a.probability,
               "beforeState": a.state === compareNode.state ? "" : compareNode.state,
               "beforeProb": a.state === compareNode.state ? 0 : compareNode.probability

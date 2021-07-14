@@ -11,11 +11,11 @@
       <ScrollPanel  style="height:100%">
         <div v-if="compareConfig == null">
       <NodeInput  title="Desired Outcomes" :nodes="nodes" :selection="selection" :changeable="true" :hideHeader="true"
-                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
+                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)" :labels="labels"/>
         </div>
       <div v-else>
         <NodeInputCompare    title="Desired Outcomes" :nodes="nodes" :selection="selection" :name2="compareConfig.name"
-                    :selection2="compareConfig.config.patient.goals" :changeable="false"/>
+                    :selection2="compareConfig.config.patient.goals" :changeable="false" :labels="labels"/>
       </div>
         </ScrollPanel>
     </template>
@@ -28,7 +28,7 @@ import NodeInputCompare from "@/components/InputFields/NodeInputCompare";
 
 export default {
   name: "GoalInput",
-  emits: ["addNodes", "deleteNode"],
+  emits: ["addNodes", "deleteNode", "labels"],
   components: {
   NodeInput,
     NodeInputCompare
@@ -36,7 +36,8 @@ export default {
     props: [
       "nodes",
       "selection",
-        "compareConfig"
+        "compareConfig",
+        "labels"
   ],
 }
 </script>

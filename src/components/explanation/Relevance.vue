@@ -2,7 +2,11 @@
   <div class="p-d-flex p-dir-col">
     <DataTable class="p-col p-datatable-sm" :value="relevance" v-model:expandedRows="expandedRows" dataKey="node_name">
       <Column :expander="true" headerStyle="width: 3rem"/>
-      <Column :header="$t('Node')" field="node_name"/>
+      <Column :header="$t('Node')" field="node_name">
+        <template #body="slotProps">
+          {{ labels[slotProps.data.node_name] }}
+        </template>
+      </Column>
       <Column :header="$t('Relevance')" field="overall_relevance">
         <template #body="slotProps">
           <bar :value="slotProps.data.overall_relevance" color="#004d80" width="300"
@@ -13,10 +17,10 @@
         <DataTable :value="getGoalKeys()" :key="goal" :rowClass="() => 'smallTable'">
           <Column header="influence on goals:">
             <template #body="currGoal">
-             {{currGoal.data}}
+              {{ currGoal.data }}
             </template>
           </Column>
-          <Column >
+          <Column>
             <template #body="currGoal">
               <twoSidedBar :value="slotProps.data.relevancies[currGoal.data]"
                            v-tooltip="getDirectionTooltip(slotProps.data.relevancies[currGoal.data])"></twoSidedBar>
@@ -32,7 +36,11 @@
     <div class="p-col" v-else>
       <h3> {{ compareConfig.name }}:</h3>
       <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance">
-        <Column :header="$t('Node')" field="node_name"/>
+        <Column :header="$t('Node')" field="node_name">
+          <template #body="slotProps">
+            {{ labels[slotProps.data.node_name] }}
+          </template>
+        </Column>
         <Column :header="$t('Relevance')" field="overall_relevance">
           <template #body="slotProps">
             <bar :value="slotProps.data.overall_relevance" color="#004d80" width="300"
@@ -80,7 +88,7 @@
     </DataTable>
   </Dialog>
 
-<!--  <Button :label="$t('ShowMore')" @click="showLocal = true"></Button>-->
+  <!--  <Button :label="$t('ShowMore')" @click="showLocal = true"></Button>-->
 
 </template>
 
@@ -99,7 +107,8 @@ export default {
     "goals",
     "nodes",
     "compareConfig",
-    "selectedOption"
+    "selectedOption",
+    "labels"
   ],
   data() {
     return {
@@ -112,7 +121,7 @@ export default {
       if (this.goals != null) {
         let goalnames = []
         Object.keys(this.goals).forEach(goal => {
-          goalnames.push(goal + ": " + this.goals[goal])
+          goalnames.push(this.labels[goal] + ": " + this.goals[goal])
         })
 
         return goalnames
@@ -122,7 +131,7 @@ export default {
       if (this.goals != null && this.selectedOption != null) {
         let goalnames = []
         Object.keys(this.goals).forEach(goal => {
-          goalnames.push(goal + " - " + this.goals[goal] + ": " +
+          goalnames.push(this.labels[goal] + " - " + this.goals[goal] + ": " +
               this.selectedOption.goalValues[goal].toFixed(2) * 100 + "%")
         })
         console.log(this.selectedOption)
@@ -145,7 +154,7 @@ export default {
 }
 
 ::v-deep(.smallTable) {
-    background-color: rgba(133, 131, 131, 0.15) !important;
+  background-color: rgba(133, 131, 131, 0.15) !important;
 }
 
 img {

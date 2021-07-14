@@ -16,12 +16,12 @@
     <div class="p-col-3 p-ai-start p-flex-column stretched">
       <BlockUI class="p-pb-2 p-d-flex" style="height: 30%;" :blocked="block.goals" ref="goal">
         <GoalInput :nodes="patient.nodes" :selection="patient.goals" :compareConfig="selectedConfig"
-                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)"/>
+                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)" :labels="labels"/>
       </BlockUI>
 
       <BlockUI style="height:70%" :blocked="block.evidence">
         <EvidenceInput :nodes="patient.nodes" :selection="patient.evidence" :compareConfig="selectedConfig"
-                       @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
+                       @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)" :labels="labels"/>
       </BlockUI>
 
 
@@ -30,13 +30,13 @@
       <TherapyOptions :results="options.options" :goals="newGoals"
                       :selectedOption="options.selectedOption" @update="selectedOptionUpdated($event)"
                       :nodes="patient.nodes" :targets="patient.targets" :loading="optionsLoading"
-                      :compareConfig="selectedConfig"
+                      :compareConfig="selectedConfig" :labels="labels"
                       @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
 
     </BlockUI>
     <BlockUI class="p-col stretched" :blocked="block.explain">
       <Explanation :goals="newGoals" :edges="edges" :explain="explain" :loading="explanationLoading"
-                   :compareConfig="selectedConfig" :selectedOption="options.selectedOption"/>
+                   :compareConfig="selectedConfig" :selectedOption="options.selectedOption" :labels="labels"/>
 
     </BlockUI>
   </div>
@@ -76,7 +76,7 @@ export default {
         evidence: [],
         goals: [],
         nodes: [], //nodes of the network that are neither evidence, goals, nor targets
-        name: ""
+        name: "",
       },
 
       //available options to treat the patient given the interventions
@@ -87,6 +87,7 @@ export default {
 
       newGoals: null, //helper property to let the data tables update TODO: replace
       edges: null, //edges of the network
+      labels: null,
 
       //explaining calculations for the chosen option
       explain: {
@@ -189,6 +190,7 @@ export default {
       this.edges = edges
 
       this.description = network.description
+      this.labels = network.labels
     },
     reset: async function () {
       this.patient.targets = []

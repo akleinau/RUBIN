@@ -10,9 +10,9 @@
     <template #content>
       <ScrollPanel  style="height:100%">
       <NodeInput  v-if="compareConfig == null"  title="Evidence" :nodes="nodes" :selection="selection" :changeable="true"
-                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
+                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)" :labels="labels"/>
 
-      <NodeInputCompare  v-else  title="Evidence" :nodes="nodes" :name2="compareConfig.name"
+      <NodeInputCompare  v-else  title="Evidence" :nodes="nodes" :name2="compareConfig.name" :labels="labels"
                     :selection="selection" :selection2="compareConfig.config.patient.evidence" :changeable="false"/>
       </ScrollPanel>
     </template>
@@ -34,7 +34,8 @@ name: "EvidenceInput",
     props: [
       "nodes",
       "selection",
-        "compareConfig"
+        "compareConfig",
+        "labels"
   ],
   data() {
   return {

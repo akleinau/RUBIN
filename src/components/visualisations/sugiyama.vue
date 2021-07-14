@@ -18,7 +18,8 @@ export default {
 name: "sugiyama",
     props: [
     "nodes",
-    "edges"
+    "edges",
+      "labels"
   ],
   computed: {
     edgeList: function(){
@@ -47,13 +48,6 @@ name: "sugiyama",
   },
   data() {
     return {
-      exNodes: [{"name": "a", "state": "pa"},
-        {"name": "b", "state": "pb"},
-        {"name": "c", "state": "pc"}],
-       exEdges: [
-        {"target": "Therapy", "source": "LVSI"},
-        {"target": "Therapy", "source": "LNM"}
-      ]
     }
   },
   methods: {
@@ -153,7 +147,7 @@ name: "sugiyama",
 
         // Add text to nodes
         nodes.append('text')
-            .text(d => String(d.data.id).substring(0, 10) + ": ")
+            .text(d => String(this.labels[d.data.id]).substring(0, 10) + ": ")
             .attr("class", "text")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')

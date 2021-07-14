@@ -17,33 +17,33 @@
         <TabView>
           <TabPanel :header="$t('Relevance')">
             <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states"
-            :compareConfig="compareConfig" :selectedOption="selectedOption"/>
+            :compareConfig="compareConfig" :selectedOption="selectedOption" :labels="labels"/>
           </TabPanel>
           <TabPanel :header="$t('AllPredictions')">
-            <NodeList :nodes="explain.states" :compareConfig="compareConfig"/>
+            <NodeList :nodes="explain.states" :compareConfig="compareConfig" :labels="labels"/>
           </TabPanel>
           <TabPanel :header="$t('CompactNetwork')">
             <div v-if="compareConfig==null">
-              <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()"/>
+              <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()" :labels="labels"/>
             </div>
             <div v-else>
               <sugiyamaCompare :edges="getCompactEdges()" :nodes="getExNodes()"
                                :nodes2="compareConfig.config.explain.states"
-                               :name2="compareConfig.name"/>
+                               :name2="compareConfig.name" :labels="labels"/>
             </div>
           </TabPanel>
           <TabPanel :header="$t('FullNetwork')">
             <Dropdown v-model="fullNetworkLayout" :options="layouts" optionLabel="name" class="p-mb-2"/>
             <div v-if="compareConfig==null">
-              <BNvis v-if="fullNetworkLayout.name === 'Force-directed'" :edges="edges" :nodes="explain.states"/>
-              <sugiyama v-else :edges="edges" :nodes="explain.states"/>
+              <BNvis v-if="fullNetworkLayout.name === 'Force-directed'" :edges="edges" :nodes="explain.states" :labels="labels"/>
+              <sugiyama v-else :edges="edges" :nodes="explain.states" :labels="labels"/>
             </div>
             <div v-else>
               <BNvisCompare v-if="fullNetworkLayout.name === 'Force-directed'" :edges="edges" :nodes="explain.states"
-                            :nodes2="compareConfig.config.explain.states"
+                            :nodes2="compareConfig.config.explain.states" :labels="labels"
                             :name2="compareConfig.name"/>
               <sugiyamaCompare v-else :edges="edges" :nodes="explain.states" :nodes2="compareConfig.config.explain.states"
-                               :name2="compareConfig.name"/>
+                               :name2="compareConfig.name" :labels="labels"/>
             </div>
           </TabPanel>
         </TabView>
@@ -62,7 +62,7 @@ import BNvisCompare from "@/components/visualisations/BNvisCompare";
 
 export default {
   name: "Network",
-  props: ['goals', "edges", "explain", "compareConfig", "loading", "selectedOption"],
+  props: ['goals', "edges", "explain", "compareConfig", "loading", "selectedOption", "labels"],
   components: {
     Relevance,
     BNvis,

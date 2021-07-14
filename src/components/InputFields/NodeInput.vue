@@ -7,6 +7,9 @@
               <InputText v-model="filters['name'].name" placeholder="Search..." style="width: 200%"/>
             </span>
           </template>
+          <template #body="slotProps">
+            {{labels[slotProps.data.name]}}
+          </template>
         </Column>
         <Column field="value" class="optionCol">
           <template v-if="changeable" #body="slotProps">
@@ -17,7 +20,7 @@
                     @click="deleteNode(slotProps.data)" />
           </template>
           <template v-else #body="slotProps">
-            {{slotProps.data.selected.name}}
+            {{labels[slotProps.data.selected.name]}}
           </template>
         </Column>
       </DataTable>
@@ -27,7 +30,7 @@
       <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
         <template #option="slotProps">
           <div>
-            {{ slotProps.option.name }}: {{ slotProps.option.selected.name }}
+            {{ labels[slotProps.option.name] }}: {{ slotProps.option.selected.name }}
               <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
               @click="deleteNodeFromOverlay(slotProps.option)"/>
           </div>
@@ -43,7 +46,11 @@
                 </span>
             </div>
         </template>
-        <Column field="name" :header="$t('Node')"></Column>
+        <Column field="name" :header="$t('Node')">
+          <template #body="slotProps">
+            {{labels[slotProps.data.name]}}
+          </template>
+        </Column>
         <Column field="options">
           <template #body="slotProps">
             <Button class="p-m-2" v-for="option in slotProps.data.options" :key="option"
@@ -72,7 +79,8 @@ export default {
       "nodes",
       "selection",
       "changeable",
-      "hideHeader"
+      "hideHeader",
+      "labels"
   ],
   data() {
     return {

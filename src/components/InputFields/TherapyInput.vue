@@ -2,11 +2,11 @@
   <div style="position:relative">
 
   <div v-if="compareConfig == null">
-          <Listbox :options="selection" optionLabel="name" listStyle="max-height:300px"
+          <Listbox :options="selection" :optionLabel="name" listStyle="max-height:300px"
                emptyMessage="choose therapy nodes">
         <template #option="slotProps">
           <div class="p-text-center rowContent">
-            {{ slotProps.option.name }}
+            {{ labels[slotProps.option.name] }}
           <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
               @click="deleteNode(slotProps.option)"/>
           </div>
@@ -26,7 +26,7 @@
       <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
         <template #option="slotProps">
           <div>
-            {{ slotProps.option.name }}
+            {{ labels[slotProps.option.name] }}
             <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
               @click="deleteNodeFromOverlay(slotProps.option)"/>
           </div>
@@ -37,7 +37,7 @@
                @change="addTarget()" listStyle="max-height:500px">
           <template #option="slotProps">
           <div v-tooltip.bottom="'Add as target'">
-            {{ slotProps.option.name }}
+            {{ labels[slotProps.option.name] }}
           </div>
         </template>
       </Listbox>
@@ -53,7 +53,8 @@ export default {
   props: [
     "nodes",
       "selection",
-      "compareConfig"
+      "compareConfig",
+      "labels"
   ],
   data() {
     return {
