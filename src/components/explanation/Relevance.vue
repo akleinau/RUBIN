@@ -22,8 +22,8 @@
           </Column>
           <Column>
             <template #body="currGoal">
-              <twoSidedBar :value="slotProps.data.relevancies[currGoal.data]"
-                           v-tooltip="getDirectionTooltip(slotProps.data.relevancies[currGoal.data])"></twoSidedBar>
+              <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(currGoal.data)]"
+                           v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(currGoal.data)])"></twoSidedBar>
             </template>
           </Column>
         </DataTable>
@@ -141,6 +141,16 @@ export default {
       if (number > 0.001) return "positive influence "
       else if (number < -0.001) return "negative influence "
       else return "almost no influence "
+    },
+    getIdentifier(label) {
+      let identifier = "-1"
+      let labelFirstPart = label.split(":")[0]
+      Object.entries(this.labels).forEach(([key, value]) => {
+        if (value === labelFirstPart) {
+          identifier = key
+        }
+      })
+      return identifier + ":" + label.split(":")[1]
     }
   }
 }
