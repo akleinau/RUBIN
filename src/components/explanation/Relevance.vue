@@ -4,7 +4,7 @@
       <Column :expander="true" headerStyle="width: 3rem"/>
       <Column :header="$t('Node')" field="node_name">
         <template #body="slotProps">
-          {{ labels[slotProps.data.node_name] }}
+          {{ labels[slotProps.data.node_name] }}: {{getState(slotProps.data.node_name)}}
         </template>
       </Column>
       <Column :header="$t('Relevance')" field="overall_relevance">
@@ -131,8 +131,9 @@ export default {
       if (this.goals != null && this.selectedOption != null) {
         let goalnames = []
         Object.keys(this.goals).forEach(goal => {
+          let percentage = this.selectedOption.goalValues[goal]* 100
           goalnames.push(this.labels[goal] + " - " + this.goals[goal] + ": " +
-              this.selectedOption.goalValues[goal].toFixed(2) * 100 + "%")
+              percentage.toFixed(0) + "%")
         })
         return goalnames
       }
@@ -151,6 +152,15 @@ export default {
         }
       })
       return identifier + ":" + label.split(":")[1]
+    },
+    getState(name) {
+      let state = "unknown"
+      this.nodes.forEach(node => {
+        if (node.name === name) {
+          state = node.state
+        }
+      })
+      return state
     }
   }
 }

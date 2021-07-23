@@ -4,7 +4,7 @@
              @rowSelect="update" @rowUnselect="update">
     <Column field="option">
       <template #body>
-        <div>results without calculating in interventions</div>
+        <div>no interventions</div>
       </template>
     </Column>
   </DataTable>

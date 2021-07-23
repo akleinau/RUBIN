@@ -11,6 +11,11 @@
           <h3> {{ $t("FullNetwork") }}</h3> {{ $t("FullNetworkHelp") }}
       </OverlayPanel>
     </template>
+    <template #subtitle v-if="selectedOption">
+      <div  v-for="o in Object.keys(selectedOption.option)" :key="o">
+              {{labels[o]}}: {{selectedOption.option[o]}}
+      </div>
+    </template>
     <template #content>
       <ScrollPanel style="height:100%">
         <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
@@ -85,6 +90,7 @@ export default {
   },
   computed: {
     compactNetwork: function () {
+      console.log(this.selectedOption)
 
       if (this.explain.explanation == null) {
         return null

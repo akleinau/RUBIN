@@ -1,4 +1,6 @@
 <template>
+  Save, load and compare configurations.
+  <br><br>
   <Menu :model="menu"  :scrollable="true"
            scrollHeight="300px" selectionMode="single"/>
   <br>
