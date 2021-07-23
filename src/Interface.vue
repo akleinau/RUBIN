@@ -252,7 +252,7 @@ export default {
           this.options.options = []
         }
         this.options.likelyResult = [{
-          option: [], value: nodeDict.likelyResults.value,
+          option: {}, value: nodeDict.likelyResults.value,
           goalValues: nodeDict.likelyResults.goalValues
         }]
         this.options.selectedOption = this.options.likelyResult[0]
