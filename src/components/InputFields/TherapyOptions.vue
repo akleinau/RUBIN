@@ -30,30 +30,25 @@
             <!--          <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>-->
           </div>
           <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
-          <optionsTable :results="results" :goals="goals" showLocal="true" :labels="labels"
-                        @update="update($event)" :selectedOption="selectedOption"></optionsTable>
+          <optionsTable :results="results" :goals="goals" :labels="labels"
+                        @update="update($event)" :selectedOption="selectedOption"/>
           <div v-if="compareConfig">
             <h3> {{ compareConfig.name }}:</h3>
-            <optionsTable :results="compareConfig.config.options.options" :labels="labels"
-                          :goals="compareConfig.config.newGoals" @update="update($event)"
-                          :selectedOption="selectedOption"/>
+            <div class="p-mb-2">
+             <div  v-for="o in Object.keys(compareConfig.config.options.selectedOption.option)" :key="o">
+              {{labels[o]}}: {{compareConfig.config.options.selectedOption.option[o]}}
+            </div>
+              </div>
+             <div class="p-d-flex p-jc-center" v-for="goal in Object.keys(compareConfig.config.newGoals)" :field="goal" :header="goal" :key="goal">
+                  <div class="p-mr-2">{{goal}}</div>
+                  <div class="p-mr-2">
+                    <bar :value="compareConfig.config.options.selectedOption.goalValues[String(goal)]" color="teal" width="200"
+              v-tooltip="compareConfig.config.options.selectedOption.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
+                  </div>
+            </div>
           </div>
         </div>
       </ScrollPanel>
-
-      <Dialog :header="$t('localRelevance')" v-model:visible="showLocal"
-              style="width:90%; height:90%; background-color:white"
-              :modal="true">
-        <optionsTable :results="results" :goals="goals" showLocal="true" :labels="labels"
-                      @update="update($event)" :selectedOption="selectedOption"></optionsTable>
-        <div v-if="compareConfig">
-          <h3> {{ compareConfig.name }}:</h3>
-          <optionsTable :results="compareConfig.config.options.options" showLocal="true" :labels="labels"
-                        :goals="compareConfig.config.newGoals" @update="update($event)"
-                        :selectedOption="selectedOption"/>
-        </div>
-      </Dialog>
-
     </template>
   </Card>
 
@@ -63,6 +58,7 @@
 import TherapyInput from "@/components/InputFields/TherapyInput";
 import optionsTable from "@/components/InputFields/optionsTable"
 import likelyTable from "@/components/InputFields/likelyTable";
+import bar from "@/components/visualisations/bar";
 
 export default {
   name: "TherapyOptions",
@@ -70,7 +66,8 @@ export default {
   components: {
     TherapyInput,
     optionsTable,
-    likelyTable
+    likelyTable,
+    bar
   },
   props: [
     "results",

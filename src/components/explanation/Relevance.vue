@@ -35,7 +35,8 @@
     </div>
     <div class="p-col" v-else>
       <h3> {{ compareConfig.name }}:</h3>
-      <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance">
+      <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance" v-model:expandedRows="compareExpandedRows">
+        <Column :expander="true" headerStyle="width: 3rem"/>
         <Column :header="$t('Node')" field="node_name">
           <template #body="slotProps">
             {{ labels[slotProps.data.node_name] }}
@@ -47,49 +48,24 @@
                  v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
+        <template #expansion="slotProps">
+        <DataTable :value="getGoalKeys()" :key="goal" :rowClass="() => 'smallTable'">
+          <Column header="influence on goals:">
+            <template #body="currGoal">
+              {{ currGoal.data }}
+            </template>
+          </Column>
+          <Column>
+            <template #body="currGoal">
+              <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(currGoal.data)]"
+                           v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(currGoal.data)])"></twoSidedBar>
+            </template>
+          </Column>
+        </DataTable>
+      </template>
       </DataTable>
     </div>
   </div>
-
-  <Dialog :header="$t('localRelevance')" v-model:visible="showLocal"
-          style="width:90%; height:90%; background-color:white"
-          :modal="true">
-    <DataTable :value="relevance" class="p-datatable-sm">
-      <Column :header="$t('Node')" field="node_name"/>
-      <Column :header="$t('Relevance')" field="overall_relevance">
-        <template #body="slotProps">
-          <bar :value="slotProps.data.overall_relevance" color="#004d80"
-               v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
-        </template>
-      </Column>
-      <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
-        <template #body="slotProps">
-          <twoSidedBar :value="slotProps.data.relevancies[goal]"
-                       v-tooltip="slotProps.data.relevancies[goal].toFixed(2)*100 + '%'"></twoSidedBar>
-        </template>
-      </Column>
-    </DataTable>
-    <h3 v-if="compareConfig"> {{ compareConfig.name }}:</h3>
-    <DataTable :value="compareConfig.config.explain.relevance"
-               v-if="compareConfig" class="p-datatable-sm">
-      <Column :header="$t('Node')" field="node_name"/>
-      <Column :header="$t('Relevance')" field="overall_relevance">
-        <template #body="slotProps">
-          <bar :value="slotProps.data.overall_relevance" color="#004d80"
-               v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
-        </template>
-      </Column>
-      <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
-        <template #body="slotProps">
-          <twoSidedBar :value="slotProps.data.relevancies[goal]"
-                       v-tooltip="slotProps.data.relevancies[goal].toFixed(2)*100 + '%'"></twoSidedBar>
-        </template>
-      </Column>
-    </DataTable>
-  </Dialog>
-
-  <!--  <Button :label="$t('ShowMore')" @click="showLocal = true"></Button>-->
-
 </template>
 
 <script>
@@ -113,7 +89,8 @@ export default {
   data() {
     return {
       showLocal: false,
-      expandedRows: []
+      expandedRows: [],
+      compareExpandedRows: []
     }
   },
   methods: {

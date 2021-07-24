@@ -90,8 +90,6 @@ export default {
   },
   computed: {
     compactNetwork: function () {
-      console.log(this.selectedOption)
-
       if (this.explain.explanation == null) {
         return null
       }

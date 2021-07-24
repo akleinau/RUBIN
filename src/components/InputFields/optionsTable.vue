@@ -1,7 +1,7 @@
 <template>
  <DataTable :value="results" class="p-datatable-sm" :autoLayout="true"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
-                 @rowSelect="update" @rowUnselect="update">
+                 @rowSelect="update" @rowUnselect="update" >
         <Column>
           <template #body="slotProps">
               {{slotProps.index +1}}.
@@ -17,12 +17,6 @@
         <Column >
           <template #body="slotProps">
             <i v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
-          </template>
-        </Column>
-        <Column v-if="false" :header="$t('OutcomeCertainty')" field="value" style="width:40%">
-          <template #body="slotProps">
-            <bar :value=slotProps.data.value color="RebeccaPurple"
-                 v-tooltip="slotProps.data.value.toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
@@ -46,7 +40,7 @@ export default {
   },
   data() {
     return {
-      "selected": null,
+      selected: null,
       optionCount: 0
     }
   },
@@ -54,7 +48,6 @@ export default {
     "results",
       "goals",
       "selectedOption",
-      "showLocal",
       "labels"
   ],
     watch: {
@@ -64,7 +57,7 @@ export default {
   },
   methods: {
     getGoalKeys() {
-      if (this.goals != null && this.showLocal) {
+      if (this.goals != null) {
         return Object.keys(this.goals)
       }},
     getOptionLabel(option) {

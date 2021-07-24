@@ -1,6 +1,6 @@
 <template>
   <DataTable :value="results" class="p-datatable-sm" :autoLayout="true"
-             dataKey="option" selectionMode="single" v-model:selection="selected"
+             :dataKey="option" selectionMode="single" v-model:selection="selected"
              @rowSelect="update" @rowUnselect="update">
     <Column field="option">
       <template #body>
