@@ -22,7 +22,7 @@
 
 
     <Dialog header="  " v-model:visible="overlay" style="width: 50%" :modal="true">
-      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%" @click="addTargetsFromOverlay()"/>
+      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%; background:teal; border: teal" @click="addTargetsFromOverlay()"/>
       <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
         <template #option="slotProps">
           <div>
