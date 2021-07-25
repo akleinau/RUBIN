@@ -38,16 +38,11 @@
             </div>
           </TabPanel>
           <TabPanel :header="$t('FullNetwork')">
-            <Dropdown v-model="fullNetworkLayout" :options="layouts" optionLabel="name" class="p-mb-2"/>
             <div v-if="compareConfig==null">
-              <BNvis v-if="fullNetworkLayout.name === 'Force-directed'" :edges="edges" :nodes="explain.states" :labels="labels"/>
-              <sugiyama v-else :edges="edges" :nodes="explain.states" :labels="labels"/>
+              <sugiyama :edges="edges" :nodes="explain.states" :labels="labels"/>
             </div>
             <div v-else>
-              <BNvisCompare v-if="fullNetworkLayout.name === 'Force-directed'" :edges="edges" :nodes="explain.states"
-                            :nodes2="compareConfig.config.explain.states" :labels="labels"
-                            :name2="compareConfig.name"/>
-              <sugiyamaCompare v-else :edges="edges" :nodes="explain.states" :nodes2="compareConfig.config.explain.states"
+              <sugiyamaCompare  :edges="edges" :nodes="explain.states" :nodes2="compareConfig.config.explain.states"
                                :name2="compareConfig.name" :labels="labels"/>
             </div>
           </TabPanel>
@@ -59,33 +54,24 @@
 
 <script>
 import Relevance from "@/components/explanation/Relevance";
-import BNvis from "@/components/visualisations/BNvis";
 import sugiyama from "@/components/visualisations/sugiyama";
 import NodeList from "@/components/explanation/NodeList";
 import sugiyamaCompare from "@/components/visualisations/sugiyamaCompare";
-import BNvisCompare from "@/components/visualisations/BNvisCompare";
 
 export default {
   name: "Network",
   props: ['goals', "edges", "explain", "compareConfig", "loading", "selectedOption", "labels"],
   components: {
     Relevance,
-    BNvis,
     sugiyama,
     NodeList,
-    sugiyamaCompare,
-    BNvisCompare
+    sugiyamaCompare
   },
   data() {
     return {
       onlyGlobal: true,
       compactEdges: null,
-      exNodes: null,
-      fullNetworkLayout: {name: 'Sugiyama'},
-      layouts: [
-        {name: 'Sugiyama'},
-        {name: 'Force-directed'}
-      ]
+      exNodes: null
     }
   },
   computed: {
