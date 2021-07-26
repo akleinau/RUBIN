@@ -3,7 +3,7 @@
   <form @submit.prevent="upload" id = "upload-form" enctype="multipart/form-data">
     <label>{{$t('NetworkName')}}: <InputText id = "net-name" type = "text" required/> </label>
     <br><br>
-    <FileUpload name = "net-upload" url="./upload" accept=".net" :customUpload="true" :chooseLabel="$t('Choose')"
+    <FileUpload name = "net-upload" url="./upload" accept=".net" :customUpload="true" :chooseLabel="$t('Choose')" disabled="disabled"
               :cancelLabel="$t('Cancel')"  :auto="true" :showUploadButton="false" @uploader="file = $event.files" required/>
     <br>
     <label>{{$t('OptDescription')}}: <Textarea id = "net-description"></Textarea></label>

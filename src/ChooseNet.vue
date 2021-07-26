@@ -9,7 +9,17 @@
     </Card>
 
     <div class="p-col p-grid vertical-container " style="height:100%">
-      <div class="p-col stretched">
+      <div class="p-col  stretched">
+        <Card class=" stretched">
+          <template #title>
+            {{ $t('selectNetwork') }}
+          </template>
+          <template #content>
+            <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage"></Networklist>
+          </template>
+        </Card>
+      </div>
+        <div class="p-col stretched">
         <Card class=" stretched">
           <template #title>
             {{ $t('uploadNetwork') }}
@@ -20,17 +30,6 @@
             Uploading networks is disabled in this version.
           </template>
         </Card>
-      </div>
-      <div class="p-col  stretched">
-        <Card class=" stretched">
-          <template #title>
-            {{ $t('selectNetwork') }}
-          </template>
-          <template #content>
-            <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage"></Networklist>
-          </template>
-        </Card>
-
       </div>
     </div>
 
