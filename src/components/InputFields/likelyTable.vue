@@ -4,7 +4,7 @@
              @rowSelect="update" @rowUnselect="update">
     <Column field="option">
       <template #body>
-        <div>no interventions</div>
+        <div>{{ $t("noInterventions")}}</div>
       </template>
     </Column>
   </DataTable>

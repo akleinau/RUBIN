@@ -15,7 +15,7 @@
       </Column>
       <template #expansion="slotProps">
         <DataTable :value="getGoalKeys()" :key="goal" :rowClass="() => 'smallTable'">
-          <Column header="influence on goals:">
+          <Column :header="$t('goalInfluence')">
             <template #body="currGoal">
               {{ currGoal.data }}
             </template>
@@ -50,7 +50,7 @@
         </Column>
         <template #expansion="slotProps">
         <DataTable :value="getGoalKeys()" :key="goal" :rowClass="() => 'smallTable'">
-          <Column header="influence on goals:">
+          <Column :header="$t('goalInfluence')">
             <template #body="currGoal">
               {{ currGoal.data }}
             </template>
@@ -116,9 +116,9 @@ export default {
       }
     },
     getDirectionTooltip(number) {
-      if (number > 0.001) return "positive influence "
-      else if (number < -0.001) return "negative influence "
-      else return "almost no influence "
+      if (number > 0.001) return this.$t("positiveInfluence")
+      else if (number < -0.001) return this.$t("negativeInfluence")
+      else return this.$t("noInfluence")
     },
     getIdentifier(label) {
       let identifier = "-1"

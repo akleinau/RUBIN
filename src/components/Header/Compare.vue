@@ -1,5 +1,5 @@
 <template>
-  Save, load and compare configurations.
+  {{$t("configurationsHelp")}}
   <br><br>
   <Menu :model="menu"  :scrollable="true"
            scrollHeight="300px" selectionMode="single"/>
