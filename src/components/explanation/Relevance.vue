@@ -39,13 +39,13 @@
         <Column :expander="true" headerStyle="width: 3rem"/>
         <Column :header="$t('Node')" field="node_name">
           <template #body="slotProps">
-            {{ labels[slotProps.data.node_name] }}
+            {{ labels[slotProps.data.node_name] }}: {{getCompareState(slotProps.data.node_name)}}
           </template>
         </Column>
         <Column :header="$t('Relevance')" field="overall_relevance">
           <template #body="slotProps">
             <bar :value="slotProps.data.overall_relevance" color="#004d80" width="300"
-                 v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
+                 v-tooltip="(slotProps.data.overall_relevance*100).toFixed(0) + '%'"></bar>
           </template>
         </Column>
         <template #expansion="slotProps">
@@ -93,6 +93,12 @@ export default {
       compareExpandedRows: []
     }
   },
+  watch: {
+    selectedOption: function () {
+      this.expandedRows = []
+      this.compareExpandedRows = []
+    }
+  },
   methods: {
     getGoalKeys() {
       if (this.goals != null) {
@@ -133,6 +139,15 @@ export default {
     getState(name) {
       let state = "unknown"
       this.nodes.forEach(node => {
+        if (node.name === name) {
+          state = node.state
+        }
+      })
+      return state
+    },
+    getCompareState(name) {
+      let state = "unknown"
+      this.compareConfig.config.explain.states.forEach(node => {
         if (node.name === name) {
           state = node.state
         }

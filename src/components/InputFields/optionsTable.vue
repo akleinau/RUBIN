@@ -22,7 +22,7 @@
         <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
           <template #body="slotProps">
             <bar :value="slotProps.data.goalValues[String(goal)]" color="teal" width="200"
-            v-tooltip="slotProps.data.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
+            v-tooltip="(slotProps.data.goalValues[String(goal)]*100).toFixed(0) + '%'"></bar>
           </template>
         </Column>
       </DataTable>
