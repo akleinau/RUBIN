@@ -59,6 +59,17 @@ name: "sugiyama",
     },
     visualise() {
 
+      function longName(thisThing, node, d) {
+        d3.select(node.target).text(String(thisThing.labels[d.data.id]) + ": ")
+      }
+
+      function shortName(thisThing, node, d) {
+        console.log("dubs")
+        d3.select(node.target).text(String(thisThing.labels[d.data.id]).substring(0, 10) + ": ")
+      }
+
+
+
       if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
 
         var graph = dag.dagConnect()(this.edgeList)
@@ -151,6 +162,8 @@ name: "sugiyama",
             .attr("class", "text")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')
+            .on("mouseenter", (e,d) => longName(this, e, d))
+            .on("mouseleave", (e,d) => shortName(this, e, d))
 
         // Add text to nodes
         nodes.append('text')
