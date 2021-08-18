@@ -26,17 +26,7 @@
       </DataTable>
 
     <Dialog header="  " v-model:visible="overlay" style="width: 50%" :modal="true" v-if="changeable">
-      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%; background:teal; border: teal" @click="addNodesFromOverlay()"/>
-      <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
-        <template #option="slotProps">
-          <div>
-            {{ labels[slotProps.option.name] }}: {{ slotProps.option.selected.name }}
-              <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
-              @click="deleteNodeFromOverlay(slotProps.option)"/>
-          </div>
-        </template>
-      </Listbox>
-      <DataTable :value="overlayNodes" :scrollable="true" scrollHeight="500px" class="p-datatable-sm"
+            <DataTable :value="overlayNodes" :scrollable="true" scrollHeight="400px" class="p-datatable-sm"
                  v-model:filters="filters" filterDisplay="menu" data-key="name">
         <template #header>
             <div class="p-d-flex p-jc-between">
@@ -61,6 +51,17 @@
           </template>
         </Column>
       </DataTable>
+
+      <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
+        <template #option="slotProps">
+          <div>
+            {{ labels[slotProps.option.name] }}: {{ slotProps.option.selected.name }}
+              <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
+              @click="deleteNodeFromOverlay(slotProps.option)"/>
+          </div>
+        </template>
+      </Listbox>
+      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%; background:teal; border: teal" @click="addNodesFromOverlay()"/>
     </Dialog>
 
 
