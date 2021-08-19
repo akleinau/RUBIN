@@ -20,13 +20,16 @@
       <ScrollPanel style="height:100%">
         <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
         <TabView>
+          <!--   relevance  -->
           <TabPanel :header="$t('Relevance')">
             <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states"
             :compareConfig="compareConfig" :selectedOption="selectedOption" :labels="labels"/>
           </TabPanel>
+          <!--   all predictions  -->
           <TabPanel :header="$t('AllPredictions')">
             <NodeList :nodes="explain.states" :compareConfig="compareConfig" :labels="labels"/>
           </TabPanel>
+          <!--   compact network  -->
           <TabPanel :header="$t('CompactNetwork')">
             <div v-if="compareConfig==null">
               <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()" :labels="labels"/>
@@ -37,6 +40,7 @@
                                :name2="compareConfig.name" :labels="labels"/>
             </div>
           </TabPanel>
+          <!--   full network  -->
           <TabPanel :header="$t('FullNetwork')">
             <div v-if="compareConfig==null">
               <sugiyama :edges="edges" :nodes="explain.states" :labels="labels"/>

@@ -32,6 +32,7 @@
           <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
           <optionsTable :results="results" :goals="goals" :labels="labels"
                         @update="update($event)" :selectedOption="selectedOption"/>
+          <!--    compare view  -->
           <div v-if="compareConfig">
             <h3> {{ compareConfig.name }}:</h3>
             <div class="p-mb-2">

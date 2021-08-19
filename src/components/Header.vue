@@ -13,7 +13,7 @@
     </template>
   </Menubar>
 
-
+<!--   dialogs/ overlays  -->
   <Dialog :header="$t('Feedback')" v-model:visible="showFeedback" style="width: 50%" :modal="true">
     <Feedback @sendFeedback="sendFeedback($event)"></Feedback>
   </Dialog>

@@ -19,6 +19,7 @@
         </template>
       </Column>
     </DataTable>
+<!--    compare view  -->
     <br><br>
     <div class="p-col" v-if="compareConfig == null">
       <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{ goal }}</div>
