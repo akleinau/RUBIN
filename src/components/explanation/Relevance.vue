@@ -1,7 +1,6 @@
 <template>
   <div class="p-d-flex p-dir-col">
     <DataTable class="p-col p-datatable-sm" :value="relevance" v-model:expandedRows="expandedRows" dataKey="node_name">
-      <Column :expander="true" headerStyle="width: 3rem"/>
       <Column :header="$t('Node')" field="node_name">
         <template #body="slotProps">
           {{ labels[slotProps.data.node_name] }}: {{getState(slotProps.data.node_name)}}
@@ -9,25 +8,16 @@
       </Column>
       <Column :header="$t('Relevance')" field="overall_relevance">
         <template #body="slotProps">
-          <bar :value="slotProps.data.overall_relevance" color="#004d80" width="300"
+          <bar :value="slotProps.data.overall_relevance" color="#004d80" width="200"
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
         </template>
       </Column>
-      <template #expansion="slotProps">
-        <DataTable :value="getGoalKeys()" :key="goal" :rowClass="() => 'smallTable'">
-          <Column :header="$t('goalInfluence')">
-            <template #body="currGoal">
-              {{ currGoal.data }}
-            </template>
-          </Column>
-          <Column>
-            <template #body="currGoal">
-              <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(currGoal.data)]"
-                           v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(currGoal.data)])"></twoSidedBar>
-            </template>
-          </Column>
-        </DataTable>
-      </template>
+      <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
+        <template #body="slotProps">
+          <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
+                       v-tooltip="slotProps.data.relevancies[getIdentifier(goal)].toFixed(2)*100 + '%'"></twoSidedBar>
+        </template>
+      </Column>
     </DataTable>
     <br><br>
     <div class="p-col" v-if="compareConfig == null">
