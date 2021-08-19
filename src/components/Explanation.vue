@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card :class="getCardClass()">
     <template #title>
       {{ $t("Explanation") }}
       <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
@@ -13,13 +13,13 @@
     </template>
     <template #subtitle v-if="selectedOption">
       <div  v-for="o in Object.keys(selectedOption.option)" :key="o">
-              {{labels[o]}}: {{selectedOption.option[o]}}
+        <b>  {{labels[o]}}: {{selectedOption.option[o]}} </b>
       </div>
     </template>
     <template #content>
       <ScrollPanel style="height:100%">
         <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
-        <TabView>
+        <TabView v-else>
           <!--   relevance  -->
           <TabPanel :header="$t('Relevance')">
             <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states" :targets="targets"
@@ -148,6 +148,10 @@ export default {
       if (this.compactNetwork != null) {
         return this.compactNetwork.compactNodes
       }
+    },
+    getCardClass() {
+      if (this.selectedOption === null) return null
+      return (Object.entries(this.selectedOption.option).length === 0) ? null: "treatmentCard"
     }
   }
 }
@@ -159,7 +163,15 @@ export default {
   height: 100% !important;
 }
 
+.treatmentCard {
+    border: 10px solid #b3b3b3;
+}
+
 .help {
+  position:absolute;
+  right:5%
+}
+.buttons {
   position:absolute;
   right:5%
 }

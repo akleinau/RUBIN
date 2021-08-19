@@ -75,6 +75,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+::v-deep(.p-highlight) {
+  background-color: rgba(55, 55, 55, 0.15) !important;
+}
 </style>
