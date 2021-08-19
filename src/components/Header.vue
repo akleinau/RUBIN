@@ -20,7 +20,7 @@
   <Dialog :header="$t('NetworkDescription')" v-model:visible="showNetworkDescription" style="width: 50%" :modal="true">
     {{ description }}
   </Dialog>
-  <OverlayPanel ref="compareOverlay">
+  <OverlayPanel ref="compareOverlay" style="width: 50%">
     <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"
              @load="load($event)" @deleteConfig="deleteConfig($event)"/>
   </OverlayPanel>
@@ -170,11 +170,9 @@ export default {
     },
     deleteConfig(name) {
       this.$emit('deleteConfig', name)
-      this.$refs.compareOverlay.toggle()
     },
     saveConfig(name) {
       this.$emit('saveConfig', name)
-      this.$refs.compareOverlay.toggle()
     },
     sendFeedback(description) {
       this.$emit("sendFeedback", description)
