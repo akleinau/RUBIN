@@ -2,7 +2,7 @@
  <Card>
     <template #title style="height:100%" :class="DesiredOutcomes" class="p-m-0 p-p-0">
       {{ $t("DesiredOutcomes") }}
-      <Button icon="pi pi-question" class="p-button-text p-button-secondary help" @click="$refs.op.toggle($event)" />
+      <Button icon="pi pi-question" class="p-button-text p-button-secondary p-button-rounded p-button-raised help" @click="$refs.op.toggle($event)" />
       <OverlayPanel ref="op" style="width:500px">
         {{ $t("DesiredOutcomesHelp") }}
       </OverlayPanel>
