@@ -35,7 +35,7 @@
 
     </BlockUI>
     <BlockUI class="p-col stretched" :blocked="block.explain">
-      <Explanation :goals="newGoals" :edges="edges" :explain="explain" :loading="explanationLoading"
+      <Explanation :goals="newGoals" :edges="edges" :explain="explain" :loading="explanationLoading" :targets="patient.targets"
                    :compareConfig="selectedConfig" :selectedOption="options.selectedOption" :labels="labels"/>
 
     </BlockUI>

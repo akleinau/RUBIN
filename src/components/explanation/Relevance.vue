@@ -1,6 +1,7 @@
 <template>
   <div class="p-d-flex p-dir-col">
-    <DataTable class="p-col p-datatable-sm" :value="relevance" v-model:expandedRows="expandedRows" dataKey="node_name">
+    <DataTable class="p-col p-datatable-sm" :value="relevance" v-model:expandedRows="expandedRows" dataKey="node_name"
+      :rowClass="isTherapyRow">
       <Column :header="$t('Node')" field="node_name">
         <template #body="slotProps">
           {{ labels[slotProps.data.node_name] }}: {{getState(slotProps.data.node_name)}}
@@ -75,7 +76,8 @@ export default {
     "nodes",
     "compareConfig",
     "selectedOption",
-    "labels"
+    "labels",
+      "targets"
   ],
   data() {
     return {
@@ -144,6 +146,13 @@ export default {
         }
       })
       return state
+    },
+    isTherapyRow(row) {
+      let rowClass = null
+      this.targets.forEach(target => {
+         if (target.name === row.node_name) rowClass = "therapy"
+        })
+      return rowClass
     }
   }
 }
@@ -157,6 +166,10 @@ export default {
 
 ::v-deep(.smallTable) {
   background-color: rgba(133, 131, 131, 0.15) !important;
+}
+
+::v-deep(.therapy) {
+    background-color: rgba(55, 55, 55, 0.15) !important;
 }
 
 img {

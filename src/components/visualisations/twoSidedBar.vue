@@ -41,9 +41,9 @@ export default {
 
       svg.append("rect")
           .attr("fill", color(this.value))
-          .attr("y", 5)
+          .attr("y", 3)
           .attr("x", width / 2 + x)
-          .attr("height", height-10)
+          .attr("height", height-6)
           .attr("width", length(absValue));
 
       svg.append("line")

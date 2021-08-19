@@ -22,7 +22,7 @@
         <TabView>
           <!--   relevance  -->
           <TabPanel :header="$t('Relevance')">
-            <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states"
+            <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states" :targets="targets"
             :compareConfig="compareConfig" :selectedOption="selectedOption" :labels="labels"/>
           </TabPanel>
           <!--   all predictions  -->
@@ -64,7 +64,7 @@ import sugiyamaCompare from "@/components/visualisations/sugiyamaCompare";
 
 export default {
   name: "Network",
-  props: ['goals', "edges", "explain", "compareConfig", "loading", "selectedOption", "labels"],
+  props: ['goals', "edges", "explain", "compareConfig", "loading", "selectedOption", "labels", "targets"],
   components: {
     Relevance,
     sugiyama,
