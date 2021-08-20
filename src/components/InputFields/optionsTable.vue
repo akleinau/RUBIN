@@ -19,10 +19,16 @@
             <i v-if="slotProps.index === 0" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
           </template>
         </Column>
-        <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
+        <Column v-for="goal in getGoalKeys()" :field="goal" :header="getGoalLabel(goal)" :key="goal">
           <template #body="slotProps">
             <bar :value="slotProps.data.goalValues[String(goal)]" color="teal" width="200"
             v-tooltip="(slotProps.data.goalValues[String(goal)]*100).toFixed(0) + '%'"></bar>
+          </template>
+        </Column>
+        <Column>
+          <template #body="slotProps">
+            <Button v-if="slotProps.data === selected" class="p-button-secondary p-button-text p-button-rounded"
+                    icon="pi pi-times" @click="deselect" />
           </template>
         </Column>
       </DataTable>
@@ -71,6 +77,12 @@ export default {
     update() {
       this.$emit("update", this.selected);
     },
+    getGoalLabel(goal) {
+      return this.labels[goal] + ": " + this.goals[goal]
+    },
+    deselect() {
+      this.$emit("update", null)
+    }
   }
 }
 </script>
@@ -78,5 +90,6 @@ export default {
 <style lang="scss" scoped>
 ::v-deep(.p-highlight) {
   background-color: rgba(55, 55, 55, 0.15) !important;
+  border: 2px solid black
 }
 </style>

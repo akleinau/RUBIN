@@ -17,10 +17,6 @@
     <template #content>
       <ScrollPanel style="height:100%">
         <div>
-
-          <likelyTable :results="likelyResult" :goals="goals" :labels="labels"
-                       @update="update($event)" :selectedOption="selectedOption"></likelyTable>
-
           <h3 class="p-text-left">{{ $t("Interventions") }}:</h3>
           <TherapyInput :nodes="nodes" :selection="targets" :compareConfig="compareConfig" :labels="labels"
                         @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)"/>
@@ -58,7 +54,6 @@
 <script>
 import TherapyInput from "@/components/InputFields/TherapyInput";
 import optionsTable from "@/components/InputFields/optionsTable"
-import likelyTable from "@/components/InputFields/likelyTable";
 import bar from "@/components/visualisations/bar";
 
 export default {
@@ -67,7 +62,6 @@ export default {
   components: {
     TherapyInput,
     optionsTable,
-    likelyTable,
     bar
   },
   props: [

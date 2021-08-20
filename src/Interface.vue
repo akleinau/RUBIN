@@ -333,7 +333,8 @@ export default {
       this.calculate()
     },
     selectedOptionUpdated(option) {
-      this.options.selectedOption = option
+      option === null? this.options.selectedOption = this.options.likelyResult[0] : this.options.selectedOption = option
+      console.log(this.options.selectedOption)
       if (option === []) this.explain.relevance = null
       else {
         this.calculateOption()
