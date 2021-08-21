@@ -80,6 +80,6 @@
   "negativeInfluence": "negativer Einfluss",
   "noInfluence": "fast kein Einfluss",
   "configurationsHelp": "Speicher, lade und vergleiche Konfigurationen.",
-  "goalInfluence": "Einfluss auf Ergebnisse:"
-
+  "goalInfluence": "Einfluss auf Ergebnisse:",
+  "RequestUpload": "Um Upload auf Server bitten"
 }

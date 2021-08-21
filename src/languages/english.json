@@ -80,6 +80,7 @@
   "negativeInfluence": "negative influence",
   "noInfluence": "almost no influence",
   "configurationsHelp": "Save, load and compare configurations.",
-  "goalInfluence": "influence on goals:"
+  "goalInfluence": "influence on goals:",
+  "RequestUpload": "Request upload to server"
 
 }

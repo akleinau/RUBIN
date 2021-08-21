@@ -27,7 +27,6 @@
           <template #content>
             <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()" @loadLocalNet="loadLocalNet($event)"></Upload>
             <br> <br>
-            Uploading networks is disabled in this version.
           </template>
         </Card>
       </div>

@@ -12,7 +12,7 @@
     <label>{{ $t('OptDescription') }}: <Textarea id="net-description"></Textarea></label>
     <br><br>
     <Checkbox v-model="uploadToServer" :value="true" disabled="disabled"></Checkbox>
-    <label>upload to server</label>
+    <label>{{ $t('RequestUpload') }}</label>
   </form>
   <Button name="net-submit" type="submit" :label="$t('UploadNet')" @click="upload()"/>
 </template>
