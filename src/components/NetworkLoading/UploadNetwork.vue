@@ -70,14 +70,34 @@ export default {
         let reader = new FileReader()
         reader.readAsText(fileField[0])
         let nameSplit = fileField[0].name.split(".")
-        let fileFormat = nameSplit[nameSplit.length-1]
+        let fileFormat = nameSplit[nameSplit.length - 1]
         let thisRef = this
-        reader.onload = function () {
+        reader.onload = async function () {
           let fileString = reader.result
           console.log(fileString)
-          let localNet = {"name": displayName, "description": netDescription, "fileFormat": fileFormat, "fileString": fileString}
+          let localNet = {
+            "name": displayName,
+            "description": netDescription,
+            "fileFormat": fileFormat,
+            "fileString": fileString
+          }
           thisRef.$emit("loadLocalNet", localNet);
-        };
+
+          //send request to upload to server
+          let gResponse = await fetch("https://doctorbn-backend.herokuapp.com/sendNetworkRequest", {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: localNet.name,
+              fileString: localNet.fileString,
+              fileFormat: localNet.fileFormat,
+            })
+          })
+          let result = await gResponse.json();
+          console.log(result)
+        }
       }
     }
   }
