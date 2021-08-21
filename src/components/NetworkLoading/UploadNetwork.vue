@@ -5,7 +5,7 @@
       <InputText id="net-name" type="text" required/>
     </label>
     <br><br>
-    <FileUpload name="net-upload" url="./upload" accept=".net" :customUpload="true" :chooseLabel="$t('Choose')"
+    <FileUpload name="net-upload" url="./upload" accept=".net, .bif" :customUpload="true" :chooseLabel="$t('Choose')"
                 :cancelLabel="$t('Cancel')" :auto="true" :showUploadButton="false" @uploader="file = $event.files"
                 required/>
     <br>
@@ -69,9 +69,13 @@ export default {
         //open network
         let reader = new FileReader()
         reader.readAsText(fileField[0])
+        let nameSplit = fileField[0].name.split(".")
+        let fileFormat = nameSplit[nameSplit.length-1]
         let thisRef = this
         reader.onload = function () {
-          let localNet = {"name": displayName, "description": netDescription, "fileFormat": "net", "fileString": reader.result}
+          let fileString = reader.result
+          console.log(fileString)
+          let localNet = {"name": displayName, "description": netDescription, "fileFormat": fileFormat, "fileString": fileString}
           thisRef.$emit("loadLocalNet", localNet);
         };
       }

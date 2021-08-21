@@ -181,6 +181,7 @@ export default {
           },
           body: JSON.stringify({
             fileString: this.localNet.fileString,
+            fileFormat: this.localNet.fileFormat,
             description: this.localNet.description
           })
         });
@@ -256,6 +257,7 @@ export default {
           body: JSON.stringify({
             network: this.network,
             fileString: this.localNet.fileString,
+            fileFormat: this.localNet.fileFormat,
             evidences: evidences,
             target: targets,
             goals: goals
@@ -317,6 +319,7 @@ export default {
         body: JSON.stringify({
           network: this.network,
           fileString: this.localNet.fileString,
+          fileFormat: this.localNet.fileFormat,
           evidences: evidences,
           options: this.options.selectedOption.option,
           goals: goals
