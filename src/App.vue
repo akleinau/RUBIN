@@ -1,7 +1,7 @@
 <template>
-  <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork($event)"></ChooseNet>
+  <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork($event)" @loadLocalNet="loadLocalNet($event)"></ChooseNet>
   <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'" :network="selectedNetwork"
-             :networkFile="networkFile" />
+             :localNet="localNet"/>
 </template>
 
 <script>
@@ -18,20 +18,19 @@ export default {
     return {
       page: "chooseNet",
       selectedNetwork: null,
-      networkFile: null,
-      description: null
+      localNet: null
     }
   },
   methods: {
     loadNetwork(selectedNet) {
       this.page = 'interface'
       this.selectedNetwork = selectedNet
+      this.localNet = null
     },
-    loadLocalNetwork(localNet) {
+    loadLocalNet(localNet) {
       this.page = 'interface'
       this.selectedNetwork = localNet.name
-      this.description = localNet.description
-      this.networkFile = localNet.fileString
+      this.localNet = localNet
     }
   }
 }

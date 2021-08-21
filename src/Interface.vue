@@ -66,7 +66,7 @@ export default {
     tutorial
   },
   props: [
-    "network", "networkFile"
+    "network", "localNet"
   ],
   data() {
     return {
@@ -173,15 +173,15 @@ export default {
     },
     loadNodes: async function () {
       let gResponse = null
-      if (this.networkFile) {
+      if (this.localNet) {
         gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getLocalNetwork", {
           method: 'POST',
           headers: {
             'content-type': 'application/json'
           },
           body: JSON.stringify({
-            fileString: this.networkFile,
-            description: this.description
+            fileString: this.localNet.fileString,
+            description: this.localNet.description
           })
         });
       }
@@ -247,7 +247,7 @@ export default {
           targets.push(this.patient.targets[target].name)
         }
         let gResponse = null
-        if (this.networkFile) {
+        if (this.localNet) {
            gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcTargetForGoals", {
           method: 'POST',
           headers: {
@@ -255,7 +255,7 @@ export default {
           },
           body: JSON.stringify({
             network: this.network,
-            localNetwork: this.networkFile,
+            fileString: this.localNet.fileString,
             evidences: evidences,
             target: targets,
             goals: goals
@@ -308,7 +308,7 @@ export default {
         goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
       }
       let gResponse = null
-      if (this.networkFile) {
+      if (this.localNet) {
         gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcOptions", {
         method: 'POST',
         headers: {
@@ -316,7 +316,7 @@ export default {
         },
         body: JSON.stringify({
           network: this.network,
-          localNetwork: this.networkFile,
+          fileString: this.localNet.fileString,
           evidences: evidences,
           options: this.options.selectedOption.option,
           goals: goals

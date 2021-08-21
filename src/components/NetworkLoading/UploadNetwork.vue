@@ -69,13 +69,11 @@ export default {
         //open network
         let reader = new FileReader()
         reader.readAsText(fileField[0])
+        let thisRef = this
         reader.onload = function () {
-          //console.log(reader.result);
-          console.log("ü")
+          let localNet = {"name": displayName, "description": netDescription, "fileFormat": "net", "fileString": reader.result}
+          thisRef.$emit("loadLocalNet", localNet);
         };
-        console.log(reader.result)
-        this.$emit("loadLocalNet");
-
       }
     }
   }
