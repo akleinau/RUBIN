@@ -15,7 +15,7 @@
             {{ $t('selectNetwork') }}
           </template>
           <template #content>
-            <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage"></Networklist>
+            <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage" />
           </template>
         </Card>
       </div>
@@ -25,7 +25,7 @@
             {{ $t('uploadNetwork') }}
           </template>
           <template #content>
-            <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()"></Upload>
+            <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()" @loadLocalNet="loadLocalNet($event)"></Upload>
             <br> <br>
             Uploading networks is disabled in this version.
           </template>
@@ -75,7 +75,7 @@ import Networklist from "./components/NetworkLoading/LoadNetworkList"
 
 export default {
   name: "ChooseNet",
-  emits: ["changePage"],
+  emits: ["changePage", "loadLocalNet"],
   data() {
     return {
       page: "chooseNet",
@@ -92,6 +92,9 @@ export default {
   methods: {
     changePage(selectedNet) {
       this.$emit("changePage", selectedNet)
+    },
+    loadLocalNet(localNet) {
+      this.$emit("loadLocalNet", localNet)
     }
   }
 }

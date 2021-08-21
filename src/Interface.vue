@@ -66,7 +66,7 @@ export default {
     tutorial
   },
   props: [
-    "network"
+    "network", "localNet"
   ],
   data() {
     return {
@@ -172,7 +172,22 @@ export default {
       return correspondingNodes
     },
     loadNodes: async function () {
-      const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getNetwork?network=" + this.network);
+      let gResponse = null
+      if (this.localNet) {
+        gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getLocalNetwork", {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            fileString: this.localNet.fileString,
+            description: this.localNet.description
+          })
+        });
+      }
+      else {
+        gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getNetwork?network=" + this.network);
+      }
       const network = await gResponse.json();
       let nodes = []
       for (var key in network.states) {
@@ -231,8 +246,24 @@ export default {
         for (var target in this.patient.targets) {
           targets.push(this.patient.targets[target].name)
         }
-
-        const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcTargetForGoals", {
+        let gResponse = null
+        if (this.localNet) {
+           gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcTargetForGoals", {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            network: this.network,
+            fileString: this.localNet.fileString,
+            evidences: evidences,
+            target: targets,
+            goals: goals
+          })
+        });
+        }
+        else {
+           gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcTargetForGoals", {
           method: 'POST',
           headers: {
             'content-type': 'application/json'
@@ -244,6 +275,8 @@ export default {
             goals: goals
           })
         });
+        }
+
         let nodeDict = await gResponse.json();
         if (this.patient.targets.length !== 0) {
                   this.options.options = nodeDict.optionResults
@@ -274,8 +307,24 @@ export default {
       for (var goal in this.patient.goals) {
         goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
       }
-
-      const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcOptions", {
+      let gResponse = null
+      if (this.localNet) {
+        gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcOptions", {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          network: this.network,
+          fileString: this.localNet.fileString,
+          evidences: evidences,
+          options: this.options.selectedOption.option,
+          goals: goals
+        })
+      });
+      }
+      else {
+        gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcOptions", {
         method: 'POST',
         headers: {
           'content-type': 'application/json'
@@ -287,6 +336,8 @@ export default {
           goals: goals
         })
       });
+      }
+
       let nodeDict = await gResponse.json();
       this.explain.relevance = nodeDict.relevance
       this.newGoals = goals
