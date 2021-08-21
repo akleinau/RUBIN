@@ -22,16 +22,6 @@
 
     <!--    input dialog  -->
     <Dialog header="  " v-model:visible="overlay" style="width: 50%" :modal="true">
-      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%; background:teal; border: teal" @click="addTargetsFromOverlay()"/>
-      <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
-        <template #option="slotProps">
-          <div>
-            {{ labels[slotProps.option.name] }}
-            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
-              @click="deleteNodeFromOverlay(slotProps.option)"/>
-          </div>
-        </template>
-      </Listbox>
       <Listbox v-model="selected" :options="overlayNodes" optionLabel="name" emptyMessage="choose evidences to add"
                :filter="true" filterPlaceholder="Search"
                @change="addTarget()" listStyle="max-height:500px">
@@ -41,6 +31,16 @@
           </div>
         </template>
       </Listbox>
+      <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
+        <template #option="slotProps">
+          <div>
+            {{ labels[slotProps.option.name] }}
+            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
+              @click="deleteNodeFromOverlay(slotProps.option)"/>
+          </div>
+        </template>
+      </Listbox>
+      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%; background:teal; border: teal" @click="addTargetsFromOverlay()"/>
     </Dialog>
 
   </div>
