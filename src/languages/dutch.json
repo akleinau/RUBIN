@@ -45,7 +45,7 @@
   "Tutorial1b":"Bv stel 'overleven' op 'ja', 'therapie' op 'nee', ...",
   "Tutorial2":"Kies hier welke variabelen reeds een bepaalde waarde hebben. Normaal is dit jou evidentie en dat wat je al over de patient weet.",
   "Tutorial3a":"Kies hier de variabelen die je kan veranderen, bv therapie, medicatie, roken, ...",
-  "Tutorial3b":"Het netwerk zal nu de beste combinatie van deze interventies berekenen om je gewenste resultaten te bereiken. Kies dan een interventie voor bijkomende informatie in het venster rechts. Bij keuze “geen interventies” worden de predicties getoond zonder behandelingen meegerekend.",
+  "Tutorial3b":"Het netwerk zal nu de beste combinatie van deze interventies berekenen om je gewenste resultaten te bereiken. Kies dan een interventie voor bijkomende informatie in het venster rechts.",
   "Tutorial4":"Toont  verschillende soorten uitleg en bijkomende informatie over de gekozen optie.",
   "prev":"vorige",
   "next":"volgende",

@@ -45,7 +45,7 @@
   "Tutorial1b": "Bsp: setze 'Überleben' auf 'ja', 'Therapie' auf 'nein', ...",
   "Tutorial2": "   Gib hier Variablen an, die schon auf einen bestimmten Wert gesetzt sind. Typischerweise gibst du hier Evidenz und alles, was du schon über den Patienten weißt, an.",
   "Tutorial3a": "Gib hier verschiedene Variablen, die du beeinflussen kannst, an. Bsp: Therapie oder Medikamente des Patienten.",
-  "Tutorial3b": "Dann berechnet das Netzwerk alle Kombinationen dieser Variablen, um die beste Behandlung zu finden. Wähle eine Behandlung aus, um rechts zusätzliche Informationen zu erhalten. Wenn du 'keine Interventionen' auswählst, wirst du die Vorhersagen ohne einkalkulierte Interventionen sehen.",
+  "Tutorial3b": "Dann berechnet das Netzwerk alle Kombinationen dieser Variablen, um die beste Behandlung zu finden. Wähle eine Behandlung aus, um rechts zusätzliche Informationen zu erhalten.",
   "Tutorial4": "Hier werden verschiedene Erklärungen und zusätzliche Informationen zur gewählten Behandlung angezeigt.",
   "prev": "zurück",
   "next": "weiter",

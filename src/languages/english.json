@@ -45,7 +45,7 @@
   "Tutorial1b": "Eg: set 'survival' to yes, 'therapy' to no, ...",
   "Tutorial2": "   Choose which variables are already set to a value. This will typically be your evidence and what you already know about the patient.",
   "Tutorial3a": "Choose which variables you can change. Eg: Therapy, medication, smoking, ...",
-  "Tutorial3b": "The network will then calculate the best combination of these interventions to achieve your desired outcomes. Select one to get additional information to the right. When choosing 'no interventions' you will see the predictions without interventions already calculated in.",
+  "Tutorial3b": "The network will then calculate the best combination of these interventions to achieve your desired outcomes. Select one to get additional information to the right.",
   "Tutorial4": "Here different types of explanation and additional information for your chosen option are displayed.",
   "prev": "prev",
   "next": "next",
