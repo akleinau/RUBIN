@@ -1,6 +1,6 @@
 <template>
   <div class="p-d-flex p-dir-col">
-    <DataTable class="p-col p-datatable-sm" :value="relevance" v-model:expandedRows="expandedRows" dataKey="node_name"
+    <DataTable class="p-col p-datatable-sm" :value="relevance" dataKey="node_name"
       :rowClass="isTherapyRow">
       <Column :header="$t('Node')" field="node_name">
         <template #body="slotProps">
@@ -16,7 +16,7 @@
       <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
         <template #body="slotProps">
           <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
-                       v-tooltip="slotProps.data.relevancies[getIdentifier(goal)].toFixed(2)*100 + '%'"></twoSidedBar>
+                       v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
         </template>
       </Column>
     </DataTable>
@@ -27,35 +27,26 @@
     </div>
     <div class="p-col" v-else>
       <h3> {{ compareConfig.name }}:</h3>
-      <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance" v-model:expandedRows="compareExpandedRows">
-        <Column :expander="true" headerStyle="width: 3rem"/>
-        <Column :header="$t('Node')" field="node_name">
-          <template #body="slotProps">
-            {{ labels[slotProps.data.node_name] }}: {{getCompareState(slotProps.data.node_name)}}
-          </template>
-        </Column>
-        <Column :header="$t('Relevance')" field="overall_relevance">
-          <template #body="slotProps">
-            <bar :value="slotProps.data.overall_relevance" color="#004d80" width="300"
-                 v-tooltip="(slotProps.data.overall_relevance*100).toFixed(0) + '%'"></bar>
-          </template>
-        </Column>
-        <template #expansion="slotProps">
-        <DataTable :value="getGoalKeys()" :key="goal" :rowClass="() => 'smallTable'">
-          <Column :header="$t('goalInfluence')">
-            <template #body="currGoal">
-              {{ currGoal.data }}
-            </template>
-          </Column>
-          <Column>
-            <template #body="currGoal">
-              <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(currGoal.data)]"
-                           v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(currGoal.data)])"></twoSidedBar>
-            </template>
-          </Column>
-        </DataTable>
-      </template>
-      </DataTable>
+      <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance" dataKey="node_name"
+      :rowClass="isTherapyRow">
+      <Column :header="$t('Node')" field="node_name">
+        <template #body="slotProps">
+          {{ labels[slotProps.data.node_name] }}: {{getCompareState(slotProps.data.node_name)}}
+        </template>
+      </Column>
+      <Column :header="$t('Relevance')" field="overall_relevance">
+        <template #body="slotProps">
+          <bar :value="slotProps.data.overall_relevance" color="#004d80" width="200"
+               v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
+        </template>
+      </Column>
+      <Column v-for="goal in getCompareGoalKeys()" :field="goal" :header="goal" :key="goal">
+        <template #body="slotProps">
+          <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
+                       v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
+        </template>
+      </Column>
+    </DataTable>
     </div>
   </div>
 </template>
@@ -81,9 +72,7 @@ export default {
   ],
   data() {
     return {
-      showLocal: false,
-      expandedRows: [],
-      compareExpandedRows: []
+      showLocal: false
     }
   },
   watch: {
@@ -100,6 +89,18 @@ export default {
           goalnames.push(this.labels[goal] + ": " + this.goals[goal])
         })
 
+        return goalnames
+      }
+    },
+    getCompareGoalKeys() {
+      if (this.compareConfig != null) {
+        let goalnames = []
+        Object.keys(this.compareConfig.config.newGoals).forEach(goal => {
+          goalnames.push(this.labels[goal] + ": " + this.compareConfig.config.newGoals[goal])
+        })
+        console.log(this.compareConfig)
+        console.log("GoalNames:")
+        console.log(goalnames)
         return goalnames
       }
     },
