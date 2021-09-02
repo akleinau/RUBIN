@@ -448,10 +448,9 @@ export default {
       this.addTargets([this.patient.nodes.find(x => x.name === "Therapy")])
       let surv = this.patient.nodes.find(x => x.name === "Survival5yr")
       surv["selected"] = {"name": "yes"}
-      this.addGoals([surv])
       let lnm = this.patient.nodes.find(x => x.name === "LNM")
       lnm["selected"] = {"name": "no"}
-      this.addGoals([lnm])
+      this.addGoals([surv, lnm])
     }
   }
 }
