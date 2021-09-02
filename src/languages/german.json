@@ -26,7 +26,7 @@
   "OutcomeCertainty": "Sicherheit der erwünschten Ergebnisse",
   "DecisionRatings": "Bewertung der Entscheidung",
   "DecisionRatingHelp": "Dann berechnet das Netzwerk alle Kombinationen dieser Variablen, um die beste Behandlung zu finden. Die Behandlung wird nach ihrer 'joined probability' bewertet, dh der Wahrscheinlichkeit, dass alle erwünschten Ergebnisse zusammen erzielt werden.",
-  "TreatmentChooseOne": "Wähle eine Behandlung, um rechts zusätzliche Informationen zu erhalten! Wenn du 'keine Interventionen' auswählst, wirst du die Vorhersagen ohne einkalkulierte Interventionen sehen.",
+  "TreatmentChooseOne": "Wähle eine Behandlung, um im Erklärungs-Fenster zusätzliche Informationen zu erhalten!",
   "Explanation": "Erklärung",
   "ExplanationHelp": "Hier werden verschiedene Erklärungen und zusätzliche Informationen zur gewählten Behandlung angezeigt.",
   "Relevance": "Relevanz",

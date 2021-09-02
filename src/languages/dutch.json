@@ -26,7 +26,7 @@
   "OutcomeCertainty":"zekerheid van de gewenste resultaten",
   "DecisionRatings":"schattingen van de beslissingen",
   "DecisionRatingHelp":"Het netwerk berekent nu alle mogelijke combinaties van deze variabelen om de beste behandeling te vinden. De beslissiingen zijn gerangschikt volgens hun 'gezamenlijke waarschijnlijkheid', dit is de waarschijnlijkheid dat alle gewenste resultaten tezamen uitkomen.",
-  "TreatmentChooseOne":"Kies een behandeling om bijkomende informatie in het venster 'Uitleg' te krijgen. Bij keuze “geen interventies” worden de predicties getoond zonder behandelingen meegerekend.",
+  "TreatmentChooseOne":"Kies een behandeling om bijkomende informatie in het venster 'Uitleg' te krijgen.",
   "Explanation":"uitleg",
   "ExplanationHelp":"Toont de verschillende soorten uitleg en bijkomende informatie over de gekozen behandeling.",
   "Relevance":"relevantie",
