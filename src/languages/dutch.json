@@ -81,5 +81,9 @@
   "noInfluence": "bijna geen invloed",
   "configurationsHelp": "Bewaar, laad en vergelijk configuraties.",
   "goalInfluence": "invloed op doelen:",
-  "RequestUpload":"Upload naar server aanvragen"
+  "RequestUpload":"Upload naar server aanvragen",
+  "add": "toevoegen",
+  "addEvidence": "evidentie toevoegen",
+  "addOutcome": "gewenste resultaten toevoegen",
+  "addTarget": "interventie toevoegen"
 } 

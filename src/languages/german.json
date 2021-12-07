@@ -81,5 +81,9 @@
   "noInfluence": "fast kein Einfluss",
   "configurationsHelp": "Speicher, lade und vergleiche Konfigurationen.",
   "goalInfluence": "Einfluss auf Ergebnisse:",
-  "RequestUpload": "Um Upload auf Server bitten"
+  "RequestUpload": "Um Upload auf Server bitten",
+  "add": "hinzufügen",
+  "addEvidence": "Evidenz hinzufügen",
+  "addOutcome": "Erwünschte Ergebnisse hinzufügen",
+  "addTarget": "Interventionen hinzufügen"
 }

@@ -12,7 +12,7 @@
           </div>
         </template>
       </Listbox>
-      <Button id="AddButton" icon="pi pi-plus" class="p-button-secondary" @click="overlay = true"></Button>
+      <Button id="AddButton" :label="$t('addTarget')" class="p-button-secondary" @click="overlay = true"></Button>
   </div>
   <div v-else>
     current: <span v-for="sel in selection" :key="sel">{{sel.name}}, </span>
@@ -21,17 +21,18 @@
   </div>
 
     <!--    input dialog  -->
-    <Dialog header="  " v-model:visible="overlay" style="width: 50%" :modal="true">
+    <Dialog header="  " v-model:visible="overlay" style="width:50%; height:90%" :modal="true">
       <Listbox v-model="selected" :options="overlayNodes" optionLabel="name" emptyMessage="choose evidences to add"
                :filter="true" filterPlaceholder="Search"
-               @change="addTarget()" listStyle="max-height:500px">
+               @change="addTarget()">
           <template #option="slotProps">
           <div v-tooltip.bottom="'Add as target'">
             {{ labels[slotProps.option.name] }}
           </div>
         </template>
       </Listbox>
-      <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
+      <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="..."
+        listStyle="background:#e8e8e8">
         <template #option="slotProps">
           <div>
             {{ labels[slotProps.option.name] }}
@@ -40,8 +41,14 @@
           </div>
         </template>
       </Listbox>
-      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%; background:teal; border: teal" @click="addTargetsFromOverlay()"/>
+      <div class="p-grid p-flex p-mt-2">
+        <Button class="p-col-6 p-mr-1 p-ml-2" style="background:teal; border: teal" :label="$t('add')"
+              @click="addTargetsFromOverlay()" />
+        <Button class="p-col  p-mr-2" style="background:#56717d; border: #56717d" :label="$t('cancel')"
+              @click="resetOverlay()" />
+      </div>
     </Dialog>
+
 
   </div>
 </template>
@@ -76,6 +83,10 @@ export default {
     },
     addTargetsFromOverlay() {
       this.$emit("addNodes", this.nodesToAdd)
+      this.nodesToAdd = []
+      this.overlay=false
+    },
+    resetOverlay() {
       this.nodesToAdd = []
       this.overlay=false
     },

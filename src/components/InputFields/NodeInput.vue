@@ -25,7 +25,7 @@
         </Column>
       </DataTable>
     <!--    input dialog  -->
-    <Dialog header="  " v-model:visible="overlay" style="width: 50%" :modal="true" v-if="changeable">
+    <Dialog header="  " v-model:visible="overlay" style="width: 50%" :modal="true" v-if="changeable" :closable="false">
             <DataTable :value="overlayNodes" :scrollable="true" scrollHeight="400px" class="p-datatable-sm"
                  v-model:filters="filters" filterDisplay="menu" data-key="name">
         <template #header>
@@ -52,7 +52,8 @@
         </Column>
       </DataTable>
 
-      <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="...">
+      <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="..."
+        listStyle="height:250px; background:#e8e8e8" >
         <template #option="slotProps">
           <div>
             {{ labels[slotProps.option.name] }}: {{ slotProps.option.selected.name }}
@@ -61,11 +62,22 @@
           </div>
         </template>
       </Listbox>
-      <Button class="p-mb-1" icon="pi pi-plus" style="width: 100%; background:teal; border: teal" @click="addNodesFromOverlay()"/>
+      <div class="p-grid p-flex p-mt-2">
+      <Button class="p-col-6 p-mr-1 p-ml-2" style="background:teal; border: teal" :label="$t('add')"
+              @click="addNodesFromOverlay()" />
+      <Button class="p-col  p-mr-2" style="background:#56717d; border: #56717d" :label="$t('cancel')"
+              @click="resetOverlay()" />
+      </div>
     </Dialog>
 
+  <div v-if="changeable">
+          <Button class="addButton" @click="overlay = true" v-if="title === 'Evidence'"
+              :label="$t('addEvidence')"></Button>
+              <Button class="addButton" @click="overlay = true" v-else
+              :label="$t('addOutcome')"></Button>
+  </div>
 
-      <Button id="addButton" icon="pi pi-plus" @click="overlay = true" v-if="changeable"></Button>
+
 
 </template>
 
@@ -112,6 +124,10 @@ export default {
       this.nodesToAdd = []
       this.overlay=false
     },
+    resetOverlay() {
+      this.nodesToAdd = []
+      this.overlay=false
+    },
     deleteNode(node) {
       this.$emit("deleteNode", node);
     },
@@ -130,7 +146,7 @@ export default {
   background-color: white;
 }
 
-#addButton {
+.addButton {
   width: 100%;
   position: relative;
 }
