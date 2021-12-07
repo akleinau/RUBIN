@@ -61,7 +61,7 @@
     </Card>
   </div>
 
-  <Dialog v-model:visible="langOverlay" :modal="true">
+  <Dialog v-model:visible="langOverlay" :modal="true" :dismissableMask="true">
     Choose language:
      <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`" :value="$i18n.locale" />
   </Dialog>
