@@ -22,34 +22,16 @@
     </div>
 
     <!--    input dialog  -->
-    <Dialog header="  " v-model:visible="overlay" style="width:80%; height:90%; background:white" :modal="true">
-      <div class="p-grid">
-        <Listbox v-model="selected" class="p-col p-mt-2" :options="overlayNodes" optionLabel="name"
-                 emptyMessage="choose evidences to add"
-                 :filter="true" filterPlaceholder="Search"
-                 @change="addTarget()">
-          <template #option="slotProps">
-            <div v-tooltip.bottom="'Add as target'">
-              {{ labels[slotProps.option.name] }}
-            </div>
-          </template>
-        </Listbox>
-        <div class="p-col">
-            <Button class="p-mt-1" style="background:teal; border: teal; width:100%" :label="$t('add')"
-                    @click="addTargetsFromOverlay()"/>
-
-          <Listbox v-model="selected2" :options="nodesToAdd" optionLabel="name" emptyMessage="..."
-                   listStyle="background:#e8e8e8">
-            <template #option="slotProps">
-              <div>
-                {{ labels[slotProps.option.name] }}
-                <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
-                        @click="deleteNodeFromOverlay(slotProps.option)"/>
-              </div>
-            </template>
-          </Listbox>
-        </div>
-      </div>
+    <Dialog header="  " v-model:visible="overlay" style="width:80%; height:90%; background:white" :modal="true"
+            @hide="addTargetsFromOverlay()">
+      <Listbox v-model="selected" class="p-mt-2" :options="overlayNodes" optionLabel="name"
+               emptyMessage="choose evidences to add" :multiple="true"
+               :filter="true" filterPlaceholder="Search">
+        <template #option="slotProps">
+          <i class="pi pi-check" v-if="selected && selected.find(n => n.name === slotProps.option.name)"/>
+          {{ labels[slotProps.option.name] }}
+        </template>
+      </Listbox>
     </Dialog>
 
 
@@ -69,23 +51,18 @@ export default {
   data() {
     return {
       selected: null,
-      selected2: null,
       overlay: false,
       nodesToAdd: []
     }
   },
   computed: {
     overlayNodes: function () {
-      return this.nodes.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
+      return this.nodes //.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
     }
   },
   methods: {
-    addTarget() {
-      this.nodesToAdd.push(this.selected);
-      //this.nodes = this.nodes.filter(x => x !== this.selected);
-    },
     addTargetsFromOverlay() {
-      this.$emit("addNodes", this.nodesToAdd)
+      this.$emit("addNodes", this.selected)
       this.nodesToAdd = []
       this.overlay = false
     },
@@ -96,9 +73,6 @@ export default {
     deleteNode(node) {
       this.$emit("deleteNode", node)
     },
-    deleteNodeFromOverlay(node) {
-      this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
-    }
   }
 }
 </script>

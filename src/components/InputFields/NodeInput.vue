@@ -27,31 +27,31 @@
   <!--    input dialog  -->
   <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
           v-if="changeable" @hide="addNodesFromOverlay()">
-      <DataTable :value="overlayNodes" class="p-datatable-sm"
-                 v-model:filters="filters" filterDisplay="menu" data-key="name">
-        <template #header>
-          <div class="p-d-flex p-jc-between">
+    <DataTable :value="overlayNodes" class="p-datatable-sm"
+               v-model:filters="filters" filterDisplay="menu" data-key="name">
+      <template #header>
+        <div class="p-d-flex p-jc-between">
                 <span class="p-input-icon-right" style="width:100%">
                     <InputText style="width:100%" v-model="filters['name'].value" placeholder="Search"/>
                   <i class="pi pi-search"/>
                 </span>
-          </div>
+        </div>
+      </template>
+      <Column field="name" :header="$t('Node')">
+        <template #body="slotProps">
+          {{ labels[slotProps.data.name] }}
         </template>
-        <Column field="name" :header="$t('Node')">
-          <template #body="slotProps">
-            {{ labels[slotProps.data.name] }}
-          </template>
-        </Column>
-        <Column field="options">
-          <template #body="slotProps">
-            <ToggleButton class="p-m-2" v-for="option in slotProps.data.options" :key="option"
-                          v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
-              :onLabel="option.name" onIcon="pi pi-check" :offLabel="option.name" offIcon="pi pi-plus" >
-            </ToggleButton>
+      </Column>
+      <Column field="options">
+        <template #body="slotProps">
+          <ToggleButton class="p-m-2" v-for="option in slotProps.data.options" :key="option"
+                        v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
+                        :onLabel="option.name" onIcon="pi pi-check" :offLabel="option.name" offIcon="pi pi-plus">
+          </ToggleButton>
 
-          </template>
-        </Column>
-      </DataTable>
+        </template>
+      </Column>
+    </DataTable>
   </Dialog>
 
   <div v-if="changeable">
@@ -92,13 +92,17 @@ export default {
   computed: {
     //adds 'checked' property to every option of every node of the overlay
     overlayNodes: function () {
-      return this.nodes.map(node => { return {
-            name: node.name,
-            options: node.options.map(option => {return {
-              name: option.name,
-              checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
-            }}),
-          }}
+      return this.nodes.map(node => {
+            return {
+              name: node.name,
+              options: node.options.map(option => {
+                return {
+                  name: option.name,
+                  checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
+                }
+              }),
+            }
+          }
       )
     }
   },
