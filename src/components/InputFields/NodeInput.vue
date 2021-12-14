@@ -131,10 +131,6 @@ export default {
       this.nodesToAdd = []
       this.overlay = false
     },
-    resetOverlay() {
-      this.nodesToAdd = []
-      this.overlay = false
-    },
     deleteNode(node) {
       this.$emit("deleteNode", node);
     },

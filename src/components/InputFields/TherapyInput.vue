@@ -51,8 +51,7 @@ export default {
   data() {
     return {
       selected: null,
-      overlay: false,
-      nodesToAdd: []
+      overlay: false
     }
   },
   computed: {
@@ -63,11 +62,7 @@ export default {
   methods: {
     addTargetsFromOverlay() {
       this.$emit("addNodes", this.selected)
-      this.nodesToAdd = []
-      this.overlay = false
-    },
-    resetOverlay() {
-      this.nodesToAdd = []
+      this.selected = []
       this.overlay = false
     },
     deleteNode(node) {
