@@ -25,11 +25,9 @@
     </Column>
   </DataTable>
   <!--    input dialog  -->
-  <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true" v-if="changeable" >
-    <div class="p-grid">
-
-
-      <DataTable :value="overlayNodes" class="p-datatable-sm p-col"
+  <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
+          v-if="changeable" @hide="addNodesFromOverlay()">
+      <DataTable :value="overlayNodes" class="p-datatable-sm"
                  v-model:filters="filters" filterDisplay="menu" data-key="name">
         <template #header>
           <div class="p-d-flex p-jc-between">
@@ -46,30 +44,14 @@
         </Column>
         <Column field="options">
           <template #body="slotProps">
-            <Button class="p-m-2" v-for="option in slotProps.data.options" :key="option"
-                    @click="addOption(slotProps, option)">
-              <i class="pi pi-plus"></i> &nbsp; {{ option.name }}
-            </Button>
+            <ToggleButton class="p-m-2" v-for="option in slotProps.data.options" :key="option"
+                          v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
+              :onLabel="option.name" onIcon="pi pi-check" :offLabel="option.name" offIcon="pi pi-plus" >
+            </ToggleButton>
 
           </template>
         </Column>
       </DataTable>
-      <div class="p-col">
-          <Button class="p-mt-1" style="background:teal; border: teal; width:100%" :label="$t('add')"
-                  @click="addNodesFromOverlay()"/>
-
-        <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="..."
-                 listStyle="background:#e8e8e8">
-          <template #option="slotProps">
-            <div>
-              {{ labels[slotProps.option.name] }}: {{ slotProps.option.selected.name }}
-              <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
-                      @click="deleteNodeFromOverlay(slotProps.option)"/>
-            </div>
-          </template>
-        </Listbox>
-      </div>
-    </div>
   </Dialog>
 
   <div v-if="changeable">
@@ -108,19 +90,37 @@ export default {
     }
   },
   computed: {
+    //adds 'checked' property to every option of every node of the overlay
     overlayNodes: function () {
-      return this.nodes.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
+      return this.nodes.map(node => { return {
+            name: node.name,
+            options: node.options.map(option => {return {
+              name: option.name,
+              checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
+            }}),
+          }}
+      )
     }
   },
   methods: {
-    addOption(slotProps, option) {
-      let item = {
-        name: slotProps.data.name,
-        selected: {name: option.name},
-        options: slotProps.data.options
-      }
-      this.nodesToAdd.push(item);
+    onOverlayOptionChange(slotProps, option) {
+      //deselect this and other options of the node
+      this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
       this.filters.name.value = null
+
+      //convert node in format used for selected nodes and add it to 'shopping list'
+      if (option.checked) {
+        let item = {
+          name: slotProps.data.name,
+          selected: {name: option.name},
+          options: slotProps.data.options.map(option => {
+            return {
+              name: option.name
+            }
+          })
+        }
+        this.nodesToAdd.push(item);
+      }
     },
     addNodesFromOverlay() {
       this.$emit("addNodes", this.nodesToAdd);
