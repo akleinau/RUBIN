@@ -14,6 +14,9 @@ export default {
     Interface,
     ChooseNet
   },
+  created() {
+    document.title="DoctorBN"
+  },
   data () {
     return {
       page: "chooseNet",
