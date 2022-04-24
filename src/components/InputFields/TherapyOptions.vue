@@ -18,7 +18,7 @@
       <ScrollPanel style="height:100%">
         <div>
           <h3 class="p-text-left">{{ $t("Interventions") }}:</h3>
-          <TherapyInput :nodes="nodes" :selection="targets" :compareConfig="compareConfig" :labels="labels"
+          <TherapyInput :compareConfig="compareConfig"
                         @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)"/>
 
           <div class="p-d-flex  p-jc-between p-ai-center">
@@ -26,14 +26,14 @@
             <!--          <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>-->
           </div>
           <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
-          <optionsTable :results="results" :goals="goals" :labels="labels"
-                        @update="update($event)" :selectedOption="selectedOption"/>
+          <optionsTable :goals="goals"
+                        @update="update($event)" :selectedOption="Store.options.selectedOption"/>
           <!--    compare view  -->
           <div v-if="compareConfig">
             <h3> {{ compareConfig.name }}:</h3>
             <div class="p-mb-2">
              <div  v-for="o in Object.keys(compareConfig.config.options.selectedOption.option)" :key="o">
-              {{labels[o]}}: {{compareConfig.config.options.selectedOption.option[o]}}
+              {{Store.labels[o]}}: {{compareConfig.config.options.selectedOption.option[o]}}
             </div>
               </div>
              <div class="p-d-flex p-jc-center" v-for="goal in Object.keys(compareConfig.config.newGoals)" :field="goal" :header="goal" :key="goal">
@@ -55,6 +55,7 @@
 import TherapyInput from "@/components/InputFields/TherapyInput";
 import optionsTable from "@/components/InputFields/optionsTable"
 import bar from "@/components/visualisations/bar";
+import { useStore } from '@/store'
 
 export default {
   name: "TherapyOptions",
@@ -65,16 +66,14 @@ export default {
     bar
   },
   props: [
-    "results",
-    "likelyResult",
     "goals",
-    "nodes",
-    "targets",
-    "selectedOption",
     "loading",
-    "compareConfig",
-    "labels"
+    "compareConfig"
   ],
+  setup() {
+    const Store = useStore()
+    return { Store }
+  },
   data() {
     return {
       "showLocal": false

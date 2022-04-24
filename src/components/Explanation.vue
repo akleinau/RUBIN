@@ -11,9 +11,9 @@
           <h3> {{ $t("FullNetwork") }}</h3> {{ $t("FullNetworkHelp") }}
       </OverlayPanel>
     </template>
-    <template #subtitle v-if="selectedOption">
-      <div  v-for="o in Object.keys(selectedOption.option)" :key="o">
-        <b>  {{labels[o]}}: {{selectedOption.option[o]}} </b>
+    <template #subtitle v-if="Store.options.selectedOption">
+      <div  v-for="o in Object.keys(Store.options.selectedOption.option)" :key="o">
+        <b>  {{Store.labels[o]}}: {{Store.options.selectedOption.option[o]}} </b>
       </div>
     </template>
     <template #content>
@@ -22,32 +22,32 @@
         <TabView v-else>
           <!--   relevance  -->
           <TabPanel :header="$t('Relevance')">
-            <Relevance :relevance="explain.relevance" :goals="goals" :nodes="explain.states" :targets="targets"
-            :compareConfig="compareConfig" :selectedOption="selectedOption" :labels="labels"/>
+            <Relevance :relevance="Store.explain.relevance" :goals="goals" :nodes="Store.explain.states"
+            :compareConfig="compareConfig" :selectedOption="Store.options.selectedOption" :labels="Store.labels"/>
           </TabPanel>
           <!--   all predictions  -->
           <TabPanel :header="$t('AllPredictions')">
-            <NodeList :nodes="explain.states" :compareConfig="compareConfig" :labels="labels"/>
+            <NodeList :nodes="Store.explain.states" :compareConfig="compareConfig" :labels="Store.labels"/>
           </TabPanel>
           <!--   compact network  -->
           <TabPanel :header="$t('CompactNetwork')">
             <div v-if="compareConfig==null">
-              <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()" :labels="labels"/>
+              <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()" :labels="Store.labels"/>
             </div>
             <div v-else>
               <sugiyamaCompare :edges="getCompactEdges()" :nodes="getExNodes()"
                                :nodes2="compareConfig.config.explain.states"
-                               :name2="compareConfig.name" :labels="labels"/>
+                               :name2="compareConfig.name" :labels="Store.labels"/>
             </div>
           </TabPanel>
           <!--   full network  -->
           <TabPanel :header="$t('FullNetwork')">
             <div v-if="compareConfig==null">
-              <sugiyama :edges="edges" :nodes="explain.states" :labels="labels"/>
+              <sugiyama :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
             </div>
             <div v-else>
-              <sugiyamaCompare  :edges="edges" :nodes="explain.states" :nodes2="compareConfig.config.explain.states"
-                               :name2="compareConfig.name" :labels="labels"/>
+              <sugiyamaCompare  :edges="Store.edges" :nodes="Store.explain.states" :nodes2="compareConfig.config.explain.states"
+                               :name2="compareConfig.name" :labels="Store.labels"/>
             </div>
           </TabPanel>
         </TabView>
@@ -61,15 +61,20 @@ import Relevance from "@/components/explanation/Relevance";
 import sugiyama from "@/components/visualisations/sugiyama";
 import NodeList from "@/components/explanation/NodeList";
 import sugiyamaCompare from "@/components/visualisations/sugiyamaCompare";
+import { useStore } from '@/store'
 
 export default {
   name: "Network",
-  props: ['goals', "edges", "explain", "compareConfig", "loading", "selectedOption", "labels", "targets"],
+  props: ['goals', "compareConfig", "loading"],
   components: {
     Relevance,
     sugiyama,
     NodeList,
     sugiyamaCompare
+  },
+  setup() {
+    const Store = useStore()
+    return { Store }
   },
   data() {
     return {
@@ -80,14 +85,14 @@ export default {
   },
   computed: {
     compactNetwork: function () {
-      if (this.explain.explanation == null) {
+      if (this.Store.explain.explanation == null) {
         return null
       }
         //nodes
 
         let explanationNodes = []
-        this.explain.explanation["nodes"].forEach(node => {
-          let originalNode = this.explain.states.find(n => n.name === node)
+        this.Store.explain.explanation["nodes"].forEach(node => {
+          let originalNode = this.Store.explain.states.find(n => n.name === node)
           if (originalNode != null) {
             explanationNodes.push(originalNode)
           } else {
@@ -99,21 +104,21 @@ export default {
         let edges = []
 
         let connectedNodes = new Set()
-        this.edges.forEach(edge => {
-          if (this.explain.explanation["nodes"].includes(edge["source"]) && this.explain.explanation["nodes"].includes(edge["target"])) {
+        this.Store.edges.forEach(edge => {
+          if (this.Store.explain.explanation["nodes"].includes(edge["source"]) && this.Store.explain.explanation["nodes"].includes(edge["target"])) {
             edges.push(edge)
             connectedNodes.add(edge["source"])
             connectedNodes.add(edge["target"])
           }
         })
-        let notConnectedNodes = this.explain.explanation["nodes"].filter(x => !connectedNodes.has(x))
+        let notConnectedNodes = this.Store.explain.explanation["nodes"].filter(x => !connectedNodes.has(x))
         notConnectedNodes.forEach(node => {
-          let neighborNodes = this.explain.states.filter(n =>
-              this.edges.find(e => e["source"] === node && e["target"] === n.name) != null)
+          let neighborNodes = this.Store.explain.states.filter(n =>
+              this.Store.edges.find(e => e["source"] === node && e["target"] === n.name) != null)
           neighborNodes.forEach(n => {
-            let otherEdges = this.edges.filter(e => e["target"] === n.name)
+            let otherEdges = this.Store.edges.filter(e => e["target"] === n.name)
             otherEdges.forEach(oe => {
-              if (oe["source"] !== node && this.explain.explanation["nodes"].includes(oe["source"])) {
+              if (oe["source"] !== node && this.Store.explain.explanation["nodes"].includes(oe["source"])) {
                 if (!explanationNodes.includes(n)) {
                   explanationNodes.push(n)
                 }
@@ -135,8 +140,8 @@ export default {
   },
   methods: {
     getExEdges() {
-      if (this.explain.explanation != null) {
-        return this.explain.explanation["edges"]
+      if (this.Store.explain.explanation != null) {
+        return this.Store.explain.explanation["edges"]
       }
     },
     getCompactEdges() {
@@ -150,8 +155,8 @@ export default {
       }
     },
     getCardClass() {
-      if (this.selectedOption === null) return null
-      return (Object.entries(this.selectedOption.option).length === 0) ? null: "treatmentCard"
+      if (this.Store.options.selectedOption === null) return null
+      return (Object.entries(this.Store.options.selectedOption.option).length === 0) ? null: "treatmentCard"
     }
   }
 }

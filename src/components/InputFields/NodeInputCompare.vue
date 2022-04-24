@@ -2,7 +2,7 @@
   <DataTable id="table" :value="table" class="p-datatable-sm">
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
-        {{labels[slotProps.data.name]}}
+        {{Store.labels[slotProps.data.name]}}
       </template>
     </Column>
     <Column field="value" header="current" class="optionCol">
@@ -71,19 +71,22 @@
 
 <script>
 import {FilterMatchMode} from 'primevue/api';
+import { useStore } from '@/store'
 
 export default {
   name: "NodeInputCompare",
   emits: ["addNodes", "deleteNode"],
   props: [
     "title",
-    "nodes",
     "selection",
     "changeable",
     "selection2",
-    "name2",
-      "labels"
+    "name2"
   ],
+  setup() {
+    const Store = useStore()
+    return { Store }
+  },
   data() {
     return {
       overlay: false,
@@ -96,7 +99,7 @@ export default {
   },
   computed: {
     overlayNodes: function () {
-      return this.nodes.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
+      return this.Store.patient.nodes.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
     },
     table: function () {
       let table = JSON.parse(JSON.stringify(this.selection))

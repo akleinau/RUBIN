@@ -54,6 +54,7 @@
 <script>
 import bar from "@/components/visualisations/bar";
 import twoSidedBar from "@/components/visualisations/twoSidedBar";
+import { useStore } from '@/store'
 
 export default {
   name: "Relevance",
@@ -67,9 +68,12 @@ export default {
     "nodes",
     "compareConfig",
     "selectedOption",
-    "labels",
-      "targets"
+    "labels"
   ],
+  setup() {
+    const Store = useStore()
+    return { Store }
+  },
   data() {
     return {
       showLocal: false
@@ -150,7 +154,7 @@ export default {
     },
     isTherapyRow(row) {
       let rowClass = null
-      this.targets.forEach(target => {
+      this.Store.patient.targets.forEach(target => {
          if (target.name === row.node_name) rowClass = "therapy"
         })
       return rowClass

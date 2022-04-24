@@ -8,7 +8,7 @@
             </span>
       </template>
       <template #body="slotProps">
-        {{ labels[slotProps.data.name] }}
+        {{ Store.labels[slotProps.data.name] }}
       </template>
     </Column>
     <Column field="value" class="optionCol">
@@ -20,7 +20,7 @@
                 @click="deleteNode(slotProps.data)"/>
       </template>
       <template v-else #body="slotProps">
-        {{ labels[slotProps.data.selected.name] }}
+        {{ Store.labels[slotProps.data.selected.name] }}
       </template>
     </Column>
   </DataTable>
@@ -39,7 +39,7 @@
       </template>
       <Column field="name" :header="$t('Node')">
         <template #body="slotProps">
-          {{ labels[slotProps.data.name] }}
+          {{ Store.labels[slotProps.data.name] }}
         </template>
       </Column>
       <Column field="options">
@@ -67,18 +67,21 @@
 
 <script>
 import {FilterMatchMode} from 'primevue/api';
+import {useStore} from "@/store";
 
 export default {
   name: "Evidence",
   emits: ["addNodes", "deleteNode"],
   props: [
     "title",
-    "nodes",
     "selection",
     "changeable",
-    "hideHeader",
-    "labels"
+    "hideHeader"
   ],
+  setup() {
+    const Store = useStore()
+    return { Store }
+  },
   data() {
     return {
       overlay: false,
@@ -92,7 +95,7 @@ export default {
   computed: {
     //adds 'checked' property to every option of every node of the overlay
     overlayNodes: function () {
-      return this.nodes.map(node => {
+      return this.Store.patient.nodes.map(node => {
             return {
               name: node.name,
               options: node.options.map(option => {

@@ -9,11 +9,11 @@
     </template>
     <template #content>
       <ScrollPanel  style="height:100%">
-      <NodeInput  v-if="compareConfig == null"  title="Evidence" :nodes="nodes" :selection="selection" :changeable="true"
-                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)" :labels="labels"/>
+      <NodeInput  v-if="compareConfig == null"  title="Evidence" :changeable="true" :selection="Store.patient.evidence"
+                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
 
-      <NodeInputCompare  v-else  title="Evidence" :nodes="nodes" :name2="compareConfig.name" :labels="labels"
-                    :selection="selection" :selection2="compareConfig.config.patient.evidence" :changeable="false"/>
+      <NodeInputCompare  v-else  title="Evidence" :name2="compareConfig.name" :selection="Store.patient.evidence"
+                    :selection2="compareConfig.config.patient.evidence" :changeable="false"/>
       </ScrollPanel>
     </template>
 
@@ -23,6 +23,7 @@
 <script>
 import NodeInput from "@/components/InputFields/NodeInput";
 import NodeInputCompare from "@/components/InputFields/NodeInputCompare";
+import { useStore } from '@/store'
 
 export default {
 name: "EvidenceInput",
@@ -32,11 +33,12 @@ name: "EvidenceInput",
     NodeInputCompare
   },
     props: [
-      "nodes",
-      "selection",
-        "compareConfig",
-        "labels"
+        "compareConfig"
   ],
+  setup() {
+    const Store = useStore()
+    return { Store }
+  },
   data() {
   return {
     editMode: true

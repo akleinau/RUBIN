@@ -2,11 +2,11 @@
   <div style="position:relative">
 
     <div v-if="compareConfig == null">
-      <Listbox :options="selection" :optionLabel="name" listStyle="max-height:300px"
+      <Listbox :options="Store.patient.targets" :optionLabel="name" listStyle="max-height:300px"
                emptyMessage="choose therapy nodes">
         <template #option="slotProps">
           <div class="p-text-center rowContent">
-            {{ labels[slotProps.option.name] }}
+            {{ Store.labels[slotProps.option.name] }}
             <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
                     @click="deleteNode(slotProps.option)"/>
           </div>
@@ -15,7 +15,7 @@
       <Button id="AddButton" :label="$t('addTarget')" class="p-button-secondary" @click="overlay = true"></Button>
     </div>
     <div v-else>
-      current: <span v-for="sel in selection" :key="sel">{{ sel.name }}, </span>
+      current: <span v-for="sel in Store.patient.targets" :key="sel">{{ sel.name }}, </span>
       <br>
       {{ compareConfig.name }}: <span v-for="sel in compareConfig.config.patient.targets"
                                       :key="sel">{{ sel.name }}, </span>
@@ -29,7 +29,7 @@
                :filter="true" filterPlaceholder="Search">
         <template #option="slotProps">
           <i class="pi pi-check" v-if="selected && selected.find(n => n.name === slotProps.option.name)"/>
-          {{ labels[slotProps.option.name] }}
+          {{ Store.labels[slotProps.option.name] }}
         </template>
       </Listbox>
     </Dialog>
@@ -39,15 +39,18 @@
 </template>
 
 <script>
+import { useStore } from '@/store'
+
 export default {
   name: "Target",
   emits: ["addNodes", "deleteNode"],
   props: [
-    "nodes",
-    "selection",
-    "compareConfig",
-    "labels"
+    "compareConfig"
   ],
+    setup() {
+    const Store = useStore()
+    return { Store }
+  },
   data() {
     return {
       selected: null,
@@ -56,7 +59,7 @@ export default {
   },
   computed: {
     overlayNodes: function () {
-      return this.nodes //.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
+      return this.Store.patient.nodes //.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
     }
   },
   methods: {

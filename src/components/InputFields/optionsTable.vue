@@ -1,5 +1,5 @@
 <template>
- <DataTable :value="results" class="p-datatable-sm" :autoLayout="true"
+ <DataTable :value="Store.options.options" class="p-datatable-sm" :autoLayout="true"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
                  @rowSelect="update" @rowUnselect="update" >
         <Column>
@@ -10,7 +10,7 @@
         <Column :header="$t('Decision')" field="option">
           <template #body="slotProps">
             <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
-              {{labels[o]}}: {{slotProps.data.option[o]}}
+              {{Store.labels[o]}}: {{slotProps.data.option[o]}}
             </div>
           </template>
         </Column>
@@ -36,13 +36,17 @@
 
 <script>
 import bar from "@/components/visualisations/bar";
-
+import { useStore } from '@/store'
 
 export default {
   name: "optionsTable",
   emits: ["update"],
   components: {
     bar
+  },
+  setup() {
+    const Store = useStore()
+    return { Store }
   },
   data() {
     return {
@@ -51,14 +55,11 @@ export default {
     }
   },
   props: [
-    "results",
-      "goals",
-      "selectedOption",
-      "labels"
+      "goals"
   ],
     watch: {
     selectedOption: function () {
-      this.selected = this.selectedOption
+      this.selected = this.Store.options.selectedOption
     }
   },
   methods: {
@@ -78,7 +79,7 @@ export default {
       this.$emit("update", this.selected);
     },
     getGoalLabel(goal) {
-      return this.labels[goal] + ": " + this.goals[goal]
+      return this.Store.labels[goal] + ": " + this.goals[goal]
     },
     deselect() {
       this.$emit("update", null)

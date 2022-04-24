@@ -5,7 +5,7 @@
       <div class="p-d-flex p-jc-between p-ai-center p-mt-0" style="background-color:#f8f9fa">
         <div id="name"> {{ $t('Network') }}: <b>{{ NetworkName }}</b>,
           {{ $t('Patient') }}:
-          <InputText type="text" v-model="SavePatientName" @change="$emit('setName', SavePatientName)"
+          <InputText type="text" v-model="Store.patient.name"
                      style="background-color:#fefefe"/>
         </div>
         <div id="logo" class="p-mr-2"><img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
@@ -18,7 +18,7 @@
     <Feedback @sendFeedback="sendFeedback($event)"></Feedback>
   </Dialog>
   <Dialog :header="$t('NetworkDescription')" v-model:visible="showNetworkDescription" style="width: 50%" :modal="true">
-    {{ description }}
+    {{ Store.description }}
   </Dialog>
   <OverlayPanel ref="compareOverlay" style="width: 50%">
     <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"
@@ -27,7 +27,7 @@
 
   <OverlayPanel ref="exportOverlay">
     <label> {{ $t("name") }}: </label>
-    <InputText type="text" v-model="SavePatientName"></InputText>
+    <InputText type="text" v-model="Store.patient.name"></InputText>
     <Button :label="$t('save')" @click="exportCSV()"/>
   </OverlayPanel>
 
@@ -40,7 +40,7 @@
 <script>
 import Feedback from "@/components/Header/Feedback";
 import Compare from "@/components/Header/Compare";
-
+import { useStore } from '@/store'
 
 export default {
   name: "Header",
@@ -50,8 +50,12 @@ export default {
     Compare
   },
   props: [
-    "configurations", "NetworkName", "PatientName", "description"
+    "configurations", "NetworkName"
   ],
+  setup() {
+    const Store = useStore()
+    return { Store }
+  },
   data() {
     return {
       showFeedback: false,
@@ -123,11 +127,6 @@ export default {
       ]
     }
   },
-  watch: {
-    PatientName: function () {
-      this.SavePatientName = this.PatientName
-    }
-  },
   methods: {
     changePage() {
       this.$emit('changePage')
@@ -142,7 +141,7 @@ export default {
       this.$refs.exportOverlay.toggle(event)
     },
     exportCSV() {
-      this.$emit('exportCSV', this.SavePatientName)
+      this.$emit('exportCSV', this.Store.patient.name)
       this.$refs.exportOverlay.toggle()
     },
     compareTo(name) {

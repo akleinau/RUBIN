@@ -33,6 +33,7 @@ import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css';
 
+import { createPinia } from 'pinia'
 import Button from 'primevue/button';
 import { createI18n } from 'vue-i18n'
 let enMessages = require('./languages/english.json');
@@ -85,6 +86,7 @@ vueApp.use(PrimeVue)
     .component('ToggleButton',ToggleButton)
     .directive('tooltip', Tooltip)
 
+vueApp.use(createPinia())
 vueApp.use(i18n)
 vueApp.mount('#app')
 

@@ -10,12 +10,12 @@
     <template #content style="height:100%" class="p-m-0 p-p-0">
       <ScrollPanel  style="height:100%">
         <div v-if="compareConfig == null">
-      <NodeInput  title="Desired Outcomes" :nodes="nodes" :selection="selection" :changeable="true" :hideHeader="true"
-                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)" :labels="labels"/>
+      <NodeInput  title="Desired Outcomes" :changeable="true" :hideHeader="true" :selection="Store.patient.goals"
+                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
         </div>
       <div v-else>
-        <NodeInputCompare    title="Desired Outcomes" :nodes="nodes" :selection="selection" :name2="compareConfig.name"
-                    :selection2="compareConfig.config.patient.goals" :changeable="false" :labels="labels"/>
+        <NodeInputCompare    title="Desired Outcomes" :name2="compareConfig.name" :selection="Store.patient.goals"
+                    :selection2="compareConfig.config.patient.goals" :changeable="false" />
       </div>
         </ScrollPanel>
     </template>
@@ -25,20 +25,22 @@
 <script>
 import NodeInput from "@/components/InputFields/NodeInput";
 import NodeInputCompare from "@/components/InputFields/NodeInputCompare";
+import {useStore} from "@/store";
 
 export default {
   name: "GoalInput",
-  emits: ["addNodes", "deleteNode", "labels"],
+  emits: ["addNodes", "deleteNode"],
   components: {
   NodeInput,
     NodeInputCompare
   },
     props: [
-      "nodes",
-      "selection",
-        "compareConfig",
-        "labels"
+        "compareConfig"
   ],
+  setup() {
+    const Store = useStore()
+    return { Store }
+  },
 }
 </script>
 

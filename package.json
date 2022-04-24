@@ -17,6 +17,7 @@
     "equal-vue": "^0.74.0",
     "eslint": "^7.26.0",
     "express": "^4.17.1",
+    "pinia": "^2.0.13",
     "postcss": "^8.2.15",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
