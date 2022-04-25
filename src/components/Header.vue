@@ -44,7 +44,7 @@ import { useStore } from '@/store'
 
 export default {
   name: "Header",
-  emits: ["changePage", "reset", "loadPatient", "exportCSV", "sendFeedback"],
+  emits: ["changePage","loadPatient", "exportCSV"],
   components: {
     Feedback,
     Compare
@@ -129,7 +129,7 @@ export default {
       this.$emit('changePage')
     },
     reset() {
-      this.$emit('reset')
+      this.Store.reset()
     },
     loadPatient(event) {
       this.$emit('loadPatient', event)
@@ -138,7 +138,14 @@ export default {
       this.$refs.exportOverlay.toggle(event)
     },
     exportCSV() {
-      this.$emit('exportCSV', this.Store.patient.name)
+      const csv = this.Store.createCSVcontent();
+
+      const anchor = document.createElement('a');
+      anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      anchor.target = '_blank';
+      anchor.download = this.Store.patient.name + '.csv';
+      anchor.click();
+
       this.$refs.exportOverlay.toggle()
     },
     compareTo(name) {

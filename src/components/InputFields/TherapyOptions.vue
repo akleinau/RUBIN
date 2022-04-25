@@ -18,8 +18,7 @@
       <ScrollPanel style="height:100%">
         <div>
           <h3 class="p-text-left">{{ $t("Interventions") }}:</h3>
-          <TherapyInput
-                        @addNodes="$emit('addNodes',$event)" @deleteNode="$emit('deleteNode',$event)"/>
+          <TherapyInput />
 
           <div class="p-d-flex  p-jc-between p-ai-center">
             <h3 class="p-text-left">{{ $t("DecisionRatings") }}:</h3>

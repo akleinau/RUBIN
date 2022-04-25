@@ -14,7 +14,6 @@
 <script>
 export default {
   name: "Feedback",
-  emits: ["sendFeedback"],
   data() {
     return {
       sendConfig: false,
@@ -22,10 +21,24 @@ export default {
     }
   },
   methods: {
-    sendFeedback() {
+    async sendFeedback() {
+      let csv = "NONE"
+      if (this.sendConfig) {
+        csv = this.Store.createCSVcontent();
+      }
 
-      this.$emit("sendFeedback", this.description, this.sendConfig)
-
+      const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/sendFeedback", {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          description: this.description,
+          csv: csv
+        })
+      });
+      const response = await gResponse;
+      console.log(response)
     }
   }
 }

@@ -41,6 +41,24 @@ export const useStore = defineStore('store', {
     localNet: ""
   }),
   actions: {
+    async reset() {
+      this.patient.targets = []
+      this.patient.evidence = []
+      this.patient.goals = []
+      this.patient.nodes = []
+      this.patient.name = ""
+
+      this.options.options = null
+      this.options.selectedOption = null
+      this.options.likelyResult = null
+      this.newGoals = null
+
+      this.explain.relevance = null
+      this.explain.states = null
+      this.explain.explanation = null
+
+      await this.loadNodes()
+    },
     async calculate() {
        if (this.patient.evidence.length !== 0 && this.patient.goals.length !== 0) {
          this.optionsLoading = true
@@ -234,5 +252,18 @@ export const useStore = defineStore('store', {
       this.patient.nodes.push({name: node.name, options: node.options})
       this.calculate()
     },
+    createCSVcontent() {
+      var csv = "Type; Variable; Option"
+      this.patient.evidence.forEach(ev => {
+        csv += "\nevidence; " + ev.name + "; " + ev.selected.name
+      })
+      this.patient.targets.forEach(ev => {
+        csv += "\ntarget; " + ev.name
+      })
+      this.patient.goals.forEach(ev => {
+        csv += "\ngoal; " + ev.name + "; " + ev.selected.name
+      })
+      return csv
+    }
   }
 })

@@ -2,11 +2,10 @@
 
   <tutorial @setBlock="block = $event"/>
 
-  <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
-          @exportCSV="exportCSV($event)" @sendFeedback="sendFeedback($event)"/>
+  <Header ref="menu" @changePage="changePage()" @loadPatient="openLoadForm($event)"/>
 
   <OverlayPanel ref="panel">
-    <load-patient @loaded="loadPatient"></load-patient>
+    <LoadPatient @loaded="loadPatient"></LoadPatient>
   </OverlayPanel>
 
   <div class=" p-grid stretched " style=" position:relative">
@@ -81,100 +80,29 @@ export default {
       console.log(event)
       this.$refs.panel.toggle(event)
     },
-    loadPatient: async function (patientData, name) {
-      await this.reset()
-      let evidenceNodes = this.getCorrespondingNode(patientData.evidence)
-      let targetNodes = this.getCorrespondingNode(patientData.targets)
-      let goalNodes = this.getCorrespondingNode(patientData.goals)
-      this.addEvidences(evidenceNodes)
-      this.addTargets(targetNodes)
-      this.addGoals(goalNodes)
-      this.Store.patient.name = name
-      console.log("Patient: " + name)
+    loadPatient: async function () {
       this.$refs.panel.toggle()
     },
-    getCorrespondingNode(nodeArr) {
-      let correspondingNodes = []
-      nodeArr.forEach(node => {
-        let correspondingNode = this.Store.patient.nodes.find(x => x.name === node.name)
-        let item = {
-          name: correspondingNode.name,
-          selected: {name: node.option},
-          options: correspondingNode.options
-        }
-        correspondingNodes.push(item)
-      })
-      return correspondingNodes
-    },
-
-    reset: async function () {
-      this.Store.$reset()
-      await this.Store.loadNodes()
-    },
     calculate: async function () {
+      await this.Store.calculate()
+    }
+    },
+    created: async function () {
       this.Store.network = this.network
       this.Store.localNet = this.localNet
-      await this.Store.calculate()
-    },
-    createCSVcontent() {
-      var csv = "Type; Variable; Option"
-      this.Store.patient.evidence.forEach(ev => {
-        csv += "\nevidence; " + ev.name + "; " + ev.selected.name
-      })
-      this.Store.patient.targets.forEach(ev => {
-        csv += "\ntarget; " + ev.name
-      })
-      this.Store.patient.goals.forEach(ev => {
-        csv += "\ngoal; " + ev.name + "; " + ev.selected.name
-      })
-      return csv
-    },
-    exportCSV(name) {
-      this.Store.patient.name = name
-      const csv = this.createCSVcontent();
+      await this.Store.loadNodes()
 
-      const anchor = document.createElement('a');
-      anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-      anchor.target = '_blank';
-      anchor.download = name + '.csv';
-      anchor.click();
-    },
-    async sendFeedback(description, addConfig) {
-      let csv = "NONE"
-      if (addConfig) {
-        csv = this.createCSVcontent();
-      }
-
-      const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/sendFeedback", {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          description: description,
-          csv: csv
-        })
-      });
-      const response = await gResponse;
-      console.log(response)
-    }
-  },
-  created: async function () {
-    this.Store.network = this.network
-    this.Store.localNet = this.localNet
-    await this.Store.loadNodes()
-
-    if (this.network === 'endometrial cancer') {
-      //add example nodes
-      let CA125 = this.Store.patient.nodes.find(x => x.name === "CA125")
-      CA125["selected"] = {"name": "lt_35"}
-      this.Store.addEvidences([CA125])
-      this.Store.addTargets([this.Store.patient.nodes.find(x => x.name === "Therapy")])
-      let surv = this.Store.patient.nodes.find(x => x.name === "Survival5yr")
-      surv["selected"] = {"name": "yes"}
-      let lnm = this.Store.patient.nodes.find(x => x.name === "LNM")
-      lnm["selected"] = {"name": "no"}
-      this.Store.addGoals([surv, lnm])
+      if (this.network === 'endometrial cancer') {
+        //add example nodes
+        let CA125 = this.Store.patient.nodes.find(x => x.name === "CA125")
+        CA125["selected"] = {"name": "lt_35"}
+        this.Store.addEvidences([CA125])
+        this.Store.addTargets([this.Store.patient.nodes.find(x => x.name === "Therapy")])
+        let surv = this.Store.patient.nodes.find(x => x.name === "Survival5yr")
+        surv["selected"] = {"name": "yes"}
+        let lnm = this.Store.patient.nodes.find(x => x.name === "LNM")
+        lnm["selected"] = {"name": "no"}
+        this.Store.addGoals([surv, lnm])
     }
   }
 }

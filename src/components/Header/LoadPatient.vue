@@ -4,9 +4,15 @@
 </template>
 
 <script>
+import { useStore } from '@/store'
+
 export default {
   name: "LoadPatient",
   emits: ["loaded"],
+  setup() {
+    const Store = useStore()
+    return { Store }
+  },
   data() {
     return {
       patient: {
@@ -37,7 +43,20 @@ export default {
       }
       reader.readAsText(csvFile)
     },
-    load(patientData, name) {
+    getCorrespondingNode(nodeArr) {
+      let correspondingNodes = []
+      nodeArr.forEach(node => {
+        let correspondingNode = this.Store.patient.nodes.find(x => x.name === node.name)
+        let item = {
+          name: correspondingNode.name,
+          selected: {name: node.option},
+          options: correspondingNode.options
+        }
+        correspondingNodes.push(item)
+      })
+      return correspondingNodes
+    },
+    async load(patientData, name) {
       for (var row in patientData) {
         let item = patientData[row]
         let node = {
@@ -55,7 +74,16 @@ export default {
           })
         }
       }
-      this.$emit('loaded', this.patient, name)
+      await this.Store.reset()
+      let evidenceNodes = this.getCorrespondingNode(this.patient.evidence)
+      let targetNodes = this.getCorrespondingNode(this.patient.targets)
+      let goalNodes = this.getCorrespondingNode(this.patient.goals)
+      this.Store.addEvidences(evidenceNodes)
+      this.Store.addTargets(targetNodes)
+      this.Store.addGoals(goalNodes)
+      this.Store.patient.name = name
+      console.log("Patient: " + name)
+      this.$emit('loaded')
     }
   }
 }
@@ -64,13 +92,3 @@ export default {
 <style scoped>
 
 </style>
-
-
-
-addEvidences(nodes) {
-      nodes.forEach(node => {
-        this.evidence.push(node)
-        this.nodes = this.nodes.filter(x => x.name !== node.name)
-      })
-      this.calculate()
-    },
