@@ -3,9 +3,7 @@
   <tutorial @setBlock="block = $event"/>
 
   <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
-          @exportCSV="exportCSV($event)" @compareTo="compareTo($event)"
-          :NetworkName="network"
-          description="Not working" @sendFeedback="sendFeedback($event)"/>
+          @exportCSV="exportCSV($event)" @sendFeedback="sendFeedback($event)"/>
 
   <OverlayPanel ref="panel">
     <load-patient @loaded="loadPatient"></load-patient>
@@ -14,21 +12,17 @@
   <div class=" p-grid stretched " style=" position:relative">
     <div class="p-col-3 p-ai-start p-flex-column stretched">
       <BlockUI class="p-pb-2 p-d-flex" style="height: 30%;" :blocked="block.goals" ref="goal">
-        <GoalInput
-                   @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)"/>
+        <GoalInput/>
       </BlockUI>
 
       <BlockUI style="height:70%" :blocked="block.evidence">
-        <EvidenceInput
-                       @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
+        <EvidenceInput/>
       </BlockUI>
 
 
     </div>
     <BlockUI class="p-col stretched" :blocked="block.options">
-      <TherapyOptions
-                      @update="selectedOptionUpdated($event)"
-                      @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
+      <TherapyOptions/>
 
     </BlockUI>
     <BlockUI class="p-col stretched" :blocked="block.explain">
@@ -80,9 +74,6 @@ export default {
     }
   },
   methods: {
-    compareTo(name) {
-      this.Store.selectedConfig = this.Store.configurations.find(a => a.name === name)
-    },
     changePage() {
       this.$emit("changePage")
     },
@@ -115,228 +106,15 @@ export default {
       })
       return correspondingNodes
     },
-    loadNodes: async function () {
-      let gResponse = null
-      if (this.localNet) {
-        gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getLocalNetwork", {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            fileString: this.localNet.fileString,
-            fileFormat: this.localNet.fileFormat,
-            description: this.localNet.description
-          })
-        });
-      }
-      else {
-        gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getNetwork?network=" + this.network);
-      }
-      const network = await gResponse.json();
-      let nodes = []
-      for (var key in network.states) {
-        let options = []
-        network.states[key].forEach(value => {
-          options.push({'name': value})
-        })
-        nodes.push({'name': key, 'options': options})
-      }
-      this.Store.patient.nodes = nodes
 
-      let edges = []
-      network.edges.forEach(edge => {
-        edges.push({"source": edge[0], "target": edge[1]})
-      })
-      this.Store.edges = edges
-
-      this.Store.description = network.description
-      this.Store.labels = network.labels
-    },
     reset: async function () {
-      this.Store.patient.targets = []
-      this.Store.patient.evidence = []
-      this.Store.patient.goals = []
-      this.Store.patient.nodes = []
-      this.Store.patient.name = ""
-
-      this.Store.options.options = null
-      this.Store.options.selectedOption = null
-      this.Store.options.likelyResult = null
-
-      this.Store.edges = null
-      this.Store.newGoals = null
-
-      this.Store.explain.relevance = null
-      this.Store.explain.states = null
-      this.Store.explain.explanation = null
-
-      await this.loadNodes()
+      this.Store.$reset()
+      await this.Store.loadNodes()
     },
     calculate: async function () {
-      if (this.Store.patient.evidence.length !== 0 && this.Store.patient.goals.length !== 0) {
-        this.Store.optionsLoading = true
-        this.Store.explanationLoading = true
-
-        let evidences = {}
-        for (var ev in this.Store.patient.evidence) {
-          evidences[this.Store.patient.evidence[ev].name] = this.Store.patient.evidence[ev].selected.name;
-        }
-        let goals = {}
-        for (var goal in this.Store.patient.goals) {
-          goals[this.Store.patient.goals[goal].name] = this.Store.patient.goals[goal].selected.name;
-        }
-
-        let targets = []
-        for (var target in this.Store.patient.targets) {
-          targets.push(this.Store.patient.targets[target].name)
-        }
-        let gResponse = null
-        if (this.localNet) {
-           gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcTargetForGoals", {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            network: this.network,
-            fileString: this.localNet.fileString,
-            fileFormat: this.localNet.fileFormat,
-            evidences: evidences,
-            target: targets,
-            goals: goals
-          })
-        });
-        }
-        else {
-           gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcTargetForGoals", {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            network: this.network,
-            evidences: evidences,
-            target: targets,
-            goals: goals
-          })
-        });
-        }
-
-        let nodeDict = await gResponse.json();
-        if (this.Store.patient.targets.length !== 0) {
-                  this.Store.options.options = nodeDict.optionResults
-        }
-        else {
-          this.Store.options.options = []
-        }
-        this.Store.options.likelyResult = [{
-          option: {}, value: nodeDict.likelyResults.value,
-          goalValues: nodeDict.likelyResults.goalValues
-        }]
-        this.Store.options.selectedOption = this.Store.options.likelyResult[0]
-
-        this.Store.newGoals = goals
-        this.Store.optionsLoading = false
-        this.calculateOption()
-      }
-    },
-    calculateOption: async function () {
-      this.Store.explanationLoading = true
-
-      let evidences = {}
-      for (var ev in this.Store.patient.evidence) {
-        evidences[this.Store.patient.evidence[ev].name] = this.Store.patient.evidence[ev].selected.name;
-      }
-
-      let goals = {}
-      for (var goal in this.Store.patient.goals) {
-        goals[this.Store.patient.goals[goal].name] = this.Store.patient.goals[goal].selected.name;
-      }
-      let gResponse = null
-      if (this.localNet) {
-        gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcOptions", {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          network: this.network,
-          fileString: this.localNet.fileString,
-          fileFormat: this.localNet.fileFormat,
-          evidences: evidences,
-          options: this.Store.options.selectedOption.option,
-          goals: goals
-        })
-      });
-      }
-      else {
-        gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcOptions", {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          network: this.network,
-          evidences: evidences,
-          options: this.Store.options.selectedOption.option,
-          goals: goals
-        })
-      });
-      }
-
-      let nodeDict = await gResponse.json();
-      this.Store.explain.relevance = nodeDict.relevance
-      this.Store.newGoals = goals
-      this.Store.explain.states = nodeDict.nodes
-      this.Store.explain.explanation = nodeDict.explanation
-      this.Store.explanationLoading = false
-    },
-    addEvidences(nodes) {
-      nodes.forEach(node => {
-        this.Store.patient.evidence = this.Store.patient.evidence.filter(x => x.name !== node.name)
-        this.Store.patient.nodes = this.Store.patient.nodes.filter(x => x.name !== node.name)
-        this.Store.patient.evidence.push(node)
-      })
-      this.calculate()
-    },
-    deleteEvidence(node) {
-      this.Store.patient.evidence = this.Store.patient.evidence.filter(x => x.name !== node.name)
-      this.Store.patient.nodes.push({name: node.name, options: node.options})
-      this.calculate()
-    },
-    addTargets(nodes) {
-      nodes.forEach(node => {
-        this.Store.patient.targets.push(node)
-        this.Store.patient.nodes = this.Store.patient.nodes.filter(x => x.name !== node.name)
-      })
-      this.calculate()
-    },
-    deleteTarget(node) {
-      this.Store.patient.targets = this.Store.patient.targets.filter(x => x.name !== node.name)
-      this.Store.patient.nodes.push(node)
-      this.calculate()
-    },
-    addGoals(nodes) {
-      nodes.forEach(node => {
-        this.Store.patient.goals = this.Store.patient.goals.filter(x => x.name !== node.name)
-        this.Store.patient.nodes = this.Store.patient.nodes.filter(x => x.name !== node.name)
-        this.Store.patient.goals.push(node)
-      })
-      this.calculate()
-    },
-    deleteGoal(node) {
-      this.Store.patient.goals = this.Store.patient.goals.filter(x => x.name !== node.name)
-      this.Store.patient.nodes.push({name: node.name, options: node.options})
-      this.calculate()
-    },
-    selectedOptionUpdated(option) {
-      option === null? this.Store.options.selectedOption = this.Store.options.likelyResult[0] : this.Store.options.selectedOption = option
-      console.log(this.Store.options.selectedOption)
-      if (option === []) this.Store.explain.relevance = null
-      else {
-        this.calculateOption()
-      }
+      this.Store.network = this.network
+      this.Store.localNet = this.localNet
+      await this.Store.calculate()
     },
     createCSVcontent() {
       var csv = "Type; Variable; Option"
@@ -382,19 +160,21 @@ export default {
     }
   },
   created: async function () {
-    await this.loadNodes()
+    this.Store.network = this.network
+    this.Store.localNet = this.localNet
+    await this.Store.loadNodes()
 
     if (this.network === 'endometrial cancer') {
       //add example nodes
       let CA125 = this.Store.patient.nodes.find(x => x.name === "CA125")
       CA125["selected"] = {"name": "lt_35"}
-      this.addEvidences([CA125])
-      this.addTargets([this.Store.patient.nodes.find(x => x.name === "Therapy")])
+      this.Store.addEvidences([CA125])
+      this.Store.addTargets([this.Store.patient.nodes.find(x => x.name === "Therapy")])
       let surv = this.Store.patient.nodes.find(x => x.name === "Survival5yr")
       surv["selected"] = {"name": "yes"}
       let lnm = this.Store.patient.nodes.find(x => x.name === "LNM")
       lnm["selected"] = {"name": "no"}
-      this.addGoals([surv, lnm])
+      this.Store.addGoals([surv, lnm])
     }
   }
 }

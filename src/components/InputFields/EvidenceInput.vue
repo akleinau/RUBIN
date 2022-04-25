@@ -10,7 +10,7 @@
     <template #content>
       <ScrollPanel  style="height:100%">
       <NodeInput  v-if="Store.selectedConfig == null"  title="Evidence" :changeable="true" :selection="Store.patient.evidence"
-                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
+                   @addNodes="Store.addEvidences($event)" @deleteNode="Store.deleteEvidence($event)"/>
 
       <NodeInputCompare  v-else  title="Evidence" :name2="Store.selectedConfig.name" :selection="Store.patient.evidence"
                     :selection2="Store.selectedConfig.config.patient.evidence" :changeable="false"/>
@@ -27,7 +27,6 @@ import { useStore } from '@/store'
 
 export default {
 name: "EvidenceInput",
-  emits: ["addNodes","deleteNode"],
   components: {
   NodeInput,
     NodeInputCompare

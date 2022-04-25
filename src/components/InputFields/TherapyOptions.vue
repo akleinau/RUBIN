@@ -74,8 +74,13 @@ export default {
     }
   },
   methods: {
-    update(name) {
-      this.$emit("update", name);
+    update(option) {
+      option === null? this.Store.options.selectedOption = this.Store.options.likelyResult[0] : this.Store.options.selectedOption = option
+      console.log(this.Store.options.selectedOption)
+      if (option === []) this.Store.explain.relevance = null
+      else {
+        this.Store.calculateOption()
+      }
     },
   }
 }

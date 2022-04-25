@@ -3,7 +3,7 @@
   <Menubar :model="items" ref="menu" class="p-p-0 p-m-0" style="position:relative; z-index:10">
     <template #end>
       <div class="p-d-flex p-jc-between p-ai-center p-mt-0" style="background-color:#f8f9fa">
-        <div id="name"> {{ $t('Network') }}: <b>{{ NetworkName }}</b>,
+        <div id="name"> {{ $t('Network') }}: <b>{{ Store.network }}</b>,
           {{ $t('Patient') }}:
           <InputText type="text" v-model="Store.patient.name"
                      style="background-color:#fefefe"/>
@@ -44,14 +44,11 @@ import { useStore } from '@/store'
 
 export default {
   name: "Header",
-  emits: ["setName", "changePage", "reset", "loadPatient", "exportCSV", "compareTo", "sendFeedback"],
+  emits: ["changePage", "reset", "loadPatient", "exportCSV", "sendFeedback"],
   components: {
     Feedback,
     Compare
   },
-  props: [
-    "NetworkName"
-  ],
   setup() {
     const Store = useStore()
     return { Store }
@@ -151,7 +148,7 @@ export default {
       configItem.command = () => {
         this.stopComparing()
       }
-      this.$emit("compareTo", name)
+      this.Store.selectedConfig = this.Store.configurations.find(a => a.name === name)
       this.$refs.compareOverlay.toggle()
     },
     stopComparing() {

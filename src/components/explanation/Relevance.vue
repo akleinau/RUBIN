@@ -131,7 +131,7 @@ export default {
     },
     getCompareState(name) {
       let state = "unknown"
-      this.compareConfig.config.explain.states.forEach(node => {
+      this.Store.selectedConfig.config.explain.states.forEach(node => {
         if (node.name === name) {
           state = node.state
         }

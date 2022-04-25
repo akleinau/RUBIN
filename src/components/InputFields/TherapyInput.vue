@@ -43,8 +43,7 @@ import { useStore } from '@/store'
 
 export default {
   name: "Target",
-  emits: ["addNodes", "deleteNode"],
-    setup() {
+  setup() {
     const Store = useStore()
     return { Store }
   },
@@ -61,12 +60,12 @@ export default {
   },
   methods: {
     addTargetsFromOverlay() {
-      this.$emit("addNodes", this.selected)
+      this.Store.addTargets(this.selected)
       this.selected = []
       this.overlay = false
     },
     deleteNode(node) {
-      this.$emit("deleteNode", node)
+      this.Store.deleteTarget(node)
     },
   }
 }

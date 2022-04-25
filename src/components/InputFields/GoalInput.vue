@@ -11,7 +11,7 @@
       <ScrollPanel  style="height:100%">
         <div v-if="Store.selectedConfig == null">
       <NodeInput  title="Desired Outcomes" :changeable="true" :hideHeader="true" :selection="Store.patient.goals"
-                   @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
+                   @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
         </div>
       <div v-else>
         <NodeInputCompare    title="Desired Outcomes" :name2="Store.selectedConfig.name" :selection="Store.patient.goals"
@@ -29,7 +29,6 @@ import {useStore} from "@/store";
 
 export default {
   name: "GoalInput",
-  emits: ["addNodes", "deleteNode"],
   components: {
   NodeInput,
     NodeInputCompare
