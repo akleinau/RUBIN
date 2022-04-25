@@ -9,11 +9,11 @@
     </template>
     <template #content>
       <ScrollPanel  style="height:100%">
-      <NodeInput  v-if="compareConfig == null"  title="Evidence" :changeable="true" :selection="Store.patient.evidence"
+      <NodeInput  v-if="Store.selectedConfig == null"  title="Evidence" :changeable="true" :selection="Store.patient.evidence"
                    @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
 
-      <NodeInputCompare  v-else  title="Evidence" :name2="compareConfig.name" :selection="Store.patient.evidence"
-                    :selection2="compareConfig.config.patient.evidence" :changeable="false"/>
+      <NodeInputCompare  v-else  title="Evidence" :name2="Store.selectedConfig.name" :selection="Store.patient.evidence"
+                    :selection2="Store.selectedConfig.config.patient.evidence" :changeable="false"/>
       </ScrollPanel>
     </template>
 
@@ -32,9 +32,6 @@ name: "EvidenceInput",
   NodeInput,
     NodeInputCompare
   },
-    props: [
-        "compareConfig"
-  ],
   setup() {
     const Store = useStore()
     return { Store }

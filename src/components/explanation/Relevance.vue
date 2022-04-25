@@ -1,10 +1,10 @@
 <template>
   <div class="p-d-flex p-dir-col">
-    <DataTable class="p-col p-datatable-sm" :value="relevance" dataKey="node_name"
+    <DataTable class="p-col p-datatable-sm" :value="Store.explain.relevance" dataKey="node_name"
       :rowClass="isTherapyRow">
       <Column :header="$t('Node')" field="node_name">
         <template #body="slotProps">
-          {{ labels[slotProps.data.node_name] }}: {{getState(slotProps.data.node_name)}}
+          {{ Store.labels[slotProps.data.node_name] }}: {{getState(slotProps.data.node_name)}}
         </template>
       </Column>
       <Column :header="$t('Relevance')" field="overall_relevance">
@@ -22,16 +22,16 @@
     </DataTable>
 <!--    compare view  -->
     <br><br>
-    <div class="p-col" v-if="compareConfig == null">
+    <div class="p-col" v-if="Store.selectedConfig == null">
       <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{ goal }}</div>
     </div>
     <div class="p-col" v-else>
-      <h3> {{ compareConfig.name }}:</h3>
-      <DataTable class="p-col p-datatable-sm" :value="compareConfig.config.explain.relevance" dataKey="node_name"
+      <h3> {{ Store.selectedConfig.name }}:</h3>
+      <DataTable class="p-col p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
       :rowClass="isTherapyRow">
       <Column :header="$t('Node')" field="node_name">
         <template #body="slotProps">
-          {{ labels[slotProps.data.node_name] }}: {{getCompareState(slotProps.data.node_name)}}
+          {{ Store.labels[slotProps.data.node_name] }}: {{getCompareState(slotProps.data.node_name)}}
         </template>
       </Column>
       <Column :header="$t('Relevance')" field="overall_relevance">
@@ -62,14 +62,6 @@ export default {
     bar,
     twoSidedBar
   },
-  props: [
-    "relevance",
-    "goals",
-    "nodes",
-    "compareConfig",
-    "selectedOption",
-    "labels"
-  ],
   setup() {
     const Store = useStore()
     return { Store }
@@ -79,41 +71,35 @@ export default {
       showLocal: false
     }
   },
-  watch: {
-    selectedOption: function () {
-      this.expandedRows = []
-      this.compareExpandedRows = []
-    }
-  },
   methods: {
     getGoalKeys() {
-      if (this.goals != null) {
+      if (this.Store.newGoals != null) {
         let goalnames = []
-        Object.keys(this.goals).forEach(goal => {
-          goalnames.push(this.labels[goal] + ": " + this.goals[goal])
+        Object.keys(this.Store.newGoals).forEach(goal => {
+          goalnames.push(this.Store.labels[goal] + ": " + this.Store.newGoals[goal])
         })
 
         return goalnames
       }
     },
     getCompareGoalKeys() {
-      if (this.compareConfig != null) {
+      if (this.Store.selectedConfig != null) {
         let goalnames = []
-        Object.keys(this.compareConfig.config.newGoals).forEach(goal => {
-          goalnames.push(this.labels[goal] + ": " + this.compareConfig.config.newGoals[goal])
+        Object.keys(this.Store.selectedConfig.config.newGoals).forEach(goal => {
+          goalnames.push(this.Store.labels[goal] + ": " + this.Store.selectedConfig.config.newGoals[goal])
         })
-        console.log(this.compareConfig)
+        console.log(this.Store.selectedConfig)
         console.log("GoalNames:")
         console.log(goalnames)
         return goalnames
       }
     },
     getGoalForSummary() {
-      if (this.goals != null && this.selectedOption != null) {
+      if (this.Store.newGoals != null && this.Store.options.selectedOption != null) {
         let goalnames = []
-        Object.keys(this.goals).forEach(goal => {
-          let percentage = this.selectedOption.goalValues[goal]* 100
-          goalnames.push(this.labels[goal] + " - " + this.goals[goal] + ": " +
+        Object.keys(this.Store.newGoals).forEach(goal => {
+          let percentage = this.Store.options.selectedOption.goalValues[goal]* 100
+          goalnames.push(this.Store.labels[goal] + " - " + this.Store.newGoals[goal] + ": " +
               percentage.toFixed(0) + "%")
         })
         return goalnames
@@ -127,7 +113,7 @@ export default {
     getIdentifier(label) {
       let identifier = "-1"
       let labelFirstPart = label.split(":")[0]
-      Object.entries(this.labels).forEach(([key, value]) => {
+      Object.entries(this.Store.labels).forEach(([key, value]) => {
         if (value === labelFirstPart) {
           identifier = key
         }
@@ -136,7 +122,7 @@ export default {
     },
     getState(name) {
       let state = "unknown"
-      this.nodes.forEach(node => {
+      this.Store.explain.states.forEach(node => {
         if (node.name === name) {
           state = node.state
         }

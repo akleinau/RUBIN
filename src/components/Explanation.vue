@@ -18,36 +18,35 @@
     </template>
     <template #content>
       <ScrollPanel style="height:100%">
-        <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em"/>
+        <ProgressBar v-if="Store.explanationLoading" mode="indeterminate" style="height: .5em"/>
         <TabView v-else>
           <!--   relevance  -->
           <TabPanel :header="$t('Relevance')">
-            <Relevance :relevance="Store.explain.relevance" :goals="goals" :nodes="Store.explain.states"
-            :compareConfig="compareConfig" :selectedOption="Store.options.selectedOption" :labels="Store.labels"/>
+            <Relevance/>
           </TabPanel>
           <!--   all predictions  -->
           <TabPanel :header="$t('AllPredictions')">
-            <NodeList :nodes="Store.explain.states" :compareConfig="compareConfig" :labels="Store.labels"/>
+            <NodeList/>
           </TabPanel>
           <!--   compact network  -->
           <TabPanel :header="$t('CompactNetwork')">
-            <div v-if="compareConfig==null">
+            <div v-if="Store.selectedConfig==null">
               <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()" :labels="Store.labels"/>
             </div>
             <div v-else>
               <sugiyamaCompare :edges="getCompactEdges()" :nodes="getExNodes()"
-                               :nodes2="compareConfig.config.explain.states"
-                               :name2="compareConfig.name" :labels="Store.labels"/>
+                               :nodes2="Store.selectedConfig.config.explain.states"
+                               :name2="Store.selectedConfig.name" :labels="Store.labels"/>
             </div>
           </TabPanel>
           <!--   full network  -->
           <TabPanel :header="$t('FullNetwork')">
-            <div v-if="compareConfig==null">
+            <div v-if="Store.selectedConfig==null">
               <sugiyama :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
             </div>
             <div v-else>
-              <sugiyamaCompare  :edges="Store.edges" :nodes="Store.explain.states" :nodes2="compareConfig.config.explain.states"
-                               :name2="compareConfig.name" :labels="Store.labels"/>
+              <sugiyamaCompare  :edges="Store.edges" :nodes="Store.explain.states" :nodes2="Store.selectedConfig.config.explain.states"
+                               :name2="Store.selectedConfig.name" :labels="Store.labels"/>
             </div>
           </TabPanel>
         </TabView>
@@ -65,7 +64,6 @@ import { useStore } from '@/store'
 
 export default {
   name: "Network",
-  props: ['goals', "compareConfig", "loading"],
   components: {
     Relevance,
     sugiyama,

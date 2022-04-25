@@ -8,9 +8,9 @@
                 :label="getLabel(slotProps.data.probability)"/>
     </template>
   </Column>
-   <Column header="" field="beforeState" v-if="compareConfig">
+   <Column header="" field="beforeState" v-if="Store.selectedConfig">
     <template #body="slotProps">
-      <div v-if="slotProps.data.beforeState !== ''">{{compareConfig.name}}: &nbsp; </div>
+      <div v-if="slotProps.data.beforeState !== ''">{{Store.selectedConfig.name}}: &nbsp; </div>
       <div :style="{color: color(slotProps.data.beforeProb)}">  {{slotProps.data.beforeState}} </div>
     </template>
   </Column>
@@ -19,13 +19,14 @@
 
 <script>
 import * as d3 from "d3";
+import { useStore } from '@/store'
+
 export default {
 name: "NodeList",
-  props: [
-      "nodes",
-      "compareConfig",
-      "labels"
-  ],
+  setup() {
+    const Store = useStore()
+    return { Store }
+  },
   data() {
   return {
     c1: "blue"
@@ -33,13 +34,13 @@ name: "NodeList",
   },
   computed: {
      data: function () {
-        if (this.nodes === null) return null
-        if (this.compareConfig == null) {
+        if (this.Store.explain.states === null) return null
+        if (this.Store.selectedConfig == null) {
           let data = []
-          this.nodes.forEach(a => {
+          this.Store.explain.states.forEach(a => {
             data.push({
               "name": a.name,
-              "label": this.labels[a.name],
+              "label": this.Store.labels[a.name],
               "state": a.state,
               "probability": a.probability,
               "beforeState": "",
@@ -50,12 +51,12 @@ name: "NodeList",
         }
         else {
           let data = []
-          this.nodes.forEach( a => {
-            let compareNode = this.compareConfig.config.explain.states.find(n => n.name === a.name)
+          this.Store.explain.states.forEach( a => {
+            let compareNode = this.Store.selectedConfig.config.explain.states.find(n => n.name === a.name)
             data.push({
               "name": a.name,
               "state": a.state,
-              "label": this.labels[a.name],
+              "label": this.Store.labels[a.name],
               "probability": a.probability,
               "beforeState": a.state === compareNode.state ? "" : compareNode.state,
               "beforeProb": a.state === compareNode.state ? 0 : compareNode.probability

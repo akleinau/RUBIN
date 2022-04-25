@@ -54,9 +54,6 @@ export default {
       optionCount: 0
     }
   },
-  props: [
-      "goals"
-  ],
     watch: {
     selectedOption: function () {
       this.selected = this.Store.options.selectedOption
@@ -64,8 +61,8 @@ export default {
   },
   methods: {
     getGoalKeys() {
-      if (this.goals != null) {
-        return Object.keys(this.goals)
+      if (this.Store.newGoals != null) {
+        return Object.keys(this.Store.newGoals)
       }},
     getOptionLabel(option) {
       if (option == null) return null
@@ -79,7 +76,7 @@ export default {
       this.$emit("update", this.selected);
     },
     getGoalLabel(goal) {
-      return this.Store.labels[goal] + ": " + this.goals[goal]
+      return this.Store.labels[goal] + ": " + this.Store.newGoals[goal]
     },
     deselect() {
       this.$emit("update", null)

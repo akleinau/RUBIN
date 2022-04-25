@@ -21,7 +21,7 @@
     {{ Store.description }}
   </Dialog>
   <OverlayPanel ref="compareOverlay" style="width: 50%">
-    <Compare @saveConfig="saveConfig($event)" :configurations="configurations" @compareTo="compareTo($event)"
+    <Compare @saveConfig="saveConfig($event)" :configurations="Store.configurations" @compareTo="compareTo($event)"
              @load="load($event)" @deleteConfig="deleteConfig($event)"/>
   </OverlayPanel>
 
@@ -44,13 +44,13 @@ import { useStore } from '@/store'
 
 export default {
   name: "Header",
-  emits: ["setName", "changePage", "reset", "loadPatient", "exportCSV", "compareTo", "load", "deleteConfig", "sendFeedback", "saveConfig"],
+  emits: ["setName", "changePage", "reset", "loadPatient", "exportCSV", "compareTo", "sendFeedback"],
   components: {
     Feedback,
     Compare
   },
   props: [
-    "configurations", "NetworkName"
+    "NetworkName"
   ],
   setup() {
     const Store = useStore()
@@ -164,14 +164,26 @@ export default {
       this.$emit("compareTo", null)
     },
     load(name) {
-      this.$emit('load', name)
+      let configuration = this.Store.configurations.find(a => a.name === name)
+      this.Store.patient = configuration.config.patient
+      this.Store.options = configuration.config.options
+      this.Store.explain = configuration.config.explain
+      this.Store.newGoals = configuration.config.newGoals
       this.$refs.compareOverlay.toggle()
     },
     deleteConfig(name) {
-      this.$emit('deleteConfig', name)
+      this.Store.configurations = this.Store.configurations.filter(a => a.name !== name)
     },
     saveConfig(name) {
-      this.$emit('saveConfig', name)
+      this.Store.configurations.push({
+        "name": name,
+        "config": {
+          "patient": JSON.parse(JSON.stringify(this.Store.patient)),
+          "options": JSON.parse(JSON.stringify(this.Store.options)),
+          "explain": JSON.parse(JSON.stringify(this.Store.explain)),
+          "newGoals": JSON.parse(JSON.stringify(this.Store.newGoals))
+        }
+      })
     },
     sendFeedback(description) {
       this.$emit("sendFeedback", description)

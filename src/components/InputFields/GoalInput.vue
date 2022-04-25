@@ -9,13 +9,13 @@
     </template>
     <template #content style="height:100%" class="p-m-0 p-p-0">
       <ScrollPanel  style="height:100%">
-        <div v-if="compareConfig == null">
+        <div v-if="Store.selectedConfig == null">
       <NodeInput  title="Desired Outcomes" :changeable="true" :hideHeader="true" :selection="Store.patient.goals"
                    @addNodes="$emit('addNodes', $event)" @deleteNode="$emit('deleteNode',$event)"/>
         </div>
       <div v-else>
-        <NodeInputCompare    title="Desired Outcomes" :name2="compareConfig.name" :selection="Store.patient.goals"
-                    :selection2="compareConfig.config.patient.goals" :changeable="false" />
+        <NodeInputCompare    title="Desired Outcomes" :name2="Store.selectedConfig.name" :selection="Store.patient.goals"
+                    :selection2="Store.selectedConfig.config.patient.goals" :changeable="false" />
       </div>
         </ScrollPanel>
     </template>
@@ -34,9 +34,6 @@ export default {
   NodeInput,
     NodeInputCompare
   },
-    props: [
-        "compareConfig"
-  ],
   setup() {
     const Store = useStore()
     return { Store }

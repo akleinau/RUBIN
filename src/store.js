@@ -28,6 +28,14 @@ export const useStore = defineStore('store', {
       edges: null, //edges of the network
       labels: null,
 
+      configurations: [],
+      selectedConfig: null,
+
+      newGoals: null, //helper property to let the data tables update TODO: replace
+
+      optionsLoading: false,
+      explanationLoading: false,
+
     description: ""
   })
 })

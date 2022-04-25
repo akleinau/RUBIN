@@ -1,7 +1,7 @@
 <template>
   <div style="position:relative">
 
-    <div v-if="compareConfig == null">
+    <div v-if="Store.selectedConfig == null">
       <Listbox :options="Store.patient.targets" :optionLabel="name" listStyle="max-height:300px"
                emptyMessage="choose therapy nodes">
         <template #option="slotProps">
@@ -17,7 +17,7 @@
     <div v-else>
       current: <span v-for="sel in Store.patient.targets" :key="sel">{{ sel.name }}, </span>
       <br>
-      {{ compareConfig.name }}: <span v-for="sel in compareConfig.config.patient.targets"
+      {{ Store.selectedConfig.name }}: <span v-for="sel in Store.selectedConfig.config.patient.targets"
                                       :key="sel">{{ sel.name }}, </span>
     </div>
 
@@ -44,9 +44,6 @@ import { useStore } from '@/store'
 export default {
   name: "Target",
   emits: ["addNodes", "deleteNode"],
-  props: [
-    "compareConfig"
-  ],
     setup() {
     const Store = useStore()
     return { Store }

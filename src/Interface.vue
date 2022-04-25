@@ -3,8 +3,7 @@
   <tutorial @setBlock="block = $event"/>
 
   <Header ref="menu" @changePage="changePage()" @reset="reset()" @loadPatient="openLoadForm($event)"
-          @exportCSV="exportCSV($event)" @saveConfig="saveConfig($event)" @compareTo="compareTo($event)"
-          :configurations="configurations" @load="loadConfig($event)" @deleteConfig="deleteConfig($event)"
+          @exportCSV="exportCSV($event)" @compareTo="compareTo($event)"
           :NetworkName="network"
           description="Not working" @sendFeedback="sendFeedback($event)"/>
 
@@ -15,28 +14,25 @@
   <div class=" p-grid stretched " style=" position:relative">
     <div class="p-col-3 p-ai-start p-flex-column stretched">
       <BlockUI class="p-pb-2 p-d-flex" style="height: 30%;" :blocked="block.goals" ref="goal">
-        <GoalInput :compareConfig="selectedConfig"
+        <GoalInput
                    @addNodes="addGoals($event)" @deleteNode="deleteGoal($event)"/>
       </BlockUI>
 
       <BlockUI style="height:70%" :blocked="block.evidence">
-        <EvidenceInput :compareConfig="selectedConfig"
+        <EvidenceInput
                        @addNodes="addEvidences($event)" @deleteNode="deleteEvidence($event)"/>
       </BlockUI>
 
 
     </div>
     <BlockUI class="p-col stretched" :blocked="block.options">
-      <TherapyOptions  :goals="newGoals"
+      <TherapyOptions
                       @update="selectedOptionUpdated($event)"
-                      :loading="optionsLoading"
-                      :compareConfig="selectedConfig"
                       @addNodes="addTargets($event)" @deleteNode="deleteTarget($event)"/>
 
     </BlockUI>
     <BlockUI class="p-col stretched" :blocked="block.explain">
-      <Explanation :goals="newGoals" :loading="explanationLoading"
-                   :compareConfig="selectedConfig" />
+      <Explanation />
 
     </BlockUI>
   </div>
@@ -75,16 +71,6 @@ export default {
   },
   data() {
     return {
-
-      newGoals: null, //helper property to let the data tables update TODO: replace
-
-      configurations: [],
-      selectedConfig: null,
-      patientCases: [],
-
-      optionsLoading: false,
-      explanationLoading: false,
-
       block: {
         goals: false,
         evidence: true,
@@ -94,29 +80,8 @@ export default {
     }
   },
   methods: {
-    saveConfig(name) {
-      this.configurations.push({
-        "name": name,
-        "config": {
-          "patient": JSON.parse(JSON.stringify(this.Store.patient)),
-          "options": JSON.parse(JSON.stringify(this.Store.options)),
-          "explain": JSON.parse(JSON.stringify(this.Store.explain)),
-          "newGoals": JSON.parse(JSON.stringify(this.newGoals))
-        }
-      })
-    },
-    deleteConfig(name) {
-      this.configurations = this.configurations.filter(a => a.name !== name)
-    },
-    loadConfig(name) {
-      let configuration = this.configurations.find(a => a.name === name)
-      this.Store.patient = configuration.config.patient
-      this.Store.options = configuration.config.options
-      this.Store.explain = configuration.config.explain
-      this.newGoals = configuration.config.newGoals
-    },
     compareTo(name) {
-      this.selectedConfig = this.configurations.find(a => a.name === name)
+      this.Store.selectedConfig = this.Store.configurations.find(a => a.name === name)
     },
     changePage() {
       this.$emit("changePage")
@@ -200,7 +165,7 @@ export default {
       this.Store.options.likelyResult = null
 
       this.Store.edges = null
-      this.newGoals = null
+      this.Store.newGoals = null
 
       this.Store.explain.relevance = null
       this.Store.explain.states = null
@@ -211,7 +176,7 @@ export default {
     calculate: async function () {
       if (this.Store.patient.evidence.length !== 0 && this.Store.patient.goals.length !== 0) {
         this.Store.optionsLoading = true
-        this.explanationLoading = true
+        this.Store.explanationLoading = true
 
         let evidences = {}
         for (var ev in this.Store.patient.evidence) {
@@ -271,13 +236,13 @@ export default {
         }]
         this.Store.options.selectedOption = this.Store.options.likelyResult[0]
 
-        this.newGoals = goals
+        this.Store.newGoals = goals
         this.Store.optionsLoading = false
         this.calculateOption()
       }
     },
     calculateOption: async function () {
-      this.explanationLoading = true
+      this.Store.explanationLoading = true
 
       let evidences = {}
       for (var ev in this.Store.patient.evidence) {
@@ -322,10 +287,10 @@ export default {
 
       let nodeDict = await gResponse.json();
       this.Store.explain.relevance = nodeDict.relevance
-      this.newGoals = goals
+      this.Store.newGoals = goals
       this.Store.explain.states = nodeDict.nodes
       this.Store.explain.explanation = nodeDict.explanation
-      this.explanationLoading = false
+      this.Store.explanationLoading = false
     },
     addEvidences(nodes) {
       nodes.forEach(node => {
