@@ -18,15 +18,13 @@
         <EvidenceInput/>
       </BlockUI>
 
-
     </div>
     <BlockUI class="p-col stretched" :blocked="block.options">
       <TherapyOptions/>
-
     </BlockUI>
+
     <BlockUI class="p-col stretched" :blocked="block.explain">
       <Explanation />
-
     </BlockUI>
   </div>
 </template>
@@ -82,9 +80,6 @@ export default {
     },
     loadPatient: async function () {
       this.$refs.panel.toggle()
-    },
-    calculate: async function () {
-      await this.Store.calculate()
     }
     },
     created: async function () {
@@ -92,8 +87,8 @@ export default {
       this.Store.localNet = this.localNet
       await this.Store.loadNodes()
 
+      //add example nodes for the endometrial cancer network
       if (this.network === 'endometrial cancer') {
-        //add example nodes
         let CA125 = this.Store.patient.nodes.find(x => x.name === "CA125")
         CA125["selected"] = {"name": "lt_35"}
         this.Store.addEvidences([CA125])

@@ -20,6 +20,7 @@
         </template>
       </Column>
     </DataTable>
+
 <!--    compare view  -->
     <br><br>
     <div class="p-col" v-if="Store.selectedConfig == null">

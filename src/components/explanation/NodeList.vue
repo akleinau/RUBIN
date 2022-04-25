@@ -27,11 +27,6 @@ name: "NodeList",
     const Store = useStore()
     return { Store }
   },
-  data() {
-  return {
-    c1: "blue"
-  }
-  },
   computed: {
      data: function () {
         if (this.Store.explain.states === null) return null

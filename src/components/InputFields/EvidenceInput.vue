@@ -35,11 +35,6 @@ name: "EvidenceInput",
     const Store = useStore()
     return { Store }
   },
-  data() {
-  return {
-    editMode: true
-  }
-  }
 }
 </script>
 

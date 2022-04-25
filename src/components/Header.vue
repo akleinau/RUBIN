@@ -15,7 +15,7 @@
 
 <!--   dialogs/ overlays  -->
   <Dialog :header="$t('Feedback')" v-model:visible="showFeedback" style="width: 50%" :modal="true">
-    <Feedback @sendFeedback="sendFeedback($event)"></Feedback>
+    <Feedback @sendFeedback="sendFeedback"></Feedback>
   </Dialog>
   <Dialog :header="$t('NetworkDescription')" v-model:visible="showNetworkDescription" style="width: 50%" :modal="true">
     {{ Store.description }}
@@ -189,8 +189,7 @@ export default {
         }
       })
     },
-    sendFeedback(description) {
-      this.$emit("sendFeedback", description)
+    sendFeedback() {
       this.showFeedback = false
     },
     showLanguage(event) {

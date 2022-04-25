@@ -14,6 +14,7 @@
 <script>
 export default {
   name: "Feedback",
+  emits: ["sendFeedback"],
   data() {
     return {
       sendConfig: false,
@@ -39,6 +40,7 @@ export default {
       });
       const response = await gResponse;
       console.log(response)
+      this.$emit("sendFeedback")
     }
   }
 }
