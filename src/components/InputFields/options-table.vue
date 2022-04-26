@@ -1,6 +1,6 @@
 <template>
  <DataTable :value="Store.options.options" class="p-datatable-sm" :autoLayout="true"
-                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selected"
+                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="Store.options.selectedOption"
                  @rowSelect="update" @rowUnselect="update" >
         <Column>
           <template #body="slotProps">
@@ -27,7 +27,7 @@
         </Column>
         <Column>
           <template #body="slotProps">
-            <Button v-if="slotProps.data === selected" class="p-button-secondary p-button-text p-button-rounded"
+            <Button v-if="slotProps.data === Store.options.selectedOption" class="p-button-secondary p-button-text p-button-rounded"
                     icon="pi pi-times" @click="deselect" />
           </template>
         </Column>
@@ -40,24 +40,12 @@ import { useStore } from '@/store'
 
 export default {
   name: "options-table",
-  emits: ["update"],
   components: {
     bar
   },
   setup() {
     const Store = useStore()
     return { Store }
-  },
-  data() {
-    return {
-      selected: null,
-      optionCount: 0
-    }
-  },
-    watch: {
-    selectedOption: function () {
-      this.selected = this.Store.options.selectedOption
-    }
   },
   methods: {
     getGoalKeys() {
@@ -73,13 +61,17 @@ export default {
       return label
     },
     update() {
-      this.$emit("update", this.selected);
+      if (this.Store.options.selectedOption === []) this.Store.explain.relevance = null
+      else {
+        this.Store.calculateOption()
+      }
     },
     getGoalLabel(goal) {
       return this.Store.labels[goal] + ": " + this.Store.newGoals[goal]
     },
     deselect() {
-      this.$emit("update", null)
+      this.Store.options.selectedOption = this.Store.options.likelyResult[0]
+      this.update()
     }
   }
 }

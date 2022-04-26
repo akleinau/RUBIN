@@ -165,7 +165,7 @@ export default {
       configItem.command = (event) => {
         this.$refs.compareOverlay.toggle(event.originalEvent)
       }
-      this.$emit("compareTo", null)
+      this.Store.selectedConfig = null
     },
     load(name) {
       let configuration = this.Store.configurations.find(a => a.name === name)

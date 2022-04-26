@@ -11,30 +11,30 @@ export const useStore = defineStore('store', {
         name: "",
       },
 
-      //available options to treat the patient given the interventions
-      options: {
-        options: null,
-        likelyResult: null,
-        selectedOption: null,
-      },
+    //available options to treat the patient given the interventions
+    options: {
+      options: null,
+      likelyResult: null,
+      selectedOption: null,
+    },
 
-      //explaining calculations for the chosen option
-      explain: {
-        explanation: null,
-        relevance: null,
-        states: null,
-      },
+    //explaining calculations for the chosen option
+    explain: {
+      explanation: null,
+      relevance: null,
+      states: null,
+    },
 
-      edges: null, //edges of the network
-      labels: null,
+    edges: [], //edges of the network
+    labels: null,
 
-      configurations: [],
-      selectedConfig: null,
+    configurations: [],
+    selectedConfig: null,
 
-      newGoals: null, //helper property to let the data tables update TODO: replace
+    newGoals: null, //helper property to let the data tables update TODO: replace
 
-      optionsLoading: false,
-      explanationLoading: false,
+    optionsLoading: false,
+    explanationLoading: false,
 
     description: "",
     network: "",
@@ -205,11 +205,10 @@ export const useStore = defineStore('store', {
       }
       this.patient.nodes = nodes
 
-      let edges = []
+      this.edges = []
       network.edges.forEach(edge => {
-        edges.push({"source": edge[0], "target": edge[1]})
+        this.edges.push({"source": edge[0], "target": edge[1]})
       })
-      this.edges = edges
 
       this.description = network.description
       this.labels = network.labels

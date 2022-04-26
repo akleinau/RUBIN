@@ -64,7 +64,6 @@ name: "sugiyama-vis",
       }
 
       function shortName(thisThing, node, d) {
-        console.log("dubs")
         d3.select(node.target).text(String(thisThing.labels[d.data.id]).substring(0, 10) + ": ")
       }
 

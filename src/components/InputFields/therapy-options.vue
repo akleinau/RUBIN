@@ -25,7 +25,7 @@
             <!--          <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>-->
           </div>
           <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
-          <optionsTable @update="update($event)" />
+          <optionsTable />
           <!--    compare view  -->
           <div v-if="Store.selectedConfig">
             <h3> {{ Store.selectedConfig.name }}:</h3>
@@ -73,14 +73,6 @@ export default {
     }
   },
   methods: {
-    update(option) {
-      option === null? this.Store.options.selectedOption = this.Store.options.likelyResult[0] : this.Store.options.selectedOption = option
-      console.log(this.Store.options.selectedOption)
-      if (option === []) this.Store.explain.relevance = null
-      else {
-        this.Store.calculateOption()
-      }
-    },
   }
 }
 </script>
