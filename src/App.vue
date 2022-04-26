@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import Interface from "./Interface";
-import ChooseNet from "./ChooseNet";
+import Interface from "./page-interface";
+import ChooseNet from "./page-choose-net";
 
 export default {
   name: 'App',
