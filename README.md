@@ -1,4 +1,5 @@
-# doctorbn
+# DoctorBN
+Clinical Decision Support System based on Bayesian Networks.  
 
 ## Project setup
 ```
