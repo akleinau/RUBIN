@@ -95,7 +95,19 @@ export default {
   computed: {
     //adds 'checked' property to every option of every node of the overlay
     overlayNodes: function () {
-      return this.Store.patient.nodes.map(node => {
+      let nodes = this.Store.patient.nodes
+      if (this.Store.currentPhase !== "") {
+        let phaseNodes = this.Store.phases.find(x => x.name=this.Store.currentPhase)
+        if (this.title === "Evidence") {
+          nodes = nodes.filter(x =>phaseNodes.sets.evidence.includes(x.name))
+        }
+        else {
+          nodes = nodes.filter(x =>phaseNodes.sets.goal.includes(x.name))
+        }
+
+      }
+
+      return nodes.map(node => {
             return {
               name: node.name,
               options: node.options.map(option => {

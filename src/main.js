@@ -28,6 +28,7 @@ import FileUpload from 'primevue/fileupload';
 import ProgressBar from 'primevue/progressbar';
 import BlockUI from 'primevue/blockui';
 import ToggleButton from 'primevue/togglebutton';
+import SelectButton from 'primevue/selectbutton';
 import 'primevue/resources/themes/saga-blue/theme.css';       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css'
@@ -84,6 +85,7 @@ vueApp.use(PrimeVue)
     .component('ProgressBar', ProgressBar)
     .component('BlockUI', BlockUI)
     .component('ToggleButton',ToggleButton)
+    .component('SelectButton', SelectButton)
     .directive('tooltip', Tooltip)
 
 vueApp.use(createPinia())

@@ -1,6 +1,7 @@
 <template>
   {{$t("FeedbackInfo")}}
   <br>
+  <div style="color: red"> Currently not working!</div>
   <form>
   <Textarea v-model="description" rows="5" style="width:100%"/>
   <div class="p-field-checkbox">

@@ -38,7 +38,9 @@ export const useStore = defineStore('store', {
 
     description: "",
     network: "",
-    localNet: ""
+    localNet: "",
+    phases: [],
+    currentPhase: ""
   }),
   actions: {
     async reset() {
@@ -212,6 +214,11 @@ export const useStore = defineStore('store', {
 
       this.description = network.description
       this.labels = network.labels
+      let customization = network.customization
+      if (customization != null) {
+        this.phases = network.customization.phases
+        console.log(this.phases)
+      }
     },
     addEvidences(nodes) {
       nodes.forEach(node => {
@@ -263,6 +270,6 @@ export const useStore = defineStore('store', {
         csv += "\ngoal; " + ev.name + "; " + ev.selected.name
       })
       return csv
-    }
+    },
   }
 })
