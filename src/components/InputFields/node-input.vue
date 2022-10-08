@@ -97,12 +97,11 @@ export default {
     overlayNodes: function () {
       let nodes = this.Store.patient.nodes
       if (this.Store.currentPhase !== null) {
-        let phaseNodes = this.Store.phases.find(x => x.name=this.Store.currentPhase)
         if (this.title === "Evidence") {
-          nodes = nodes.filter(x =>phaseNodes.sets.evidence.includes(x.name))
+          nodes = nodes.filter(x =>this.Store.currentPhase.sets.evidence.includes(x.name))
         }
         else {
-          nodes = nodes.filter(x =>phaseNodes.sets.goal.includes(x.name))
+          nodes = nodes.filter(x =>this.Store.currentPhase.sets.goal.includes(x.name))
         }
 
       }

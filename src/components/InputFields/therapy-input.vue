@@ -56,8 +56,7 @@ export default {
   computed: {
     overlayNodes: function () {
       if (this.Store.currentPhase != null) {
-        let phaseNodes = this.Store.phases.find(x => x.name=this.Store.currentPhase)
-        return this.Store.patient.nodes.filter(x =>phaseNodes.sets.target.includes(x.name))
+        return this.Store.patient.nodes.filter(x =>this.Store.currentPhase.sets.target.includes(x.name))
       }
       return this.Store.patient.nodes //.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
     }
