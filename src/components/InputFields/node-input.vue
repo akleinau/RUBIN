@@ -96,7 +96,7 @@ export default {
     //adds 'checked' property to every option of every node of the overlay
     overlayNodes: function () {
       let nodes = this.Store.patient.nodes
-      if (this.Store.currentPhase !== "") {
+      if (this.Store.currentPhase !== null) {
         let phaseNodes = this.Store.phases.find(x => x.name=this.Store.currentPhase)
         if (this.title === "Evidence") {
           nodes = nodes.filter(x =>phaseNodes.sets.evidence.includes(x.name))

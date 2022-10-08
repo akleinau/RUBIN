@@ -8,8 +8,11 @@
     <LoadPatient @loaded="loadPatient"></LoadPatient>
   </OverlayPanel>
 
-  <SelectButton v-model="Store.currentPhase" :options="Store.phases" aria-labelledby="single"
-    class="p-d-flex p-ai-start p-mt-1 p-ml-1" optionLabel="name" />
+  <div class="p-d-flex p-jc-between p-m-1">
+      <SelectButton v-model="Store.currentPhase" :options="Store.phases" aria-labelledby="single"
+    class="p-d-flex" optionLabel="name" />
+    <Button class="p-d-flex" label="custom" @click="Store.currentPhase=null" />
+  </div>
 
   <div class=" p-grid stretched " style=" position:relative">
     <div class="p-col-3 p-ai-start p-flex-column stretched">
