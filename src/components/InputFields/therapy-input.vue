@@ -25,7 +25,7 @@
     <Dialog header="  " v-model:visible="overlay" style="width:80%; height:90%; background:white" :modal="true"
             @hide="addTargetsFromOverlay()">
       <Listbox v-model="selected" class="p-mt-2" :options="overlayNodes" optionLabel="name"
-               emptyMessage="choose evidences to add" :multiple="true"
+               emptyMessage="" :multiple="true"
                :filter="true" filterPlaceholder="Search">
         <template #option="slotProps">
           <i class="pi pi-check" v-if="selected && selected.find(n => n.name === slotProps.option.name)"/>
@@ -63,7 +63,9 @@ export default {
   },
   methods: {
     addTargetsFromOverlay() {
-      this.Store.addTargets(this.selected)
+      if (this.selected != null) {
+              this.Store.addTargets(this.selected)
+      }
       this.selected = []
       this.overlay = false
     },

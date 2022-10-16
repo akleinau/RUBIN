@@ -101,7 +101,7 @@ export default {
           nodes = nodes.filter(x =>this.Store.currentPhase.sets.evidence.includes(x.name))
         }
         else {
-          nodes = nodes.filter(x =>this.Store.currentPhase.sets.goal.includes(x.name))
+          nodes = nodes.filter(x =>this.Store.currentPhase.sets.goal.map(a => a.name).includes(x.name))
         }
 
       }

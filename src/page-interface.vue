@@ -10,7 +10,7 @@
 
   <div class="p-d-flex p-jc-between p-m-1">
       <SelectButton v-model="Store.currentPhase" :options="Store.phases" aria-labelledby="single"
-    class="p-d-flex" optionLabel="name" />
+    class="p-d-flex" optionLabel="name" @click="Store.phase_change()" />
     <Button class="p-d-flex" label="custom" @click="Store.currentPhase=null" />
   </div>
 
@@ -92,19 +92,6 @@ export default {
       this.Store.network = this.network
       this.Store.localNet = this.localNet
       await this.Store.loadNodes()
-
-      //add example nodes for the endometrial cancer network
-      if (this.network === 'endometrial cancer') {
-        let CA125 = this.Store.patient.nodes.find(x => x.name === "CA125")
-        CA125["selected"] = {"name": "lt_35"}
-        this.Store.addEvidences([CA125])
-        this.Store.addTargets([this.Store.patient.nodes.find(x => x.name === "Therapy")])
-        let surv = this.Store.patient.nodes.find(x => x.name === "Survival5yr")
-        surv["selected"] = {"name": "yes"}
-        let lnm = this.Store.patient.nodes.find(x => x.name === "LNM")
-        lnm["selected"] = {"name": "no"}
-        this.Store.addGoals([surv, lnm])
-    }
   }
 }
 </script>

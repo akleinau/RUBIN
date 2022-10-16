@@ -217,7 +217,8 @@ export const useStore = defineStore('store', {
       let customization = network.customization
       if (customization != null) {
         this.phases = network.customization.phases
-        console.log(this.phases)
+        this.currentPhase = this.phases[0]
+        this.phase_change()
       }
     },
     addEvidences(nodes) {
@@ -271,5 +272,14 @@ export const useStore = defineStore('store', {
       })
       return csv
     },
+    phase_change() {
+      this.patient.targets.forEach(a => this.deleteTarget(a))
+      this.patient.goals.forEach(a => this.deleteGoal(a))
+      this.addTargets(this.patient.nodes.filter(a => this.currentPhase.sets.target.includes(a.name)))
+      this.currentPhase.sets.goal.forEach(a => {
+        let fullnode = this.patient.nodes.find(b => b.name === a.name)
+        this.addGoals([{"name": a.name, "selected": {"name":a.option}, "options": fullnode.options}])
+      })
+    }
   }
 })
