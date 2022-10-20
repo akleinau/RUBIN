@@ -26,7 +26,7 @@
 
     </div>
     <BlockUI class="p-col stretched" :blocked="block.options">
-      <TherapyOptions/>
+      <Therapy/>
     </BlockUI>
 
     <BlockUI class="p-col stretched" :blocked="block.explain">
@@ -38,7 +38,7 @@
 <script>
 import Header from "./components/page-header";
 import Explanation from "./components/page-explanation";
-import TherapyOptions from "@/components/InputFields/therapy-options";
+import Therapy from "@/components/page-therapy";
 import LoadPatient from "@/components/Header/load-patient";
 import OverlayPanel from "primevue/overlaypanel";
 import EvidenceInput from "@/components/InputFields/evidence-input";
@@ -52,7 +52,7 @@ export default {
   components: {
     Header,
     Explanation,
-    TherapyOptions,
+    Therapy,
     LoadPatient,
     OverlayPanel,
     EvidenceInput,
