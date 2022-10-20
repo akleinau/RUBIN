@@ -3,7 +3,7 @@
   <Card style="height:100%">
 
     <template #title>
-      {{ $t("Treatment") }}
+      {{ $t("Prediction") }}
       <Button icon="pi pi-question" class="p-button-text p-button-secondary p-button-rounded p-button-raised help" @click="$refs.op.toggle($event)"/>
       <OverlayPanel ref="op" style="width: 500px"> {{ $t("TreatmentHelp") }}
         <h3>{{ $t("Interventions") }}</h3>
@@ -16,6 +16,9 @@
     </template>
     <template #content>
       <ScrollPanel style="height:100%">
+        <div class="p-col" >
+          <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{ goal }}</div>
+        </div>
         <div>
           <h3 class="p-text-left">{{ $t("Interventions") }}:</h3>
           <TherapyInput />
@@ -73,6 +76,17 @@ export default {
     }
   },
   methods: {
+    getGoalForSummary() {
+      if (this.Store.newGoals != null && this.Store.options.selectedOption != null) {
+        let goalnames = []
+        Object.keys(this.Store.newGoals).forEach(goal => {
+          let percentage = this.Store.options.selectedOption.goalValues[goal]* 100
+          goalnames.push(this.Store.labels[goal] + " - " + this.Store.newGoals[goal] + ": " +
+              percentage.toFixed(0) + "%")
+        })
+        return goalnames
+      }
+    }
   }
 }
 </script>

@@ -22,11 +22,7 @@
     </DataTable>
 
 <!--    compare view  -->
-    <br><br>
-    <div class="p-col" v-if="Store.selectedConfig == null">
-      <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{ goal }}</div>
-    </div>
-    <div class="p-col" v-else>
+    <div class="p-col" v-if="Store.selectedConfig !== null">
       <h3> {{ Store.selectedConfig.name }}:</h3>
       <DataTable class="p-col p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
       :rowClass="isTherapyRow">
@@ -92,17 +88,6 @@ export default {
         console.log(this.Store.selectedConfig)
         console.log("GoalNames:")
         console.log(goalnames)
-        return goalnames
-      }
-    },
-    getGoalForSummary() {
-      if (this.Store.newGoals != null && this.Store.options.selectedOption != null) {
-        let goalnames = []
-        Object.keys(this.Store.newGoals).forEach(goal => {
-          let percentage = this.Store.options.selectedOption.goalValues[goal]* 100
-          goalnames.push(this.Store.labels[goal] + " - " + this.Store.newGoals[goal] + ": " +
-              percentage.toFixed(0) + "%")
-        })
         return goalnames
       }
     },

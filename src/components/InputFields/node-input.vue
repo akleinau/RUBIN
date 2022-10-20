@@ -57,7 +57,7 @@
   <div v-if="changeable">
     <Button class="addButton" @click="overlay = true" v-if="title === 'Evidence'"
             :label="$t('addEvidence')"></Button>
-    <Button class="addButton" @click="overlay = true" v-else
+    <Button class="addButton p-button-secondary" @click="overlay = true" v-else
             :label="$t('addOutcome')"></Button>
   </div>
 
