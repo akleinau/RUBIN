@@ -1,20 +1,21 @@
 <template>
   <!-- Form to upload a network file -->
   <form @submit.prevent="upload" id="upload-form" enctype="multipart/form-data">
-    <label>{{ $t('NetworkName') }}:
-      <InputText id="net-name" type="text" required/>
-    </label>
-    <br><br>
     <FileUpload name="net-upload" url="./upload" accept=".net, .bif" :customUpload="true" :chooseLabel="$t('Choose')"
-                :cancelLabel="$t('Cancel')" :auto="true" :showUploadButton="false" @uploader="file = $event.files"
+                 :auto="true" :showUploadButton="false" @uploader="file = $event.files" :showCancelButton="false"
                 required/>
     <br>
-    <label>{{ $t('OptDescription') }}: <Textarea id="net-description"></Textarea></label>
-    <br><br>
-    <Checkbox v-model="uploadToServer" :value="true" disabled="disabled"></Checkbox>
-    <label>{{ $t('RequestUpload') }}</label>
+    <div v-if="file.length !== 0" class="p-d-flex p-jc-between" >
+      <label>{{ $t('NetworkName') }}:
+        <InputText id="net-name" type="text" required/>
+      </label>
+      <label>{{ $t('OptDescription') }}: <Textarea id="net-description"></Textarea></label>
+      <Checkbox v-model="uploadToServer" :value="true" disabled="disabled"></Checkbox>
+      <label>{{ $t('RequestUpload') }}</label>
+    </div>
   </form>
-  <Button name="net-submit" type="submit" :label="$t('UploadNet')" @click="upload()"/>
+        <br><br>
+  <Button v-if="file.length !== 0" name="net-submit" type="submit" :label="$t('UploadNet')" @click="upload()"/>
 </template>
 
 <script>
@@ -23,7 +24,7 @@ export default {
   emits: ["reloadNetList", "loadLocalNet"],
   data() {
     return {
-      file: null,
+      file: [],
       uploadToServer: null
     }
   },
@@ -32,7 +33,7 @@ export default {
       let displayName = document.getElementById('net-name').value;
       let netDescription = document.getElementById('net-description').value;
       let fileField = this.file;
-      if (fileField === null) {
+      if (fileField.length === 0) {
         alert("Error: Please upload a file")
       } else if (fileField.length > 1) {
         alert("Error: Please only upload one file")
