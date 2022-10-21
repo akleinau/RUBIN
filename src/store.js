@@ -120,6 +120,7 @@ export const useStore = defineStore('store', {
            option: {}, value: nodeDict.likelyResults.value,
            goalValues: nodeDict.likelyResults.goalValues
          }]
+         this.options.options.unshift(this.options.likelyResult[0])
          this.options.selectedOption = this.options.likelyResult[0]
 
          this.newGoals = goals

@@ -14,21 +14,30 @@
         {{ $t("TreatmentChooseOne") }}
       </OverlayPanel>
     </template>
+
     <template #content>
       <ScrollPanel style="height:100%">
-        <div class="p-col" >
+        <!-- prediction results
+        <div class="p-col p-mb-2" v-if="Store.options.options.length===0">
           <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{ goal }}</div>
         </div>
+        -->
+        <!-- decision table -->
+        <div>
+          <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
+          <optionsTable />
+        </div>
+
+        <!-- Intervention Input -->
         <div>
           <h3 class="p-text-left">{{ $t("Interventions") }}:</h3>
           <TherapyInput />
 
-          <div class="p-d-flex  p-jc-between p-ai-center">
+          <!--<div class="p-d-flex  p-jc-between p-ai-center">
             <h3 class="p-text-left">{{ $t("DecisionRatings") }}:</h3>
-            <!--          <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>-->
-          </div>
-          <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
-          <optionsTable />
+                      <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>
+          </div> -->
+
           <!--    compare view  -->
           <div v-if="Store.selectedConfig">
             <h3> {{ Store.selectedConfig.name }}:</h3>
