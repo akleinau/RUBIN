@@ -5,7 +5,7 @@
                  :auto="true" :showUploadButton="false" @uploader="file = $event.files" :showCancelButton="false"
                 required/>
     <br>
-    <div v-if="file.length !== 0" class="p-d-flex p-jc-between" >
+    <div v-if="file.length !== 0" class="flex justify-content-between" >
       <label>{{ $t('NetworkName') }}:
         <InputText id="net-name" type="text" required/>
       </label>

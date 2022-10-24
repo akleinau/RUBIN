@@ -1,6 +1,6 @@
 <template>
-  <div class="p-grid p-nested-grid p-flex-column p-mx-1">
-    <Card class="p-col">
+  <div class="grid p-nested-grid flex-column mx-1">
+    <Card class="col">
       <template #content>
         <div id="logo"><img src="./assets/DoctorBN_Logo.png" style="height: 100px"/></div>
       <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`" :value="$i18n.locale"
@@ -8,8 +8,8 @@
       </template>
     </Card>
 
-    <div class="p-col p-grid vertical-container " style="height:100%">
-      <div class="p-col  stretched">
+    <div class="col grid vertical-container " style="height:100%">
+      <div class="col  stretched">
         <Card class=" stretched">
           <template #title>
             {{ $t('selectNetwork') }}
@@ -19,7 +19,7 @@
           </template>
         </Card>
       </div>
-        <div class="p-col stretched">
+        <div class="col stretched">
         <Card class=" stretched">
           <template #title>
             {{ $t('uploadNetwork') }}
@@ -32,12 +32,12 @@
       </div>
     </div>
 
-    <Card class=" p-col">
+    <Card class=" col">
       <template #title>
-        <div class="p-text-left">FAQ</div>
+        <div class="text-left">FAQ</div>
       </template>
       <template #content>
-        <Accordion class="p-text-left">
+        <Accordion class="text-left">
           <AccordionTab header="What is DoctorBN?">
             DoctorBN is a tool to use Bayesian networks in clinical decision support. Bayesian networks provide a
             knowledge base about a specific topic. The clinician can insert data

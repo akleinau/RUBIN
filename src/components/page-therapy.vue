@@ -18,7 +18,7 @@
     <template #content>
       <ScrollPanel style="height:100%">
         <!-- prediction results
-        <div class="p-col p-mb-2" v-if="Store.options.options.length===0">
+        <div class="col b-2" v-if="Store.options.options.length===0">
           <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{ goal }}</div>
         </div>
         -->
@@ -30,25 +30,25 @@
 
         <!-- Intervention Input -->
         <div>
-          <h3 class="p-text-left">{{ $t("Interventions") }}:</h3>
+          <h3 class="text-left">{{ $t("Interventions") }}:</h3>
           <TherapyInput />
 
-          <!--<div class="p-d-flex  p-jc-between p-ai-center">
-            <h3 class="p-text-left">{{ $t("DecisionRatings") }}:</h3>
+          <!--<div class="flex  justify-content-between align-center">
+            <h3 class="text-left">{{ $t("DecisionRatings") }}:</h3>
                       <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>
           </div> -->
 
           <!--    compare view  -->
           <div v-if="Store.selectedConfig">
             <h3> {{ Store.selectedConfig.name }}:</h3>
-            <div class="p-mb-2">
+            <div class="b-2">
              <div  v-for="o in Object.keys(Store.selectedConfig.config.options.selectedOption.option)" :key="o">
               {{Store.labels[o]}}: {{Store.selectedConfig.config.options.selectedOption.option[o]}}
             </div>
               </div>
-             <div class="p-d-flex p-jc-center" v-for="goal in Object.keys(Store.selectedConfig.config.newGoals)" :field="goal" :header="goal" :key="goal">
-                  <div class="p-mr-2">{{goal}}</div>
-                  <div class="p-mr-2">
+             <div class="flex justify-content-center" v-for="goal in Object.keys(Store.selectedConfig.config.newGoals)" :field="goal" :header="goal" :key="goal">
+                  <div class="r-2">{{goal}}</div>
+                  <div class="r-2">
                     <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)]" color="teal" width="200"
               v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
                   </div>

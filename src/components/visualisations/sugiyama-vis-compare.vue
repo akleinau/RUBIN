@@ -1,7 +1,7 @@
 <template>
       in <span style="border:1px solid red; border-radius:5px"> changed nodes</span>  the different states are color coded:
-    <Chip  class="p-mx-1" style="background-color:black" label="current"> </Chip>
-    <Chip  class="p-mx-1" style="background-color:#6d00bf" :label="name2"></Chip>
+    <Chip  class="mx-1" style="background-color:black" label="current"> </Chip>
+    <Chip  class="mx-1" style="background-color:#6d00bf" :label="name2"></Chip>
 <div ref="container"/>
 </template>
 

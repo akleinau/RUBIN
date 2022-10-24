@@ -1,6 +1,6 @@
 <template>
-  <div class="p-d-flex p-dir-col">
-    <DataTable class="p-col p-datatable-sm" :value="Store.explain.relevance" dataKey="node_name"
+  <div class="flex p-dir-col">
+    <DataTable class="col p-datatable-sm" :value="Store.explain.relevance" dataKey="node_name"
       :rowClass="isTherapyRow">
       <Column :header="$t('Node')" field="node_name">
         <template #body="slotProps">
@@ -22,9 +22,9 @@
     </DataTable>
 
 <!--    compare view  -->
-    <div class="p-col" v-if="Store.selectedConfig !== null">
+    <div class="col" v-if="Store.selectedConfig !== null">
       <h3> {{ Store.selectedConfig.name }}:</h3>
-      <DataTable class="p-col p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
+      <DataTable class="col p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
       :rowClass="isTherapyRow">
       <Column :header="$t('Node')" field="node_name">
         <template #body="slotProps">

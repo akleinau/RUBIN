@@ -17,7 +17,7 @@
       </div>
     </template>
     <template #content>
-      <ScrollPanel style="height:100%">
+      <ScrollPanel class="h-full">
         <ProgressBar v-if="Store.explanationLoading" mode="indeterminate" style="height: .5em"/>
         <TabView v-else>
           <!--   relevance  -->

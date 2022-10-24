@@ -5,7 +5,7 @@
       <Listbox :options="Store.patient.targets" :optionLabel="name" listStyle="max-height:300px"
                emptyMessage="choose therapy nodes">
         <template #option="slotProps">
-          <div class="p-text-center rowContent">
+          <div class="text-center rowContent">
             {{ Store.labels[slotProps.option.name] }}
             <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
                     @click="deleteNode(slotProps.option)"/>
@@ -24,7 +24,7 @@
     <!--    input dialog  -->
     <Dialog header="  " v-model:visible="overlay" style="width:80%; height:90%; background:white" :modal="true"
             @hide="addTargetsFromOverlay()">
-      <Listbox v-model="selected" class="p-mt-2" :options="overlayNodes" optionLabel="name"
+      <Listbox v-model="selected" class="t-2" :options="overlayNodes" optionLabel="name"
                emptyMessage="" :multiple="true"
                :filter="true" filterPlaceholder="Search">
         <template #option="slotProps">

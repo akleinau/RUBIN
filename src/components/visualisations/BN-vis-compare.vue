@@ -1,7 +1,7 @@
 <template>
   in <u style="text-decoration-color:red"> changed nodes</u> , the different states are color coded:
-    <Chip  class="p-mx-1" style="background-color:black" label="current"> </Chip>
-    <Chip  class="p-mx-1" style="background-color:darkblue" :label="name2"></Chip>
+    <Chip  class="mx-1" style="background-color:black" label="current"> </Chip>
+    <Chip  class="mx-1" style="background-color:darkblue" :label="name2"></Chip>
   <div ref="container"/>
 </template>
 

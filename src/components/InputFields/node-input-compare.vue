@@ -30,7 +30,7 @@
   </DataTable>
 
   <Dialog :header="'Add ' + title" v-model:visible="overlay" style="width: 50%" :modal="true" v-if="changeable">
-    <Button class="p-mb-1" :label="'Add ' + title" style="width: 100%" @click="addNodesFromOverlay()"/>
+    <Button class="mb-1" :label="'Add ' + title" style="width: 100%" @click="addNodesFromOverlay()"/>
     <Listbox v-model="selected" :options="nodesToAdd" optionLabel="name" emptyMessage="choose evidences to add">
       <template #option="slotProps">
         <div>
@@ -43,7 +43,7 @@
     <DataTable :value="overlayNodes" :scrollable="true" scrollHeight="500px"
                v-model:filters="filters" filterDisplay="menu" data-key="name">
       <template #header>
-        <div class="p-d-flex p-jc-between">
+        <div class="flex justify-content-between">
                 <span class="p-input-icon-right" style="width:100%">
                     <InputText style="width:100%" v-model="filters['name'].value" placeholder="Search"/>
                   <i class="pi pi-search"/>
@@ -53,7 +53,7 @@
       <Column field="name" :header="title"></Column>
       <Column field="options">
         <template #body="slotProps">
-          <Button class="p-m-2" v-for="option in slotProps.data.options" :key="option"
+          <Button class="m-2" v-for="option in slotProps.data.options" :key="option"
                   @click="addOption(slotProps, option)">
             <i class="pi pi-plus"></i> &nbsp; {{ option.name }}
           </Button>

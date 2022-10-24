@@ -16,7 +16,7 @@
         <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
                   placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)">
         </Dropdown>
-        <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-p-0 p-m-0"
+        <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
       </template>
       <template v-else #body="slotProps">
@@ -30,7 +30,7 @@
     <DataTable :value="overlayNodes" class="p-datatable-sm"
                v-model:filters="filters" filterDisplay="menu" data-key="name">
       <template #header>
-        <div class="p-d-flex p-jc-between">
+        <div class="flex justify-content-between">
                 <span class="p-input-icon-right" style="width:100%">
                     <InputText style="width:100%" v-model="filters['name'].value" placeholder="Search"/>
                   <i class="pi pi-search"/>
@@ -44,7 +44,7 @@
       </Column>
       <Column field="options">
         <template #body="slotProps">
-          <ToggleButton class="p-m-2" v-for="option in slotProps.data.options" :key="option"
+          <ToggleButton class="m-2" v-for="option in slotProps.data.options" :key="option"
                         v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
                         :onLabel="option.name" onIcon="pi pi-check" :offLabel="option.name" offIcon="pi pi-plus">
           </ToggleButton>

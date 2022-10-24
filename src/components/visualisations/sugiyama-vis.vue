@@ -1,11 +1,11 @@
 <template>
   <div>
     {{ $t('theNetworkIs') }}
-    <Chip  class="p-mx-1" style="background-color:green" :label="$t('verySure')"> </Chip>
-    <Chip  class="p-mx-1" style="background-color:darkgoldenrod" :label="$t('lessSure')"></Chip>
-    <Chip  class="p-mx-1" style="background-color:red" :label="$t('notSure')"></Chip>
+    <Chip  class="mx-1" style="background-color:green" :label="$t('verySure')"> </Chip>
+    <Chip  class="mx-1" style="background-color:darkgoldenrod" :label="$t('lessSure')"></Chip>
+    <Chip  class="mx-1" style="background-color:red" :label="$t('notSure')"></Chip>
     , {{ $t('orTheValueIs') }}
-    <Chip  class="p-mx-1" style="background-color:black" :label="$t('given')"> </Chip>
+    <Chip  class="mx-1" style="background-color:black" :label="$t('given')"> </Chip>
   </div>
 <div ref="container"/>
 </template>

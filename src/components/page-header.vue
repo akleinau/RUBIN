@@ -1,14 +1,14 @@
 <template>
 
-  <Menubar :model="items" ref="menu" class="p-p-0 p-m-0" style="position:relative; z-index:10">
+  <Menubar :model="items" ref="menu" class="p-0 -0" style="position:relative; z-index:10">
     <template #end>
-      <div class="p-d-flex p-jc-between p-ai-center p-mt-0" style="background-color:#f8f9fa">
+      <div class="flex justify-content-between align-center t-0" style="background-color:#f8f9fa">
         <div id="name"> {{ $t('Network') }}: <b>{{ Store.network }}</b>,
           {{ $t('Patient') }}:
           <InputText type="text" v-model="Store.patient.name"
                      style="background-color:#fefefe"/>
         </div>
-        <div id="logo" class="p-mr-2"><img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
+        <div id="logo" class="r-2"><img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
       </div>
     </template>
   </Menubar>

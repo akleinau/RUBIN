@@ -2,21 +2,23 @@
 
   <tutorial @setBlock="block = $event"/>
 
-  <Header ref="menu" @changePage="changePage()" @loadPatient="openLoadForm($event)"/>
+  <div class="flex flex-column h-full overflow-hidden">
+
+  <Header class="flex" ref="menu" @changePage="changePage()" @loadPatient="openLoadForm($event)"/>
 
   <OverlayPanel ref="panel">
     <LoadPatient @loaded="loadPatient"></LoadPatient>
   </OverlayPanel>
 
-  <div class="p-d-flex p-jc-between p-m-1">
+  <div class="flex justify-content-between m-1">
       <SelectButton v-model="Store.currentPhase" :options="Store.phases" aria-labelledby="single"
-    class="p-d-flex" optionLabel="name" @click="Store.phase_change()" />
-    <Button class="p-d-flex" label="custom" @click="Store.currentPhase=null" />
+    class="flex" optionLabel="name" @click="Store.phase_change()" />
+    <Button class="flex" label="custom" @click="Store.currentPhase=null" />
   </div>
 
-  <div class=" p-grid stretched " style=" position:relative">
-    <div class="p-col-3 p-ai-start p-flex-column stretched">
-      <BlockUI class="p-pb-2" style="height: 30%;" :blocked="block.goals" ref="goal">
+  <div class=" grid stretched flex flex-grow-1" style=" position:relative">
+    <div class="col-3 flex-column stretched">
+      <BlockUI class="pb-2" style="height: 30%;" :blocked="block.goals" ref="goal">
         <GoalInput/>
       </BlockUI>
 
@@ -25,14 +27,17 @@
       </BlockUI>
 
     </div>
-    <BlockUI class="p-col stretched" :blocked="block.options">
+    <BlockUI class="col stretched" :blocked="block.options">
       <Therapy/>
     </BlockUI>
 
-    <BlockUI class="p-col stretched" :blocked="block.explain">
+    <BlockUI class="col stretched" :blocked="block.explain">
       <Explanation />
     </BlockUI>
   </div>
+
+  </div>
+
 </template>
 
 <script>
@@ -98,14 +103,10 @@ export default {
 
 <style lang="scss" scoped>
 
-.p-grid {
+.grid {
   margin-top: 0;
   margin-bottom: 0;
   margin-right: 0
-}
-
-.stretched {
-  height: 100%;
 }
 
 ::v-deep(.p-card-content) {

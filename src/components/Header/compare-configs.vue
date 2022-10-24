@@ -4,9 +4,9 @@
     </Column>
     <Column>
       <template #body="slotProps">
-        <Button class="p-mx-1 p-button-secondary" :label="$t('compare')" @click="compare(slotProps.data.name)"/>
-        <Button class="p-mx-1 p-button-secondary" :label="$t('load')" @click="load(slotProps.data.name)"/>
-        <Button class="p-mx-1 p-button-secondary" :label="$t('delete')" @click="deleteConfig(slotProps.data.name)"/>
+        <Button class="mx-1 p-button-secondary" :label="$t('compare')" @click="compare(slotProps.data.name)"/>
+        <Button class="mx-1 p-button-secondary" :label="$t('load')" @click="load(slotProps.data.name)"/>
+        <Button class="mx-1 p-button-secondary" :label="$t('delete')" @click="deleteConfig(slotProps.data.name)"/>
       </template>
     </Column>
   </DataTable>

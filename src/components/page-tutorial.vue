@@ -4,16 +4,16 @@
     <br>
     {{ $t("Tutorial1b")}}
     <template #footer>
-      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
-      <Button class="p-mx-2" :label="$t('next')" @click="next"></Button>
+      <Button class="mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
+      <Button class="mx-2" :label="$t('next')" @click="next"></Button>
     </template>
   </Dialog>
   <Dialog v-if="i === 1" v-model:visible="display" position="bottom" :header="$t('Evidence')" :closable="false" style="width:80%">
     {{ $t("Tutorial2")}}
     <template #footer>
-      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
-      <Button class="p-mx-2" :label="$t('prev')" @click="prev"></Button>
-      <Button class="p-mx-2" :label="$t('next')" @click="next"></Button>
+      <Button class="mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
+      <Button class="mx-2" :label="$t('prev')" @click="prev"></Button>
+      <Button class="mx-2" :label="$t('next')" @click="next"></Button>
     </template>
   </Dialog>
   <Dialog v-if="i === 2" v-model:visible="display" position="bottom" :header="$t('Treatment')" :closable="false" style="width:80%">
@@ -21,16 +21,16 @@
      <br> <br>
     {{ $t("Tutorial3b")}}
     <template #footer>
-      <Button class="p-mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
-      <Button class="p-mx-2" :label="$t('prev')" @click="prev"></Button>
-      <Button class="p-mx-2" :label="$t('next')" @click="next"></Button>
+      <Button class="mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
+      <Button class="mx-2" :label="$t('prev')" @click="prev"></Button>
+      <Button class="mx-2" :label="$t('next')" @click="next"></Button>
     </template>
   </Dialog>
   <Dialog v-if="i === 3" v-model:visible="display" position="bottom" :header="$t('Explanation')" :closable="false" style="width:80%">
     {{ $t("Tutorial4")}}
     <template #footer>
-      <Button class="p-mx-2" :label="$t('prev')" @click="prev"></Button>
-      <Button class="p-mx-2" :label="$t('finish')" @click="next"></Button>
+      <Button class="mx-2" :label="$t('prev')" @click="prev"></Button>
+      <Button class="mx-2" :label="$t('finish')" @click="next"></Button>
     </template>
   </Dialog>
 
