@@ -99,14 +99,6 @@ export default {
           }
         },
         {
-          label: this.$t('SendFeedback'),
-          key: 'SendFeedback',
-          icon: PrimeIcons.SEND,
-          command: () => {
-            this.showFeedback = true
-          }
-        },
-        {
           label: this.$t('NetworkDescription'),
           key: 'NetworkDescription',
           icon: PrimeIcons.BOOK,
@@ -121,6 +113,29 @@ export default {
           command: (event) => {
             this.$refs.compareOverlay.toggle(event.originalEvent)
           }
+        },
+        {
+          label: "Help",
+          key: 'Help',
+          icon: PrimeIcons.QUESTION_CIRCLE,
+          items: [
+            {
+              label: this.$t('SendFeedback'),
+              key: 'SendFeedback',
+              icon: PrimeIcons.SEND,
+              command: () => {
+                this.showFeedback = true
+              }
+            },
+            {
+              label: "Show tutorial",
+              key: 'ShowTutorial',
+              icon: PrimeIcons.QUESTION,
+              command: () => {
+                this.Store.showTutorial = true
+              }
+            }
+          ]
         },
         {
           label: this.$t("backToNetwork"),

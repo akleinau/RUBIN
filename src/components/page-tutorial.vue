@@ -41,19 +41,42 @@
 </template>
 
 <script>
+import {useStore} from '@/store'
+
 export default {
   name: "page-tutorial",
   emits: ["setBlock"],
   data() {
     return {
       display: false,
-      i: 0,
+      i: 0
     }
   },
+  setup() {
+    const Store = useStore()
+    return {Store}
+  },
   mounted() {
-    this.display = true
+    this.start()
+  },
+  watch: {
+    showTutorial: function () {
+      if (this.Store.showTutorial === true) {
+        this.start()
+      }
+    }
+  },
+  computed: {
+    showTutorial: function () {
+      return this.Store.showTutorial
+    }
   },
   methods: {
+    start() {
+      this.display = true //makes sure dialog is rendered on top of interface
+      this.i = 0
+      this.sendBlock()
+    },
     close() {
       this.i = 4;
       this.sendBlock()
@@ -75,6 +98,10 @@ export default {
         "evidence": this.i !== 1 && this.i !== 4,
         "options": this.i !== 2 && this.i !== 4,
         "explain": this.i !== 3 && this.i !== 4
+      }
+      if (this.i === 4) {
+        this.Store.showTutorial = false
+        this.display = false
       }
       this.$emit("setBlock", newBlock)
 

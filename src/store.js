@@ -40,7 +40,8 @@ export const useStore = defineStore('store', {
         network: "",
         localNet: "",
         phases: [],
-        currentPhase: null
+        currentPhase: null,
+        showTutorial: false
     }),
     actions: {
         async reset() {

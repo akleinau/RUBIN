@@ -14,9 +14,10 @@
     <Column field="value" class="optionCol">
       <template v-if="changeable" #body="slotProps">
         <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
-                  placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)">
+                  placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)"
+                  class="p-0 m-0">
         </Dropdown>
-        <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-p-0 m-0"
+        <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
       </template>
       <template v-else #body="slotProps">
