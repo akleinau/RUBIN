@@ -1,13 +1,13 @@
 <template>
   <div>
     {{ $t('theNetworkIs') }}
-    <Chip  class="mx-1" style="background-color:green" :label="$t('verySure')"> </Chip>
-    <Chip  class="mx-1" style="background-color:darkgoldenrod" :label="$t('lessSure')"></Chip>
-    <Chip  class="mx-1" style="background-color:red" :label="$t('notSure')"></Chip>
+    <Chip class="mx-1" style="background-color:green" :label="$t('verySure')"></Chip>
+    <Chip class="mx-1" style="background-color:darkgoldenrod" :label="$t('lessSure')"></Chip>
+    <Chip class="mx-1" style="background-color:red" :label="$t('notSure')"></Chip>
     , {{ $t('orTheValueIs') }}
-    <Chip  class="mx-1" style="background-color:black" :label="$t('given')"> </Chip>
+    <Chip class="mx-1" style="background-color:black" :label="$t('given')"></Chip>
   </div>
-<div ref="container"/>
+  <div ref="container"/>
 </template>
 
 <script>
@@ -15,19 +15,19 @@ import * as d3 from "d3";
 import * as dag from "d3-dag"
 
 export default {
-name: "sugiyama-vis",
-    props: [
+  name: "sugiyama-vis",
+  props: [
     "nodes",
     "edges",
-      "labels"
+    "labels"
   ],
   computed: {
-    edgeList: function(){
+    edgeList: function () {
       const list = []
       if (this.edges) {
-         this.edges.forEach(d => {
-        list.push([d["source"], d["target"]])
-      })
+        this.edges.forEach(d => {
+          list.push([d["source"], d["target"]])
+        })
       }
 
       return list
@@ -38,17 +38,16 @@ name: "sugiyama-vis",
       this.visualise()
     }
   },
-  watch :{
-    nodes: function() {
+  watch: {
+    nodes: function () {
       this.visualise()
     },
-    edges: function() {
+    edges: function () {
       this.visualise()
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     getState(node) {
@@ -66,7 +65,6 @@ name: "sugiyama-vis",
       function shortName(thisThing, node, d) {
         d3.select(node.target).text(String(thisThing.labels[d.data.id]).substring(0, 10) + ": ")
       }
-
 
 
       if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
@@ -118,7 +116,7 @@ name: "sugiyama-vis",
               const normal = Math.sqrt(dx * dx + dy * dy);
               // This is the angle of the last line segment
               const angle = Math.atan2(-dy, -dx) * 180 / Math.PI + 90;
-              return `translate(${end.x + 6 * dx / normal}, ${end.y + 6* dy / normal}) rotate(${angle})`;
+              return `translate(${end.x + 6 * dx / normal}, ${end.y + 6 * dy / normal}) rotate(${angle})`;
             })
             .attr('fill', "black")
 
@@ -161,8 +159,8 @@ name: "sugiyama-vis",
             .attr("class", "text")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')
-            .on("mouseenter", (e,d) => longName(this, e, d))
-            .on("mouseleave", (e,d) => shortName(this, e, d))
+            .on("mouseenter", (e, d) => longName(this, e, d))
+            .on("mouseleave", (e, d) => shortName(this, e, d))
 
         // Add text to nodes
         nodes.append('text')
@@ -179,7 +177,6 @@ name: "sugiyama-vis",
     }
   }
 }
-
 
 
 </script>

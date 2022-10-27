@@ -1,15 +1,15 @@
 <template>
-  {{$t("FeedbackInfo")}}
+  {{ $t("FeedbackInfo") }}
   <br>
   <div style="color: red"> Currently not working!</div>
   <form>
-  <Textarea v-model="description" rows="5" style="width:100%"/>
-  <div class="p-field-checkbox">
-    <Checkbox id="checkConfig" v-model="sendConfig" :binary="true" value="true"></Checkbox>
-    <label for="checkConfig">{{$t("IncludeConfig")}}</label>
-  </div>
-  <Button :label="$t('send')" @click="sendFeedback"></Button>
-    </form>
+    <Textarea v-model="description" rows="5" style="width:100%"/>
+    <div class="p-field-checkbox">
+      <Checkbox id="checkConfig" v-model="sendConfig" :binary="true" value="true"></Checkbox>
+      <label for="checkConfig">{{ $t("IncludeConfig") }}</label>
+    </div>
+    <Button :label="$t('send')" @click="sendFeedback"></Button>
+  </form>
 </template>
 
 <script>

@@ -2,10 +2,10 @@
   <!-- Form to upload a network file -->
   <form @submit.prevent="upload" id="upload-form" enctype="multipart/form-data">
     <FileUpload name="net-upload" url="./upload" accept=".net, .bif" :customUpload="true" :chooseLabel="$t('Choose')"
-                 :auto="true" :showUploadButton="false" @uploader="file = $event.files" :showCancelButton="false"
+                :auto="true" :showUploadButton="false" @uploader="file = $event.files" :showCancelButton="false"
                 required/>
     <br>
-    <div v-if="file.length !== 0" class="flex justify-content-between" >
+    <div v-if="file.length !== 0" class="flex justify-content-between">
       <label>{{ $t('NetworkName') }}:
         <InputText id="net-name" type="text" required/>
       </label>
@@ -14,7 +14,7 @@
       <label>{{ $t('RequestUpload') }}</label>
     </div>
   </form>
-        <br><br>
+  <br><br>
   <Button v-if="file.length !== 0" name="net-submit" type="submit" :label="$t('UploadNet')" @click="upload()"/>
 </template>
 
@@ -57,19 +57,19 @@ export default {
 
           if (this.uploadToServer) {
             //send request to upload to server
-          let gResponse = await fetch("https://doctorbn-backend.herokuapp.com/sendNetworkRequest", {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-              name: localNet.name,
-              fileString: localNet.fileString,
-              fileFormat: localNet.fileFormat,
+            let gResponse = await fetch("https://doctorbn-backend.herokuapp.com/sendNetworkRequest", {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json'
+              },
+              body: JSON.stringify({
+                name: localNet.name,
+                fileString: localNet.fileString,
+                fileFormat: localNet.fileFormat,
+              })
             })
-          })
-          let result = await gResponse.json();
-          console.log(result)
+            let result = await gResponse.json();
+            console.log(result)
           }
         }
       }

@@ -1,8 +1,8 @@
 <template>
-      in <span style="border:1px solid red; border-radius:5px"> changed nodes</span>  the different states are color coded:
-    <Chip  class="mx-1" style="background-color:black" label="current"> </Chip>
-    <Chip  class="mx-1" style="background-color:#6d00bf" :label="name2"></Chip>
-<div ref="container"/>
+  in <span style="border:1px solid red; border-radius:5px"> changed nodes</span> the different states are color coded:
+  <Chip class="mx-1" style="background-color:black" label="current"></Chip>
+  <Chip class="mx-1" style="background-color:#6d00bf" :label="name2"></Chip>
+  <div ref="container"/>
 </template>
 
 <script>
@@ -10,16 +10,16 @@ import * as d3 from "d3";
 import * as dag from "d3-dag"
 
 export default {
-name: "sugiyama-vis-compare",
-    props: [
+  name: "sugiyama-vis-compare",
+  props: [
     "nodes",
     "edges",
-      "nodes2",
-        "name2",
-        "labels"
+    "nodes2",
+    "name2",
+    "labels"
   ],
   computed: {
-    edgeList: function(){
+    edgeList: function () {
       const list = []
       this.edges.forEach(d => {
         list.push([d["source"], d["target"]])
@@ -32,14 +32,14 @@ name: "sugiyama-vis-compare",
       this.visualise()
     }
   },
-  watch :{
-    nodes: function() {
+  watch: {
+    nodes: function () {
       this.visualise()
     },
-     nodes2: function() {
+    nodes2: function () {
       this.visualise()
     },
-    edges: function() {
+    edges: function () {
       this.visualise()
     }
   },
@@ -57,7 +57,7 @@ name: "sugiyama-vis-compare",
     isChanged(node) {
       let node1 = this.nodes.find(d => d.name === node.data.id).state
       let node2 = this.nodes2.find(d => d.name === node.data.id).state
-      return node1 === node2? 0:1
+      return node1 === node2 ? 0 : 1
     },
     visualise() {
 
@@ -114,7 +114,7 @@ name: "sugiyama-vis-compare",
               const normal = Math.sqrt(dx * dx + dy * dy);
               // This is the angle of the last line segment
               const angle = Math.atan2(-dy, -dx) * 180 / Math.PI + 90;
-              return `translate(${end.x + 6 * dx / normal}, ${end.y + 6* dy / normal}) rotate(${angle})`;
+              return `translate(${end.x + 6 * dx / normal}, ${end.y + 6 * dy / normal}) rotate(${angle})`;
             })
             .attr('fill', "black")
 
@@ -143,7 +143,7 @@ name: "sugiyama-vis-compare",
 
         nodes.append('rect')
             .attr("width", 25)
-            .attr("height", d => 10*(this.isChanged(d)*0.7+1))
+            .attr("height", d => 10 * (this.isChanged(d) * 0.7 + 1))
             .attr('fill', "white")
             .attr("stroke-width", 0.5)
             .attr("stroke", d => color(this.isChanged(d)))
@@ -157,8 +157,8 @@ name: "sugiyama-vis-compare",
             .attr("class", "text")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')
-            .on("mouseenter", (e,d) => longName(this, e, d))
-            .on("mouseleave", (e,d) => shortName(this, e, d))
+            .on("mouseenter", (e, d) => longName(this, e, d))
+            .on("mouseleave", (e, d) => shortName(this, e, d))
 
         // Add text to nodes
         nodes.append('text')
@@ -168,7 +168,7 @@ name: "sugiyama-vis-compare",
             .attr('text-anchor', 'middle')
             .attr("dy", 5)
 
-                // Add text to nodes
+        // Add text to nodes
         nodes.append('text')
             .text(d => String(this.getState2(d)).substring(0, 10))
             .attr("class", "text")
@@ -184,7 +184,6 @@ name: "sugiyama-vis-compare",
     }
   }
 }
-
 
 
 </script>

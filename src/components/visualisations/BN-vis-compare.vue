@@ -1,7 +1,7 @@
 <template>
   in <u style="text-decoration-color:red"> changed nodes</u> , the different states are color coded:
-    <Chip  class="mx-1" style="background-color:black" label="current"> </Chip>
-    <Chip  class="mx-1" style="background-color:darkblue" :label="name2"></Chip>
+  <Chip class="mx-1" style="background-color:black" label="current"></Chip>
+  <Chip class="mx-1" style="background-color:darkblue" :label="name2"></Chip>
   <div ref="container"/>
 </template>
 
@@ -13,23 +13,23 @@ export default {
   props: [
     "nodes",
     "edges",
-      "nodes2",
-      "name2",
-      "labels"
+    "nodes2",
+    "name2",
+    "labels"
   ],
   mounted() {
-  if (this.nodes != null && this.edges != null && this.nodes2 != null) {
+    if (this.nodes != null && this.edges != null && this.nodes2 != null) {
       this.visualise()
     }
   },
-  watch :{
-    nodes: function() {
+  watch: {
+    nodes: function () {
       this.visualise()
     },
-    nodes2: function() {
+    nodes2: function () {
       this.visualise()
     },
-    edges: function() {
+    edges: function () {
       this.visualise()
     }
   },
@@ -37,14 +37,14 @@ export default {
     normalVect(v1, v2) {
       let x = v1.x - v2.x
       let y = v1.y - v2.y
-      let xq = Math.pow(x,2)
+      let xq = Math.pow(x, 2)
       let yq = Math.pow(y, 2)
       return Math.sqrt(xq + yq)
     },
-        isChanged(node) {
+    isChanged(node) {
       let node1 = this.nodes.find(d => d.name === node.name).state
       let node2 = this.nodes2.find(d => d.name === node.name).state
-      return node1 === node2? 0:1
+      return node1 === node2 ? 0 : 1
     },
     getState2(node) {
       if (this.isChanged(node)) return "(" + this.nodes2.find(d => d.name === node.name).state + ")"
@@ -105,7 +105,7 @@ export default {
             .attr('fill', 'none');
 
 
-      var color = d3.scaleQuantize()
+        var color = d3.scaleQuantize()
             .domain([0, 1])
             .range(["black", "red"]);
 
@@ -115,7 +115,7 @@ export default {
             .data(nodes)
             .join("rect")
             .attr("width", 25)
-            .attr("height", d => 10*(this.isChanged(d)+1))
+            .attr("height", d => 10 * (this.isChanged(d) + 1))
             .attr('fill', "white")
             .attr("stroke", d => color(this.isChanged(d)))
             .attr("rx", 2)
@@ -136,7 +136,7 @@ export default {
             .text(d => String(d.state).substring(0, 10))
             .attr("dy", 5)
         const textState2 = text.append("tspan")
-            .text(d => this.getState2(d).substring(0,10))
+            .text(d => this.getState2(d).substring(0, 10))
             .attr("dy", 7)
             .attr('fill', "darkblue")
 

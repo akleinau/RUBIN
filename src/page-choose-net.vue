@@ -3,8 +3,9 @@
     <Card class="col">
       <template #content>
         <div id="logo"><img src="./assets/DoctorBN_Logo.png" style="height: 100px"/></div>
-      <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`" :value="$i18n.locale"
-      style="position:absolute; right:5%; top: 5%"/>
+        <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
+                  :value="$i18n.locale"
+                  style="position:absolute; right:5%; top: 5%"/>
       </template>
     </Card>
 
@@ -15,17 +16,18 @@
             {{ $t('selectNetwork') }}
           </template>
           <template #content>
-            <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage" />
+            <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage"/>
           </template>
         </Card>
       </div>
-        <div class="col stretched">
+      <div class="col stretched">
         <Card class=" stretched">
           <template #title>
             {{ $t('uploadNetwork') }}
           </template>
           <template #content>
-            <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()" @loadLocalNet="loadLocalNet($event)"></Upload>
+            <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()"
+                    @loadLocalNet="loadLocalNet($event)"></Upload>
             <br> <br>
           </template>
         </Card>
@@ -63,7 +65,8 @@
 
   <Dialog v-model:visible="langOverlay" :modal="true" :dismissableMask="true">
     Choose language:
-     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`" :value="$i18n.locale" />
+    <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
+             :value="$i18n.locale"/>
   </Dialog>
 
 </template>
@@ -85,7 +88,7 @@ export default {
     Upload,
     Networklist
   },
-   mounted() {
+  mounted() {
     this.langOverlay = true
   },
   methods: {

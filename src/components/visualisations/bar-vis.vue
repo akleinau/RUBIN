@@ -9,17 +9,17 @@ export default {
   name: "bar-vis",
   props: [
     "value",
-      "color",
-      "width"
+    "color",
+    "width"
   ],
   mounted() {
     this.visualise()
   },
-   watch :{
-    value: function() {
+  watch: {
+    value: function () {
       this.visualise()
     },
-    color: function() {
+    color: function () {
       this.visualise()
     }
   },
@@ -32,16 +32,14 @@ export default {
       if (this.color === "trafficlight") {
         const colorScale = d3.scaleQuantize()
             .domain([0, 1])
-             .range(["red", "chocolate", "darkGoldenRod", "yellowgreen", "green"]);
+            .range(["red", "chocolate", "darkGoldenRod", "yellowgreen", "green"]);
         color = colorScale(this.value)
-      }
-      else if (this.color === "bluescale") {
+      } else if (this.color === "bluescale") {
         const colorScale = d3.scaleLinear()
             .domain([0, 1])
             .range(["darkslategrey", "midnightblue"]);
         color = colorScale(this.value)
-      }
-      else color = this.color
+      } else color = this.color
 
       d3.select(this.$refs.container).selectAll("*").remove()
 
@@ -69,7 +67,6 @@ export default {
           .attr("x", 0)
           .attr("height", 50)
           .attr("width", x(this.value));
-
 
 
     }

@@ -43,15 +43,15 @@ export default {
           .attr("fill", color(this.value))
           .attr("y", 3)
           .attr("x", width / 2 + x)
-          .attr("height", height-6)
+          .attr("height", height - 6)
           .attr("width", length(absValue));
 
       svg.append("line")
           .style("stroke", "black")
           .style("stroke-width", 3)
-          .attr("x1", width/2)
+          .attr("x1", width / 2)
           .attr("y1", 0)
-          .attr("x2", width/2)
+          .attr("x2", width / 2)
           .attr("y2", height);
 
     }

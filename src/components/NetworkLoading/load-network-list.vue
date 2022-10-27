@@ -4,7 +4,7 @@
              emptyFilterMessage="No networks found" :options="networks" option-label="name"
              placeholder="Select a network" required/>
     <br>
-    <Button type="submit">{{$t('openNetwork')}}</Button>
+    <Button type="submit">{{ $t('openNetwork') }}</Button>
   </form>
 </template>
 
@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     openNetwork: async function () {
-      if (typeof(this.$refs.selectMenu.modelValue.name) == 'undefined') {
+      if (typeof (this.$refs.selectMenu.modelValue.name) == 'undefined') {
         alert("No network selected")
         return
       }

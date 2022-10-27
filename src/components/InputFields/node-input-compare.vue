@@ -2,7 +2,7 @@
   <DataTable id="table" :value="table" class="p-datatable-sm">
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
-        {{Store.labels[slotProps.data.name]}}
+        {{ Store.labels[slotProps.data.name] }}
       </template>
     </Column>
     <Column field="value" header="current" class="optionCol">
@@ -18,13 +18,13 @@
       </template>
       <template v-else #body="slotProps">
         <div v-if="slotProps.data.selected === ''"></div>
-        <div v-else> {{ slotProps.data.selected.name }} </div>
+        <div v-else> {{ slotProps.data.selected.name }}</div>
       </template>
     </Column>
     <Column field="value2" class="optionCol" :header="name2">
       <template #body="slotProps">
         <div v-if="slotProps.data.selected2 === ''"></div>
-        <div v-else> {{ slotProps.data.selected2.name }} </div>
+        <div v-else> {{ slotProps.data.selected2.name }}</div>
       </template>
     </Column>
   </DataTable>
@@ -71,7 +71,7 @@
 
 <script>
 import {FilterMatchMode} from 'primevue/api';
-import { useStore } from '@/store'
+import {useStore} from '@/store'
 
 export default {
   name: "node-input-compare",
@@ -85,7 +85,7 @@ export default {
   ],
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
   data() {
     return {

@@ -1,15 +1,15 @@
 {
-  "uploadNetwork": "Upload a new network",
-  "selectNetwork": "Select a network",
+  "uploadNetwork": "Upload network",
+  "selectNetwork": "Select network",
   "openNetwork": "Open network",
   "Network": "Network",
   "LoadPatient": "Load Patient",
   "SavePatient": "Save Patient",
-  "SendFeedback": "Send feedback",
+  "SendFeedback": "Feedback",
   "Feedback": "Feedback",
   "NetworkDescription": "Network description",
-  "savedConfigurations": "Saved configurations",
-  "backToNetwork": "Back to network selection",
+  "savedConfigurations": "Saved Configurations",
+  "backToNetwork": "Network Selection",
   "Patient": "Patient",
   "Settings": "Settings",
   "Reset": "Reset",
@@ -58,9 +58,9 @@
   "notSure": "not likely",
   "given": "given",
   "save": "save",
-  "compare": "compare",
-  "load": "load",
-  "delete": "delete",
+  "compare": "Compare",
+  "load": "Load",
+  "delete": "Delete",
   "ComparingTo": "comparing to ",
   "SaveConfig": "Save new configuration",
   "ErrName": "ERROR: The name already exists.",
@@ -85,6 +85,6 @@
   "add": "add",
   "addEvidence": "add evidence",
   "addOutcome": "add outcome",
-  "addTarget": "add target"
+  "addTarget": "add intervention"
 
 }

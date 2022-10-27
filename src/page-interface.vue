@@ -2,39 +2,41 @@
 
   <tutorial @setBlock="block = $event"/>
 
-  <div class="flex flex-column h-full overflow-hidden">
+  <div class="flex flex-column h-full">
 
-  <Header class="flex" ref="menu" @changePage="changePage()" @loadPatient="openLoadForm($event)"/>
+    <Header class="flex" ref="menu" @changePage="changePage()" @loadPatient="openLoadForm($event)"/>
 
-  <OverlayPanel ref="panel">
-    <LoadPatient @loaded="loadPatient"></LoadPatient>
-  </OverlayPanel>
+    <OverlayPanel ref="panel">
+      <LoadPatient @loaded="loadPatient"></LoadPatient>
+    </OverlayPanel>
 
-  <div class="flex justify-content-between m-1">
+    <!-- phases -->
+    <div class="flex justify-content-between m-1">
       <SelectButton v-model="Store.currentPhase" :options="Store.phases" aria-labelledby="single"
-    class="flex" optionLabel="name" @click="Store.phase_change()" />
-    <Button class="flex" label="custom" @click="Store.currentPhase=null" />
-  </div>
-
-  <div class=" grid stretched flex flex-grow-1" style=" position:relative">
-    <div class="col-3 flex-column stretched">
-      <BlockUI class="pb-2" style="height: 30%;" :blocked="block.goals" ref="goal">
-        <GoalInput/>
-      </BlockUI>
-
-      <BlockUI style="height:70%" :blocked="block.evidence">
-        <EvidenceInput/>
-      </BlockUI>
-
+                    class="flex" optionLabel="name" @click="Store.phase_change()"/>
+      <Button class="flex" label="custom" @click="Store.currentPhase=null"/>
     </div>
-    <BlockUI class="col stretched" :blocked="block.options">
-      <Therapy/>
-    </BlockUI>
 
-    <BlockUI class="col stretched" :blocked="block.explain">
-      <Explanation />
-    </BlockUI>
-  </div>
+    <!-- main cards -->
+    <div class=" grid flex flex-grow-1 h-full overflow-hidden relative">
+      <div class="col-3 flex-column">
+        <BlockUI class="pb-2" style="height: 30%;" :blocked="block.goals" ref="goal">
+          <GoalInput/>
+        </BlockUI>
+
+        <BlockUI style="height:70%" :blocked="block.evidence">
+          <EvidenceInput/>
+        </BlockUI>
+
+      </div>
+      <BlockUI class="col" :blocked="block.options">
+        <Therapy/>
+      </BlockUI>
+
+      <BlockUI class="col h-full" :blocked="block.explain">
+        <Explanation class="h-full"/>
+      </BlockUI>
+    </div>
 
   </div>
 
@@ -49,7 +51,7 @@ import OverlayPanel from "primevue/overlaypanel";
 import EvidenceInput from "@/components/InputFields/evidence-input";
 import GoalInput from "@/components/InputFields/goal-input";
 import tutorial from "@/components/page-tutorial";
-import { useStore } from '@/store'
+import {useStore} from '@/store'
 
 export default {
   name: "page-interface",
@@ -69,7 +71,7 @@ export default {
   ],
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
   data() {
     return {
@@ -92,11 +94,11 @@ export default {
     loadPatient: async function () {
       this.$refs.panel.toggle()
     }
-    },
-    created: async function () {
-      this.Store.network = this.network
-      this.Store.localNet = this.localNet
-      await this.Store.loadNodes()
+  },
+  created: async function () {
+    this.Store.network = this.network
+    this.Store.localNet = this.localNet
+    await this.Store.loadNodes()
   }
 }
 </script>
@@ -130,10 +132,5 @@ export default {
   }
 
 }
-
-::v-deep(.p-card-content) {
-  padding-top: 0 !important;
-}
-
 
 </style>

@@ -3,7 +3,7 @@
 
     <div v-if="Store.selectedConfig == null">
       <Listbox :options="Store.patient.targets" :optionLabel="name" listStyle="max-height:300px"
-               emptyMessage="choose therapy nodes">
+               emptyMessage=" ">
         <template #option="slotProps">
           <div class="text-center rowContent">
             {{ Store.labels[slotProps.option.name] }}
@@ -18,7 +18,7 @@
       current: <span v-for="sel in Store.patient.targets" :key="sel">{{ sel.name }}, </span>
       <br>
       {{ Store.selectedConfig.name }}: <span v-for="sel in Store.selectedConfig.config.patient.targets"
-                                      :key="sel">{{ sel.name }}, </span>
+                                             :key="sel">{{ sel.name }}, </span>
     </div>
 
     <!--    input dialog  -->
@@ -39,13 +39,13 @@
 </template>
 
 <script>
-import { useStore } from '@/store'
+import {useStore} from '@/store'
 
 export default {
   name: "therapy-input",
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
   data() {
     return {
@@ -56,7 +56,7 @@ export default {
   computed: {
     overlayNodes: function () {
       if (this.Store.currentPhase != null) {
-        return this.Store.patient.nodes.filter(x =>this.Store.currentPhase.sets.target.includes(x.name))
+        return this.Store.patient.nodes.filter(x => this.Store.currentPhase.sets.target.includes(x.name))
       }
       return this.Store.patient.nodes //.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
     }
@@ -64,7 +64,7 @@ export default {
   methods: {
     addTargetsFromOverlay() {
       if (this.selected != null) {
-              this.Store.addTargets(this.selected)
+        this.Store.addTargets(this.selected)
       }
       this.selected = []
       this.overlay = false

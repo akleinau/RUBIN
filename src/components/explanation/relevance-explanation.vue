@@ -1,10 +1,10 @@
 <template>
   <div class="flex p-dir-col">
     <DataTable class="col p-datatable-sm" :value="Store.explain.relevance" dataKey="node_name"
-      :rowClass="isTherapyRow">
+               :rowClass="isTherapyRow">
       <Column :header="$t('Node')" field="node_name">
         <template #body="slotProps">
-          {{ Store.labels[slotProps.data.node_name] }}: {{getState(slotProps.data.node_name)}}
+          {{ Store.labels[slotProps.data.node_name] }}: {{ getState(slotProps.data.node_name) }}
         </template>
       </Column>
       <Column :header="$t('Relevance')" field="overall_relevance">
@@ -21,29 +21,29 @@
       </Column>
     </DataTable>
 
-<!--    compare view  -->
+    <!--    compare view  -->
     <div class="col" v-if="Store.selectedConfig !== null">
       <h3> {{ Store.selectedConfig.name }}:</h3>
       <DataTable class="col p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
-      :rowClass="isTherapyRow">
-      <Column :header="$t('Node')" field="node_name">
-        <template #body="slotProps">
-          {{ Store.labels[slotProps.data.node_name] }}: {{getCompareState(slotProps.data.node_name)}}
-        </template>
-      </Column>
-      <Column :header="$t('Relevance')" field="overall_relevance">
-        <template #body="slotProps">
-          <bar :value="slotProps.data.overall_relevance" color="#004d80" width="200"
-               v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
-        </template>
-      </Column>
-      <Column v-for="goal in getCompareGoalKeys()" :field="goal" :header="goal" :key="goal">
-        <template #body="slotProps">
-          <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
-                       v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
-        </template>
-      </Column>
-    </DataTable>
+                 :rowClass="isTherapyRow">
+        <Column :header="$t('Node')" field="node_name">
+          <template #body="slotProps">
+            {{ Store.labels[slotProps.data.node_name] }}: {{ getCompareState(slotProps.data.node_name) }}
+          </template>
+        </Column>
+        <Column :header="$t('Relevance')" field="overall_relevance">
+          <template #body="slotProps">
+            <bar :value="slotProps.data.overall_relevance" color="#004d80" width="200"
+                 v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
+          </template>
+        </Column>
+        <Column v-for="goal in getCompareGoalKeys()" :field="goal" :header="goal" :key="goal">
+          <template #body="slotProps">
+            <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
+                         v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
+          </template>
+        </Column>
+      </DataTable>
     </div>
   </div>
 </template>
@@ -51,7 +51,7 @@
 <script>
 import bar from "@/components/visualisations/bar-vis";
 import twoSidedBar from "@/components/visualisations/two-sided-bar-vis";
-import { useStore } from '@/store'
+import {useStore} from '@/store'
 
 export default {
   name: "relevance-explanation",
@@ -61,7 +61,7 @@ export default {
   },
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
   data() {
     return {
@@ -127,8 +127,8 @@ export default {
     isTherapyRow(row) {
       let rowClass = null
       this.Store.patient.targets.forEach(target => {
-         if (target.name === row.node_name) rowClass = "therapy"
-        })
+        if (target.name === row.node_name) rowClass = "therapy"
+      })
       return rowClass
     }
   }
@@ -146,7 +146,7 @@ export default {
 }
 
 ::v-deep(.therapy) {
-    background-color: rgba(55, 55, 55, 0.15) !important;
+  background-color: rgba(55, 55, 55, 0.15) !important;
 }
 
 img {

@@ -13,7 +13,7 @@
     </template>
   </Menubar>
 
-<!--   dialogs/ overlays  -->
+  <!--   dialogs/ overlays  -->
   <Dialog :header="$t('Feedback')" v-model:visible="showFeedback" style="width: 50%" :modal="true">
     <Feedback @sendFeedback="sendFeedback"></Feedback>
   </Dialog>
@@ -31,8 +31,9 @@
     <Button :label="$t('save')" @click="exportCSV()"/>
   </OverlayPanel>
 
-  <OverlayPanel ref="langOverlay" >
-     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale" @change="langChange()"/>
+  <OverlayPanel ref="langOverlay">
+    <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale"
+             @change="langChange()"/>
   </OverlayPanel>
 
 </template>
@@ -40,18 +41,19 @@
 <script>
 import Feedback from "@/components/Header/send-feedback";
 import Compare from "@/components/Header/compare-configs";
-import { useStore } from '@/store'
+import {useStore} from '@/store'
+import {PrimeIcons} from 'primevue/api';
 
 export default {
   name: "page-header",
-  emits: ["changePage","loadPatient", "exportCSV"],
+  emits: ["changePage", "loadPatient", "exportCSV"],
   components: {
     Feedback,
     Compare
   },
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
   data() {
     return {
@@ -63,6 +65,7 @@ export default {
         {
           label: this.$t('Settings'),
           key: 'Settings',
+          icon: PrimeIcons.BARS,
           items: [
             {
               label: this.$t('Reset'),
@@ -81,6 +84,7 @@ export default {
         },
         {
           label: this.$t('LoadPatient'),
+          icon: PrimeIcons.UPLOAD,
           key: 'LoadPatient',
           command: (event) => {
             this.loadPatient(event.originalEvent)
@@ -89,6 +93,7 @@ export default {
         {
           label: this.$t('SavePatient'),
           key: 'SavePatient',
+          icon: PrimeIcons.DOWNLOAD,
           command: (event) => {
             this.exportPatientOverlay(event.originalEvent)
           }
@@ -96,6 +101,7 @@ export default {
         {
           label: this.$t('SendFeedback'),
           key: 'SendFeedback',
+          icon: PrimeIcons.SEND,
           command: () => {
             this.showFeedback = true
           }
@@ -103,13 +109,15 @@ export default {
         {
           label: this.$t('NetworkDescription'),
           key: 'NetworkDescription',
+          icon: PrimeIcons.BOOK,
           command: () => {
             this.showNetworkDescription = true
           }
         },
         {
           key: "savedConfigurations",
-          label: this.$t("savedConfigurations"),
+          label: this.$t("compare"),
+          icon: PrimeIcons.BOOKMARK,
           command: (event) => {
             this.$refs.compareOverlay.toggle(event.originalEvent)
           }
@@ -117,6 +125,7 @@ export default {
         {
           label: this.$t("backToNetwork"),
           key: 'backToNetwork',
+          icon: PrimeIcons.HOME,
           command: () => {
             this.changePage()
           }
@@ -160,8 +169,8 @@ export default {
     },
     stopComparing() {
       let configItem = this.items.find(a => a.key === "savedConfigurations")
-      configItem.label = this.$t("savedConfigurations")
-      configItem.icon = ""
+      configItem.label = this.$t("Compare")
+      configItem.icon = PrimeIcons.BOOKMARK
       configItem.command = (event) => {
         this.$refs.compareOverlay.toggle(event.originalEvent)
       }
@@ -196,7 +205,7 @@ export default {
       this.$refs.langOverlay.toggle(event)
     },
     langChange() {
-      this.items.forEach( a => {
+      this.items.forEach(a => {
         a.label = this.$t(a.key)
       })
     }

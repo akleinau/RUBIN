@@ -1,17 +1,17 @@
 <template>
-   <FileUpload name = "net-upload" url="./Patientupload" accept=".csv" :customUpload="true"
-                mode="basic" auto="true" :chooseLabel="$t('Choose')" @uploader="read($event)"  />
+  <FileUpload name="net-upload" url="./Patientupload" accept=".csv" :customUpload="true"
+              mode="basic" auto="true" :chooseLabel="$t('Choose')" @uploader="read($event)"/>
 </template>
 
 <script>
-import { useStore } from '@/store'
+import {useStore} from '@/store'
 
 export default {
   name: "load-patient",
   emits: ["loaded"],
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
   data() {
     return {

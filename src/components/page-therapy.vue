@@ -4,7 +4,8 @@
 
     <template #title>
       {{ $t("Prediction") }}
-      <Button icon="pi pi-question" class="p-button-text p-button-secondary p-button-rounded p-button-raised help" @click="$refs.op.toggle($event)"/>
+      <Button icon="pi pi-question" class="p-button-text p-button-secondary p-button-rounded p-button-raised help"
+              @click="$refs.op.toggle($event)"/>
       <OverlayPanel ref="op" style="width: 500px"> {{ $t("TreatmentHelp") }}
         <h3>{{ $t("Interventions") }}</h3>
         {{ $t("InterventionsHelp") }}
@@ -25,13 +26,13 @@
         <!-- decision table -->
         <div>
           <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
-          <optionsTable />
+          <optionsTable/>
         </div>
 
         <!-- Intervention Input -->
         <div>
           <h3 class="text-left">{{ $t("Interventions") }}:</h3>
-          <TherapyInput />
+          <TherapyInput/>
 
           <!--<div class="flex  justify-content-between align-center">
             <h3 class="text-left">{{ $t("DecisionRatings") }}:</h3>
@@ -41,17 +42,21 @@
           <!--    compare view  -->
           <div v-if="Store.selectedConfig">
             <h3> {{ Store.selectedConfig.name }}:</h3>
-            <div class="b-2">
-             <div  v-for="o in Object.keys(Store.selectedConfig.config.options.selectedOption.option)" :key="o">
-              {{Store.labels[o]}}: {{Store.selectedConfig.config.options.selectedOption.option[o]}}
-            </div>
+            <div v-if="Store.selectedConfig.config.options.selectedOption">
+              <div class="b-2">
+                <div v-for="o in Object.keys(Store.selectedConfig.config.options.selectedOption.option)" :key="o">
+                  {{ Store.labels[o] }}: {{ Store.selectedConfig.config.options.selectedOption.option[o] }}
+                </div>
               </div>
-             <div class="flex justify-content-center" v-for="goal in Object.keys(Store.selectedConfig.config.newGoals)" :field="goal" :header="goal" :key="goal">
-                  <div class="r-2">{{goal}}</div>
-                  <div class="r-2">
-                    <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)]" color="teal" width="200"
-              v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
-                  </div>
+              <div class="flex justify-content-center" v-for="goal in Object.keys(Store.selectedConfig.config.newGoals)"
+                   :field="goal" :header="goal" :key="goal">
+                <div class="r-2">{{ goal }}</div>
+                <div class="r-2">
+                  <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)]" color="teal"
+                       width="200"
+                       v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -62,10 +67,10 @@
 </template>
 
 <script>
-import TherapyInput from "@/components/InputFields/therapy-input";
-import optionsTable from "@/components/InputFields/options-table"
+import TherapyInput from "@/components/Therapy/therapy-input";
+import optionsTable from "@/components/Therapy/options-table"
 import bar from "@/components/visualisations/bar-vis";
-import { useStore } from '@/store'
+import {useStore} from '@/store'
 
 export default {
   name: "therapy-options",
@@ -77,7 +82,7 @@ export default {
   },
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
   data() {
     return {
@@ -89,7 +94,7 @@ export default {
       if (this.Store.newGoals != null && this.Store.options.selectedOption != null) {
         let goalnames = []
         Object.keys(this.Store.newGoals).forEach(goal => {
-          let percentage = this.Store.options.selectedOption.goalValues[goal]* 100
+          let percentage = this.Store.options.selectedOption.goalValues[goal] * 100
           goalnames.push(this.Store.labels[goal] + " - " + this.Store.newGoals[goal] + ": " +
               percentage.toFixed(0) + "%")
         })

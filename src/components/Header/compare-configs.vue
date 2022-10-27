@@ -37,11 +37,11 @@ export default {
   },
   methods: {
     updateStandardSaveName() {
-    let i = 1
-    while (this.configurations.find(a => a.name === "save_" + i)) {
-      i++
-    }
-    this.patientName = "save_" + i
+      let i = 1
+      while (this.configurations.find(a => a.name === "save_" + i)) {
+        i++
+      }
+      this.patientName = "save_" + i
     },
     saveConfig() {
       if (!this.configurations.find(a => a.name === this.patientName)) {

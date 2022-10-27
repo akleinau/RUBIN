@@ -1,5 +1,6 @@
 <template>
-  <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork($event)" @loadLocalNet="loadLocalNet($event)"></ChooseNet>
+  <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork($event)"
+             @loadLocalNet="loadLocalNet($event)"></ChooseNet>
   <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'" :network="selectedNetwork"
              :localNet="localNet"/>
 </template>
@@ -15,9 +16,9 @@ export default {
     ChooseNet
   },
   created() {
-    document.title="DoctorBN"
+    document.title = "DoctorBN"
   },
-  data () {
+  data() {
     return {
       page: "chooseNet",
       selectedNetwork: null,
@@ -58,7 +59,6 @@ body, html {
   background-color: #6eb5be;
   height: 93%;
 }
-
 
 
 </style>

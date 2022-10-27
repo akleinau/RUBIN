@@ -1,21 +1,23 @@
 <template>
- <Card class="DesiredOutcomes"  style="height:100%">
+  <Card class="DesiredOutcomes" style="height:100%">
     <template #title>
       {{ $t("DesiredOutcomes") }}
-      <Button icon="pi pi-question" class="p-button-text p-button-secondary p-button-rounded p-button-raised help" @click="$refs.op.toggle($event)" />
+      <Button icon="pi pi-question" class="p-button-text p-button-secondary p-button-rounded p-button-raised help"
+              @click="$refs.op.toggle($event)"/>
       <OverlayPanel ref="op" style="width:500px">
         {{ $t("DesiredOutcomesHelp") }}
       </OverlayPanel>
     </template>
     <template #content>
-      <ScrollPanel  style="height:100%">
-      <NodeInput v-if="Store.selectedConfig == null"  title="Desired Outcomes" :changeable="true" :hideHeader="true" :selection="Store.patient.goals"
+      <ScrollPanel style="height:100%">
+        <NodeInput v-if="Store.selectedConfig == null" title="Desired Outcomes" :changeable="true" :hideHeader="true"
+                   :selection="Store.patient.goals"
                    @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
-      <div v-else>
-        <NodeInputCompare    title="Desired Outcomes" :name2="Store.selectedConfig.name" :selection="Store.patient.goals"
-                    :selection2="Store.selectedConfig.config.patient.goals" :changeable="false" />
-      </div>
-        </ScrollPanel>
+        <div v-else>
+          <NodeInputCompare title="Desired Outcomes" :name2="Store.selectedConfig.name" :selection="Store.patient.goals"
+                            :selection2="Store.selectedConfig.config.patient.goals" :changeable="false"/>
+        </div>
+      </ScrollPanel>
     </template>
   </Card>
 </template>
@@ -28,12 +30,12 @@ import {useStore} from "@/store";
 export default {
   name: "goal-input",
   components: {
-  NodeInput,
+    NodeInput,
     NodeInputCompare
   },
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
 }
 </script>
@@ -45,11 +47,9 @@ export default {
 }
 
 .help {
-  position:absolute;
-  right:5%
+  position: absolute;
+  right: 5%
 }
-
-
 
 
 </style>

@@ -54,6 +54,7 @@
     </DataTable>
   </Dialog>
 
+  <!-- Buttons -->
   <div v-if="changeable">
     <Button class="addButton" @click="overlay = true" v-if="title === 'Evidence'"
             :label="$t('addEvidence')"></Button>
@@ -80,7 +81,7 @@ export default {
   ],
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
   data() {
     return {
@@ -98,10 +99,9 @@ export default {
       let nodes = this.Store.patient.nodes
       if (this.Store.currentPhase !== null) {
         if (this.title === "Evidence") {
-          nodes = nodes.filter(x =>this.Store.currentPhase.sets.evidence.includes(x.name))
-        }
-        else {
-          nodes = nodes.filter(x =>this.Store.currentPhase.sets.goal.map(a => a.name).includes(x.name))
+          nodes = nodes.filter(x => this.Store.currentPhase.sets.evidence.includes(x.name))
+        } else {
+          nodes = nodes.filter(x => this.Store.currentPhase.sets.goal.map(a => a.name).includes(x.name))
         }
 
       }

@@ -2,18 +2,19 @@
   <Card :class="getCardClass()">
     <template #title>
       {{ $t("Explanation") }}
-      <Button icon="pi pi-question" class="p-button-text p-button-secondary p-button-rounded p-button-raised help" @click="$refs.op.toggle($event)" />
+      <Button icon="pi pi-question" class="p-button-text p-button-secondary p-button-rounded p-button-raised help"
+              @click="$refs.op.toggle($event)"/>
       <OverlayPanel ref="op" style="width: 500px">
         {{ $t("ExplanationHelp") }}
-          <h3>{{ $t("Relevance") }}</h3> {{ $t("RelevanceHelp") }}
-          <h3>{{ $t("AllPredictions") }}</h3> {{ $t("AllPredictionsHelp") }}
-          <h3> {{ $t("CompactNetwork") }}</h3> {{ $t("CompactNetworkHelp") }}
-          <h3> {{ $t("FullNetwork") }}</h3> {{ $t("FullNetworkHelp") }}
+        <h3>{{ $t("Relevance") }}</h3> {{ $t("RelevanceHelp") }}
+        <h3>{{ $t("AllPredictions") }}</h3> {{ $t("AllPredictionsHelp") }}
+        <h3> {{ $t("CompactNetwork") }}</h3> {{ $t("CompactNetworkHelp") }}
+        <h3> {{ $t("FullNetwork") }}</h3> {{ $t("FullNetworkHelp") }}
       </OverlayPanel>
     </template>
     <template #subtitle v-if="Store.options.selectedOption">
-      <div  v-for="o in Object.keys(Store.options.selectedOption.option)" :key="o">
-        <b>  {{Store.labels[o]}}: {{Store.options.selectedOption.option[o]}} </b>
+      <div v-for="o in Object.keys(Store.options.selectedOption.option)" :key="o">
+        <b> {{ Store.labels[o] }}: {{ Store.options.selectedOption.option[o] }} </b>
       </div>
     </template>
     <template #content>
@@ -45,7 +46,8 @@
               <sugiyama :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
             </div>
             <div v-else>
-              <sugiyamaCompare  :edges="Store.edges" :nodes="Store.explain.states" :nodes2="Store.selectedConfig.config.explain.states"
+              <sugiyamaCompare :edges="Store.edges" :nodes="Store.explain.states"
+                               :nodes2="Store.selectedConfig.config.explain.states"
                                :name2="Store.selectedConfig.name" :labels="Store.labels"/>
             </div>
           </TabPanel>
@@ -60,7 +62,7 @@ import Relevance from "@/components/explanation/relevance-explanation";
 import sugiyama from "@/components/visualisations/sugiyama-vis";
 import NodeList from "@/components/explanation/list-explanation";
 import sugiyamaCompare from "@/components/visualisations/sugiyama-vis-compare";
-import { useStore } from '@/store'
+import {useStore} from '@/store'
 
 export default {
   name: "page-explanation",
@@ -72,7 +74,7 @@ export default {
   },
   setup() {
     const Store = useStore()
-    return { Store }
+    return {Store}
   },
   data() {
     return {
@@ -86,54 +88,54 @@ export default {
       if (this.Store.explain.explanation == null) {
         return null
       }
-        //nodes
+      //nodes
 
-        let explanationNodes = []
-        this.Store.explain.explanation["nodes"].forEach(node => {
-          let originalNode = this.Store.explain.states.find(n => n.name === node)
-          if (originalNode != null) {
-            explanationNodes.push(originalNode)
-          } else {
-            explanationNodes.push({"name": node, "probability": "1.0"})
-          }
-        })
-
-        //edges
-        let edges = []
-
-        let connectedNodes = new Set()
-        this.Store.edges.forEach(edge => {
-          if (this.Store.explain.explanation["nodes"].includes(edge["source"]) && this.Store.explain.explanation["nodes"].includes(edge["target"])) {
-            edges.push(edge)
-            connectedNodes.add(edge["source"])
-            connectedNodes.add(edge["target"])
-          }
-        })
-        let notConnectedNodes = this.Store.explain.explanation["nodes"].filter(x => !connectedNodes.has(x))
-        notConnectedNodes.forEach(node => {
-          let neighborNodes = this.Store.explain.states.filter(n =>
-              this.Store.edges.find(e => e["source"] === node && e["target"] === n.name) != null)
-          neighborNodes.forEach(n => {
-            let otherEdges = this.Store.edges.filter(e => e["target"] === n.name)
-            otherEdges.forEach(oe => {
-              if (oe["source"] !== node && this.Store.explain.explanation["nodes"].includes(oe["source"])) {
-                if (!explanationNodes.includes(n)) {
-                  explanationNodes.push(n)
-                }
-                edges.push({"source": node, "target": n.name})
-                edges.push(oe)
-              }
-            })
-          })
-
-        })
-        //remove duplicates
-        edges = edges.filter(e => edges.find(e2 => e2["source"] === e["source"] && e2["target"] === e["target"]) === e)
-
-        return  {
-          "compactEdges": edges,
-          "compactNodes": explanationNodes
+      let explanationNodes = []
+      this.Store.explain.explanation["nodes"].forEach(node => {
+        let originalNode = this.Store.explain.states.find(n => n.name === node)
+        if (originalNode != null) {
+          explanationNodes.push(originalNode)
+        } else {
+          explanationNodes.push({"name": node, "probability": "1.0"})
         }
+      })
+
+      //edges
+      let edges = []
+
+      let connectedNodes = new Set()
+      this.Store.edges.forEach(edge => {
+        if (this.Store.explain.explanation["nodes"].includes(edge["source"]) && this.Store.explain.explanation["nodes"].includes(edge["target"])) {
+          edges.push(edge)
+          connectedNodes.add(edge["source"])
+          connectedNodes.add(edge["target"])
+        }
+      })
+      let notConnectedNodes = this.Store.explain.explanation["nodes"].filter(x => !connectedNodes.has(x))
+      notConnectedNodes.forEach(node => {
+        let neighborNodes = this.Store.explain.states.filter(n =>
+            this.Store.edges.find(e => e["source"] === node && e["target"] === n.name) != null)
+        neighborNodes.forEach(n => {
+          let otherEdges = this.Store.edges.filter(e => e["target"] === n.name)
+          otherEdges.forEach(oe => {
+            if (oe["source"] !== node && this.Store.explain.explanation["nodes"].includes(oe["source"])) {
+              if (!explanationNodes.includes(n)) {
+                explanationNodes.push(n)
+              }
+              edges.push({"source": node, "target": n.name})
+              edges.push(oe)
+            }
+          })
+        })
+
+      })
+      //remove duplicates
+      edges = edges.filter(e => edges.find(e2 => e2["source"] === e["source"] && e2["target"] === e["target"]) === e)
+
+      return {
+        "compactEdges": edges,
+        "compactNodes": explanationNodes
+      }
     }
   },
   methods: {
@@ -154,7 +156,7 @@ export default {
     },
     getCardClass() {
       if (this.Store.options.selectedOption === null) return null
-      return (Object.entries(this.Store.options.selectedOption.option).length === 0) ? null: "treatmentCard"
+      return (Object.entries(this.Store.options.selectedOption.option).length === 0) ? null : "treatmentCard"
     }
   }
 }
@@ -167,20 +169,21 @@ export default {
 }
 
 .treatmentCard {
-    border: 10px solid #b3b3b3;
+  border: 10px solid #b3b3b3;
 }
 
 .help {
-  position:absolute;
-  right:5%
+  position: absolute;
+  right: 5%
 }
+
 .buttons {
-  position:absolute;
-  right:5%
+  position: absolute;
+  right: 5%
 }
 
 li {
-  margin:5px
+  margin: 5px
 }
 
 </style>

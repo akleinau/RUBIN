@@ -1,11 +1,11 @@
 <template>
   <div>
     {{ $t('theNetworkIs') }}
-    <Chip  class="mx-1" style="background-color:green" :label="$t('verySure')"> </Chip>
-    <Chip  class="mx-1" style="background-color:darkgoldenrod" :label="$t('lessSure')"></Chip>
-    <Chip  class="mx-1" style="background-color:red" :label="$t('notSure')"></Chip>
+    <Chip class="mx-1" style="background-color:green" :label="$t('verySure')"></Chip>
+    <Chip class="mx-1" style="background-color:darkgoldenrod" :label="$t('lessSure')"></Chip>
+    <Chip class="mx-1" style="background-color:red" :label="$t('notSure')"></Chip>
     , {{ $t('orTheValueIs') }}
-    <Chip  class="mx-1" style="background-color:black" :label="$t('given')"> </Chip>
+    <Chip class="mx-1" style="background-color:black" :label="$t('given')"></Chip>
   </div>
   <div ref="container"/>
 </template>
@@ -18,7 +18,7 @@ export default {
   props: [
     "nodes",
     "edges",
-      "labels"
+    "labels"
   ],
   data() {
     return {
@@ -34,11 +34,11 @@ export default {
       this.visualise()
     }
   },
-  watch :{
-    nodes: function() {
+  watch: {
+    nodes: function () {
       this.visualise()
     },
-    edges: function() {
+    edges: function () {
       this.visualise()
     }
   },
@@ -46,7 +46,7 @@ export default {
     normalVect(v1, v2) {
       let x = v1.x - v2.x
       let y = v1.y - v2.y
-      let xq = Math.pow(x,2)
+      let xq = Math.pow(x, 2)
       let yq = Math.pow(y, 2)
       return Math.sqrt(xq + yq)
     },
