@@ -1,15 +1,8 @@
 <template>
 
-  <Menubar :model="items" ref="menu" class="p-0 -0" style="position:relative; z-index:10">
+  <Menubar :model="items" ref="menu" class="p-0 -0" style="position:relative; z-index:10">s
     <template #end>
-      <div class="flex justify-content-between align-center t-0" style="background-color:#f8f9fa">
-        <div id="name"> {{ $t('Network') }}: <b>{{ Store.network }}</b>,
-          {{ $t('Patient') }}:
-          <InputText type="text" v-model="Store.patient.name"
-                     style="background-color:#fefefe"/>
-        </div>
-        <div id="logo" class="r-2"><img src="../assets/DoctorBN_Logo.png" style="height: 20px"></div>
-      </div>
+      <div id="logo" class="r-2"><img src="../assets/DoctorBN_Logo.png" style="height: 1.5rem"></div>
     </template>
   </Menubar>
 
@@ -17,18 +10,12 @@
   <Dialog :header="$t('Feedback')" v-model:visible="showFeedback" style="width: 50%" :modal="true">
     <Feedback @sendFeedback="sendFeedback"></Feedback>
   </Dialog>
-  <Dialog :header="$t('NetworkDescription')" v-model:visible="showNetworkDescription" style="width: 50%" :modal="true">
+  <OverlayPanel ref="networkOverlay" :header="$t('NetworkDescription')" style="width: 50%" :modal="true">
     {{ Store.description }}
-  </Dialog>
+  </OverlayPanel>
   <OverlayPanel ref="compareOverlay" style="width: 50%">
     <Compare @saveConfig="saveConfig($event)" :configurations="Store.configurations" @compareTo="compareTo($event)"
              @load="load($event)" @deleteConfig="deleteConfig($event)"/>
-  </OverlayPanel>
-
-  <OverlayPanel ref="exportOverlay">
-    <label> {{ $t("name") }}: </label>
-    <InputText type="text" v-model="Store.patient.name"></InputText>
-    <Button :label="$t('save')" @click="exportCSV()"/>
   </OverlayPanel>
 
   <OverlayPanel ref="langOverlay">
@@ -54,6 +41,21 @@ export default {
   setup() {
     const Store = useStore()
     return {Store}
+  },
+  watch: {
+    patient: function (name) {
+      let configItem = this.items.find(a => a.key === "Patient")
+      if (name !== "") {
+        configItem.label = "Patient: " + name
+      } else {
+        configItem.label = "Patient"
+      }
+    }
+  },
+  computed: {
+    patient: function () {
+      return this.Store.patient.name
+    }
   },
   data() {
     return {
@@ -83,27 +85,19 @@ export default {
             }]
         },
         {
-          label: this.$t('LoadPatient'),
-          icon: PrimeIcons.UPLOAD,
-          key: 'LoadPatient',
+          label: "Patient " + this.Store.patient.name,
+          icon: PrimeIcons.USER,
+          key: 'Patient',
           command: (event) => {
             this.loadPatient(event.originalEvent)
-          }
+          },
         },
         {
-          label: this.$t('SavePatient'),
-          key: 'SavePatient',
-          icon: PrimeIcons.DOWNLOAD,
-          command: (event) => {
-            this.exportPatientOverlay(event.originalEvent)
-          }
-        },
-        {
-          label: this.$t('NetworkDescription'),
+          label: this.$t('Network') + ": " + this.Store.network,
           key: 'NetworkDescription',
           icon: PrimeIcons.BOOK,
-          command: () => {
-            this.showNetworkDescription = true
+          command: (event) => {
+            this.$refs.networkOverlay.toggle(event.originalEvent)
           }
         },
         {
@@ -157,20 +151,6 @@ export default {
     },
     loadPatient(event) {
       this.$emit('loadPatient', event)
-    },
-    exportPatientOverlay(event) {
-      this.$refs.exportOverlay.toggle(event)
-    },
-    exportCSV() {
-      const csv = this.Store.createCSVcontent();
-
-      const anchor = document.createElement('a');
-      anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-      anchor.target = '_blank';
-      anchor.download = this.Store.patient.name + '.csv';
-      anchor.click();
-
-      this.$refs.exportOverlay.toggle()
     },
     compareTo(name) {
       let configItem = this.items.find(a => a.key === "savedConfigurations")

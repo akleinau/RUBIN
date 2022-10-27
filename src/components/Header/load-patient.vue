@@ -1,6 +1,13 @@
 <template>
-  <FileUpload name="net-upload" url="./Patientupload" accept=".csv" :customUpload="true"
-              mode="basic" auto="true" :chooseLabel="$t('Choose')" @uploader="read($event)"/>
+  <label> {{ $t("name") }}: </label>
+  <InputText type="text" v-model="Store.patient.name"></InputText>
+  <br><br>
+  <div class="flex">
+    <FileUpload name="net-upload" url="./Patientupload" accept=".csv" :customUpload="true" chooseIcon="pi pi-upload"
+                mode="basic" :auto=true :chooseLabel="$t('Upload')" @uploader="read($event)"
+                class="flex-auto flex"/>
+    <Button :label="$t('save')" @click="exportCSV()" icon="pi pi-download" class="flex-auto flex"/>
+  </div>
 </template>
 
 <script>
@@ -84,7 +91,18 @@ export default {
       this.Store.patient.name = name
       console.log("Patient: " + name)
       this.$emit('loaded')
-    }
+    },
+    exportCSV() {
+      const csv = this.Store.createCSVcontent();
+
+      const anchor = document.createElement('a');
+      anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      anchor.target = '_blank';
+      anchor.download = this.Store.patient.name + '.csv';
+      anchor.click();
+
+      this.$refs.exportOverlay.toggle()
+    },
   }
 }
 </script>
