@@ -54,6 +54,7 @@ export default {
       let correspondingNodes = []
       nodeArr.forEach(node => {
         let correspondingNode = this.Store.patient.nodes.find(x => x.name === node.name)
+        if (correspondingNode == null) console.log(node)
         let item = {
           name: correspondingNode.name,
           selected: {name: node.option},
@@ -81,7 +82,8 @@ export default {
           })
         }
       }
-      await this.Store.reset()
+      await this.Store.reset(true)
+
       let evidenceNodes = this.getCorrespondingNode(this.patient.evidence)
       let targetNodes = this.getCorrespondingNode(this.patient.targets)
       let goalNodes = this.getCorrespondingNode(this.patient.goals)
@@ -100,8 +102,6 @@ export default {
       anchor.target = '_blank';
       anchor.download = this.Store.patient.name + '.csv';
       anchor.click();
-
-      this.$refs.exportOverlay.toggle()
     },
   }
 }

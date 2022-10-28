@@ -44,7 +44,7 @@ export const useStore = defineStore('store', {
         showTutorial: false
     }),
     actions: {
-        async reset() {
+        async reset(noPhase = false) {
             this.patient.targets = []
             this.patient.evidence = []
             this.patient.goals = []
@@ -60,7 +60,10 @@ export const useStore = defineStore('store', {
             this.explain.states = null
             this.explain.explanation = null
 
-            await this.loadNodes()
+            this.currentPhase = null
+
+            await this.loadNodes(noPhase)
+
         },
         async calculate() {
             if (this.patient.evidence.length !== 0 && this.patient.goals.length !== 0) {
@@ -179,7 +182,7 @@ export const useStore = defineStore('store', {
             this.explain.explanation = nodeDict.explanation
             this.explanationLoading = false
         },
-        async loadNodes() {
+        async loadNodes(noPhase = false) {
             let gResponse = null
             if (this.localNet) {
                 gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getLocalNetwork", {
@@ -217,8 +220,10 @@ export const useStore = defineStore('store', {
             let customization = network.customization
             if (customization != null) {
                 this.phases = network.customization.phases
-                this.currentPhase = this.phases[0]
-                this.phase_change()
+                if (!noPhase) {
+                    this.currentPhase = this.phases[0]
+                    this.phase_change()
+                }
             }
         },
         addEvidences(nodes) {

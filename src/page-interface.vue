@@ -4,11 +4,7 @@
 
   <div class="flex flex-column h-full">
 
-    <Header class="flex" ref="menu" @changePage="changePage()" @loadPatient="openLoadForm($event)"/>
-
-    <OverlayPanel ref="panel">
-      <LoadPatient @loaded="loadPatient"></LoadPatient>
-    </OverlayPanel>
+    <Header class="flex" ref="menu" @changePage="changePage()" />
 
     <!-- phases -->
     <div class="flex justify-content-between m-1">
@@ -46,8 +42,6 @@
 import Header from "./components/page-header";
 import Explanation from "./components/page-explanation";
 import Therapy from "@/components/page-therapy";
-import LoadPatient from "@/components/Header/load-patient";
-import OverlayPanel from "primevue/overlaypanel";
 import EvidenceInput from "@/components/InputFields/evidence-input";
 import GoalInput from "@/components/InputFields/goal-input";
 import tutorial from "@/components/page-tutorial";
@@ -60,8 +54,6 @@ export default {
     Header,
     Explanation,
     Therapy,
-    LoadPatient,
-    OverlayPanel,
     EvidenceInput,
     GoalInput,
     tutorial
@@ -87,13 +79,6 @@ export default {
     changePage() {
       this.$emit("changePage")
     },
-    openLoadForm(event) {
-      console.log(event)
-      this.$refs.panel.toggle(event)
-    },
-    loadPatient: async function () {
-      this.$refs.panel.toggle()
-    }
   },
   created: async function () {
     this.Store.network = this.network

@@ -7,6 +7,11 @@
   </Menubar>
 
   <!--   dialogs/ overlays  -->
+
+  <OverlayPanel ref="loadOverlay">
+    <LoadPatient @loaded="loadPatient"></LoadPatient>
+  </OverlayPanel>
+
   <Dialog :header="$t('Feedback')" v-model:visible="showFeedback" style="width: 50%" :modal="true">
     <Feedback @sendFeedback="sendFeedback"></Feedback>
   </Dialog>
@@ -28,6 +33,7 @@
 <script>
 import Feedback from "@/components/Header/send-feedback";
 import Compare from "@/components/Header/compare-configs";
+import LoadPatient from "@/components/Header/load-patient";
 import {useStore} from '@/store'
 import {PrimeIcons} from 'primevue/api';
 
@@ -36,7 +42,8 @@ export default {
   emits: ["changePage", "loadPatient", "exportCSV"],
   components: {
     Feedback,
-    Compare
+    Compare,
+    LoadPatient
   },
   setup() {
     const Store = useStore()
@@ -152,9 +159,6 @@ export default {
     reset() {
       this.Store.reset()
     },
-    loadPatient(event) {
-      this.$emit('loadPatient', event)
-    },
     compareTo(name) {
       let configItem = this.items.find(a => a.key === "savedConfigurations")
       configItem.label = this.$t("ComparingTo") + name
@@ -206,6 +210,13 @@ export default {
       this.items.forEach(a => {
         a.label = this.$t(a.key)
       })
+    },
+    openLoadForm(event) {
+      console.log(event)
+      this.$refs.panel.toggle(event)
+    },
+    loadPatient(event) {
+      this.$refs.loadOverlay.toggle(event)
     }
   }
 }
@@ -218,8 +229,8 @@ export default {
   color: grey;
 }
 
-::v-deep(.p-submenu-list){
-       padding: 0 !important;
+::v-deep(.p-submenu-list) {
+  padding: 0 !important;
 }
 
 </style>
