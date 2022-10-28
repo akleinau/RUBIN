@@ -4,29 +4,17 @@
 
   <div class="flex flex-column h-full">
 
-    <Header class="flex" ref="menu" @changePage="changePage()" />
-
-    <!-- phases -->
-    <div class="flex justify-content-between m-1">
-      <SelectButton v-model="Store.currentPhase" :options="Store.phases" aria-labelledby="single"
-                    class="flex" optionLabel="name" @click="Store.phase_change()"/>
-      <Button class="flex" label="custom" @click="Store.currentPhase=null"/>
-    </div>
+    <Header class="flex" ref="menu" @changePage="changePage()"/>
 
     <!-- main cards -->
     <div class=" grid flex flex-grow-1 h-full overflow-hidden relative">
-      <div class="col-3 flex-column">
-        <BlockUI class="pb-2" style="height: 30%;" :blocked="block.goals" ref="goal">
-          <GoalInput/>
-        </BlockUI>
 
-        <BlockUI style="height:70%" :blocked="block.evidence">
-          <EvidenceInput/>
-        </BlockUI>
+      <BlockUI class="col-3 flex-column h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
+        <EvidenceInput class="h-full"/>
+      </BlockUI>
 
-      </div>
-      <BlockUI class="col" :blocked="block.options">
-        <Therapy/>
+      <BlockUI class="col h-full" :blocked="block.options">
+        <Therapy class="h-full"/>
       </BlockUI>
 
       <BlockUI class="col h-full" :blocked="block.explain">
@@ -43,7 +31,6 @@ import Header from "./components/page-header";
 import Explanation from "./components/page-explanation";
 import Therapy from "@/components/page-therapy";
 import EvidenceInput from "@/components/InputFields/evidence-input";
-import GoalInput from "@/components/InputFields/goal-input";
 import tutorial from "@/components/page-tutorial";
 import {useStore} from '@/store'
 
@@ -55,7 +42,6 @@ export default {
     Explanation,
     Therapy,
     EvidenceInput,
-    GoalInput,
     tutorial
   },
   props: [
