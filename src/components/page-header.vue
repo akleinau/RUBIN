@@ -1,6 +1,6 @@
 <template>
 
-  <Menubar :model="items" ref="menu" class="p-0 -0" style="position:relative; z-index:10">s
+  <Menubar :model="items" ref="menu" class="p-0 -0" style="position:relative; z-index:10">
     <template #end>
       <div id="logo" class="r-2"><img src="../assets/DoctorBN_Logo.png" style="height: 1.5rem"></div>
     </template>
@@ -91,6 +91,7 @@ export default {
           command: (event) => {
             this.loadPatient(event.originalEvent)
           },
+          items: []
         },
         {
           label: this.$t('Network') + ": " + this.Store.network,
@@ -98,7 +99,8 @@ export default {
           icon: PrimeIcons.BOOK,
           command: (event) => {
             this.$refs.networkOverlay.toggle(event.originalEvent)
-          }
+          },
+          items: []
         },
         {
           key: "savedConfigurations",
@@ -106,7 +108,8 @@ export default {
           icon: PrimeIcons.BOOKMARK,
           command: (event) => {
             this.$refs.compareOverlay.toggle(event.originalEvent)
-          }
+          },
+          items: []
         },
         {
           label: "Help",
@@ -208,11 +211,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 
 #name {
   color: grey;
+}
+
+::v-deep(.p-submenu-list){
+       padding: 0 !important;
 }
 
 </style>
