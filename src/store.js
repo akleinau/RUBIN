@@ -281,10 +281,12 @@ export const useStore = defineStore('store', {
             this.patient.targets.forEach(a => this.deleteTarget(a))
             this.patient.goals.forEach(a => this.deleteGoal(a))
             this.addTargets(this.patient.nodes.filter(a => this.currentPhase.sets.target.includes(a.name)))
+            let goalList = []
             this.currentPhase.sets.goal.forEach(a => {
                 let fullnode = this.patient.nodes.find(b => b.name === a.name)
-                this.addGoals([{"name": a.name, "selected": {"name": a.option}, "options": fullnode.options}])
+                goalList.push({"name": a.name, "selected": {"name": a.option}, "options": fullnode.options})
             })
+            this.addGoals(goalList)
         }
     }
 })
