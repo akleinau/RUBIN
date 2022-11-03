@@ -100,7 +100,7 @@ export default {
       let nodes = this.Store.patient.nodes
       if (this.Store.currentPhase !== null) {
         if (this.title === "Evidence") {
-          nodes = nodes.filter(x => this.Store.currentPhase.sets.evidence.includes(x.name))
+          //nodes = nodes.filter(x => this.Store.currentPhase.sets.evidence.includes(x.name))
         } else {
           nodes = nodes.filter(x => this.Store.currentPhase.sets.goal.map(a => a.name).includes(x.name))
         }
