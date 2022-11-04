@@ -2,12 +2,23 @@
   <div class="flex p-dir-col">
     <DataTable class="col p-datatable-sm" :value="Store.explain.relevance" dataKey="node_name"
                :rowClass="isTherapyRow">
-      <Column :header="$t('Node')" field="node_name">
+      <ColumnGroup type="header">
+        <Row>
+          <Column header="" field="node_name" :rowspan="2"/>
+          <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
+          <Column header="Influence on outcome" :colspan="getGoalKeyNum()"></Column>
+        </Row>
+        <Row>
+          <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal"/>
+        </Row>
+      </ColumnGroup>
+
+      <Column :header="$t('Node')" field="node_name" :rowspan="2">
         <template #body="slotProps">
           {{ Store.labels[slotProps.data.node_name] }}: {{ getState(slotProps.data.node_name) }}
         </template>
       </Column>
-      <Column :header="$t('Relevance')" field="overall_relevance">
+      <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2">
         <template #body="slotProps">
           <bar :value="slotProps.data.overall_relevance" color="#004d80" width="200"
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
@@ -77,6 +88,13 @@ export default {
         })
 
         return goalnames
+      }
+    },
+    getGoalKeyNum() {
+      if (this.Store.newGoals != null) {
+        return (Object.keys(this.Store.newGoals)).length
+      } else {
+        return 0
       }
     },
     getCompareGoalKeys() {

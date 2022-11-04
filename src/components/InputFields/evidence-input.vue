@@ -2,7 +2,7 @@
   <Card style="position:relative" class="Evidence">
     <template #title>
       {{ $t("Evidence") }}
-      <Button icon="pi pi-question" class="p-button-text p-button-secondary p-button-rounded p-button-raised help"
+      <Button icon="pi pi-question" class="p-button-outlined p-button-secondary p-button-rounded p-button-raised help"
               @click="$refs.op.toggle($event)"/>
       <OverlayPanel ref="op" style="width:500px">
         {{ $t("EvidenceHelp") }}
@@ -11,8 +11,7 @@
     <template #content>
       <ScrollPanel style="height:100%">
         <NodeInput v-if="Store.selectedConfig == null" title="Evidence" :changeable="true"
-                   :selection="Store.patient.evidence"
-                   @addNodes="Store.addEvidences($event)" @deleteNode="Store.deleteEvidence($event)"/>
+                   :selection="Store.patient.evidence"/>
 
         <NodeInputCompare v-else title="Evidence" :name2="Store.selectedConfig.name" :selection="Store.patient.evidence"
                           :selection2="Store.selectedConfig.config.patient.evidence" :changeable="false"/>

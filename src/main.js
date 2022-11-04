@@ -15,6 +15,8 @@ import OverlayPanel from 'primevue/overlaypanel';
 import CascadeSelect from 'primevue/cascadeselect';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import ColumnGroup from "primevue/columngroup";
+import Row from "primevue/row";
 import Dropdown from 'primevue/dropdown';
 import Divider from 'primevue/divider';
 import ScrollPanel from "primevue/scrollpanel";
@@ -72,6 +74,8 @@ vueApp.use(PrimeVue)
     .component('CascadeSelect', CascadeSelect)
     .component('DataTable', DataTable)
     .component('Column', Column)
+    .component('ColumnGroup', ColumnGroup)
+    .component('Row', Row)
     .component('Dropdown', Dropdown)
     .component('Divider', Divider)
     .component('Menu', Menu)

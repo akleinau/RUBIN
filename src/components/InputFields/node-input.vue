@@ -73,7 +73,6 @@ import {useStore} from "@/store";
 
 export default {
   name: "node-input",
-  emits: ["addNodes", "deleteNode"],
   props: [
     "title",
     "selection",
@@ -142,18 +141,33 @@ export default {
       }
     },
     addNodesFromOverlay() {
-      this.$emit("addNodes", this.nodesToAdd);
+      this.addNodes(this.nodesToAdd)
       this.nodesToAdd = []
       this.overlay = false
     },
     deleteNode(node) {
-      this.$emit("deleteNode", node);
+       if (this.title === "Evidence") {
+        this.Store.deleteEvidence(node)
+      }
+      else {
+        this.Store.deleteGoal(node)
+      }
+      this.Store.calculate()
     },
     deleteNodeFromOverlay(node) {
       this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
     },
     onNodeChange(node) {
-      this.$emit("addNodes", [node])
+      this.addNodes([node])
+    },
+    addNodes(nodes) {
+      if (this.title === "Evidence") {
+        this.Store.addEvidences(nodes)
+      }
+      else {
+        this.Store.addGoals(nodes)
+      }
+      this.Store.calculate()
     }
   }
 }
