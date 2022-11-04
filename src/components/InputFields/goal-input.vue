@@ -11,8 +11,7 @@
     <template #content>
       <ScrollPanel style="height:100%">
         <NodeInput v-if="Store.selectedConfig == null" title="Desired Outcomes" :changeable="true" :hideHeader="true"
-                   :selection="Store.patient.goals"
-                   @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
+                   :selection="Store.patient.goals"/>
         <div v-else>
           <NodeInputCompare title="Desired Outcomes" :name2="Store.selectedConfig.name" :selection="Store.patient.goals"
                             :selection2="Store.selectedConfig.config.patient.goals" :changeable="false"/>

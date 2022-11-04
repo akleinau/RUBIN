@@ -129,7 +129,7 @@ export const useStore = defineStore('store', {
 
                 this.newGoals = goals
                 this.optionsLoading = false
-                await this.calculateOption()
+                this.calculateOption()
             }
         },
         async calculateOption() {
@@ -232,24 +232,20 @@ export const useStore = defineStore('store', {
                 this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
                 this.patient.evidence.push(node)
             })
-            this.calculate()
         },
         deleteEvidence(node) {
             this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
             this.patient.nodes.push({name: node.name, options: node.options})
-            this.calculate()
         },
         addTargets(nodes) {
             nodes.forEach(node => {
                 this.patient.targets.push(node)
                 this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
             })
-            this.calculate()
         },
         deleteTarget(node) {
             this.patient.targets = this.patient.targets.filter(x => x.name !== node.name)
             this.patient.nodes.push(node)
-            this.calculate()
         },
         addGoals(nodes) {
             nodes.forEach(node => {
@@ -257,12 +253,10 @@ export const useStore = defineStore('store', {
                 this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
                 this.patient.goals.push(node)
             })
-            this.calculate()
         },
         deleteGoal(node) {
             this.patient.goals = this.patient.goals.filter(x => x.name !== node.name)
             this.patient.nodes.push({name: node.name, options: node.options})
-            this.calculate()
         },
         createCSVcontent() {
             var csv = "Type; Variable; Option"
@@ -278,15 +272,32 @@ export const useStore = defineStore('store', {
             return csv
         },
         phase_change() {
-            this.patient.targets.forEach(a => this.deleteTarget(a))
-            this.patient.goals.forEach(a => this.deleteGoal(a))
-            this.addTargets(this.patient.nodes.filter(a => this.currentPhase.sets.target.includes(a.name)))
-            let goalList = []
-            this.currentPhase.sets.goal.forEach(a => {
-                let fullnode = this.patient.nodes.find(b => b.name === a.name)
-                goalList.push({"name": a.name, "selected": {"name": a.option}, "options": fullnode.options})
-            })
-            this.addGoals(goalList)
+            let reload = false
+            if (this.differentLists(this.patient.targets.map(a=> a.name),this.currentPhase.sets.target)) {
+                this.patient.targets.forEach(a => this.deleteTarget(a))
+                this.addTargets(this.patient.nodes.filter(a => this.currentPhase.sets.target.includes(a.name)))
+                reload = true
+            }
+            if (this.differentLists(this.patient.goals.map(a=> a.name + a.selected.name),
+                this.currentPhase.sets.goal.map(a=> a.name + a.option))) {
+                this.patient.goals.forEach(a => this.deleteGoal(a))
+
+                let goalList = []
+                this.currentPhase.sets.goal.forEach(a => {
+                    let fullnode = this.patient.nodes.find(b => b.name === a.name)
+                    goalList.push({"name": a.name, "selected": {"name": a.option}, "options": fullnode.options})
+                })
+                this.addGoals(goalList)
+                reload = true
+            }
+            if (reload) {
+                this.calculate()
+            }
+        },
+        differentLists(a, b) {
+            let missing = (a.filter(x => !b.includes(x))).length
+            missing += (b.filter(x => !a.includes(x))).length
+            return missing > 0
         }
     }
 })

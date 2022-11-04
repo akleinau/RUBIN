@@ -11,8 +11,7 @@
     <template #content>
       <ScrollPanel style="height:100%">
         <NodeInput v-if="Store.selectedConfig == null" title="Evidence" :changeable="true"
-                   :selection="Store.patient.evidence"
-                   @addNodes="Store.addEvidences($event)" @deleteNode="Store.deleteEvidence($event)"/>
+                   :selection="Store.patient.evidence"/>
 
         <NodeInputCompare v-else title="Evidence" :name2="Store.selectedConfig.name" :selection="Store.patient.evidence"
                           :selection2="Store.selectedConfig.config.patient.evidence" :changeable="false"/>

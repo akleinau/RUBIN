@@ -65,12 +65,14 @@ export default {
     addTargetsFromOverlay() {
       if (this.selected != null) {
         this.Store.addTargets(this.selected)
+        this.Store.calculate()
       }
       this.selected = []
       this.overlay = false
     },
     deleteNode(node) {
       this.Store.deleteTarget(node)
+      this.Store.calculate()
     },
   }
 }
