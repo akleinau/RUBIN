@@ -67,7 +67,7 @@
   "FeedbackInfo": "If the network classified a case incorrectly, please send it as feedback. ",
   "IncludeConfig": "Include network configuration",
   "send": "send",
-  "name": "Name",
+  "name": "Name/ ID",
   "NetworkName": "Network name",
   "OptDescription": "Description (optional)",
   "UploadNet": "Upload Network",

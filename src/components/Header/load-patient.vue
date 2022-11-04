@@ -2,11 +2,11 @@
   <label> {{ $t("name") }}: </label>
   <InputText type="text" v-model="Store.patient.name"></InputText>
   <br><br>
-  <div class="flex">
+  <div class="flex align-items-center justify-content-between">
     <FileUpload name="net-upload" url="./Patientupload" accept=".csv" :customUpload="true" chooseIcon="pi pi-upload"
                 mode="basic" :auto=true :chooseLabel="$t('Upload')" @uploader="read($event)"
-                class="flex-auto flex"/>
-    <Button :label="$t('save')" @click="exportCSV()" icon="pi pi-download" class="flex-auto flex"/>
+                class="flex"/>
+    <Button :label="$t('save')" @click="exportCSV()" icon="pi pi-download" class="flex"/>
   </div>
 </template>
 

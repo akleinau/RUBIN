@@ -1,6 +1,4 @@
 import { createApp} from 'vue'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css';
 import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import Dialog from 'primevue/dialog';
@@ -60,7 +58,6 @@ let vueApp = createApp(App)
 
 
 vueApp.use(PrimeVue)
-    .component('v-select', vSelect)
     .component('Dialog', Dialog)
     .component('Button', Button)
     .component('Menubar', Menubar)
