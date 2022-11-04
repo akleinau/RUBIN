@@ -102,10 +102,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .stretched {
   height: 100%
+}
+
+::v-deep(.p-button.p-fileupload-choose){
+        margin: auto !important;
 }
 
 </style>
