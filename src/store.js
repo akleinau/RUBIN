@@ -40,6 +40,7 @@ export const useStore = defineStore('store', {
         network: "",
         localNet: "",
         phases: [],
+        evidenceGroupMap: {},
         currentPhase: null,
         showTutorial: false
     }),
@@ -223,6 +224,15 @@ export const useStore = defineStore('store', {
                 if (!noPhase) {
                     this.currentPhase = this.phases[0]
                     this.phase_change()
+                }
+
+                if (network.customization.evidence_groups) {
+                    network.customization.evidence_groups.forEach( (g, i) => {
+                        g.variables.forEach( v => {
+                            this.evidenceGroupMap[v] = i + " " + g.name
+                        })
+                    })
+                console.log(this.evidenceGroupMap)
                 }
             }
         },

@@ -45,7 +45,7 @@
           <TabPanel header="custom" v-bind:key="null">
             <!-- Desired Outcomes -->
             <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
-            <NodeInput v-if="Store.selectedConfig == null" title="Desired Outcomes" :changeable="true"
+            <GoalInput v-if="Store.selectedConfig == null" title="Desired Outcomes" :changeable="true"
                        :hideHeader="true"
                        :selection="Store.patient.goals"
                        @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
@@ -101,7 +101,7 @@
 import TherapyInput from "@/components/Therapy/therapy-input";
 import optionsTable from "@/components/Therapy/options-table"
 import bar from "@/components/visualisations/bar-vis";
-import NodeInput from "@/components/InputFields/node-input";
+import GoalInput from "@/components/InputFields/goal-input";
 import NodeInputCompare from "@/components/InputFields/node-input-compare";
 import {useStore} from '@/store'
 
@@ -112,7 +112,7 @@ export default {
     TherapyInput,
     optionsTable,
     bar,
-    NodeInput,
+    GoalInput,
     NodeInputCompare
   },
   setup() {
