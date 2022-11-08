@@ -3,10 +3,10 @@
              rowGroupMode="subheader" groupRowsBy="group"
              sortMode="single" sortField="group" :sortOrder="1">
     <template #groupheader="slotProps">
-        <br>
-        <b> {{slotProps.data.group.substr(2)}} </b>
+      <br>
+      <b> {{ slotProps.data.group.substr(2) }} </b>
     </template>
-    <Column field="group" header="group" />
+    <Column field="group" header="group"/>
     <Column field="name" style="padding: 0; border: 0;">
       <template #header>
             <span class="p-input-icon-left">
@@ -48,14 +48,14 @@
       </template>
       <template #groupheader="slotProps">
         <br>
-        <h3> {{slotProps.data.group.substr(2)}} </h3>
+        <h3> {{ slotProps.data.group.substr(2) }} </h3>
       </template>
       <Column field="name" :header="$t('Node')">
         <template #body="slotProps">
           {{ Store.labels[slotProps.data.name] }}
         </template>
       </Column>
-      <Column field="group" header="group" >
+      <Column field="group" header="group">
       </Column>
       <Column field="options">
         <template #body="slotProps">
@@ -119,7 +119,7 @@ export default {
                   checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
                 }
               }),
-              group: this.Store.evidenceGroupMap[node.name]
+              group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[node.name]
             }
           }
       )
@@ -141,7 +141,7 @@ export default {
               name: option.name
             }
           }),
-          group: this.Store.evidenceGroupMap[slotProps.data.name]
+          group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[slotProps.data.name]
         }
         this.nodesToAdd.push(item);
       }

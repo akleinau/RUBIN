@@ -40,7 +40,7 @@ export const useStore = defineStore('store', {
         network: "",
         localNet: "",
         phases: [],
-        evidenceGroupMap: {},
+        evidenceGroupMap: null,
         currentPhase: null,
         showTutorial: false
     }),
@@ -67,7 +67,7 @@ export const useStore = defineStore('store', {
 
         },
         async calculate() {
-            if (this.patient.evidence.length !== 0 && this.patient.goals.length !== 0) {
+            if (this.patient.goals.length !== 0) {
                 this.optionsLoading = true
                 this.explanationLoading = true
 
@@ -227,14 +227,15 @@ export const useStore = defineStore('store', {
                 }
 
                 if (network.customization.evidence_groups) {
-                    network.customization.evidence_groups.forEach( (g, i) => {
-                        g.variables.forEach( v => {
+                    this.evidenceGroupMap = {}
+                    network.customization.evidence_groups.forEach((g, i) => {
+                        g.variables.forEach(v => {
                             this.evidenceGroupMap[v] = i + " " + g.name
                         })
                     })
-                console.log(this.evidenceGroupMap)
                 }
             }
+            await this.calculate()
         },
         addEvidences(nodes) {
             nodes.forEach(node => {
@@ -283,13 +284,13 @@ export const useStore = defineStore('store', {
         },
         phase_change() {
             let reload = false
-            if (this.differentLists(this.patient.targets.map(a=> a.name),this.currentPhase.sets.target)) {
+            if (this.differentLists(this.patient.targets.map(a => a.name), this.currentPhase.sets.target)) {
                 this.patient.targets.forEach(a => this.deleteTarget(a))
                 this.addTargets(this.patient.nodes.filter(a => this.currentPhase.sets.target.includes(a.name)))
                 reload = true
             }
-            if (this.differentLists(this.patient.goals.map(a=> a.name + a.selected.name),
-                this.currentPhase.sets.goal.map(a=> a.name + a.option))) {
+            if (this.differentLists(this.patient.goals.map(a => a.name + a.selected.name),
+                this.currentPhase.sets.goal.map(a => a.name + a.option))) {
                 this.patient.goals.forEach(a => this.deleteGoal(a))
 
                 let goalList = []

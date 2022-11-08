@@ -2,7 +2,7 @@
   <!-- Form to upload a network file -->
   <form @submit.prevent="upload" id="upload-form" enctype="multipart/form-data">
     <FileUpload name="net-upload" url="./upload" accept=".net, .bif" :customUpload="true" :chooseLabel="$t('Choose')"
-                :auto="true" :showUploadButton="false" @uploader="file = $event.files" :showCancelButton="false"
+                :showUploadButton="false" @select="file = $event.files" :showCancelButton="false"
                 required/>
     <br>
     <div v-if="file.length !== 0" class="flex justify-content-between">
@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       file: [],
-      uploadToServer: null
+      uploadToServer: null,
     }
   },
   methods: {
