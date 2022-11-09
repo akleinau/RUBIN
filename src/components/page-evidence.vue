@@ -10,11 +10,7 @@
     </template>
     <template #content>
       <ScrollPanel style="height:100%">
-        <EvidenceInput v-if="Store.selectedConfig == null" title="Evidence" :changeable="true"
-                       :selection="Store.patient.evidence"/>
-
-        <NodeInputCompare v-else title="Evidence" :name2="Store.selectedConfig.name" :selection="Store.patient.evidence"
-                          :selection2="Store.selectedConfig.config.patient.evidence" :changeable="false"/>
+        <EvidenceInput />
       </ScrollPanel>
     </template>
 
@@ -23,14 +19,12 @@
 
 <script>
 import EvidenceInput from "@/components/InputFields/evidence-input";
-import NodeInputCompare from "@/components/InputFields/node-input-compare";
 import {useStore} from '@/store'
 
 export default {
   name: "evidence-input",
   components: {
-    EvidenceInput,
-    NodeInputCompare
+    EvidenceInput
   },
   setup() {
     const Store = useStore()

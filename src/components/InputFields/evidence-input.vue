@@ -1,5 +1,5 @@
 <template>
-  <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm"
+  <DataTable class="p-datatable-sm" id="table" :value="table"
              rowGroupMode="subheader" groupRowsBy="group"
              sortMode="single" sortField="group" :sortOrder="1">
     <template #groupheader="slotProps">
@@ -7,34 +7,39 @@
       <b> {{ slotProps.data.group.substr(2) }} </b>
     </template>
     <Column field="group" header="group"/>
-    <Column field="name" style="padding: 0; border: 0;">
+    <Column field="name" style="padding: 0; border: 0;" >
+
       <template #header>
             <span class="p-input-icon-left">
               <i class="pi pi-search"/>
               <InputText v-model="filters['name'].name" placeholder="Search..." style="width: 200%"/>
             </span>
       </template>
+
       <template #body="slotProps">
         {{ Store.labels[slotProps.data.name] }}
       </template>
     </Column>
-    <Column field="value" class="optionCol">
-      <template v-if="changeable" #body="slotProps">
+    <Column field="value" class="optionCol" >
+      <template #body="slotProps">
         <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
-                  placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)"
+                  placeholder="" @change="onNodeChange(slotProps.data)"
                   class="p-0 m-0">
         </Dropdown>
-        <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
+        <Button v-if="slotProps.data.selected" icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
       </template>
-      <template v-else #body="slotProps">
-        {{ Store.labels[slotProps.data.selected.name] }}
+    </Column>
+    <Column class="optionCol" >
+      <template #body="slotProps">
+        <div v-if="slotProps.data.selectedCompare === ''"></div>
+        <div v-else> {{ Store.selectedConfig.name }}: {{ slotProps.data.selectedCompare}}</div>
       </template>
     </Column>
   </DataTable>
   <!--    input dialog  -->
   <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
-          v-if="changeable" @hide="addNodesFromOverlay()">
+          @hide="addNodesFromOverlay()">
     <DataTable :value="overlayNodes" rowGroupMode="subheader" groupRowsBy="group" class="p-datatable-sm"
                sortMode="single" sortField="group" :sortOrder="1"
                v-model:filters="filters" filterDisplay="menu" data-key="name">
@@ -70,7 +75,7 @@
   </Dialog>
 
   <!-- Buttons -->
-  <div v-if="changeable">
+  <div>
     <Button class="addButton" @click="overlay = true"
             :label="$t('addEvidence')"></Button>
   </div>
@@ -85,12 +90,6 @@ import {useStore} from "@/store";
 
 export default {
   name: "node-input",
-  props: [
-    "title",
-    "selection",
-    "changeable",
-    "hideHeader"
-  ],
   setup() {
     const Store = useStore()
     return {Store}
@@ -123,6 +122,32 @@ export default {
             }
           }
       )
+    },
+    table: function () {
+      let table = JSON.parse(JSON.stringify(this.Store.patient.evidence))
+      table.forEach(n => n.selectedCompare = '')
+      if (this.Store.selectedConfig) {
+        let compareEvidence = this.Store.selectedConfig.config.patient.evidence
+
+        compareEvidence.forEach(n => {
+          let foundNode = table.find(a => a.name === n.name)
+          if (foundNode == null) {
+            table.push({
+              name: n.name,
+              selected: '',
+              selectedCompare: n.selected.name,
+              options: n.options,
+              group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[n.name]
+            })
+          } else {
+            foundNode.selectedCompare = (foundNode.selected.name === n.selected.name) ? '' : n.selected.name
+            console.log(foundNode.selected.name )
+            console.log(n.selected.name)
+          }
+        })
+      }
+
+      return table
     }
   },
   methods: {

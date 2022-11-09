@@ -1,6 +1,6 @@
 <template>
-  <div class="flex p-dir-col">
-    <DataTable class="col p-datatable-sm" :value="Store.explain.relevance" dataKey="node_name"
+  <div>
+    <DataTable class=" p-datatable-sm" :value="Store.explain.relevance" dataKey="node_name"
                :rowClass="isTherapyRow">
       <ColumnGroup type="header">
         <Row>
@@ -33,10 +33,20 @@
     </DataTable>
 
     <!--    compare view  -->
-    <div class="col" v-if="Store.selectedConfig !== null">
+    <div v-if="Store.selectedConfig !== null">
       <h3> {{ Store.selectedConfig.name }}:</h3>
-      <DataTable class="col p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
+      <DataTable class="p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
                  :rowClass="isTherapyRow">
+        <ColumnGroup type="header">
+        <Row>
+          <Column header="" field="node_name" :rowspan="2"/>
+          <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
+          <Column header="Influence on outcome" :colspan="getGoalKeyNum()"></Column>
+        </Row>
+        <Row>
+          <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal"/>
+        </Row>
+      </ColumnGroup>
         <Column :header="$t('Node')" field="node_name">
           <template #body="slotProps">
             {{ Store.labels[slotProps.data.node_name] }}: {{ getCompareState(slotProps.data.node_name) }}
@@ -103,9 +113,6 @@ export default {
         Object.keys(this.Store.selectedConfig.config.newGoals).forEach(goal => {
           goalnames.push(this.Store.labels[goal] + ": " + this.Store.selectedConfig.config.newGoals[goal])
         })
-        console.log(this.Store.selectedConfig)
-        console.log("GoalNames:")
-        console.log(goalnames)
         return goalnames
       }
     },

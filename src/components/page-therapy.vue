@@ -18,11 +18,30 @@
 
     <template #content>
       <ScrollPanel style="height:100%">
-        <!-- prediction results
-        <div class="col b-2" v-if="Store.options.options.length===0">
-          <div v-for="goal in getGoalForSummary()" :key="goal" style="fontSize: 2rem">{{ goal }}</div>
+
+        <!--    compare view  -->
+        <div v-if="Store.selectedConfig">
+          <h3> {{ Store.selectedConfig.name }}:</h3>
+          <div v-if="Store.selectedConfig.config.options.selectedOption">
+            <div class="b-2">
+              <div v-for="o in Object.keys(Store.selectedConfig.config.options.selectedOption.option)" :key="o">
+                {{ Store.labels[o] }}: {{ Store.selectedConfig.config.options.selectedOption.option[o] }}
+              </div>
+            </div>
+            <div class="flex justify-content-center"
+                 v-for="goal in Object.keys(Store.selectedConfig.config.newGoals)"
+                 :field="goal" :header="goal" :key="goal">
+              <div class="r-2">{{ goal }}</div>
+              <div class="r-2">
+                <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)]"
+                     color="teal"
+                     width="200"
+                     v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
+              </div>
+            </div>
+          </div>
         </div>
-        -->
+        <br>
 
         <!-- decision table -->
         <div>
@@ -45,48 +64,16 @@
           <TabPanel header="custom" v-bind:key="null">
             <!-- Desired Outcomes -->
             <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
-            <GoalInput v-if="Store.selectedConfig == null" title="Desired Outcomes" :changeable="true"
+            <GoalInput title="Desired Outcomes" :changeable="true"
                        :hideHeader="true"
                        :selection="Store.patient.goals"
                        @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
-            <div v-else>
-              <NodeInputCompare title="Desired Outcomes" :name2="Store.selectedConfig.name"
-                                :selection="Store.patient.goals"
-                                :selection2="Store.selectedConfig.config.patient.goals" :changeable="false"/>
-            </div>
 
             <!-- Intervention Input -->
             <div>
               <h3 class="text-left">{{ $t("Interventions") }}:</h3>
               <TherapyInput/>
 
-              <!--<div class="flex  justify-content-between align-center">
-                <h3 class="text-left">{{ $t("DecisionRatings") }}:</h3>
-                          <Button :label="$t('ShowMore')" @click="showLocal = true" ></Button>
-              </div> -->
-
-              <!--    compare view  -->
-              <div v-if="Store.selectedConfig">
-                <h3> {{ Store.selectedConfig.name }}:</h3>
-                <div v-if="Store.selectedConfig.config.options.selectedOption">
-                  <div class="b-2">
-                    <div v-for="o in Object.keys(Store.selectedConfig.config.options.selectedOption.option)" :key="o">
-                      {{ Store.labels[o] }}: {{ Store.selectedConfig.config.options.selectedOption.option[o] }}
-                    </div>
-                  </div>
-                  <div class="flex justify-content-center"
-                       v-for="goal in Object.keys(Store.selectedConfig.config.newGoals)"
-                       :field="goal" :header="goal" :key="goal">
-                    <div class="r-2">{{ goal }}</div>
-                    <div class="r-2">
-                      <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)]"
-                           color="teal"
-                           width="200"
-                           v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </TabPanel>
         </TabView>
@@ -102,7 +89,6 @@ import TherapyInput from "@/components/Therapy/therapy-input";
 import optionsTable from "@/components/Therapy/options-table"
 import bar from "@/components/visualisations/bar-vis";
 import GoalInput from "@/components/InputFields/goal-input";
-import NodeInputCompare from "@/components/InputFields/node-input-compare";
 import {useStore} from '@/store'
 
 export default {
@@ -112,8 +98,7 @@ export default {
     TherapyInput,
     optionsTable,
     bar,
-    GoalInput,
-    NodeInputCompare
+    GoalInput
   },
   setup() {
     const Store = useStore()
