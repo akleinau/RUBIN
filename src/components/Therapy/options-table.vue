@@ -77,7 +77,7 @@ export default {
     update() {
       if (this.Store.options.selectedOption === []) this.Store.explain.relevance = null
       else {
-        this.Store.calculateOption()
+        this.Store.calculateExplanations(this.Store.patient, this.Store.options, this.Store.explain)
       }
     },
     getGoalLabel(goal) {

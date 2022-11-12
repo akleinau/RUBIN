@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="flex justify-content-center"
-                 v-for="goal in Store.selectedConfig.config.patient.goals"
+                 v-for="goal in Store.patient.goals"
                  :field="goal" :header="goal" :key="goal.name">
               <div class="r-2">{{ getGoalLabel(goal) }}</div>
               <div class="r-2">

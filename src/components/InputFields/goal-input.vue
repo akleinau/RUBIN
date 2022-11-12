@@ -136,6 +136,9 @@ export default {
     deleteNode(node) {
       this.Store.deleteGoal(node)
       this.Store.calculate()
+      if (this.Store.selectedConfig) {
+              this.Store.calculate(true)
+      }
     },
     deleteNodeFromOverlay(node) {
       this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
@@ -146,6 +149,9 @@ export default {
     addNodes(nodes) {
       this.Store.addGoals(nodes)
       this.Store.calculate()
+      if (this.Store.selectedConfig) {
+              this.Store.calculate(true)
+      }
     }
   }
 }

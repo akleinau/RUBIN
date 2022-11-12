@@ -110,7 +110,7 @@ export default {
     getCompareGoalKeys() {
       if (this.Store.selectedConfig != null) {
         let goalnames = []
-        this.Store.selectedConfig.config.patient.goals.forEach(goal => {
+        this.Store.patient.goals.forEach(goal => {
           goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
         })
         return goalnames

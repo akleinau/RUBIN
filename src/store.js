@@ -64,23 +64,35 @@ export const useStore = defineStore('store', {
 
         },
         //calculate overall results & changes through therapy options
-        async calculate() {
-            if (this.patient.goals.length !== 0) {
+        async calculate(compare = false) {
+            let patient = this.patient
+            let options = this.options
+            let explain = this.explain
+            if (compare) {
+                patient = this.selectedConfig.config.patient
+                options = this.selectedConfig.config.options
+                explain = this.selectedConfig.config.explain
+            }
+
+
+            if (patient.goals.length !== 0) {
                 this.optionsLoading = true
                 this.explanationLoading = true
 
                 let evidences = {}
-                for (var ev in this.patient.evidence) {
-                    evidences[this.patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
+                for (var ev in patient.evidence) {
+                    evidences[patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
                 }
+
+                //use current patient goals in both current config and compare config
                 let goals = {}
                 for (var goal in this.patient.goals) {
                     goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
                 }
 
                 let targets = []
-                for (const target in this.patient.targets) {
-                    targets.push(this.patient.targets[target].name)
+                for (const target in patient.targets) {
+                    targets.push(patient.targets[target].name)
                 }
                 let gResponse = null
                 if (this.localNet) {
@@ -114,29 +126,36 @@ export const useStore = defineStore('store', {
                 }
 
                 let nodeDict = await gResponse.json();
-                if (this.patient.targets.length !== 0) {
-                    this.options.options = nodeDict.optionResults
+                if (patient.targets.length !== 0) {
+                    options.options = nodeDict.optionResults
                 } else {
-                    this.options.options = []
+                    options.options = []
                 }
-                this.options.likelyResult = [{
+                options.likelyResult = [{
                     option: {}, value: nodeDict.likelyResults.value,
                     goalValues: nodeDict.likelyResults.goalValues
                 }]
-                this.options.options.unshift(this.options.likelyResult[0])
-                this.options.selectedOption = this.options.likelyResult[0]
+                options.options.unshift(options.likelyResult[0])
+                if (!compare) { //don't overwrite the saved selected option when comparing
+                    options.selectedOption = options.likelyResult[0]
+                }
+                else {
+                    options.selectedOption = options.options.find(a => JSON.stringify(a.option) ===
+                        JSON.stringify(options.selectedOption.option))
+                                        console.log(options.options)
+                }
 
                 this.optionsLoading = false
-                this.calculateOption()
+                await this.calculateExplanations(patient, options, explain)
             }
         },
         //calculate explanations based on current option
-        async calculateOption() {
+        async calculateExplanations(patient, options, explain) {
             this.explanationLoading = true
 
             let evidences = {}
             for (var ev in this.patient.evidence) {
-                evidences[this.patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
+                evidences[patient.evidence[ev].name] = patient.evidence[ev].selected.name;
             }
 
             let goals = {}
@@ -155,7 +174,7 @@ export const useStore = defineStore('store', {
                         fileString: this.localNet.fileString,
                         fileFormat: this.localNet.fileFormat,
                         evidences: evidences,
-                        options: this.options.selectedOption.option,
+                        options: options.selectedOption.option,
                         goals: goals
                     })
                 });
@@ -168,16 +187,16 @@ export const useStore = defineStore('store', {
                     body: JSON.stringify({
                         network: this.network,
                         evidences: evidences,
-                        options: this.options.selectedOption.option,
+                        options: options.selectedOption.option,
                         goals: goals
                     })
                 });
             }
 
             let nodeDict = await gResponse.json();
-            this.explain.relevance = nodeDict.relevance
-            this.explain.states = nodeDict.nodes
-            this.explain.explanation = nodeDict.explanation
+            explain.relevance = nodeDict.relevance
+            explain.states = nodeDict.nodes
+            explain.explanation = nodeDict.explanation
             this.explanationLoading = false
         },
         //load network at the beginning from server or local file
@@ -301,6 +320,9 @@ export const useStore = defineStore('store', {
             }
             if (reload) {
                 this.calculate()
+                if (this.selectedConfig) {
+                    this.calculate(true)
+                }
             }
         },
         differentLists(a, b) {
