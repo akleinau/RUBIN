@@ -91,18 +91,18 @@ export default {
   },
   methods: {
     getGoalKeys() {
-      if (this.Store.newGoals != null) {
+      if (this.Store.patient.goals != null) {
         let goalnames = []
-        Object.keys(this.Store.newGoals).forEach(goal => {
-          goalnames.push(this.Store.labels[goal] + ": " + this.Store.newGoals[goal])
+        this.Store.patient.goals.forEach(goal => {
+          goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
         })
 
         return goalnames
       }
     },
     getGoalKeyNum() {
-      if (this.Store.newGoals != null) {
-        return (Object.keys(this.Store.newGoals)).length
+      if (this.Store.patient.goals != null) {
+        return this.Store.patient.goals.length
       } else {
         return 0
       }
@@ -110,8 +110,8 @@ export default {
     getCompareGoalKeys() {
       if (this.Store.selectedConfig != null) {
         let goalnames = []
-        Object.keys(this.Store.selectedConfig.config.newGoals).forEach(goal => {
-          goalnames.push(this.Store.labels[goal] + ": " + this.Store.selectedConfig.config.newGoals[goal])
+        this.Store.selectedConfig.config.patient.goals.forEach(goal => {
+          goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
         })
         return goalnames
       }

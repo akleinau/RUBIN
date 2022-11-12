@@ -29,9 +29,7 @@ export const useStore = defineStore('store', {
         labels: null,
 
         configurations: [],
-        selectedConfig: null,
-
-        newGoals: null, //helper property to let the data tables update TODO: replace
+        selectedConfig: null, //{name, config: {patient, explain, options}}
 
         optionsLoading: false,
         explanationLoading: false,
@@ -55,7 +53,6 @@ export const useStore = defineStore('store', {
             this.options.options = null
             this.options.selectedOption = null
             this.options.likelyResult = null
-            this.newGoals = null
 
             this.explain.relevance = null
             this.explain.states = null
@@ -66,6 +63,7 @@ export const useStore = defineStore('store', {
             await this.loadNodes(noPhase)
 
         },
+        //calculate overall results & changes through therapy options
         async calculate() {
             if (this.patient.goals.length !== 0) {
                 this.optionsLoading = true
@@ -128,11 +126,11 @@ export const useStore = defineStore('store', {
                 this.options.options.unshift(this.options.likelyResult[0])
                 this.options.selectedOption = this.options.likelyResult[0]
 
-                this.newGoals = goals
                 this.optionsLoading = false
                 this.calculateOption()
             }
         },
+        //calculate explanations based on current option
         async calculateOption() {
             this.explanationLoading = true
 
@@ -178,11 +176,11 @@ export const useStore = defineStore('store', {
 
             let nodeDict = await gResponse.json();
             this.explain.relevance = nodeDict.relevance
-            this.newGoals = goals
             this.explain.states = nodeDict.nodes
             this.explain.explanation = nodeDict.explanation
             this.explanationLoading = false
         },
+        //load network at the beginning from server or local file
         async loadNodes(noPhase = false) {
             let gResponse = null
             if (this.localNet) {

@@ -183,7 +183,6 @@ export default {
       this.Store.patient = configuration.config.patient
       this.Store.options = configuration.config.options
       this.Store.explain = configuration.config.explain
-      this.Store.newGoals = configuration.config.newGoals
       this.$refs.compareOverlay.toggle()
     },
     deleteConfig(name) {
@@ -195,8 +194,7 @@ export default {
         "config": {
           "patient": JSON.parse(JSON.stringify(this.Store.patient)),
           "options": JSON.parse(JSON.stringify(this.Store.options)),
-          "explain": JSON.parse(JSON.stringify(this.Store.explain)),
-          "newGoals": JSON.parse(JSON.stringify(this.Store.newGoals))
+          "explain": JSON.parse(JSON.stringify(this.Store.explain))
         }
       })
     },

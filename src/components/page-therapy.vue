@@ -29,14 +29,14 @@
               </div>
             </div>
             <div class="flex justify-content-center"
-                 v-for="goal in Object.keys(Store.selectedConfig.config.newGoals)"
-                 :field="goal" :header="goal" :key="goal">
-              <div class="r-2">{{ goal }}</div>
+                 v-for="goal in Store.selectedConfig.config.patient.goals"
+                 :field="goal" :header="goal" :key="goal.name">
+              <div class="r-2">{{ getGoalLabel(goal) }}</div>
               <div class="r-2">
-                <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)]"
+                <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)]"
                      color="teal"
                      width="200"
-                     v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal)].toFixed(2)*100 + '%'"></bar>
+                     v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)].toFixed(2)*100 + '%'"></bar>
               </div>
             </div>
           </div>
@@ -118,20 +118,12 @@ export default {
         this.Store.currentPhase = this.Store.phases[this.currentPhaseIndex]
         this.Store.phase_change()
       }
-    }
+    },
   },
   methods: {
-    getGoalForSummary() {
-      if (this.Store.newGoals != null && this.Store.options.selectedOption != null) {
-        let goalnames = []
-        Object.keys(this.Store.newGoals).forEach(goal => {
-          let percentage = this.Store.options.selectedOption.goalValues[goal] * 100
-          goalnames.push(this.Store.labels[goal] + " - " + this.Store.newGoals[goal] + ": " +
-              percentage.toFixed(0) + "%")
-        })
-        return goalnames
-      }
-    }
+    getGoalLabel(goal) {
+      return this.Store.labels[goal.name] + ": " + goal.selected.name
+    },
   }
 }
 </script>

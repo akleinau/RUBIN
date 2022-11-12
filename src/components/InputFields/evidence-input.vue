@@ -141,8 +141,6 @@ export default {
             })
           } else {
             foundNode.selectedCompare = (foundNode.selected.name === n.selected.name) ? '' : n.selected.name
-            console.log(foundNode.selected.name )
-            console.log(n.selected.name)
           }
         })
       }

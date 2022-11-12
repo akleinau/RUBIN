@@ -26,12 +26,12 @@
       </template>
     </Column>
 
-    <Column v-for="goal in getGoalKeys()" :field="goal" :header="getGoalLabel(goal)" :key="goal">
+    <Column v-for="goal in getGoalKeys()" :field="goal.name" :header="getGoalLabel(goal)" :key="goal.name">
       <template #body="slotProps">
-        <bar :value="slotProps.data.goalValues[String(goal)]" color="teal" width="200"
-             v-tooltip="(slotProps.data.goalValues[String(goal)]*100).toFixed(0) + '%'"></bar>
+        <bar :value="slotProps.data.goalValues[String(goal.name)]" color="teal" width="200"
+             v-tooltip="(slotProps.data.goalValues[String(goal.name)]*100).toFixed(0) + '%'"></bar>
         <div v-if="slotProps.data === Store.options.selectedOption" style="fontSize: 1.5rem">
-          {{ (slotProps.data.goalValues[String(goal)] * 100).toFixed(0) }} %
+          {{ (slotProps.data.goalValues[String(goal.name)] * 100).toFixed(0) }} %
         </div>
       </template>
     </Column>
@@ -62,8 +62,8 @@ export default {
   },
   methods: {
     getGoalKeys() {
-      if (this.Store.newGoals != null) {
-        return Object.keys(this.Store.newGoals)
+      if (this.Store.patient.goals != null) {
+        return this.Store.patient.goals
       }
     },
     getOptionLabel(option) {
@@ -81,7 +81,7 @@ export default {
       }
     },
     getGoalLabel(goal) {
-      return this.Store.labels[goal] + ": " + this.Store.newGoals[goal]
+      return this.Store.labels[goal.name] + ": " + goal.selected.name
     },
     deselect() {
       this.Store.options.selectedOption = this.Store.options.likelyResult[0]
