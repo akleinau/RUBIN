@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DataTable class=" p-datatable-sm" :value="Store.explain.relevance" dataKey="node_name"
+    <DataTable class=" p-datatable-sm" :value="Store.explain.relevance"
                :rowClass="isTherapyRow">
       <ColumnGroup type="header">
         <Row>
@@ -9,7 +9,7 @@
           <Column header="Influence on Outcome" :colspan="getGoalKeyNum()"></Column>
         </Row>
         <Row>
-          <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal"/>
+          <Column v-for="goal in goalnames" :field="goal" :header="goal" :key="goal"/>
         </Row>
       </ColumnGroup>
 
@@ -24,7 +24,7 @@
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
         </template>
       </Column>
-      <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
+      <Column v-for="goal in goalnames" :field="goal" :header="goal" :key="goal">
         <template #body="slotProps">
           <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
                        v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
@@ -38,15 +38,15 @@
       <DataTable class="p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
                  :rowClass="isTherapyRow">
         <ColumnGroup type="header">
-        <Row>
-          <Column header="" field="node_name" :rowspan="2"/>
-          <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
-          <Column header="Influence on outcome" :colspan="getGoalKeyNum()"></Column>
-        </Row>
-        <Row>
-          <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal"/>
-        </Row>
-      </ColumnGroup>
+          <Row>
+            <Column header="" field="node_name" :rowspan="2"/>
+            <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
+            <Column header="Influence on outcome" :colspan="getGoalKeyNum()"></Column>
+          </Row>
+          <Row>
+            <Column v-for="goal in compareGoalnames" :field="goal" :header="goal" :key="goal"/>
+          </Row>
+        </ColumnGroup>
         <Column :header="$t('Node')" field="node_name">
           <template #body="slotProps">
             {{ Store.labels[slotProps.data.node_name] }}: {{ getCompareState(slotProps.data.node_name) }}
@@ -58,7 +58,7 @@
                  v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
-        <Column v-for="goal in getCompareGoalKeys()" :field="goal" :header="goal" :key="goal">
+        <Column v-for="goal in compareGoalnames" :field="goal" :header="goal" :key="goal">
           <template #body="slotProps">
             <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
                          v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
@@ -86,34 +86,38 @@ export default {
   },
   data() {
     return {
-      showLocal: false
+      showLocal: false,
     }
   },
-  methods: {
-    getGoalKeys() {
-      if (this.Store.patient.goals != null) {
-        let goalnames = []
+  computed: {
+    goalnames: function () {
+      let goalnames = []
+      if (this.Store.patient.goals != null && this.Store.explain.relevance != null) {
         this.Store.patient.goals.forEach(goal => {
           goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
         })
-
-        return goalnames
       }
+      return goalnames
     },
+    //does the same as goalnames, but updates when selectedConfig is loaded
+    compareGoalnames: function () {
+      let goalnames = []
+      if (this.Store.selectedConfig != null) {
+        if (this.Store.patient.goals != null && this.Store.selectedConfig.config.explain.relevance != null) {
+        this.Store.patient.goals.forEach(goal => {
+          goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
+        })
+      }
+      }
+      return goalnames
+    }
+  },
+  methods: {
     getGoalKeyNum() {
       if (this.Store.patient.goals != null) {
         return this.Store.patient.goals.length
       } else {
         return 0
-      }
-    },
-    getCompareGoalKeys() {
-      if (this.Store.selectedConfig != null) {
-        let goalnames = []
-        this.Store.patient.goals.forEach(goal => {
-          goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
-        })
-        return goalnames
       }
     },
     getDirectionTooltip(number) {
