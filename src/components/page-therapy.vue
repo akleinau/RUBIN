@@ -48,6 +48,7 @@
           <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
           <optionsTable/>
         </div>
+        <br>
 
         <!-- phases -->
         <TabView v-model:active-index="currentPhaseIndex">

@@ -21,7 +21,13 @@
   </DataTable>
   <!--    input dialog  -->
   <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
-          v-if="changeable" @hide="addNodesFromOverlay()">
+          v-if="changeable" :closable="false">
+    <template #header>
+      <div class="flex justify-content-end w-full">
+        <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
+        <Button class="p-button-secondary" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
+      </div>
+    </template>
     <DataTable :value="overlayNodes" class="p-datatable-sm"
                v-model:filters="filters" filterDisplay="menu" data-key="name">
       <template #header>
@@ -137,7 +143,7 @@ export default {
       this.Store.deleteGoal(node)
       this.Store.calculate()
       if (this.Store.selectedConfig) {
-              this.Store.calculate(true)
+        this.Store.calculate(true)
       }
     },
     deleteNodeFromOverlay(node) {
@@ -150,8 +156,12 @@ export default {
       this.Store.addGoals(nodes)
       this.Store.calculate()
       if (this.Store.selectedConfig) {
-              this.Store.calculate(true)
+        this.Store.calculate(true)
       }
+    },
+    cancelOverlay() {
+      this.nodesToAdd = []
+      this.overlay = false
     }
   }
 }

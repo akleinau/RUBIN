@@ -6,7 +6,7 @@
         <Row>
           <Column header="" field="node_name" :rowspan="2"/>
           <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
-          <Column header="Influence on outcome" :colspan="getGoalKeyNum()"></Column>
+          <Column header="Influence on Outcome" :colspan="getGoalKeyNum()"></Column>
         </Row>
         <Row>
           <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal"/>

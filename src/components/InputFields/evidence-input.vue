@@ -7,7 +7,7 @@
       <b> {{ slotProps.data.group.substr(2) }} </b>
     </template>
     <Column field="group" header="group"/>
-    <Column field="name" style="padding: 0; border: 0;" >
+    <Column field="name" style="padding: 0; border: 0;">
 
       <template #header>
             <span class="p-input-icon-left">
@@ -20,26 +20,34 @@
         {{ Store.labels[slotProps.data.name] }}
       </template>
     </Column>
-    <Column field="value" class="optionCol" >
+    <Column field="value" class="optionCol">
       <template #body="slotProps">
         <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
                   placeholder="" @change="onNodeChange(slotProps.data)"
                   class="p-0 m-0">
         </Dropdown>
-        <Button v-if="slotProps.data.selected" icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
+        <Button v-if="slotProps.data.selected" icon="pi pi-times"
+                class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
       </template>
     </Column>
-    <Column class="optionCol" >
+    <Column class="optionCol">
       <template #body="slotProps">
         <div v-if="slotProps.data.selectedCompare === ''"></div>
-        <div v-else> {{ Store.selectedConfig.name }}: {{ slotProps.data.selectedCompare}}</div>
+        <div v-else> {{ Store.selectedConfig.name }}: {{ slotProps.data.selectedCompare }}</div>
       </template>
     </Column>
   </DataTable>
   <!--    input dialog  -->
   <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
-          @hide="addNodesFromOverlay()">
+          :closable="false">
+    <template #header>
+      <div class="flex justify-content-end w-full">
+        <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
+        <Button class="p-button-secondary" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
+      </div>
+    </template>
+    <br>
     <DataTable :value="overlayNodes" rowGroupMode="subheader" groupRowsBy="group" class="p-datatable-sm"
                sortMode="single" sortField="group" :sortOrder="1"
                v-model:filters="filters" filterDisplay="menu" data-key="name">
@@ -187,6 +195,10 @@ export default {
     addNodes(nodes) {
       this.Store.addEvidences(nodes)
       this.Store.calculate()
+    },
+    cancelOverlay() {
+      this.nodesToAdd = []
+      this.overlay = false
     }
   }
 }
@@ -212,7 +224,6 @@ export default {
   padding: 0;
   border: 0;
 }
-
 
 .NoHeader ::v-deep(.p-datatable-thead) {
   display: None !important
