@@ -1,21 +1,14 @@
 <template>
-  <DataTable class="p-datatable-sm" id="table" :value="table"
+  <DataTable class="p-datatable-sm NoHeader" id="table" :value="table"
              rowGroupMode="subheader" groupRowsBy="group"
              sortMode="single" sortField="group" :sortOrder="1">
     <template #groupheader="slotProps">
       <br>
       <b> {{ slotProps.data.group.substr(2) }} </b>
     </template>
-    <Column field="group" header="group"/>
+
+    <Column field="group" />
     <Column field="name" style="padding: 0; border: 0;">
-
-      <template #header>
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"/>
-              <InputText v-model="filters['name'].name" placeholder="Search..." style="width: 200%"/>
-            </span>
-      </template>
-
       <template #body="slotProps">
         {{ Store.labels[slotProps.data.name] }}
       </template>
@@ -133,8 +126,9 @@ export default {
     },
     table: function () {
       let table = JSON.parse(JSON.stringify(this.Store.patient.evidence))
-      table.forEach(n => n.selectedCompare = '')
+
       if (this.Store.selectedConfig) {
+        table.forEach(n => n.selectedCompare = '-')
         let compareEvidence = this.Store.selectedConfig.config.patient.evidence
 
         compareEvidence.forEach(n => {
@@ -151,6 +145,9 @@ export default {
             foundNode.selectedCompare = (foundNode.selected.name === n.selected.name) ? '' : n.selected.name
           }
         })
+      }
+      else {
+        table.forEach(n => n.selectedCompare = '')
       }
 
       return table
