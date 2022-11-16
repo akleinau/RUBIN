@@ -15,7 +15,12 @@
 
       <Column :header="$t('Node')" field="node_name" :rowspan="2">
         <template #body="slotProps">
-          {{ Store.labels[slotProps.data.node_name] }}: {{ getState(slotProps.data.node_name) }}
+          <div :class="{ red: isDifferentName(slotProps.data) }">
+            {{ Store.labels[slotProps.data.node_name] }}:
+            <span :class="{red: isDifferentState(slotProps.data)}">{{
+                getState(slotProps.data.node_name)
+              }} </span>
+          </div>
         </template>
       </Column>
       <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2">
@@ -34,6 +39,9 @@
 
     <!--    compare view  -->
     <div v-if="Store.selectedConfig !== null">
+      <br> <br>
+      <span style="color:red">Red</span> nodes are changed.
+
       <h3> {{ Store.selectedConfig.name }}:</h3>
       <DataTable class="p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
                  :rowClass="isTherapyRow">
@@ -49,7 +57,12 @@
         </ColumnGroup>
         <Column :header="$t('Node')" field="node_name">
           <template #body="slotProps">
-            {{ Store.labels[slotProps.data.node_name] }}: {{ getCompareState(slotProps.data.node_name) }}
+            <div :class="{ red: isDifferentName(slotProps.data, true) }">
+              {{ Store.labels[slotProps.data.node_name] }}:
+              <span :class="{red: isDifferentState(slotProps.data, true)}">{{
+                  getCompareState(slotProps.data.node_name)
+                }} </span>
+            </div>
           </template>
         </Column>
         <Column :header="$t('Relevance')" field="overall_relevance">
@@ -104,10 +117,10 @@ export default {
       let goalnames = []
       if (this.Store.selectedConfig != null) {
         if (this.Store.patient.goals != null && this.Store.selectedConfig.config.explain.relevance != null) {
-        this.Store.patient.goals.forEach(goal => {
-          goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
-        })
-      }
+          this.Store.patient.goals.forEach(goal => {
+            goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
+          })
+        }
       }
       return goalnames
     }
@@ -159,6 +172,29 @@ export default {
         if (target.name === row.node_name) rowClass = "therapy"
       })
       return rowClass
+    },
+    isDifferentName(row, compare = false) {
+      if (compare) {
+        return !this.Store.explain.relevance.find(a => a.node_name === row.node_name);
+      }
+      if (this.Store.selectedConfig !== null) {
+        return !this.Store.selectedConfig.config.explain.relevance.find(a => a.node_name === row.node_name)
+      }
+      return false
+    },
+    isDifferentState(row, compare = false) {
+      if (compare) {
+        let node = this.Store.explain.relevance.find(a => a.node_name === row.node_name)
+        if (node === undefined) return true
+        return this.getState(node.node_name) !== this.getCompareState(row.node_name);
+      }
+      if (this.Store.selectedConfig !== null) {
+        let node = this.Store.selectedConfig.config.explain.relevance.find(a => a.node_name === row.node_name)
+        if (node === undefined) return true
+        return this.getState(row.node_name) !== this.getCompareState(node.node_name);
+      }
+      return false
+
     }
   }
 }
@@ -180,6 +216,10 @@ export default {
 
 img {
   width: 100%;
+}
+
+.red {
+  color: red;
 }
 
 </style>
