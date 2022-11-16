@@ -21,7 +21,7 @@ export const useStore = defineStore('store', {
         //explaining calculations for the chosen option
         explain: {
             explanation: null,
-            relevance: null,
+            relevance: null, //{node_name, overall_relevance, relevancies[goal]}
             states: null,
         },
 

@@ -28,15 +28,19 @@
                 {{ Store.labels[o] }}: {{ Store.selectedConfig.config.options.selectedOption.option[o] }}
               </div>
             </div>
-            <div class="flex justify-content-center"
-                 v-for="goal in Store.patient.goals"
-                 :field="goal" :header="goal" :key="goal.name">
-              <div class="r-2">{{ getGoalLabel(goal) }}</div>
-              <div class="r-2">
-                <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)]"
-                     color="teal"
-                     width="200"
-                     v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)].toFixed(2)*100 + '%'"></bar>
+            <br>
+            <div class="flex flex-row justify-content-center gap-3">
+              <div class="flex justify-content-center flex-column"
+                   v-for="goal in Store.patient.goals"
+                   :field="goal" :header="goal" :key="goal.name">
+                <div class="r-2">{{ getGoalLabel(goal) }}</div>
+                <div class="r-2 m-1">
+                  <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)]"
+                       color="teal"
+                       width="200"
+                       v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)].toFixed(2)*100 + '%'"></bar>
+                  {{ Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)].toFixed(2) * 100 + '%' }}
+                </div>
               </div>
             </div>
           </div>
