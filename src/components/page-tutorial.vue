@@ -1,14 +1,4 @@
 <template>
-  <Dialog v-if="i === 0" v-model:visible="display" position="bottom" :header="$t('DesiredOutcomes')" :closable="false"
-          style="width:80%">
-    {{ $t("Tutorial1a") }}
-    <br>
-    {{ $t("Tutorial1b") }}
-    <template #footer>
-      <Button class="mx-2 p-button-secondary" icon="pi pi-times" :label="$t('close')" @click="close"></Button>
-      <Button class="mx-2" :label="$t('next')" @click="next"></Button>
-    </template>
-  </Dialog>
   <Dialog v-if="i === 1" v-model:visible="display" position="bottom" :header="$t('Evidence')" :closable="false"
           style="width:80%">
     {{ $t("Tutorial2") }}
@@ -49,7 +39,7 @@ export default {
   data() {
     return {
       display: false,
-      i: 0
+      i: 1
     }
   },
   setup() {
@@ -74,7 +64,7 @@ export default {
   methods: {
     start() {
       this.display = true //makes sure dialog is rendered on top of interface
-      this.i = 0
+      this.i = 1
       this.sendBlock()
     },
     close() {
@@ -83,7 +73,7 @@ export default {
     },
 
     prev() {
-      this.i === 0 ? this.i = 3 : this.i--;
+      this.i === 1 ? this.i = 3 : this.i--;
       this.sendBlock()
 
     },
@@ -94,7 +84,6 @@ export default {
     },
     async sendBlock() {
       let newBlock = {
-        "goals": this.i !== 0 && this.i !== 4,
         "evidence": this.i !== 1 && this.i !== 4,
         "options": this.i !== 2 && this.i !== 4,
         "explain": this.i !== 3 && this.i !== 4
