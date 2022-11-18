@@ -19,34 +19,6 @@
     <template #content>
       <ScrollPanel style="height:100%">
 
-        <!--    compare view  -->
-        <div v-if="Store.selectedConfig">
-          <h3> {{ Store.selectedConfig.name }}:</h3>
-          <div v-if="Store.selectedConfig.config.options.selectedOption">
-            <div class="b-2">
-              <div v-for="o in Object.keys(Store.selectedConfig.config.options.selectedOption.option)" :key="o">
-                {{ Store.labels[o] }}: {{ Store.selectedConfig.config.options.selectedOption.option[o] }}
-              </div>
-            </div>
-            <br>
-            <div class="flex flex-row justify-content-center gap-3">
-              <div class="flex justify-content-center flex-column"
-                   v-for="goal in Store.patient.goals"
-                   :field="goal" :header="goal" :key="goal.name">
-                <div class="r-2">{{ getGoalLabel(goal) }}</div>
-                <div class="r-2 m-1">
-                  <bar :value="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)]"
-                       color="teal"
-                       width="200"
-                       v-tooltip="Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)].toFixed(2)*100 + '%'"></bar>
-                  {{ Store.selectedConfig.config.options.selectedOption.goalValues[String(goal.name)].toFixed(2) * 100 + '%' }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <br>
-
         <!-- decision table -->
         <div>
           <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
@@ -92,7 +64,6 @@
 <script>
 import TherapyInput from "@/components/Therapy/therapy-input";
 import optionsTable from "@/components/Therapy/options-table"
-import bar from "@/components/visualisations/bar-vis";
 import GoalInput from "@/components/InputFields/goal-input";
 import {useStore} from '@/store'
 
@@ -102,7 +73,6 @@ export default {
   components: {
     TherapyInput,
     optionsTable,
-    bar,
     GoalInput
   },
   setup() {

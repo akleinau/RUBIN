@@ -136,13 +136,19 @@ export const useStore = defineStore('store', {
                     goalValues: nodeDict.likelyResults.goalValues
                 }]
                 options.options.unshift(options.likelyResult[0])
-                if (!compare) { //don't overwrite the saved selected option when comparing
-                    options.selectedOption = options.likelyResult[0]
+
+                //don't overwrite the saved selected option
+                if (options.selectedOption) {
+                    let oldOption = options.options.find(a => JSON.stringify(a.option) ===
+                        JSON.stringify(options.selectedOption.option))
+                    if (oldOption) {
+                        options.selectedOption = oldOption
+                    } else {
+                        options.selectedOption = options.likelyResult[0]
+                    }
                 }
                 else {
-                    options.selectedOption = options.options.find(a => JSON.stringify(a.option) ===
-                        JSON.stringify(options.selectedOption.option))
-                                        console.log(options.options)
+                    options.selectedOption = options.likelyResult[0]
                 }
 
                 this.optionsLoading = false

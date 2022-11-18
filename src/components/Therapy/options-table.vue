@@ -1,28 +1,35 @@
 <template>
-  <DataTable :value="Store.options.options" class="p-datatable-sm" :autoLayout="true" :rowClass="rowClass"
-             :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="Store.options.selectedOption"
+  <DataTable :value="table" class="p-datatable-sm" :autoLayout="true" :rowClass="rowClass"
+             :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
+             rowGroupMode="subheader" groupRowsBy="config_name"
              @rowSelect="update" @rowUnselect="update">
+
+    <template #groupheader="slotProps">
+      <br>
+      <b>{{ slotProps.data.config_name }}:</b>
+    </template>
 
     <Column>
       <template #body="slotProps">
-        <div v-if="slotProps.index > 0">
-          {{ slotProps.index }}.
+        <div v-if="slotProps.index > minIndex">
+          {{ slotProps.index - minIndex }}.
         </div>
       </template>
     </Column>
 
     <Column field="option">
       <template #body="slotProps">
-        <div v-for="o in Object.keys(slotProps.data.option)" :key="o">
+        <div v-if="Object.keys(slotProps.data.option).length === 0"><b>overall</b></div>
+        <div v-else v-for="o in Object.keys(slotProps.data.option)" :key="o">
           {{ Store.labels[o] }}: {{ slotProps.data.option[o] }}
         </div>
-        <div v-if="slotProps.index===0"><b>overall</b></div>
+
       </template>
     </Column>
 
     <Column>
       <template #body="slotProps">
-        <i v-if="slotProps.index === 1" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
+        <i v-if="slotProps.index === minIndex+1" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
       </template>
     </Column>
 
@@ -60,6 +67,29 @@ export default {
     const Store = useStore()
     return {Store}
   },
+  computed: {
+    table: function () {
+      let table = JSON.parse(JSON.stringify(this.Store.options.options))
+      if (table !== null) {
+        table.forEach(n => n.config_name = "current")
+        if (this.Store.selectedConfig) {
+          let compare = this.Store.selectedConfig.config.options.selectedOption
+          compare.config_name = this.Store.selectedConfig.name
+          table.unshift(compare)
+        }
+      }
+      this.updateSelected(table)
+      return table
+    },
+    minIndex: function () {
+      return this.Store.selectedConfig ? 1 : 0;
+    }
+  },
+  data() {
+    return {
+      selectedOption: []
+    }
+  },
   methods: {
     getGoalKeys() {
       if (this.Store.patient.goals != null) {
@@ -74,10 +104,41 @@ export default {
       })
       return label
     },
-    update() {
-      if (this.Store.options.selectedOption === []) this.Store.explain.relevance = null
-      else {
-        this.Store.calculateExplanations(this.Store.patient, this.Store.options, this.Store.explain)
+    update(event) {
+      if (this.table !== null && this.table !== undefined) {
+
+        //in case someone selects an option of compare view
+        if (event.index < this.minIndex) {
+          this.selectedOption = this.table[this.minIndex]
+        }
+
+        if (this.selectedOption.length === 0) {
+          this.selectedOption = this.table[this.minIndex]
+        }
+
+        let newOption = this.Store.options.options.find(n =>
+            this.selectedOption.config_name === "current" &&
+            JSON.stringify(n.option) === JSON.stringify(this.selectedOption.option))
+        if (newOption !== this.Store.options.selectedOption) {
+          this.Store.options.selectedOption = newOption
+          this.Store.calculateExplanations(this.Store.patient, this.Store.options, this.Store.explain)
+        }
+      }
+    },
+    updateSelected(table) {
+      if (table !== null && table !== undefined) {
+        if (this.selectedOption) {
+          let newOption = table.find(n =>
+              n.config_name === "current" &&
+              JSON.stringify(n.option) === JSON.stringify(this.selectedOption.option))
+          if (newOption) {
+            this.selectedOption = newOption
+          } else {
+            this.selectedOption = table[this.Store.selectedConfig ? 1 : 0]
+          }
+        } else {
+          this.selectedOption = table[this.Store.selectedConfig ? 1 : 0]
+        }
       }
     },
     getGoalLabel(goal) {
@@ -88,7 +149,7 @@ export default {
       this.update()
     },
     rowClass(data) {
-      return Object.keys(data.option).length === 0 ? 'overall' : null;
+      return Object.keys(data.option).length === 0 && data.config_name === "current" ? 'overall' : null;
     },
   }
 }
