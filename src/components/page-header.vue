@@ -18,10 +18,6 @@
   <OverlayPanel ref="networkOverlay" :header="$t('NetworkDescription')" style="width: 50%" :modal="true">
     {{ Store.description }}
   </OverlayPanel>
-  <OverlayPanel ref="compareOverlay" style="width: 50%">
-    <Compare @saveConfig="saveConfig($event)" :configurations="Store.configurations" @compareTo="compareTo($event)"
-             @load="load($event)" @deleteConfig="deleteConfig($event)"/>
-  </OverlayPanel>
 
   <OverlayPanel ref="langOverlay">
     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale"
@@ -32,7 +28,6 @@
 
 <script>
 import Feedback from "@/components/Header/send-feedback";
-import Compare from "@/components/Header/compare-configs";
 import LoadPatient from "@/components/Header/load-patient";
 import {useStore} from '@/store'
 import {PrimeIcons} from 'primevue/api';
@@ -42,7 +37,6 @@ export default {
   emits: ["changePage", "loadPatient", "exportCSV"],
   components: {
     Feedback,
-    Compare,
     LoadPatient
   },
   setup() {
@@ -111,12 +105,11 @@ export default {
         },
         {
           key: "savedConfigurations",
-          label: this.$t("compare"),
+          label: "start comparing",
           icon: PrimeIcons.BOOKMARK,
-          command: (event) => {
-            this.$refs.compareOverlay.toggle(event.originalEvent)
-          },
-          items: []
+          command: () => {
+            this.startComparing()
+          }
         },
         {
           label: "Help",
@@ -159,46 +152,33 @@ export default {
     reset() {
       this.Store.reset()
     },
-    compareTo(name) {
+    startComparing() {
+      this.Store.selectedConfig = {
+        "name": "compare",
+        "config": {
+          "patient": JSON.parse(JSON.stringify(this.Store.patient)),
+          "options": JSON.parse(JSON.stringify(this.Store.options)),
+          "explain": JSON.parse(JSON.stringify(this.Store.explain))
+        }
+      }
+
+      //change header
       let configItem = this.items.find(a => a.key === "savedConfigurations")
-      configItem.label = this.$t("ComparingTo") + name
+      configItem.label = "stop comparing"
       configItem.icon = "pi pi-fw pi-times"
       configItem.command = () => {
         this.stopComparing()
       }
-      this.Store.selectedConfig = this.Store.configurations.find(a => a.name === name)
       this.$refs.compareOverlay.toggle()
     },
     stopComparing() {
       let configItem = this.items.find(a => a.key === "savedConfigurations")
-      configItem.label = this.$t("Compare")
+      configItem.label = "start comparing"
       configItem.icon = PrimeIcons.BOOKMARK
       configItem.command = (event) => {
         this.$refs.compareOverlay.toggle(event.originalEvent)
       }
       this.Store.selectedConfig = null
-    },
-    load(name) {
-      let configuration = this.Store.configurations.find(a => a.name === name)
-      this.Store.patient = configuration.config.patient
-      this.Store.options = configuration.config.options
-      this.Store.explain = configuration.config.explain
-      this.Store.newGoals = configuration.config.newGoals
-      this.$refs.compareOverlay.toggle()
-    },
-    deleteConfig(name) {
-      this.Store.configurations = this.Store.configurations.filter(a => a.name !== name)
-    },
-    saveConfig(name) {
-      this.Store.configurations.push({
-        "name": name,
-        "config": {
-          "patient": JSON.parse(JSON.stringify(this.Store.patient)),
-          "options": JSON.parse(JSON.stringify(this.Store.options)),
-          "explain": JSON.parse(JSON.stringify(this.Store.explain)),
-          "newGoals": JSON.parse(JSON.stringify(this.Store.newGoals))
-        }
-      })
     },
     sendFeedback() {
       this.showFeedback = false
@@ -210,10 +190,6 @@ export default {
       this.items.forEach(a => {
         a.label = this.$t(a.key)
       })
-    },
-    openLoadForm(event) {
-      console.log(event)
-      this.$refs.panel.toggle(event)
     },
     loadPatient(event) {
       this.$refs.loadOverlay.toggle(event)

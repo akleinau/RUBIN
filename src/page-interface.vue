@@ -10,7 +10,7 @@
     <div class=" grid flex flex-grow-1 h-full overflow-hidden relative">
 
       <BlockUI class="col-3 flex-column h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
-        <EvidenceInput class="h-full"/>
+        <Evidence class="h-full"/>
       </BlockUI>
 
       <BlockUI class="col h-full" :blocked="block.options">
@@ -30,7 +30,7 @@
 import Header from "./components/page-header";
 import Explanation from "./components/page-explanation";
 import Therapy from "@/components/page-therapy";
-import EvidenceInput from "@/components/InputFields/evidence-input";
+import Evidence from "@/components/page-evidence";
 import tutorial from "@/components/page-tutorial";
 import {useStore} from '@/store'
 
@@ -41,7 +41,7 @@ export default {
     Header,
     Explanation,
     Therapy,
-    EvidenceInput,
+    Evidence,
     tutorial
   },
   props: [

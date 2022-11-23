@@ -23,7 +23,13 @@
 
     <!--    input dialog  -->
     <Dialog header="  " v-model:visible="overlay" style="width:80%; height:90%; background:white" :modal="true"
-            @hide="addTargetsFromOverlay()">
+    :closable="false">
+      <template #header>
+      <div class="flex justify-content-end w-full">
+        <Button class="mr-2" label="add" icon="pi pi-check" @click="addTargetsFromOverlay()"/>
+        <Button class="p-button-secondary" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
+      </div>
+    </template>
       <Listbox v-model="selected" class="t-2" :options="overlayNodes" optionLabel="name"
                emptyMessage="" :multiple="true"
                :filter="true" filterPlaceholder="Search">
@@ -74,6 +80,10 @@ export default {
       this.Store.deleteTarget(node)
       this.Store.calculate()
     },
+    cancelOverlay() {
+      this.selected = []
+      this.overlay = false
+    }
   }
 }
 </script>

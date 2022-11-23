@@ -156,6 +156,7 @@ export default {
     },
     getCardClass() {
       if (this.Store.options.selectedOption === null) return null
+      if (this.Store.options.selectedOption === undefined) return null
       return (Object.entries(this.Store.options.selectedOption.option).length === 0) ? null : "treatmentCard"
     }
   }

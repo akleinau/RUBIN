@@ -1,21 +1,26 @@
 <template>
-  <div class="flex p-dir-col">
-    <DataTable class="col p-datatable-sm" :value="Store.explain.relevance" dataKey="node_name"
+  <div>
+    <DataTable class=" p-datatable-sm" :value="Store.explain.relevance"
                :rowClass="isTherapyRow">
       <ColumnGroup type="header">
         <Row>
           <Column header="" field="node_name" :rowspan="2"/>
           <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
-          <Column header="Influence on outcome" :colspan="getGoalKeyNum()"></Column>
+          <Column header="Influence on Outcome" :colspan="getGoalKeyNum()"></Column>
         </Row>
         <Row>
-          <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal"/>
+          <Column v-for="goal in goalnames" :field="goal" :header="goal" :key="goal"/>
         </Row>
       </ColumnGroup>
 
       <Column :header="$t('Node')" field="node_name" :rowspan="2">
         <template #body="slotProps">
-          {{ Store.labels[slotProps.data.node_name] }}: {{ getState(slotProps.data.node_name) }}
+          <div :class="{ red: isDifferentName(slotProps.data) }">
+            {{ Store.labels[slotProps.data.node_name] }}:
+            <span :class="{red: isDifferentState(slotProps.data)}">{{
+                getState(slotProps.data.node_name)
+              }} </span>
+          </div>
         </template>
       </Column>
       <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2">
@@ -24,7 +29,7 @@
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
         </template>
       </Column>
-      <Column v-for="goal in getGoalKeys()" :field="goal" :header="goal" :key="goal">
+      <Column v-for="goal in goalnames" :field="goal" :header="goal" :key="goal">
         <template #body="slotProps">
           <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
                        v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
@@ -33,13 +38,31 @@
     </DataTable>
 
     <!--    compare view  -->
-    <div class="col" v-if="Store.selectedConfig !== null">
+    <div v-if="Store.selectedConfig !== null">
+      <br> <br>
+      <span style="color:red">Red</span> nodes are changed.
+
       <h3> {{ Store.selectedConfig.name }}:</h3>
-      <DataTable class="col p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
+      <DataTable class="p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
                  :rowClass="isTherapyRow">
+        <ColumnGroup type="header">
+          <Row>
+            <Column header="" field="node_name" :rowspan="2"/>
+            <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
+            <Column header="Influence on outcome" :colspan="getGoalKeyNum()"></Column>
+          </Row>
+          <Row>
+            <Column v-for="goal in compareGoalnames" :field="goal" :header="goal" :key="goal"/>
+          </Row>
+        </ColumnGroup>
         <Column :header="$t('Node')" field="node_name">
           <template #body="slotProps">
-            {{ Store.labels[slotProps.data.node_name] }}: {{ getCompareState(slotProps.data.node_name) }}
+            <div :class="{ red: isDifferentName(slotProps.data, true) }">
+              {{ Store.labels[slotProps.data.node_name] }}:
+              <span :class="{red: isDifferentState(slotProps.data, true)}">{{
+                  getCompareState(slotProps.data.node_name)
+                }} </span>
+            </div>
           </template>
         </Column>
         <Column :header="$t('Relevance')" field="overall_relevance">
@@ -48,7 +71,7 @@
                  v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
           </template>
         </Column>
-        <Column v-for="goal in getCompareGoalKeys()" :field="goal" :header="goal" :key="goal">
+        <Column v-for="goal in compareGoalnames" :field="goal" :header="goal" :key="goal">
           <template #body="slotProps">
             <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
                          v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
@@ -76,37 +99,38 @@ export default {
   },
   data() {
     return {
-      showLocal: false
+      showLocal: false,
+    }
+  },
+  computed: {
+    goalnames: function () {
+      let goalnames = []
+      if (this.Store.patient.goals != null && this.Store.explain.relevance != null) {
+        this.Store.patient.goals.forEach(goal => {
+          goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
+        })
+      }
+      return goalnames
+    },
+    //does the same as goalnames, but updates when selectedConfig is loaded
+    compareGoalnames: function () {
+      let goalnames = []
+      if (this.Store.selectedConfig != null) {
+        if (this.Store.patient.goals != null && this.Store.selectedConfig.config.explain.relevance != null) {
+          this.Store.patient.goals.forEach(goal => {
+            goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
+          })
+        }
+      }
+      return goalnames
     }
   },
   methods: {
-    getGoalKeys() {
-      if (this.Store.newGoals != null) {
-        let goalnames = []
-        Object.keys(this.Store.newGoals).forEach(goal => {
-          goalnames.push(this.Store.labels[goal] + ": " + this.Store.newGoals[goal])
-        })
-
-        return goalnames
-      }
-    },
     getGoalKeyNum() {
-      if (this.Store.newGoals != null) {
-        return (Object.keys(this.Store.newGoals)).length
+      if (this.Store.patient.goals != null) {
+        return this.Store.patient.goals.length
       } else {
         return 0
-      }
-    },
-    getCompareGoalKeys() {
-      if (this.Store.selectedConfig != null) {
-        let goalnames = []
-        Object.keys(this.Store.selectedConfig.config.newGoals).forEach(goal => {
-          goalnames.push(this.Store.labels[goal] + ": " + this.Store.selectedConfig.config.newGoals[goal])
-        })
-        console.log(this.Store.selectedConfig)
-        console.log("GoalNames:")
-        console.log(goalnames)
-        return goalnames
       }
     },
     getDirectionTooltip(number) {
@@ -148,6 +172,29 @@ export default {
         if (target.name === row.node_name) rowClass = "therapy"
       })
       return rowClass
+    },
+    isDifferentName(row, compare = false) {
+      if (compare) {
+        return !this.Store.explain.relevance.find(a => a.node_name === row.node_name);
+      }
+      if (this.Store.selectedConfig !== null) {
+        return !this.Store.selectedConfig.config.explain.relevance.find(a => a.node_name === row.node_name)
+      }
+      return false
+    },
+    isDifferentState(row, compare = false) {
+      if (compare) {
+        let node = this.Store.explain.relevance.find(a => a.node_name === row.node_name)
+        if (node === undefined) return true
+        return this.getState(node.node_name) !== this.getCompareState(row.node_name);
+      }
+      if (this.Store.selectedConfig !== null) {
+        let node = this.Store.selectedConfig.config.explain.relevance.find(a => a.node_name === row.node_name)
+        if (node === undefined) return true
+        return this.getState(row.node_name) !== this.getCompareState(node.node_name);
+      }
+      return false
+
     }
   }
 }
@@ -169,6 +216,10 @@ export default {
 
 img {
   width: 100%;
+}
+
+.red {
+  color: red;
 }
 
 </style>

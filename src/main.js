@@ -31,6 +31,7 @@ import ProgressBar from 'primevue/progressbar';
 import BlockUI from 'primevue/blockui';
 import ToggleButton from 'primevue/togglebutton';
 import SelectButton from 'primevue/selectbutton';
+import Toolbar from 'primevue/toolbar';
 import 'primevue/resources/themes/saga-blue/theme.css';       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css'
@@ -90,6 +91,7 @@ vueApp.use(PrimeVue)
     .component('BlockUI', BlockUI)
     .component('ToggleButton',ToggleButton)
     .component('SelectButton', SelectButton)
+    .component('Toolbar', Toolbar)
     .directive('tooltip', Tooltip)
 
 vueApp.use(createPinia())

@@ -21,7 +21,7 @@ export const useStore = defineStore('store', {
         //explaining calculations for the chosen option
         explain: {
             explanation: null,
-            relevance: null,
+            relevance: null, //{node_name, overall_relevance, relevancies[goal]}
             states: null,
         },
 
@@ -29,9 +29,7 @@ export const useStore = defineStore('store', {
         labels: null,
 
         configurations: [],
-        selectedConfig: null,
-
-        newGoals: null, //helper property to let the data tables update TODO: replace
+        selectedConfig: null, //{name, config: {patient, explain, options}}
 
         optionsLoading: false,
         explanationLoading: false,
@@ -40,6 +38,7 @@ export const useStore = defineStore('store', {
         network: "",
         localNet: "",
         phases: [],
+        evidenceGroupMap: null,
         currentPhase: null,
         showTutorial: false
     }),
@@ -54,7 +53,6 @@ export const useStore = defineStore('store', {
             this.options.options = null
             this.options.selectedOption = null
             this.options.likelyResult = null
-            this.newGoals = null
 
             this.explain.relevance = null
             this.explain.states = null
@@ -65,23 +63,36 @@ export const useStore = defineStore('store', {
             await this.loadNodes(noPhase)
 
         },
-        async calculate() {
-            if (this.patient.evidence.length !== 0 && this.patient.goals.length !== 0) {
+        //calculate overall results & changes through therapy options
+        async calculate(compare = false) {
+            let patient = this.patient
+            let options = this.options
+            let explain = this.explain
+            if (compare) {
+                patient = this.selectedConfig.config.patient
+                options = this.selectedConfig.config.options
+                explain = this.selectedConfig.config.explain
+            }
+
+
+            if (patient.goals.length !== 0) {
                 this.optionsLoading = true
                 this.explanationLoading = true
 
                 let evidences = {}
-                for (var ev in this.patient.evidence) {
-                    evidences[this.patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
+                for (var ev in patient.evidence) {
+                    evidences[patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
                 }
+
+                //use current patient goals in both current config and compare config
                 let goals = {}
                 for (var goal in this.patient.goals) {
                     goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
                 }
 
                 let targets = []
-                for (const target in this.patient.targets) {
-                    targets.push(this.patient.targets[target].name)
+                for (const target in patient.targets) {
+                    targets.push(patient.targets[target].name)
                 }
                 let gResponse = null
                 if (this.localNet) {
@@ -115,29 +126,42 @@ export const useStore = defineStore('store', {
                 }
 
                 let nodeDict = await gResponse.json();
-                if (this.patient.targets.length !== 0) {
-                    this.options.options = nodeDict.optionResults
+                if (patient.targets.length !== 0) {
+                    options.options = nodeDict.optionResults
                 } else {
-                    this.options.options = []
+                    options.options = []
                 }
-                this.options.likelyResult = [{
+                options.likelyResult = [{
                     option: {}, value: nodeDict.likelyResults.value,
                     goalValues: nodeDict.likelyResults.goalValues
                 }]
-                this.options.options.unshift(this.options.likelyResult[0])
-                this.options.selectedOption = this.options.likelyResult[0]
+                options.options.unshift(options.likelyResult[0])
 
-                this.newGoals = goals
+                //don't overwrite the saved selected option
+                if (options.selectedOption) {
+                    let oldOption = options.options.find(a => JSON.stringify(a.option) ===
+                        JSON.stringify(options.selectedOption.option))
+                    if (oldOption) {
+                        options.selectedOption = oldOption
+                    } else {
+                        options.selectedOption = options.likelyResult[0]
+                    }
+                }
+                else {
+                    options.selectedOption = options.likelyResult[0]
+                }
+
                 this.optionsLoading = false
-                this.calculateOption()
+                await this.calculateExplanations(patient, options, explain)
             }
         },
-        async calculateOption() {
+        //calculate explanations based on current option
+        async calculateExplanations(patient, options, explain) {
             this.explanationLoading = true
 
             let evidences = {}
             for (var ev in this.patient.evidence) {
-                evidences[this.patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
+                evidences[patient.evidence[ev].name] = patient.evidence[ev].selected.name;
             }
 
             let goals = {}
@@ -156,7 +180,7 @@ export const useStore = defineStore('store', {
                         fileString: this.localNet.fileString,
                         fileFormat: this.localNet.fileFormat,
                         evidences: evidences,
-                        options: this.options.selectedOption.option,
+                        options: options.selectedOption.option,
                         goals: goals
                     })
                 });
@@ -169,19 +193,19 @@ export const useStore = defineStore('store', {
                     body: JSON.stringify({
                         network: this.network,
                         evidences: evidences,
-                        options: this.options.selectedOption.option,
+                        options: options.selectedOption.option,
                         goals: goals
                     })
                 });
             }
 
             let nodeDict = await gResponse.json();
-            this.explain.relevance = nodeDict.relevance
-            this.newGoals = goals
-            this.explain.states = nodeDict.nodes
-            this.explain.explanation = nodeDict.explanation
+            explain.relevance = nodeDict.relevance
+            explain.states = nodeDict.nodes
+            explain.explanation = nodeDict.explanation
             this.explanationLoading = false
         },
+        //load network at the beginning from server or local file
         async loadNodes(noPhase = false) {
             let gResponse = null
             if (this.localNet) {
@@ -224,7 +248,17 @@ export const useStore = defineStore('store', {
                     this.currentPhase = this.phases[0]
                     this.phase_change()
                 }
+
+                if (network.customization.evidence_groups) {
+                    this.evidenceGroupMap = {}
+                    network.customization.evidence_groups.forEach((g, i) => {
+                        g.variables.forEach(v => {
+                            this.evidenceGroupMap[v] = i + " " + g.name
+                        })
+                    })
+                }
             }
+            await this.calculate()
         },
         addEvidences(nodes) {
             nodes.forEach(node => {
@@ -273,13 +307,13 @@ export const useStore = defineStore('store', {
         },
         phase_change() {
             let reload = false
-            if (this.differentLists(this.patient.targets.map(a=> a.name),this.currentPhase.sets.target)) {
+            if (this.differentLists(this.patient.targets.map(a => a.name), this.currentPhase.sets.target)) {
                 this.patient.targets.forEach(a => this.deleteTarget(a))
                 this.addTargets(this.patient.nodes.filter(a => this.currentPhase.sets.target.includes(a.name)))
                 reload = true
             }
-            if (this.differentLists(this.patient.goals.map(a=> a.name + a.selected.name),
-                this.currentPhase.sets.goal.map(a=> a.name + a.option))) {
+            if (this.differentLists(this.patient.goals.map(a => a.name + a.selected.name),
+                this.currentPhase.sets.goal.map(a => a.name + a.option))) {
                 this.patient.goals.forEach(a => this.deleteGoal(a))
 
                 let goalList = []
@@ -292,6 +326,9 @@ export const useStore = defineStore('store', {
             }
             if (reload) {
                 this.calculate()
+                if (this.selectedConfig) {
+                    this.calculate(true)
+                }
             }
         },
         differentLists(a, b) {
