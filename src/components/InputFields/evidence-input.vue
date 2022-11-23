@@ -13,6 +13,15 @@
         {{ Store.labels[slotProps.data.name] }}
       </template>
     </Column>
+
+    <!--compare column -->
+    <Column class="optionCol">
+      <template #body="slotProps">
+        <div v-if="slotProps.data.selectedCompare === ''"></div>
+        <div v-else> {{ Store.selectedConfig.name }}: {{ slotProps.data.selectedCompare }}</div>
+      </template>
+    </Column>
+
     <Column field="value" class="optionCol">
       <template #body="slotProps">
         <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
@@ -22,12 +31,6 @@
         <Button v-if="slotProps.data.selected" icon="pi pi-times"
                 class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
-      </template>
-    </Column>
-    <Column class="optionCol">
-      <template #body="slotProps">
-        <div v-if="slotProps.data.selectedCompare === ''"></div>
-        <div v-else> {{ Store.selectedConfig.name }}: {{ slotProps.data.selectedCompare }}</div>
       </template>
     </Column>
   </DataTable>

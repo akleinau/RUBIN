@@ -37,7 +37,10 @@
       <template #body="slotProps">
         <bar :value="slotProps.data.goalValues[String(goal.name)]" color="teal" width="200"
              v-tooltip="(slotProps.data.goalValues[String(goal.name)]*100).toFixed(0) + '%'"></bar>
-        <div v-if="slotProps.data === Store.options.selectedOption" style="fontSize: 1.5rem">
+        <!-- show percentages of selected configs -->
+        <div v-if="slotProps.data.config_name === 'current' &&
+              JSON.stringify(slotProps.data.option) === JSON.stringify(this.selectedOption.option)
+              || slotProps.data.config_name !== 'current'" style="fontSize: 1.5rem">
           {{ (slotProps.data.goalValues[String(goal.name)] * 100).toFixed(0) }} %
         </div>
       </template>
@@ -75,7 +78,7 @@ export default {
         if (this.Store.selectedConfig) {
           let compare = this.Store.selectedConfig.config.options.selectedOption
           compare.config_name = this.Store.selectedConfig.name
-          table.unshift(compare)
+          table.push(compare)
         }
       }
       this.updateSelected(table)
