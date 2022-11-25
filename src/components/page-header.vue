@@ -169,14 +169,13 @@ export default {
       configItem.command = () => {
         this.stopComparing()
       }
-      this.$refs.compareOverlay.toggle()
     },
     stopComparing() {
       let configItem = this.items.find(a => a.key === "savedConfigurations")
       configItem.label = "start comparing"
       configItem.icon = PrimeIcons.BOOKMARK
-      configItem.command = (event) => {
-        this.$refs.compareOverlay.toggle(event.originalEvent)
+      configItem.command = () => {
+        this.startComparing()
       }
       this.Store.selectedConfig = null
     },

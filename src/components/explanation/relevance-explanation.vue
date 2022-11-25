@@ -15,9 +15,9 @@
 
       <Column :header="$t('Node')" field="node_name" :rowspan="2">
         <template #body="slotProps">
-          <div :class="{ red: isDifferentName(slotProps.data) }">
+          <div :class="{ highlightCompare: isDifferentName(slotProps.data) }">
             {{ Store.labels[slotProps.data.node_name] }}:
-            <span :class="{red: isDifferentState(slotProps.data)}">{{
+            <span :class="{highlightCompare: isDifferentState(slotProps.data)}">{{
                 getState(slotProps.data.node_name)
               }} </span>
           </div>
@@ -40,7 +40,7 @@
     <!--    compare view  -->
     <div v-if="Store.selectedConfig !== null">
       <br> <br>
-      <span style="color:red">Red</span> nodes are changed.
+      <span style="color:darkviolet">Violet</span> nodes are changed.
 
       <h3> {{ Store.selectedConfig.name }}:</h3>
       <DataTable class="p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
@@ -57,9 +57,9 @@
         </ColumnGroup>
         <Column :header="$t('Node')" field="node_name">
           <template #body="slotProps">
-            <div :class="{ red: isDifferentName(slotProps.data, true) }">
+            <div :class="{ highlightCompare: isDifferentName(slotProps.data, true) }">
               {{ Store.labels[slotProps.data.node_name] }}:
-              <span :class="{red: isDifferentState(slotProps.data, true)}">{{
+              <span :class="{highlightCompare: isDifferentState(slotProps.data, true)}">{{
                   getCompareState(slotProps.data.node_name)
                 }} </span>
             </div>
@@ -218,8 +218,8 @@ img {
   width: 100%;
 }
 
-.red {
-  color: red;
+.highlightCompare {
+  color: darkviolet;
 }
 
 </style>

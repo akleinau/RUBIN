@@ -7,7 +7,7 @@
       <b> {{ slotProps.data.group.substr(2) }} </b>
     </template>
 
-    <Column field="group" />
+    <Column field="group"/>
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
         {{ Store.labels[slotProps.data.name] }}
@@ -15,18 +15,19 @@
     </Column>
 
     <!--compare column -->
-    <Column class="optionCol">
+    <Column class="optionCol" header="compare" v-if="Store.selectedConfig">
       <template #body="slotProps">
         <div v-if="slotProps.data.selectedCompare === ''"></div>
-        <div v-else> {{ Store.selectedConfig.name }}: {{ slotProps.data.selectedCompare }}</div>
+        <div v-else> {{ slotProps.data.selectedCompare }}</div>
       </template>
     </Column>
 
-    <Column field="value" class="optionCol">
+    <Column field="value" :header="Store.selectedConfig ? 'current' : ''" class="optionCol">
       <template #body="slotProps">
         <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
                   placeholder="" @change="onNodeChange(slotProps.data)"
-                  class="p-0 m-0">
+                  class="p-0 m-0"
+                  :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
         </Dropdown>
         <Button v-if="slotProps.data.selected" icon="pi pi-times"
                 class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
@@ -145,11 +146,10 @@ export default {
               group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[n.name]
             })
           } else {
-            foundNode.selectedCompare = (foundNode.selected.name === n.selected.name) ? '' : n.selected.name
+            foundNode.selectedCompare = n.selected.name
           }
         })
-      }
-      else {
+      } else {
         table.forEach(n => n.selectedCompare = '')
       }
 
@@ -199,6 +199,10 @@ export default {
     cancelOverlay() {
       this.nodesToAdd = []
       this.overlay = false
+    },
+    isDifferentState(item) {
+      if (item.selectedCompare === '') return false
+      return item.selected.name !== item.selectedCompare
     }
   }
 }
@@ -226,12 +230,16 @@ export default {
 }
 
 .NoHeader ::v-deep(.p-datatable-thead) {
-  display: None !important
+  //display: None !important
 }
 
 ::v-deep(.p-dropdown-label) {
   padding-right: 0;
   margin: 0;
+}
+
+::v-deep(.highlightCompare) {
+  color: darkviolet !important;
 }
 
 </style>
