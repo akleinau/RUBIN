@@ -12,9 +12,9 @@
         <h3> {{ $t("FullNetwork") }}</h3> {{ $t("FullNetworkHelp") }}
       </OverlayPanel>
     </template>
-    <template #subtitle v-if="Store.options.selectedOption">
-      <div v-for="o in Object.keys(Store.options.selectedOption.option)" :key="o">
-        <b> {{ Store.labels[o] }}: {{ Store.options.selectedOption.option[o] }} </b>
+    <template #subtitle v-if="Store.predictions.selectedOption">
+      <div v-for="o in Object.keys(Store.predictions.selectedOption.option)" :key="o">
+        <b> {{ Store.labels[o] }}: {{ Store.predictions.selectedOption.option[o] }} </b>
       </div>
     </template>
     <template #content>
@@ -31,24 +31,24 @@
           </TabPanel>
           <!--   compact network  -->
           <TabPanel :header="$t('CompactNetwork')">
-            <div v-if="Store.selectedConfig==null">
+            <div v-if="Store.compareConfig==null">
               <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()" :labels="Store.labels"/>
             </div>
             <div v-else>
               <sugiyamaCompare :edges="getCompactEdges()" :nodes="getExNodes()"
-                               :nodes2="Store.selectedConfig.config.explain.states"
-                               :name2="Store.selectedConfig.name" :labels="Store.labels"/>
+                               :nodes2="Store.compareConfig.explain.states"
+                               :name2="compare" :labels="Store.labels"/>
             </div>
           </TabPanel>
           <!--   full network  -->
           <TabPanel :header="$t('FullNetwork')">
-            <div v-if="Store.selectedConfig==null">
+            <div v-if="Store.compareConfig==null">
               <sugiyama :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
             </div>
             <div v-else>
               <sugiyamaCompare :edges="Store.edges" :nodes="Store.explain.states"
-                               :nodes2="Store.selectedConfig.config.explain.states"
-                               :name2="Store.selectedConfig.name" :labels="Store.labels"/>
+                               :nodes2="Store.compareConfig.explain.states"
+                               :name2="compare" :labels="Store.labels"/>
             </div>
           </TabPanel>
         </TabView>
@@ -155,9 +155,9 @@ export default {
       }
     },
     getCardClass() {
-      if (this.Store.options.selectedOption === null) return null
-      if (this.Store.options.selectedOption === undefined) return null
-      return (Object.entries(this.Store.options.selectedOption.option).length === 0) ? null : "treatmentCard"
+      if (this.Store.predictions.selectedOption === null) return null
+      if (this.Store.predictions.selectedOption === undefined) return null
+      return (Object.entries(this.Store.predictions.selectedOption.option).length === 0) ? null : "treatmentCard"
     }
   }
 }

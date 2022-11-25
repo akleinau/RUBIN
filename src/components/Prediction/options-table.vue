@@ -48,7 +48,7 @@
 
     <Column>
       <template #body="slotProps">
-        <Button v-if="slotProps.data === Store.options.selectedOption"
+        <Button v-if="slotProps.data === Store.predictions.selectedOption"
                 class="p-button-secondary p-button-text p-button-rounded"
                 icon="pi pi-times" @click="deselect"/>
       </template>
@@ -72,12 +72,12 @@ export default {
   },
   computed: {
     table: function () {
-      let table = JSON.parse(JSON.stringify(this.Store.options.options))
+      let table = JSON.parse(JSON.stringify(this.Store.predictions.options))
       if (table !== null) {
         table.forEach(n => n.config_name = "current")
-        if (this.Store.selectedConfig) {
-          let compare = this.Store.selectedConfig.config.options.selectedOption
-          compare.config_name = this.Store.selectedConfig.name
+        if (this.Store.compareConfig) {
+          let compare = this.Store.compareConfig.predictions.selectedOption
+          compare.config_name = "compare"
           table.push(compare)
         }
       }
@@ -85,7 +85,7 @@ export default {
       return table
     },
     minIndex: function () {
-      return this.Store.selectedConfig ? 1 : 0;
+      return this.Store.compareConfig ? 1 : 0;
     }
   },
   data() {
@@ -119,12 +119,12 @@ export default {
           this.selectedOption = this.table[this.minIndex]
         }
 
-        let newOption = this.Store.options.options.find(n =>
+        let newOption = this.Store.predictions.options.find(n =>
             this.selectedOption.config_name === "current" &&
             JSON.stringify(n.option) === JSON.stringify(this.selectedOption.option))
-        if (newOption !== this.Store.options.selectedOption) {
-          this.Store.options.selectedOption = newOption
-          this.Store.calculateExplanations(this.Store.patient, this.Store.options, this.Store.explain)
+        if (newOption !== this.Store.predictions.selectedOption) {
+          this.Store.predictions.selectedOption = newOption
+          this.Store.calculateExplanations(this.Store.patient, this.Store.predictions, this.Store.explain)
         }
       }
     },
@@ -137,10 +137,10 @@ export default {
           if (newOption) {
             this.selectedOption = newOption
           } else {
-            this.selectedOption = table[this.Store.selectedConfig ? 1 : 0]
+            this.selectedOption = table[this.Store.compareConfig ? 1 : 0]
           }
         } else {
-          this.selectedOption = table[this.Store.selectedConfig ? 1 : 0]
+          this.selectedOption = table[this.Store.compareConfig ? 1 : 0]
         }
       }
     },
@@ -148,7 +148,7 @@ export default {
       return this.Store.labels[goal.name] + ": " + goal.selected.name
     },
     deselect() {
-      this.Store.options.selectedOption = this.Store.options.likelyResult[0]
+      this.Store.predictions.selectedOption = this.Store.predictions.likelyResult[0]
       this.update()
     },
     rowClass(data) {

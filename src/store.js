@@ -12,7 +12,7 @@ export const useStore = defineStore('store', {
         },
 
         //available options to treat the patient given the interventions
-        options: {
+        predictions: {
             options: null,
             likelyResult: null,
             selectedOption: null,
@@ -29,7 +29,7 @@ export const useStore = defineStore('store', {
         labels: null,
 
         configurations: [],
-        selectedConfig: null, //{name, config: {patient, explain, options}}
+        compareConfig: null, //{patient, explain, predictions}
 
         optionsLoading: false,
         explanationLoading: false,
@@ -50,9 +50,9 @@ export const useStore = defineStore('store', {
             this.patient.nodes = []
             this.patient.name = ""
 
-            this.options.options = null
-            this.options.selectedOption = null
-            this.options.likelyResult = null
+            this.predictions.options = null
+            this.predictions.selectedOption = null
+            this.predictions.likelyResult = null
 
             this.explain.relevance = null
             this.explain.states = null
@@ -66,12 +66,12 @@ export const useStore = defineStore('store', {
         //calculate overall results & changes through therapy options
         async calculate(compare = false) {
             let patient = this.patient
-            let options = this.options
+            let predictions = this.predictions
             let explain = this.explain
             if (compare) {
-                patient = this.selectedConfig.config.patient
-                options = this.selectedConfig.config.options
-                explain = this.selectedConfig.config.explain
+                patient = this.compareConfig.patient
+                predictions = this.compareConfig.predictions
+                explain = this.compareConfig.explain
             }
 
 
@@ -127,36 +127,36 @@ export const useStore = defineStore('store', {
 
                 let nodeDict = await gResponse.json();
                 if (patient.targets.length !== 0) {
-                    options.options = nodeDict.optionResults
+                    predictions.options = nodeDict.optionResults
                 } else {
-                    options.options = []
+                    predictions.options = []
                 }
-                options.likelyResult = [{
+                predictions.likelyResult = [{
                     option: {}, value: nodeDict.likelyResults.value,
                     goalValues: nodeDict.likelyResults.goalValues
                 }]
-                options.options.unshift(options.likelyResult[0])
+                predictions.options.unshift(predictions.likelyResult[0])
 
                 //don't overwrite the saved selected option
-                if (options.selectedOption) {
-                    let oldOption = options.options.find(a => JSON.stringify(a.option) ===
-                        JSON.stringify(options.selectedOption.option))
+                if (predictions.selectedOption) {
+                    let oldOption = predictions.options.find(a => JSON.stringify(a.option) ===
+                        JSON.stringify(predictions.selectedOption.option))
                     if (oldOption) {
-                        options.selectedOption = oldOption
+                        predictions.selectedOption = oldOption
                     } else {
-                        options.selectedOption = options.likelyResult[0]
+                        predictions.selectedOption = predictions.likelyResult[0]
                     }
                 }
                 else {
-                    options.selectedOption = options.likelyResult[0]
+                    predictions.selectedOption = predictions.likelyResult[0]
                 }
 
                 this.optionsLoading = false
-                await this.calculateExplanations(patient, options, explain)
+                await this.calculateExplanations(patient, predictions, explain)
             }
         },
         //calculate explanations based on current option
-        async calculateExplanations(patient, options, explain) {
+        async calculateExplanations(patient, predictions, explain) {
             this.explanationLoading = true
 
             let evidences = {}
@@ -180,7 +180,7 @@ export const useStore = defineStore('store', {
                         fileString: this.localNet.fileString,
                         fileFormat: this.localNet.fileFormat,
                         evidences: evidences,
-                        options: options.selectedOption.option,
+                        options: predictions.selectedOption.option,
                         goals: goals
                     })
                 });
@@ -193,7 +193,7 @@ export const useStore = defineStore('store', {
                     body: JSON.stringify({
                         network: this.network,
                         evidences: evidences,
-                        options: options.selectedOption.option,
+                        options: predictions.selectedOption.option,
                         goals: goals
                     })
                 });

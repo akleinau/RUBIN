@@ -14,7 +14,7 @@
       </BlockUI>
 
       <BlockUI class="col h-full" :blocked="block.options">
-        <Therapy class="h-full"/>
+        <Prediction class="h-full"/>
       </BlockUI>
 
       <BlockUI class="col h-full" :blocked="block.explain">
@@ -29,7 +29,7 @@
 <script>
 import Header from "./components/page-header";
 import Explanation from "./components/page-explanation";
-import Therapy from "@/components/page-therapy";
+import Prediction from "@/components/page-prediction";
 import Evidence from "@/components/page-evidence";
 import tutorial from "@/components/page-tutorial";
 import {useStore} from '@/store'
@@ -40,7 +40,7 @@ export default {
   components: {
     Header,
     Explanation,
-    Therapy,
+    Prediction,
     Evidence,
     tutorial
   },

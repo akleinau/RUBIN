@@ -153,13 +153,10 @@ export default {
       this.Store.reset()
     },
     startComparing() {
-      this.Store.selectedConfig = {
-        "name": "compare",
-        "config": {
-          "patient": JSON.parse(JSON.stringify(this.Store.patient)),
-          "options": JSON.parse(JSON.stringify(this.Store.options)),
-          "explain": JSON.parse(JSON.stringify(this.Store.explain))
-        }
+      this.Store.compareConfig = {
+        "patient": JSON.parse(JSON.stringify(this.Store.patient)),
+        "predictions": JSON.parse(JSON.stringify(this.Store.predictions)),
+        "explain": JSON.parse(JSON.stringify(this.Store.explain))
       }
 
       //change header
@@ -177,7 +174,7 @@ export default {
       configItem.command = () => {
         this.startComparing()
       }
-      this.Store.selectedConfig = null
+      this.Store.compareConfig = null
     },
     sendFeedback() {
       this.showFeedback = false

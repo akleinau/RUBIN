@@ -49,7 +49,7 @@
             <!-- Intervention Input -->
             <div>
               <h3 class="text-left">{{ $t("Interventions") }}:</h3>
-              <TherapyInput/>
+              <optionsInput/>
 
             </div>
           </TabPanel>
@@ -62,16 +62,16 @@
 </template>
 
 <script>
-import TherapyInput from "@/components/Therapy/therapy-input";
-import optionsTable from "@/components/Therapy/options-table"
-import GoalInput from "@/components/InputFields/goal-input";
+import optionsInput from "@/components/Prediction/options-input";
+import optionsTable from "@/components/Prediction/options-table"
+import GoalInput from "@/components/Prediction/goal-input";
 import {useStore} from '@/store'
 
 export default {
   name: "therapy-options",
   emits: ["update"],
   components: {
-    TherapyInput,
+    optionsInput,
     optionsTable,
     GoalInput
   },

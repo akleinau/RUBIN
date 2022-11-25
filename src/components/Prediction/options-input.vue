@@ -1,7 +1,7 @@
 <template>
   <div style="position:relative">
 
-    <div v-if="Store.selectedConfig == null">
+    <div v-if="Store.compareConfig == null">
       <Listbox :options="Store.patient.targets" :optionLabel="name" listStyle="max-height:300px"
                emptyMessage=" ">
         <template #option="slotProps">
@@ -17,7 +17,7 @@
     <div v-else>
       current: <span v-for="sel in Store.patient.targets" :key="sel">{{ sel.name }}, </span>
       <br>
-      {{ Store.selectedConfig.name }}: <span v-for="sel in Store.selectedConfig.config.patient.targets"
+      compare: <span v-for="sel in Store.compareConfig.patient.targets"
                                              :key="sel">{{ sel.name }}, </span>
     </div>
 

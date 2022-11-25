@@ -38,12 +38,12 @@
     </DataTable>
 
     <!--    compare view  -->
-    <div v-if="Store.selectedConfig !== null">
+    <div v-if="Store.compareConfig !== null">
       <br> <br>
       <span style="color:darkviolet">Violet</span> nodes are changed.
 
-      <h3> {{ Store.selectedConfig.name }}:</h3>
-      <DataTable class="p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
+      <h3> compare:</h3>
+      <DataTable class="p-datatable-sm" :value="Store.compareConfig.explain.relevance" dataKey="node_name"
                  :rowClass="isTherapyRow">
         <ColumnGroup type="header">
           <Row>
@@ -115,8 +115,8 @@ export default {
     //does the same as goalnames, but updates when selectedConfig is loaded
     compareGoalnames: function () {
       let goalnames = []
-      if (this.Store.selectedConfig != null) {
-        if (this.Store.patient.goals != null && this.Store.selectedConfig.config.explain.relevance != null) {
+      if (this.Store.compareConfig != null) {
+        if (this.Store.patient.goals != null && this.Store.compareConfig.explain.relevance != null) {
           this.Store.patient.goals.forEach(goal => {
             goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
           })
@@ -159,7 +159,7 @@ export default {
     },
     getCompareState(name) {
       let state = "unknown"
-      this.Store.selectedConfig.config.explain.states.forEach(node => {
+      this.Store.compareConfig.explain.states.forEach(node => {
         if (node.name === name) {
           state = node.state
         }
@@ -177,8 +177,8 @@ export default {
       if (compare) {
         return !this.Store.explain.relevance.find(a => a.node_name === row.node_name);
       }
-      if (this.Store.selectedConfig !== null) {
-        return !this.Store.selectedConfig.config.explain.relevance.find(a => a.node_name === row.node_name)
+      if (this.Store.compareConfig !== null) {
+        return !this.Store.compareConfig.explain.relevance.find(a => a.node_name === row.node_name)
       }
       return false
     },
@@ -188,8 +188,8 @@ export default {
         if (node === undefined) return true
         return this.getState(node.node_name) !== this.getCompareState(row.node_name);
       }
-      if (this.Store.selectedConfig !== null) {
-        let node = this.Store.selectedConfig.config.explain.relevance.find(a => a.node_name === row.node_name)
+      if (this.Store.compareConfig !== null) {
+        let node = this.Store.compareConfig.explain.relevance.find(a => a.node_name === row.node_name)
         if (node === undefined) return true
         return this.getState(row.node_name) !== this.getCompareState(node.node_name);
       }

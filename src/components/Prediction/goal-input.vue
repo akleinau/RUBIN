@@ -142,7 +142,7 @@ export default {
     deleteNode(node) {
       this.Store.deleteGoal(node)
       this.Store.calculate()
-      if (this.Store.selectedConfig) {
+      if (this.Store.compareConfig) {
         this.Store.calculate(true)
       }
     },
@@ -155,7 +155,7 @@ export default {
     addNodes(nodes) {
       this.Store.addGoals(nodes)
       this.Store.calculate()
-      if (this.Store.selectedConfig) {
+      if (this.Store.compareConfig) {
         this.Store.calculate(true)
       }
     },
