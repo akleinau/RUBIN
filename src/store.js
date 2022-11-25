@@ -326,7 +326,7 @@ export const useStore = defineStore('store', {
             }
             if (reload) {
                 this.calculate()
-                if (this.selectedConfig) {
+                if (this.compareConfig) {
                     this.calculate(true)
                 }
             }

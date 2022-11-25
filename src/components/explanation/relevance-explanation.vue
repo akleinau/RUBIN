@@ -1,7 +1,14 @@
 <template>
   <div>
-    <DataTable class=" p-datatable-sm" :value="Store.explain.relevance"
+    <DataTable class=" p-datatable-sm" :value="table"
+               rowGroupMode="subheader" groupRowsBy="config_name"
                :rowClass="isTherapyRow">
+
+      <template #groupheader="slotProps">
+        <br>
+        <b>{{ slotProps.data.config_name }}:</b>
+      </template>
+
       <ColumnGroup type="header">
         <Row>
           <Column header="" field="node_name" :rowspan="2"/>
@@ -16,10 +23,10 @@
       <Column :header="$t('Node')" field="node_name" :rowspan="2">
         <template #body="slotProps">
           <div :class="{ highlightCompare: isDifferentName(slotProps.data) }">
-            {{ Store.labels[slotProps.data.node_name] }}:
-            <span :class="{highlightCompare: isDifferentState(slotProps.data)}">{{
-                getState(slotProps.data.node_name)
-              }} </span>
+            {{ slotProps.data.label }}:
+            <span :class="{highlightCompare: isDifferentState(slotProps.data)}">
+                {{ slotProps.data.state }}
+            </span>
           </div>
         </template>
       </Column>
@@ -37,48 +44,6 @@
       </Column>
     </DataTable>
 
-    <!--    compare view  -->
-    <div v-if="Store.compareConfig !== null">
-      <br> <br>
-      <span style="color:darkviolet">Violet</span> nodes are changed.
-
-      <h3> compare:</h3>
-      <DataTable class="p-datatable-sm" :value="Store.compareConfig.explain.relevance" dataKey="node_name"
-                 :rowClass="isTherapyRow">
-        <ColumnGroup type="header">
-          <Row>
-            <Column header="" field="node_name" :rowspan="2"/>
-            <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
-            <Column header="Influence on outcome" :colspan="getGoalKeyNum()"></Column>
-          </Row>
-          <Row>
-            <Column v-for="goal in compareGoalnames" :field="goal" :header="goal" :key="goal"/>
-          </Row>
-        </ColumnGroup>
-        <Column :header="$t('Node')" field="node_name">
-          <template #body="slotProps">
-            <div :class="{ highlightCompare: isDifferentName(slotProps.data, true) }">
-              {{ Store.labels[slotProps.data.node_name] }}:
-              <span :class="{highlightCompare: isDifferentState(slotProps.data, true)}">{{
-                  getCompareState(slotProps.data.node_name)
-                }} </span>
-            </div>
-          </template>
-        </Column>
-        <Column :header="$t('Relevance')" field="overall_relevance">
-          <template #body="slotProps">
-            <bar :value="slotProps.data.overall_relevance" color="#004d80" width="200"
-                 v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
-          </template>
-        </Column>
-        <Column v-for="goal in compareGoalnames" :field="goal" :header="goal" :key="goal">
-          <template #body="slotProps">
-            <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
-                         v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
-          </template>
-        </Column>
-      </DataTable>
-    </div>
   </div>
 </template>
 
@@ -123,6 +88,37 @@ export default {
         }
       }
       return goalnames
+    },
+    table: function () {
+      if (this.Store.explain.relevance) {
+        let table = []
+        this.Store.explain.relevance.forEach(n => {
+          table.push({
+            config_name: "current",
+            label: this.Store.labels[n.node_name],
+            node_name: n.node_name,
+            state: this.getState(n.node_name),
+            overall_relevance: n.overall_relevance,
+            relevancies: n.relevancies
+          })
+        })
+
+        //compare
+        if (this.Store.compareConfig != null) {
+          this.Store.compareConfig.explain.relevance.forEach(n => {
+            table.push({
+              config_name: "compare",
+              label: this.Store.labels[n.node_name],
+              node_name: n.node_name,
+              state: this.getCompareState(n.node_name),
+              overall_relevance: n.overall_relevance,
+              relevancies: n.relevancies
+            })
+          })
+        }
+
+        return table
+      } else return []
     }
   },
   methods: {
@@ -182,8 +178,8 @@ export default {
       }
       return false
     },
-    isDifferentState(row, compare = false) {
-      if (compare) {
+    isDifferentState(row) {
+      if (row.config_name === "compare") {
         let node = this.Store.explain.relevance.find(a => a.node_name === row.node_name)
         if (node === undefined) return true
         return this.getState(node.node_name) !== this.getCompareState(row.node_name);

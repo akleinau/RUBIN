@@ -1,60 +1,64 @@
 <template>
-  <DataTable :value="table" class="p-datatable-sm" :autoLayout="true" :rowClass="rowClass"
-             :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
-             rowGroupMode="subheader" groupRowsBy="config_name"
-             @rowSelect="update" @rowUnselect="update">
+  <Card>
+    <template #content>
+      <DataTable :value="table" class="p-datatable-sm" :autoLayout="true" :rowClass="rowClass"
+                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
+                 rowGroupMode="subheader" groupRowsBy="config_name"
+                 @rowSelect="update" @rowUnselect="update">
 
-    <template #groupheader="slotProps">
-      <br>
-      <b>{{ slotProps.data.config_name }}:</b>
-    </template>
+        <template #groupheader="slotProps">
+          <br>
+          <b>{{ slotProps.data.config_name }}:</b>
+        </template>
 
-    <Column>
-      <template #body="slotProps">
-        <div v-if="slotProps.index > minIndex">
-          {{ slotProps.index - minIndex }}.
-        </div>
-      </template>
-    </Column>
+        <Column>
+          <template #body="slotProps">
+            <div v-if="slotProps.index > minIndex">
+              {{ slotProps.index - minIndex }}.
+            </div>
+          </template>
+        </Column>
 
-    <Column field="option">
-      <template #body="slotProps">
-        <div v-if="Object.keys(slotProps.data.option).length === 0"><b>overall</b></div>
-        <div v-else v-for="o in Object.keys(slotProps.data.option)" :key="o">
-          {{ Store.labels[o] }}: {{ slotProps.data.option[o] }}
-        </div>
+        <Column field="option">
+          <template #body="slotProps">
+            <div v-if="Object.keys(slotProps.data.option).length === 0"><b>overall</b></div>
+            <div v-else v-for="o in Object.keys(slotProps.data.option)" :key="o">
+              {{ Store.labels[o] }}: {{ slotProps.data.option[o] }}
+            </div>
 
-      </template>
-    </Column>
+          </template>
+        </Column>
 
-    <Column>
-      <template #body="slotProps">
-        <i v-if="slotProps.index === minIndex+1" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
-      </template>
-    </Column>
+        <Column>
+          <template #body="slotProps">
+            <i v-if="slotProps.index === minIndex+1" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
+          </template>
+        </Column>
 
-    <Column v-for="goal in getGoalKeys()" :field="goal.name" :header="getGoalLabel(goal)" :key="goal.name">
-      <template #body="slotProps">
-        <bar :value="slotProps.data.goalValues[String(goal.name)]" color="teal" width="200"
-             v-tooltip="(slotProps.data.goalValues[String(goal.name)]*100).toFixed(0) + '%'"></bar>
-        <!-- show percentages of selected configs -->
-        <div v-if="slotProps.data.config_name === 'current' &&
+        <Column v-for="goal in getGoalKeys()" :field="goal.name" :header="getGoalLabel(goal)" :key="goal.name">
+          <template #body="slotProps">
+            <bar :value="slotProps.data.goalValues[String(goal.name)]" color="teal" width="200"
+                 v-tooltip="(slotProps.data.goalValues[String(goal.name)]*100).toFixed(0) + '%'"></bar>
+            <!-- show percentages of selected configs -->
+            <div v-if="slotProps.data.config_name === 'current' &&
               JSON.stringify(slotProps.data.option) === JSON.stringify(this.selectedOption.option)
               || slotProps.data.config_name !== 'current'" style="fontSize: 1.5rem">
-          {{ (slotProps.data.goalValues[String(goal.name)] * 100).toFixed(0) }} %
-        </div>
-      </template>
-    </Column>
+              {{ (slotProps.data.goalValues[String(goal.name)] * 100).toFixed(0) }} %
+            </div>
+          </template>
+        </Column>
 
-    <Column>
-      <template #body="slotProps">
-        <Button v-if="slotProps.data === Store.predictions.selectedOption"
-                class="p-button-secondary p-button-text p-button-rounded"
-                icon="pi pi-times" @click="deselect"/>
-      </template>
-    </Column>
+        <Column>
+          <template #body="slotProps">
+            <Button v-if="slotProps.data === Store.predictions.selectedOption"
+                    class="p-button-secondary p-button-text p-button-rounded"
+                    icon="pi pi-times" @click="deselect"/>
+          </template>
+        </Column>
 
-  </DataTable>
+      </DataTable>
+    </template>
+  </Card>
 </template>
 
 <script>

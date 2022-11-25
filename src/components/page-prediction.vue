@@ -22,7 +22,7 @@
         <!-- decision table -->
         <div>
           <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
-          <optionsTable/>
+          <optionsTable style="border: solid 5px lightgray"/>
         </div>
         <br>
 
