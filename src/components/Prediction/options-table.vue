@@ -8,7 +8,7 @@
 
         <template #groupheader="slotProps">
           <br>
-          <b>{{ slotProps.data.config_name }}:</b>
+          <b v-if="Store.compareConfig">{{ slotProps.data.config_name }}:</b>
         </template>
 
         <Column>

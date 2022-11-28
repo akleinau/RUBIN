@@ -10,7 +10,7 @@
     </template>
     <template #content>
       <ScrollPanel style="height:100%">
-        <DataTable class="p-datatable-sm NoHeader" id="table" :value="table"
+        <DataTable class="p-datatable-sm" :class="{NoHeader: !Store.compareConfig}" id="table" :value="table"
                    rowGroupMode="subheader" groupRowsBy="group"
                    sortMode="single" sortField="group" :sortOrder="1">
           <template #groupheader="slotProps">
@@ -251,7 +251,7 @@ export default {
 }
 
 .NoHeader ::v-deep(.p-datatable-thead) {
-  //display: None !important
+  display: None !important
 }
 
 ::v-deep(.p-dropdown-label) {

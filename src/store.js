@@ -146,8 +146,7 @@ export const useStore = defineStore('store', {
                     } else {
                         predictions.selectedOption = predictions.likelyResult[0]
                     }
-                }
-                else {
+                } else {
                     predictions.selectedOption = predictions.likelyResult[0]
                 }
 
@@ -266,10 +265,12 @@ export const useStore = defineStore('store', {
                 this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
                 this.patient.evidence.push(node)
             })
+            this.phase_change()
         },
         deleteEvidence(node) {
             this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
             this.patient.nodes.push({name: node.name, options: node.options})
+            this.phase_change()
         },
         addTargets(nodes) {
             nodes.forEach(node => {
@@ -319,7 +320,9 @@ export const useStore = defineStore('store', {
                 let goalList = []
                 this.currentPhase.sets.goal.forEach(a => {
                     let fullnode = this.patient.nodes.find(b => b.name === a.name)
-                    goalList.push({"name": a.name, "selected": {"name": a.option}, "options": fullnode.options})
+                    if (fullnode) {
+                        goalList.push({"name": a.name, "selected": {"name": a.option}, "options": fullnode.options})
+                    }
                 })
                 this.addGoals(goalList)
                 reload = true

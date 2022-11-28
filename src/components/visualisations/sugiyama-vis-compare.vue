@@ -70,7 +70,7 @@ export default {
         d3.select(node.target).text(String(thisThing.labels[d.data.id]).substring(0, 10) + ": ")
       }
 
-      if (this.nodes !== null && this.edges !== null && this.nodes2 !== null) {
+      if (this.nodes !== null && this.edgeList !== null && this.edgeList.length !== 0 && this.nodes2 !== null) {
 
         var graph = dag.dagConnect()(this.edgeList)
 
