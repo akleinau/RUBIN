@@ -1,51 +1,34 @@
 <template>
-  <DataTable class="p-datatable-sm NoHeader" id="table" :value="table"
-             rowGroupMode="subheader" groupRowsBy="group"
-             sortMode="single" sortField="group" :sortOrder="1">
-    <template #groupheader="slotProps">
-      <br>
-      <b> {{ slotProps.data.group.substr(2) }} </b>
-    </template>
-
-    <Column field="group" />
+  <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm">
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
         {{ Store.labels[slotProps.data.name] }}
       </template>
     </Column>
-
-    <!--compare column -->
-    <Column class="optionCol">
-      <template #body="slotProps">
-        <div v-if="slotProps.data.selectedCompare === ''"></div>
-        <div v-else> {{ Store.selectedConfig.name }}: {{ slotProps.data.selectedCompare }}</div>
-      </template>
-    </Column>
-
     <Column field="value" class="optionCol">
-      <template #body="slotProps">
+      <template v-if="changeable" #body="slotProps">
         <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
-                  placeholder="" @change="onNodeChange(slotProps.data)"
+                  placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)"
                   class="p-0 m-0">
         </Dropdown>
-        <Button v-if="slotProps.data.selected" icon="pi pi-times"
-                class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
+        <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
+      </template>
+      <template v-else #body="slotProps">
+        {{ Store.labels[slotProps.data.selected.name] }}
       </template>
     </Column>
   </DataTable>
   <!--    input dialog  -->
   <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
-          :closable="false">
+          v-if="changeable" :closable="false">
     <template #header>
       <div class="flex justify-content-end w-full">
         <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
         <Button class="p-button-secondary" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
       </div>
     </template>
-    <br>
-    <DataTable :value="overlayNodes" rowGroupMode="subheader" groupRowsBy="group" class="p-datatable-sm"
-               sortMode="single" sortField="group" :sortOrder="1"
+    <DataTable :value="overlayNodes" class="p-datatable-sm"
                v-model:filters="filters" filterDisplay="menu" data-key="name">
       <template #header>
         <div class="flex justify-content-between">
@@ -55,16 +38,10 @@
                 </span>
         </div>
       </template>
-      <template #groupheader="slotProps">
-        <br>
-        <h3> {{ slotProps.data.group.substr(2) }} </h3>
-      </template>
       <Column field="name" :header="$t('Node')">
         <template #body="slotProps">
           {{ Store.labels[slotProps.data.name] }}
         </template>
-      </Column>
-      <Column field="group" header="group">
       </Column>
       <Column field="options">
         <template #body="slotProps">
@@ -79,9 +56,9 @@
   </Dialog>
 
   <!-- Buttons -->
-  <div>
-    <Button class="addButton" @click="overlay = true"
-            :label="$t('addEvidence')"></Button>
+  <div v-if="changeable">
+    <Button class="addButton p-button-secondary" @click="overlay = true"
+            :label="$t('addOutcome')"></Button>
   </div>
 
 
@@ -94,6 +71,12 @@ import {useStore} from "@/store";
 
 export default {
   name: "node-input",
+  props: [
+    "title",
+    "selection",
+    "changeable",
+    "hideHeader"
+  ],
   setup() {
     const Store = useStore()
     return {Store}
@@ -112,6 +95,10 @@ export default {
     //adds 'checked' property to every option of every node of the overlay
     overlayNodes: function () {
       let nodes = this.Store.patient.nodes
+      if (this.Store.currentPhase !== null) {
+        nodes = nodes.filter(x => this.Store.currentPhase.sets.goal.map(a => a.name).includes(x.name))
+
+      }
 
       return nodes.map(node => {
             return {
@@ -122,38 +109,9 @@ export default {
                   checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
                 }
               }),
-              group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[node.name]
             }
           }
       )
-    },
-    table: function () {
-      let table = JSON.parse(JSON.stringify(this.Store.patient.evidence))
-
-      if (this.Store.selectedConfig) {
-        table.forEach(n => n.selectedCompare = '-')
-        let compareEvidence = this.Store.selectedConfig.config.patient.evidence
-
-        compareEvidence.forEach(n => {
-          let foundNode = table.find(a => a.name === n.name)
-          if (foundNode == null) {
-            table.push({
-              name: n.name,
-              selected: '',
-              selectedCompare: n.selected.name,
-              options: n.options,
-              group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[n.name]
-            })
-          } else {
-            foundNode.selectedCompare = (foundNode.selected.name === n.selected.name) ? '' : n.selected.name
-          }
-        })
-      }
-      else {
-        table.forEach(n => n.selectedCompare = '')
-      }
-
-      return table
     }
   },
   methods: {
@@ -171,8 +129,7 @@ export default {
             return {
               name: option.name
             }
-          }),
-          group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[slotProps.data.name]
+          })
         }
         this.nodesToAdd.push(item);
       }
@@ -183,8 +140,11 @@ export default {
       this.overlay = false
     },
     deleteNode(node) {
-      this.Store.deleteEvidence(node)
+      this.Store.deleteGoal(node)
       this.Store.calculate()
+      if (this.Store.compareConfig) {
+        this.Store.calculate(true)
+      }
     },
     deleteNodeFromOverlay(node) {
       this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
@@ -193,8 +153,11 @@ export default {
       this.addNodes([node])
     },
     addNodes(nodes) {
-      this.Store.addEvidences(nodes)
+      this.Store.addGoals(nodes)
       this.Store.calculate()
+      if (this.Store.compareConfig) {
+        this.Store.calculate(true)
+      }
     },
     cancelOverlay() {
       this.nodesToAdd = []
@@ -205,9 +168,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#evidence {
-  background-color: white;
-}
 
 .addButton {
   width: 100%;
@@ -224,6 +184,7 @@ export default {
   padding: 0;
   border: 0;
 }
+
 
 .NoHeader ::v-deep(.p-datatable-thead) {
   display: None !important

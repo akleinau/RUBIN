@@ -153,13 +153,10 @@ export default {
       this.Store.reset()
     },
     startComparing() {
-      this.Store.selectedConfig = {
-        "name": "compare",
-        "config": {
-          "patient": JSON.parse(JSON.stringify(this.Store.patient)),
-          "options": JSON.parse(JSON.stringify(this.Store.options)),
-          "explain": JSON.parse(JSON.stringify(this.Store.explain))
-        }
+      this.Store.compareConfig = {
+        "patient": JSON.parse(JSON.stringify(this.Store.patient)),
+        "predictions": JSON.parse(JSON.stringify(this.Store.predictions)),
+        "explain": JSON.parse(JSON.stringify(this.Store.explain))
       }
 
       //change header
@@ -169,16 +166,15 @@ export default {
       configItem.command = () => {
         this.stopComparing()
       }
-      this.$refs.compareOverlay.toggle()
     },
     stopComparing() {
       let configItem = this.items.find(a => a.key === "savedConfigurations")
       configItem.label = "start comparing"
       configItem.icon = PrimeIcons.BOOKMARK
-      configItem.command = (event) => {
-        this.$refs.compareOverlay.toggle(event.originalEvent)
+      configItem.command = () => {
+        this.startComparing()
       }
-      this.Store.selectedConfig = null
+      this.Store.compareConfig = null
     },
     sendFeedback() {
       this.showFeedback = false

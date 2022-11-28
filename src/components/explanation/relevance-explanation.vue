@@ -1,7 +1,14 @@
 <template>
   <div>
-    <DataTable class=" p-datatable-sm" :value="Store.explain.relevance"
+    <DataTable class=" p-datatable-sm" :value="table"
+               rowGroupMode="subheader" groupRowsBy="config_name"
                :rowClass="isTherapyRow">
+
+      <template #groupheader="slotProps">
+        <br>
+        <b v-if="Store.compareConfig">{{ slotProps.data.config_name }}:</b>
+      </template>
+
       <ColumnGroup type="header">
         <Row>
           <Column header="" field="node_name" :rowspan="2"/>
@@ -15,11 +22,11 @@
 
       <Column :header="$t('Node')" field="node_name" :rowspan="2">
         <template #body="slotProps">
-          <div :class="{ red: isDifferentName(slotProps.data) }">
-            {{ Store.labels[slotProps.data.node_name] }}:
-            <span :class="{red: isDifferentState(slotProps.data)}">{{
-                getState(slotProps.data.node_name)
-              }} </span>
+          <div :class="{ highlightCompare: isDifferentName(slotProps.data) }">
+            {{ slotProps.data.label }}:
+            <span :class="{highlightCompare: isDifferentState(slotProps.data)}">
+                {{ slotProps.data.state }}
+            </span>
           </div>
         </template>
       </Column>
@@ -37,48 +44,6 @@
       </Column>
     </DataTable>
 
-    <!--    compare view  -->
-    <div v-if="Store.selectedConfig !== null">
-      <br> <br>
-      <span style="color:red">Red</span> nodes are changed.
-
-      <h3> {{ Store.selectedConfig.name }}:</h3>
-      <DataTable class="p-datatable-sm" :value="Store.selectedConfig.config.explain.relevance" dataKey="node_name"
-                 :rowClass="isTherapyRow">
-        <ColumnGroup type="header">
-          <Row>
-            <Column header="" field="node_name" :rowspan="2"/>
-            <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
-            <Column header="Influence on outcome" :colspan="getGoalKeyNum()"></Column>
-          </Row>
-          <Row>
-            <Column v-for="goal in compareGoalnames" :field="goal" :header="goal" :key="goal"/>
-          </Row>
-        </ColumnGroup>
-        <Column :header="$t('Node')" field="node_name">
-          <template #body="slotProps">
-            <div :class="{ red: isDifferentName(slotProps.data, true) }">
-              {{ Store.labels[slotProps.data.node_name] }}:
-              <span :class="{red: isDifferentState(slotProps.data, true)}">{{
-                  getCompareState(slotProps.data.node_name)
-                }} </span>
-            </div>
-          </template>
-        </Column>
-        <Column :header="$t('Relevance')" field="overall_relevance">
-          <template #body="slotProps">
-            <bar :value="slotProps.data.overall_relevance" color="#004d80" width="200"
-                 v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
-          </template>
-        </Column>
-        <Column v-for="goal in compareGoalnames" :field="goal" :header="goal" :key="goal">
-          <template #body="slotProps">
-            <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
-                         v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
-          </template>
-        </Column>
-      </DataTable>
-    </div>
   </div>
 </template>
 
@@ -115,14 +80,45 @@ export default {
     //does the same as goalnames, but updates when selectedConfig is loaded
     compareGoalnames: function () {
       let goalnames = []
-      if (this.Store.selectedConfig != null) {
-        if (this.Store.patient.goals != null && this.Store.selectedConfig.config.explain.relevance != null) {
+      if (this.Store.compareConfig != null) {
+        if (this.Store.patient.goals != null && this.Store.compareConfig.explain.relevance != null) {
           this.Store.patient.goals.forEach(goal => {
             goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
           })
         }
       }
       return goalnames
+    },
+    table: function () {
+      if (this.Store.explain.relevance) {
+        let table = []
+        this.Store.explain.relevance.forEach(n => {
+          table.push({
+            config_name: "current",
+            label: this.Store.labels[n.node_name],
+            node_name: n.node_name,
+            state: this.getState(n.node_name),
+            overall_relevance: n.overall_relevance,
+            relevancies: n.relevancies
+          })
+        })
+
+        //compare
+        if (this.Store.compareConfig != null) {
+          this.Store.compareConfig.explain.relevance.forEach(n => {
+            table.push({
+              config_name: "compare",
+              label: this.Store.labels[n.node_name],
+              node_name: n.node_name,
+              state: this.getCompareState(n.node_name),
+              overall_relevance: n.overall_relevance,
+              relevancies: n.relevancies
+            })
+          })
+        }
+
+        return table
+      } else return []
     }
   },
   methods: {
@@ -159,7 +155,7 @@ export default {
     },
     getCompareState(name) {
       let state = "unknown"
-      this.Store.selectedConfig.config.explain.states.forEach(node => {
+      this.Store.compareConfig.explain.states.forEach(node => {
         if (node.name === name) {
           state = node.state
         }
@@ -177,19 +173,19 @@ export default {
       if (compare) {
         return !this.Store.explain.relevance.find(a => a.node_name === row.node_name);
       }
-      if (this.Store.selectedConfig !== null) {
-        return !this.Store.selectedConfig.config.explain.relevance.find(a => a.node_name === row.node_name)
+      if (this.Store.compareConfig !== null) {
+        return !this.Store.compareConfig.explain.relevance.find(a => a.node_name === row.node_name)
       }
       return false
     },
-    isDifferentState(row, compare = false) {
-      if (compare) {
+    isDifferentState(row) {
+      if (row.config_name === "compare") {
         let node = this.Store.explain.relevance.find(a => a.node_name === row.node_name)
         if (node === undefined) return true
         return this.getState(node.node_name) !== this.getCompareState(row.node_name);
       }
-      if (this.Store.selectedConfig !== null) {
-        let node = this.Store.selectedConfig.config.explain.relevance.find(a => a.node_name === row.node_name)
+      if (this.Store.compareConfig !== null) {
+        let node = this.Store.compareConfig.explain.relevance.find(a => a.node_name === row.node_name)
         if (node === undefined) return true
         return this.getState(row.node_name) !== this.getCompareState(node.node_name);
       }
@@ -218,8 +214,8 @@ img {
   width: 100%;
 }
 
-.red {
-  color: red;
+.highlightCompare {
+  color: darkviolet;
 }
 
 </style>

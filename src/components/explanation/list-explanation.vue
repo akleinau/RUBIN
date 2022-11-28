@@ -8,9 +8,9 @@
               :label="getLabel(slotProps.data.probability)"/>
       </template>
     </Column>
-    <Column header="" field="beforeState" v-if="Store.selectedConfig">
+    <Column header="" field="beforeState" v-if="Store.compareConfig">
       <template #body="slotProps">
-        <div v-if="slotProps.data.beforeState !== ''">{{ Store.selectedConfig.name }}: &nbsp;</div>
+        <div v-if="slotProps.data.beforeState !== ''">compare: &nbsp;</div>
         <div :style="{color: color(slotProps.data.beforeProb)}"> {{ slotProps.data.beforeState }}</div>
       </template>
     </Column>
@@ -30,7 +30,7 @@ export default {
   computed: {
     data: function () {
       if (this.Store.explain.states === null) return null
-      if (this.Store.selectedConfig == null) {
+      if (this.Store.compareConfig == null) {
         let data = []
         this.Store.explain.states.forEach(a => {
           data.push({
@@ -46,7 +46,7 @@ export default {
       } else {
         let data = []
         this.Store.explain.states.forEach(a => {
-          let compareNode = this.Store.selectedConfig.config.explain.states.find(n => n.name === a.name)
+          let compareNode = this.Store.compareConfig.explain.states.find(n => n.name === a.name)
           data.push({
             "name": a.name,
             "state": a.state,

@@ -22,7 +22,7 @@
         <!-- decision table -->
         <div>
           <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
-          <optionsTable/>
+          <optionsTable style="border: solid 5px lightgray"/>
         </div>
         <br>
 
@@ -33,11 +33,19 @@
             <div v-for="goal in Store.patient.goals" :key="goal.name">
               {{ Store.labels[goal.name] }} : {{ goal.selected.name }}
             </div>
+            <div v-for="goal in this.givenGoals" :key="goal.name">
+              {{goal.name}} - <b> given: {{goal.selected.name}} </b>
+            </div>
+
             <h3 class="text-left">{{ $t("Interventions") }}:</h3>
             <div v-for="target in Store.patient.targets" :key="target.name">
               {{ Store.labels[target.name] }}
             </div>
+            <div v-for="target in this.givenTargets" :key="target.name">
+              {{target.name}} - <b> given: {{target.selected.name}} </b>
+            </div>
           </TabPanel>
+
           <TabPanel header="custom" v-bind:key="null">
             <!-- Desired Outcomes -->
             <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
@@ -49,7 +57,7 @@
             <!-- Intervention Input -->
             <div>
               <h3 class="text-left">{{ $t("Interventions") }}:</h3>
-              <TherapyInput/>
+              <optionsInput/>
 
             </div>
           </TabPanel>
@@ -62,16 +70,16 @@
 </template>
 
 <script>
-import TherapyInput from "@/components/Therapy/therapy-input";
-import optionsTable from "@/components/Therapy/options-table"
-import GoalInput from "@/components/InputFields/goal-input";
+import optionsInput from "@/components/Prediction/options-input";
+import optionsTable from "@/components/Prediction/options-table"
+import GoalInput from "@/components/Prediction/goal-input";
 import {useStore} from '@/store'
 
 export default {
   name: "therapy-options",
   emits: ["update"],
   components: {
-    TherapyInput,
+    optionsInput,
     optionsTable,
     GoalInput
   },
@@ -82,7 +90,9 @@ export default {
   data() {
     return {
       "showLocal": false,
-      currentPhaseIndex: 0
+      currentPhaseIndex: 0,
+      givenGoals: [],
+      givenTargets: null,
     }
   },
   watch: {
@@ -92,13 +102,33 @@ export default {
       } else {
         this.Store.currentPhase = this.Store.phases[this.currentPhaseIndex]
         this.Store.phase_change()
+        this.calculateGivenGoals(this.Store.currentPhase.sets.goal)
+        this.calculateGivenTargets(this.Store.currentPhase.sets.target)
       }
-    },
+    }
   },
   methods: {
     getGoalLabel(goal) {
       return this.Store.labels[goal.name] + ": " + goal.selected.name
     },
+    calculateGivenGoals(goals) {
+      this.givenGoals = []
+      goals.forEach(g => {
+        let ev = this.Store.patient.evidence.find(e => e.name === g.name)
+        if (ev) {
+          this.givenGoals.push(ev)
+        }
+      })
+    },
+    calculateGivenTargets(targets) {
+      this.givenTargets = []
+      targets.forEach(t => {
+        let ev = this.Store.patient.evidence.find(e => e.name === t)
+        if (ev) {
+          this.givenTargets.push(ev)
+        }
+      })
+    }
   }
 }
 </script>
