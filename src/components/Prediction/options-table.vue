@@ -149,7 +149,7 @@ export default {
       }
     },
     getGoalLabel(goal) {
-      return this.Store.labels[goal.name] + ": " + goal.selected.name
+      return this.Store.labels[goal.name] + ": " + goal.selected.label
     },
     deselect() {
       this.Store.predictions.selectedOption = this.Store.predictions.likelyResult[0]

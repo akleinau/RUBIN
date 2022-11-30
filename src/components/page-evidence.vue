@@ -35,7 +35,8 @@
 
           <Column field="value" :header="Store.compareConfig ? 'current' : ''" class="optionCol">
             <template #body="slotProps">
-              <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
+              <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
+                        optionLabel="label"
                         placeholder="" @change="onNodeChange(slotProps.data)"
                         class="p-0 m-0"
                         :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
@@ -52,7 +53,8 @@
           <template #header>
             <div class="flex justify-content-end w-full">
               <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
-              <Button class="p-button-secondary" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
+              <Button class="p-button-secondary mr-2" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
+              <Button class="p-button-secondary" label="clear evidence" icon="pi pi-trash" @click="clearEvidence"/>
             </div>
           </template>
           <br>
@@ -82,7 +84,7 @@
               <template #body="slotProps">
                 <ToggleButton class="m-2" v-for="option in slotProps.data.options" :key="option"
                               v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
-                              :onLabel="option.name" onIcon="pi pi-check" :offLabel="option.name" offIcon="pi pi-plus">
+                              :onLabel="option.label" onIcon="pi pi-check" :offLabel="option.label" offIcon="pi pi-plus">
                 </ToggleButton>
 
               </template>
@@ -132,6 +134,7 @@ export default {
               options: node.options.map(option => {
                 return {
                   name: option.name,
+                  label: option.label,
                   checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
                 }
               }),
@@ -178,10 +181,11 @@ export default {
       if (option.checked) {
         let item = {
           name: slotProps.data.name,
-          selected: {name: option.name},
+          selected: {name: option.name, label: option.label},
           options: slotProps.data.options.map(option => {
             return {
-              name: option.name
+              name: option.name,
+              label: option.label
             }
           }),
           group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[slotProps.data.name]
@@ -211,6 +215,13 @@ export default {
     cancelOverlay() {
       this.nodesToAdd = []
       this.overlay = false
+    },
+    clearEvidence() {
+      this.cancelOverlay()
+      this.Store.patient.evidence.forEach(ev => {
+        this.Store.deleteEvidence(ev)
+      })
+
     },
     isDifferentState(item) {
       if (item.selectedCompare === '') return false

@@ -7,15 +7,15 @@
     </Column>
     <Column field="value" class="optionCol">
       <template v-if="changeable" #body="slotProps">
-        <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
-                  placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)"
+        <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="label"
+                  placeholder="enter goal" @change="onNodeChange(slotProps.data)"
                   class="p-0 m-0">
         </Dropdown>
         <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
       </template>
       <template v-else #body="slotProps">
-        {{ Store.labels[slotProps.data.selected.name] }}
+        {{ Store.labels[slotProps.data.selected.label] }}
       </template>
     </Column>
   </DataTable>
@@ -47,7 +47,7 @@
         <template #body="slotProps">
           <ToggleButton class="m-2" v-for="option in slotProps.data.options" :key="option"
                         v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
-                        :onLabel="option.name" onIcon="pi pi-check" :offLabel="option.name" offIcon="pi pi-plus">
+                        :onLabel="option.label" onIcon="pi pi-check" :offLabel="option.label" offIcon="pi pi-plus">
           </ToggleButton>
 
         </template>
@@ -106,6 +106,7 @@ export default {
               options: node.options.map(option => {
                 return {
                   name: option.name,
+                  label: option.label,
                   checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
                 }
               }),
@@ -124,10 +125,11 @@ export default {
       if (option.checked) {
         let item = {
           name: slotProps.data.name,
-          selected: {name: option.name},
+          selected: {name: option.name, label: option.label},
           options: slotProps.data.options.map(option => {
             return {
-              name: option.name
+              name: option.name,
+              label: option.label
             }
           })
         }

@@ -223,11 +223,19 @@ export const useStore = defineStore('store', {
                 gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getNetwork?network=" + this.network);
             }
             const network = await gResponse.json();
+            let customization = network.customization
             let nodes = []
             for (var key in network.states) {
                 let options = []
                 network.states[key].forEach(value => {
-                    options.push({'name': value})
+                    let label = value
+                    if (customization !== null && customization.replace) {
+                        customization.replace.forEach(r => {
+                            label = label.replace(r.old, r.new)
+                        })
+                    }
+
+                    options.push({'name': value, 'label': label})
                 })
                 nodes.push({'name': key, 'options': options})
             }
@@ -240,8 +248,8 @@ export const useStore = defineStore('store', {
 
             this.description = network.description
             this.labels = network.labels
-            let customization = network.customization
-            if (customization != null) {
+
+            if (customization !== null) {
                 this.phases = network.customization.phases
                 if (!noPhase) {
                     this.currentPhase = this.phases[0]
@@ -321,7 +329,10 @@ export const useStore = defineStore('store', {
                 this.currentPhase.sets.goal.forEach(a => {
                     let fullnode = this.patient.nodes.find(b => b.name === a.name)
                     if (fullnode) {
-                        goalList.push({"name": a.name, "selected": {"name": a.option}, "options": fullnode.options})
+                        let selectedOption = fullnode.options.find(o => o.name === a.option)
+                        if (selectedOption) {
+                            goalList.push({"name": a.name, "selected": selectedOption, "options": fullnode.options})
+                        }
                     }
                 })
                 this.addGoals(goalList)
