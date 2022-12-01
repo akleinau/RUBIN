@@ -31,10 +31,10 @@
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
             <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
-              {{ Store.labels[goal.name] }} : {{ goal.selected.label }}
+              {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.selected.name] }}
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
-              {{goal.name}} - <b> given: {{goal.selected.label}} </b>
+              {{Store.labels[goal.name]}} - <b> given: {{Store.option_labels[goal.selected.name]}} </b>
             </div>
 
             <h3 class="text-left">{{ $t("Interventions") }}:</h3>
@@ -42,7 +42,7 @@
               {{ Store.labels[target.name] }}
             </div>
             <div v-for="target in this.givenTargets" :key="target.name">
-              {{target.name}} - <b> given: {{target.selected.label}} </b>
+              {{Store.labels[target.name]}} - <b> given: {{Store.option_labels[target.selected.name]}} </b>
             </div>
           </TabPanel>
 

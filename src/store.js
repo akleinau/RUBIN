@@ -27,6 +27,7 @@ export const useStore = defineStore('store', {
 
         edges: [], //edges of the network
         labels: null,
+        option_labels: null,
 
         configurations: [],
         compareConfig: null, //{patient, explain, predictions}
@@ -225,17 +226,19 @@ export const useStore = defineStore('store', {
             const network = await gResponse.json();
             let customization = network.customization
             let nodes = []
+            this.option_labels = {}
             for (var key in network.states) {
                 let options = []
-                network.states[key].forEach(value => {
-                    let label = value
+                network.states[key].forEach(option_name => {
+                    let option_label = option_name
                     if (customization !== null && customization.replace) {
                         customization.replace.forEach(r => {
-                            label = label.replace(r.old, r.new)
+                            option_label = option_label.replace(r.old, r.new)
                         })
                     }
+                    this.option_labels[option_name] = option_label
 
-                    options.push({'name': value, 'label': label})
+                    options.push({'name': option_name})
                 })
                 nodes.push({'name': key, 'options': options})
             }
@@ -273,12 +276,10 @@ export const useStore = defineStore('store', {
                 this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
                 this.patient.evidence.push(node)
             })
-            this.phase_change()
         },
         deleteEvidence(node) {
             this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
             this.patient.nodes.push({name: node.name, options: node.options})
-            this.phase_change()
         },
         addTargets(nodes) {
             nodes.forEach(node => {

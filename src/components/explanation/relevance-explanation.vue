@@ -72,7 +72,7 @@ export default {
       let goalnames = []
       if (this.Store.patient.goals != null && this.Store.explain.relevance != null) {
         this.Store.patient.goals.forEach(goal => {
-          goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
+          goalnames.push(this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.selected.name])
         })
       }
       return goalnames
@@ -83,7 +83,7 @@ export default {
       if (this.Store.compareConfig != null) {
         if (this.Store.patient.goals != null && this.Store.compareConfig.explain.relevance != null) {
           this.Store.patient.goals.forEach(goal => {
-            goalnames.push(this.Store.labels[goal.name] + ": " + goal.selected.name)
+            goalnames.push(this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.selected.name])
           })
         }
       }
@@ -148,7 +148,7 @@ export default {
       let state = "unknown"
       this.Store.explain.states.forEach(node => {
         if (node.name === name) {
-          state = node.state
+          state = this.Store.option_labels[node.state]
         }
       })
       return state
@@ -157,7 +157,7 @@ export default {
       let state = "unknown"
       this.Store.compareConfig.explain.states.forEach(node => {
         if (node.name === name) {
-          state = node.state
+          state = this.Store.option_labels[node.state]
         }
       })
       return state

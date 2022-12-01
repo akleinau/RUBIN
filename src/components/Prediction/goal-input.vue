@@ -6,22 +6,19 @@
       </template>
     </Column>
     <Column field="value" class="optionCol">
-      <template v-if="changeable" #body="slotProps">
-        <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="label"
+      <template #body="slotProps">
+        <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" :optionLabel="get_option_label"
                   placeholder="enter goal" @change="onNodeChange(slotProps.data)"
                   class="p-0 m-0">
         </Dropdown>
         <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
       </template>
-      <template v-else #body="slotProps">
-        {{ Store.labels[slotProps.data.selected.label] }}
-      </template>
     </Column>
   </DataTable>
   <!--    input dialog  -->
   <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
-          v-if="changeable" :closable="false">
+          :closable="false">
     <template #header>
       <div class="flex justify-content-end w-full">
         <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
@@ -47,7 +44,8 @@
         <template #body="slotProps">
           <ToggleButton class="m-2" v-for="option in slotProps.data.options" :key="option"
                         v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
-                        :onLabel="option.label" onIcon="pi pi-check" :offLabel="option.label" offIcon="pi pi-plus">
+                        :onLabel="get_option_label(option)" onIcon="pi pi-check"
+                        :offLabel="get_option_label(option)" offIcon="pi pi-plus">
           </ToggleButton>
 
         </template>
@@ -56,7 +54,7 @@
   </Dialog>
 
   <!-- Buttons -->
-  <div v-if="changeable">
+  <div>
     <Button class="addButton p-button-secondary" @click="overlay = true"
             :label="$t('addOutcome')"></Button>
   </div>
@@ -74,7 +72,6 @@ export default {
   props: [
     "title",
     "selection",
-    "changeable",
     "hideHeader"
   ],
   setup() {
@@ -106,7 +103,6 @@ export default {
               options: node.options.map(option => {
                 return {
                   name: option.name,
-                  label: option.label,
                   checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
                 }
               }),
@@ -125,11 +121,10 @@ export default {
       if (option.checked) {
         let item = {
           name: slotProps.data.name,
-          selected: {name: option.name, label: option.label},
+          selected: {name: option.name},
           options: slotProps.data.options.map(option => {
             return {
-              name: option.name,
-              label: option.label
+              name: option.name
             }
           })
         }
@@ -164,6 +159,9 @@ export default {
     cancelOverlay() {
       this.nodesToAdd = []
       this.overlay = false
+    },
+    get_option_label(item) {
+      return this.Store.option_labels[item.name]
     }
   }
 }

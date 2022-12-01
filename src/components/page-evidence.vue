@@ -29,14 +29,14 @@
           <Column class="optionCol" header="compare" v-if="Store.compareConfig">
             <template #body="slotProps">
               <div v-if="slotProps.data.selectedCompare === ''"></div>
-              <div v-else> {{ slotProps.data.selectedCompare }}</div>
+              <div v-else> {{ Store.option_labels[slotProps.data.selectedCompare] }}</div>
             </template>
           </Column>
 
           <Column field="value" :header="Store.compareConfig ? 'current' : ''" class="optionCol">
             <template #body="slotProps">
               <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
-                        optionLabel="label"
+                        :optionLabel="get_option_label"
                         placeholder="" @change="onNodeChange(slotProps.data)"
                         class="p-0 m-0"
                         :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
@@ -84,7 +84,8 @@
               <template #body="slotProps">
                 <ToggleButton class="m-2" v-for="option in slotProps.data.options" :key="option"
                               v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
-                              :onLabel="option.label" onIcon="pi pi-check" :offLabel="option.label" offIcon="pi pi-plus">
+                              :onLabel="Store.option_labels[option.name]" onIcon="pi pi-check"
+                              :offLabel="Store.option_labels[option.name]" offIcon="pi pi-plus">
                 </ToggleButton>
 
               </template>
@@ -134,7 +135,6 @@ export default {
               options: node.options.map(option => {
                 return {
                   name: option.name,
-                  label: option.label,
                   checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
                 }
               }),
@@ -181,11 +181,10 @@ export default {
       if (option.checked) {
         let item = {
           name: slotProps.data.name,
-          selected: {name: option.name, label: option.label},
+          selected: {name: option.name},
           options: slotProps.data.options.map(option => {
             return {
-              name: option.name,
-              label: option.label
+              name: option.name
             }
           }),
           group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[slotProps.data.name]
@@ -226,6 +225,9 @@ export default {
     isDifferentState(item) {
       if (item.selectedCompare === '') return false
       return item.selected.name !== item.selectedCompare
+    },
+    get_option_label(item) {
+      return this.Store.option_labels[item.name]
     }
   }
 }
