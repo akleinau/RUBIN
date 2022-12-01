@@ -37,7 +37,7 @@
               {{Store.labels[goal.name]}} - <b> given: {{Store.option_labels[goal.selected.name]}} </b>
             </div>
 
-            <h3 class="text-left">{{ $t("Interventions") }}:</h3>
+            <h3 class="text-left" v-if="Store.patient.targets.length > 0">{{ $t("Interventions") }}:</h3>
             <div v-for="target in Store.patient.targets" :key="target.name">
               {{ Store.labels[target.name] }}
             </div>
