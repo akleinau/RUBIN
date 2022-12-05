@@ -31,18 +31,18 @@
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
             <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
-              {{ Store.labels[goal.name] }} : {{ goal.selected.name }}
+              {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
-              {{goal.name}} - <b> given: {{goal.selected.name}} </b>
+              {{Store.labels[goal.name]}} - <b> given: {{Store.option_labels[goal.name][goal.selected.name]}} </b>
             </div>
 
-            <h3 class="text-left">{{ $t("Interventions") }}:</h3>
+            <h3 class="text-left" v-if="Store.patient.targets.length > 0">{{ $t("Interventions") }}:</h3>
             <div v-for="target in Store.patient.targets" :key="target.name">
               {{ Store.labels[target.name] }}
             </div>
             <div v-for="target in this.givenTargets" :key="target.name">
-              {{target.name}} - <b> given: {{target.selected.name}} </b>
+              {{Store.labels[target.name]}} - <b> given: {{Store.option_labels[target.name][target.selected.name]}} </b>
             </div>
           </TabPanel>
 
@@ -51,7 +51,6 @@
             <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
             <GoalInput title="Desired Outcomes" :changeable="true"
                        :hideHeader="true"
-                       :selection="Store.patient.goals"
                        @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
 
             <!-- Intervention Input -->

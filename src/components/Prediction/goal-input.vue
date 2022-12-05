@@ -6,22 +6,20 @@
       </template>
     </Column>
     <Column field="value" class="optionCol">
-      <template v-if="changeable" #body="slotProps">
-        <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options" optionLabel="name"
-                  placeholder="slotProps.data.selected" @change="onNodeChange(slotProps.data)"
+      <template #body="slotProps">
+        <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
+                  :optionLabel="get_option_label"
+                  placeholder="enter goal" @change="onNodeChange(slotProps.data)"
                   class="p-0 m-0">
         </Dropdown>
         <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
       </template>
-      <template v-else #body="slotProps">
-        {{ Store.labels[slotProps.data.selected.name] }}
-      </template>
     </Column>
   </DataTable>
   <!--    input dialog  -->
   <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
-          v-if="changeable" :closable="false">
+          :closable="false">
     <template #header>
       <div class="flex justify-content-end w-full">
         <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
@@ -47,7 +45,8 @@
         <template #body="slotProps">
           <ToggleButton class="m-2" v-for="option in slotProps.data.options" :key="option"
                         v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
-                        :onLabel="option.name" onIcon="pi pi-check" :offLabel="option.name" offIcon="pi pi-plus">
+                        :onLabel="Store.option_labels[slotProps.data.name][option.name]" onIcon="pi pi-check"
+                        :offLabel="Store.option_labels[slotProps.data.name][option.name]" offIcon="pi pi-plus">
           </ToggleButton>
 
         </template>
@@ -56,7 +55,7 @@
   </Dialog>
 
   <!-- Buttons -->
-  <div v-if="changeable">
+  <div>
     <Button class="addButton p-button-secondary" @click="overlay = true"
             :label="$t('addOutcome')"></Button>
   </div>
@@ -73,8 +72,6 @@ export default {
   name: "node-input",
   props: [
     "title",
-    "selection",
-    "changeable",
     "hideHeader"
   ],
   setup() {
@@ -92,6 +89,21 @@ export default {
     }
   },
   computed: {
+    selection: function () {
+      return this.Store.patient.goals.map(node => {
+        return {
+          name: node.name,
+          selected: {name: node.selected.name, node: node.name},
+          options:
+              node.options.map(option => {
+                return {
+                  name: option.name,
+                  node: node.name
+                }
+              })
+        }
+      })
+    },
     //adds 'checked' property to every option of every node of the overlay
     overlayNodes: function () {
       let nodes = this.Store.patient.nodes
@@ -106,7 +118,8 @@ export default {
               options: node.options.map(option => {
                 return {
                   name: option.name,
-                  checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null
+                  checked: this.nodesToAdd.find(n => n.name === node.name && n.selected.name === option.name) != null,
+                  node: node.name
                 }
               }),
             }
@@ -124,10 +137,11 @@ export default {
       if (option.checked) {
         let item = {
           name: slotProps.data.name,
-          selected: {name: option.name},
+          selected: {name: option.name, node: slotProps.data.name},
           options: slotProps.data.options.map(option => {
             return {
-              name: option.name
+              name: option.name,
+              node: slotProps.data.name
             }
           })
         }
@@ -162,6 +176,9 @@ export default {
     cancelOverlay() {
       this.nodesToAdd = []
       this.overlay = false
+    },
+    get_option_label(option) {
+      return this.Store.option_labels[option.node][option.name]
     }
   }
 }

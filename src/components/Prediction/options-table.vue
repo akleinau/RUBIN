@@ -23,7 +23,7 @@
           <template #body="slotProps">
             <div v-if="Object.keys(slotProps.data.option).length === 0"><b>overall</b></div>
             <div v-else v-for="o in Object.keys(slotProps.data.option)" :key="o">
-              {{ Store.labels[o] }}: {{ slotProps.data.option[o] }}
+              {{ Store.labels[o] }}: {{ Store.option_labels[o][slotProps.data.option[o]] }}
             </div>
 
           </template>
@@ -149,7 +149,7 @@ export default {
       }
     },
     getGoalLabel(goal) {
-      return this.Store.labels[goal.name] + ": " + goal.selected.name
+      return this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name]
     },
     deselect() {
       this.Store.predictions.selectedOption = this.Store.predictions.likelyResult[0]

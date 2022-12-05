@@ -26,7 +26,12 @@ export const useStore = defineStore('store', {
         },
 
         edges: [], //edges of the network
+        network_translation: {
+            original_labels: null,
+            custom_labels: null
+        },
         labels: null,
+        option_labels: null,
 
         configurations: [],
         compareConfig: null, //{patient, explain, predictions}
@@ -40,7 +45,8 @@ export const useStore = defineStore('store', {
         phases: [],
         evidenceGroupMap: null,
         currentPhase: null,
-        showTutorial: false
+        showTutorial: false,
+        language: "en"
     }),
     actions: {
         async reset(noPhase = false) {
@@ -223,11 +229,15 @@ export const useStore = defineStore('store', {
                 gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getNetwork?network=" + this.network);
             }
             const network = await gResponse.json();
+            let customization = network.customization
             let nodes = []
+            this.option_labels = {}
             for (var key in network.states) {
                 let options = []
-                network.states[key].forEach(value => {
-                    options.push({'name': value})
+                this.option_labels[key] = {}
+                network.states[key].forEach(option_name => {
+                    this.option_labels[key][option_name] = option_name
+                    options.push({'name': option_name})
                 })
                 nodes.push({'name': key, 'options': options})
             }
@@ -239,9 +249,10 @@ export const useStore = defineStore('store', {
             })
 
             this.description = network.description
+            this.network_translation.original_labels = network.labels
             this.labels = network.labels
-            let customization = network.customization
-            if (customization != null) {
+
+            if (customization !== null) {
                 this.phases = network.customization.phases
                 if (!noPhase) {
                     this.currentPhase = this.phases[0]
@@ -256,21 +267,74 @@ export const useStore = defineStore('store', {
                         })
                     })
                 }
+
+                if (network.customization.translation) {
+                    this.network_translation.custom_labels = network.customization.translation
+                }
             }
+
+            this.updateLabels()
+
             await this.calculate()
         },
+        updateLabels() {
+
+            for (const name in this.labels) {
+                //prio 3: original name
+                let label = this.network_translation.original_labels[name]
+
+                if (this.network_translation.custom_labels) {
+                    //prio 2: standard name
+                    let standard = this.network_translation.custom_labels["standard"]
+                    if (standard && standard[name]) {
+                        label = standard[name]
+                    }
+
+                    //prio 1: language-specific name
+                    let language = this.network_translation.custom_labels[this.language]
+                    if (language && language[name]) {
+                        label = language[name]
+                    }
+
+                }
+                this.labels[name] = label
+            }
+
+            for (const name in this.option_labels) {
+                for (const option_name in this.option_labels[name]) {
+
+                    //prio 3: original name
+                    let label = option_name
+
+                    if (this.network_translation.custom_labels) {
+                        //prio 2: standard name
+                        let standard = this.network_translation.custom_labels["standard"]
+                        if (standard && standard[name + " - " + option_name]) {
+                            label = standard[name + " - " + option_name]
+                        }
+
+                        //prio 1: language-specific name
+                        let language = this.network_translation.custom_labels[this.language]
+                        if (language && language[name + " - " + option_name]) {
+                            label = language[name + " - " + option_name]
+                        }
+
+                    }
+                    this.option_labels[name][option_name] = label
+                }
+            }
+        },
+
         addEvidences(nodes) {
             nodes.forEach(node => {
                 this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
                 this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
                 this.patient.evidence.push(node)
             })
-            this.phase_change()
         },
         deleteEvidence(node) {
             this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
             this.patient.nodes.push({name: node.name, options: node.options})
-            this.phase_change()
         },
         addTargets(nodes) {
             nodes.forEach(node => {
@@ -321,7 +385,10 @@ export const useStore = defineStore('store', {
                 this.currentPhase.sets.goal.forEach(a => {
                     let fullnode = this.patient.nodes.find(b => b.name === a.name)
                     if (fullnode) {
-                        goalList.push({"name": a.name, "selected": {"name": a.option}, "options": fullnode.options})
+                        let selectedOption = fullnode.options.find(o => o.name === a.option)
+                        if (selectedOption) {
+                            goalList.push({"name": a.name, "selected": selectedOption, "options": fullnode.options})
+                        }
                     }
                 })
                 this.addGoals(goalList)

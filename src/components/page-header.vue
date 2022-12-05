@@ -186,6 +186,8 @@ export default {
       this.items.forEach(a => {
         a.label = this.$t(a.key)
       })
+      this.Store.language=this.$i18n.locale
+      this.Store.updateLabels()
     },
     loadPatient(event) {
       this.$refs.loadOverlay.toggle(event)
