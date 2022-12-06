@@ -32,17 +32,36 @@
             <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
               {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
+              <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
+                ,<b> compare: - given: {{
+                  Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
+                }} </b>
+              </span>
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
-              {{Store.labels[goal.name]}} - <b> given: {{Store.option_labels[goal.name][goal.selected.name]}} </b>
+              {{ Store.labels[goal.name] }} - <b> given: {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
+              <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
+                ,<b> compare: - given: {{
+                  Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
+                }} </b>
+              </span>
             </div>
 
-            <h3 class="text-left" v-if="Store.patient.targets.length > 0">{{ $t("Interventions") }}:</h3>
+
+            <h3 class="text-left" v-if="Store.patient.targets.length > 0 || this.givenTargets.length > 0 ||
+            this.givenTargets_compare.length > 0">
+              {{ $t("Interventions") }}:
+            </h3>
             <div v-for="target in Store.patient.targets" :key="target.name">
               {{ Store.labels[target.name] }}
             </div>
             <div v-for="target in this.givenTargets" :key="target.name">
-              {{Store.labels[target.name]}} - <b> given: {{Store.option_labels[target.name][target.selected.name]}} </b>
+              {{ Store.labels[target.name] }} - <b> given:
+              {{ Store.option_labels[target.name][target.selected.name] }} </b>
+            </div>
+            <div v-for="target in this.givenTargets_compare" :key="target.name">
+              compare: {{ Store.labels[target.name] }} - <b> given:
+              {{ Store.option_labels[target.name][target.selected.name] }} </b>
             </div>
           </TabPanel>
 
@@ -89,9 +108,7 @@ export default {
   data() {
     return {
       "showLocal": false,
-      currentPhaseIndex: 0,
-      givenGoals: [],
-      givenTargets: null,
+      currentPhaseIndex: 0
     }
   },
   watch: {
@@ -101,32 +118,74 @@ export default {
       } else {
         this.Store.currentPhase = this.Store.phases[this.currentPhaseIndex]
         this.Store.phase_change()
-        this.calculateGivenGoals(this.Store.currentPhase.sets.goal)
-        this.calculateGivenTargets(this.Store.currentPhase.sets.target)
       }
+    }
+  },
+  computed: {
+    givenGoals: function () {
+      let givenGoals = []
+      if (this.Store.currentPhase !== null) {
+        let goals = this.Store.currentPhase.sets.goal
+        goals.forEach(g => {
+          let ev = this.Store.patient.evidence.find(e => e.name === g.name)
+          if (ev) {
+            givenGoals.push(ev)
+          }
+        })
+      }
+      return givenGoals
+    },
+    givenGoals_compare: function () {
+
+      let givenGoals_compare = []
+      if (this.Store.currentPhase !== null) {
+        let goals = this.Store.currentPhase.sets.goal
+        goals.forEach(g => {
+          if (this.Store.compareConfig) {
+            let ev = this.Store.compareConfig.patient.evidence.find(e => e.name === g.name)
+            if (ev) {
+              givenGoals_compare.push(ev)
+            }
+          }
+        })
+      }
+      return givenGoals_compare
+    },
+    givenTargets: function () {
+      let givenTargets = []
+      if (this.Store.currentPhase !== null) {
+        let targets = this.Store.currentPhase.sets.target
+        targets.forEach(t => {
+          let ev = this.Store.patient.evidence.find(e => e.name === t)
+          if (ev) {
+            givenTargets.push(ev)
+          }
+        })
+      }
+
+      return givenTargets
+    },
+    givenTargets_compare: function () {
+      let givenTargets_compare = []
+      if (this.Store.currentPhase !== null) {
+        let targets = this.Store.currentPhase.sets.target
+        targets.forEach(t => {
+
+          if (this.Store.compareConfig) {
+            let ev = this.Store.compareConfig.patient.evidence.find(e => e.name === t)
+            if (ev) {
+              givenTargets_compare.push(ev)
+            }
+          }
+        })
+      }
+
+      return givenTargets_compare
     }
   },
   methods: {
     getGoalLabel(goal) {
       return this.Store.labels[goal.name] + ": " + goal.selected.name
-    },
-    calculateGivenGoals(goals) {
-      this.givenGoals = []
-      goals.forEach(g => {
-        let ev = this.Store.patient.evidence.find(e => e.name === g.name)
-        if (ev) {
-          this.givenGoals.push(ev)
-        }
-      })
-    },
-    calculateGivenTargets(targets) {
-      this.givenTargets = []
-      targets.forEach(t => {
-        let ev = this.Store.patient.evidence.find(e => e.name === t)
-        if (ev) {
-          this.givenTargets.push(ev)
-        }
-      })
     }
   }
 }

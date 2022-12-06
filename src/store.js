@@ -86,19 +86,23 @@ export const useStore = defineStore('store', {
                 this.explanationLoading = true
 
                 let evidences = {}
-                for (var ev in patient.evidence) {
-                    evidences[patient.evidence[ev].name] = this.patient.evidence[ev].selected.name;
+                for (const ev in patient.evidence) {
+                    evidences[patient.evidence[ev].name] = patient.evidence[ev].selected.name;
                 }
 
                 //use current patient goals in both current config and compare config
                 let goals = {}
-                for (var goal in this.patient.goals) {
-                    goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
+                for (const goal in this.patient.goals) {
+                    if (!evidences[this.patient.goals[goal].name]) {
+                        goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
+                    }
                 }
 
                 let targets = []
                 for (const target in patient.targets) {
-                    targets.push(patient.targets[target].name)
+                    if (!evidences[patient.targets[target].name]) {
+                        targets.push(patient.targets[target].name)
+                    }
                 }
                 let gResponse = null
                 if (this.localNet) {
@@ -165,13 +169,15 @@ export const useStore = defineStore('store', {
             this.explanationLoading = true
 
             let evidences = {}
-            for (var ev in this.patient.evidence) {
+            for (var ev in patient.evidence) {
                 evidences[patient.evidence[ev].name] = patient.evidence[ev].selected.name;
             }
 
             let goals = {}
             for (var goal in this.patient.goals) {
-                goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
+                if (!evidences[this.patient.goals[goal].name]) {
+                    goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
+                }
             }
             let gResponse = null
             if (this.localNet) {

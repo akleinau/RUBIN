@@ -38,11 +38,14 @@
         <Column v-for="goal in getGoalKeys()" :field="goal.name" :header="getGoalLabel(goal)" :key="goal.name">
           <template #body="slotProps">
             <bar :value="slotProps.data.goalValues[String(goal.name)]" color="teal" width="200"
+                 v-if="!isNaN(slotProps.data.goalValues[String(goal.name)])"
                  v-tooltip="(slotProps.data.goalValues[String(goal.name)]*100).toFixed(0) + '%'"></bar>
             <!-- show percentages of selected configs -->
             <div v-if="slotProps.data.config_name === 'current' &&
               JSON.stringify(slotProps.data.option) === JSON.stringify(this.selectedOption.option)
-              || slotProps.data.config_name !== 'current'" style="fontSize: 1.5rem">
+              || slotProps.data.config_name !== 'current' &&
+                 !isNaN(slotProps.data.goalValues[String(goal.name)])"
+                 style="fontSize: 1.5rem">
               {{ (slotProps.data.goalValues[String(goal.name)] * 100).toFixed(0) }} %
             </div>
           </template>

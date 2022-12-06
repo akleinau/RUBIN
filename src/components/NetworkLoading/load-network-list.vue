@@ -43,6 +43,10 @@ export default {
       for (const key in netList) {
         this.networks.push({name: netList[key]})
       }
+      if (this.networks.length > 0) {
+        this.selectedNetwork = this.networks[0]
+      }
+
       this.$emit('updated')
     }
   },
