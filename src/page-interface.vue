@@ -66,7 +66,7 @@ export default {
       this.$emit("changePage")
     },
   },
-  created: async function () {
+  mounted: async function () {
     this.Store.language = this.$i18n.locale
     this.Store.network = this.network
     this.Store.localNet = this.localNet
