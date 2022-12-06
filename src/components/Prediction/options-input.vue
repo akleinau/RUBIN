@@ -1,7 +1,6 @@
 <template>
   <div style="position:relative">
 
-    <div v-if="Store.compareConfig == null">
       <Listbox :options="Store.patient.targets" :optionLabel="name" listStyle="max-height:300px"
                emptyMessage=" ">
         <template #option="slotProps">
@@ -13,13 +12,6 @@
         </template>
       </Listbox>
       <Button id="AddButton" :label="$t('addTarget')" class="p-button-secondary" @click="overlay = true"></Button>
-    </div>
-    <div v-else>
-      current: <span v-for="sel in Store.patient.targets" :key="sel">{{ sel.name }}, </span>
-      <br>
-      compare: <span v-for="sel in Store.compareConfig.patient.targets"
-                                             :key="sel">{{ sel.name }}, </span>
-    </div>
 
     <!--    input dialog  -->
     <Dialog header="  " v-model:visible="overlay" style="width:80%; height:90%; background:white" :modal="true"
