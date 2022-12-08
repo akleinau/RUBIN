@@ -12,14 +12,14 @@
       <ScrollPanel style="height:100%">
         <DataTable class="p-datatable-sm" :class="{NoHeader: !Store.compareConfig}" id="table" :value="table"
                    rowGroupMode="subheader" groupRowsBy="group"
-                   sortMode="single" sortField="group" :sortOrder="1">
+                   sortMode="multiple" :multiSortMeta="multiSortMeta">
           <template #groupheader="slotProps">
             <br>
             <b> {{ slotProps.data.group.substr(2) }} </b>
           </template>
 
           <Column field="group"/>
-          <Column field="name" style="padding: 0; border: 0;">
+          <Column field="name" style="padding: 0; border: 0; width:50%" frozen>
             <template #body="slotProps">
               {{ Store.labels[slotProps.data.name] }}
             </template>
@@ -33,17 +33,19 @@
             </template>
           </Column>
 
-          <Column field="value" :header="Store.compareConfig ? 'current' : ''" class="optionCol">
+          <Column field="value" :header="Store.compareConfig ? 'current' : ''" class="optionCol" >
             <template #body="slotProps">
+              <div class="flex flex-row flex-nowrap flex-shrink">
               <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
                         :optionLabel="get_option_label"
                         placeholder="" @change="onNodeChange(slotProps.data)"
-                        class="p-0 m-0"
+                        class="flex p-0 m-0 flex-shrink"
                         :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
               </Dropdown>
               <Button v-if="slotProps.data.selected" icon="pi pi-times"
-                      class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
+                      class="flex p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                       @click="deleteNode(slotProps.data)"/>
+              </div>
             </template>
           </Column>
         </DataTable>
@@ -121,7 +123,11 @@ export default {
       filters: {
         'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
       },
-      nodesToAdd: []
+      nodesToAdd: [],
+      multiSortMeta: [
+            {field: 'group', order: 1},
+            {field: 'name', order: 2}
+        ]
     }
   },
   computed: {

@@ -169,8 +169,8 @@ export default {
       })
       return rowClass
     },
-    isDifferentName(row, compare = false) {
-      if (compare) {
+    isDifferentName(row) {
+      if (row.config_name === "compare") {
         return !this.Store.explain.relevance.find(a => a.node_name === row.node_name);
       }
       if (this.Store.compareConfig !== null) {
