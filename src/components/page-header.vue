@@ -63,7 +63,7 @@ export default {
       showFeedback: false,
       showNetworkDescription: false,
       SavePatientName: null,
-      configLabel: "saved configurations",
+      configLabel: "start comparing",
       items: [
         {
           label: this.$t('Settings'),
