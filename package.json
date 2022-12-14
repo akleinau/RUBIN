@@ -20,6 +20,8 @@
     "equal-vue": "^0.74.0",
     "eslint": "^8.14.0",
     "express": "^4.17.1",
+    "jspdf": "^2.5.1",
+    "loader-utils": "^2.0.3",
     "pinia": "^2.0.13",
     "postcss": "^8.2.15",
     "primeflex": "^3.2.1",
@@ -28,8 +30,7 @@
     "sass-loader": "^12.6.0",
     "vue": "^3.2.33",
     "vue-i18n": "^9.1.6",
-    "vue-router": "4.0.5",
-    "loader-utils": "^2.0.3"
+    "vue-router": "4.0.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5.0.4",

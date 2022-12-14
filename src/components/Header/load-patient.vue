@@ -7,6 +7,7 @@
                 mode="basic" :auto=true :chooseLabel="$t('Upload')" @uploader="read($event)"
                 class="flex"/>
     <Button :label="$t('save')" @click="exportCSV()" icon="pi pi-download" class="flex"/>
+        <Button label="pdf export" icon="pi pi-download" @click="exportPDF" class="p-button-secondary" />
   </div>
 </template>
 
@@ -103,6 +104,9 @@ export default {
       anchor.download = this.Store.patient.name + '.csv';
       anchor.click();
     },
+    exportPDF() {
+      console.log("export")
+    }
   }
 }
 </script>
