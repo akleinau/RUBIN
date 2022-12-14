@@ -1,15 +1,16 @@
 <template>
-  <div class="grid p-nested-grid flex-column mx-1">
-    <Card class="col">
+  <ScrollPanel class="max-h-screen">
+  <div class="grid nested-grid flex-column m-1 overflow-hidden">
+    <Card id="header">
       <template #content>
-        <div id="logo"><img src="./assets/DoctorBN_Logo.png" style="height: 100px"/></div>
+        <img src="./assets/RUBIN_Logo.svg" style="height: 150px"/>
         <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
                   :value="$i18n.locale"
                   style="position:absolute; right:5%; top: 5%"/>
       </template>
     </Card>
 
-    <div class="col grid vertical-container " style="height:100%">
+    <div class="col grid vertical-container ">
       <div class="col  stretched">
         <Card class=" stretched">
           <template #title>
@@ -68,7 +69,7 @@
     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
              :value="$i18n.locale"/>
   </Dialog>
-
+  </ScrollPanel>
 </template>
 
 <script>
@@ -110,6 +111,12 @@ export default {
 
 ::v-deep(.p-button.p-fileupload-choose){
         margin: auto !important;
+}
+
+::v-deep(#header) {
+  .p-card-body {
+    padding:0;
+  }
 }
 
 </style>
