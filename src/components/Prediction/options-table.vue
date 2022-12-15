@@ -13,7 +13,7 @@
 
         <Column>
           <template #body="slotProps">
-            <div v-if="slotProps.index > minIndex">
+            <div v-if="slotProps.data.config_name === 'current' && slotProps.index > minIndex">
               {{ slotProps.index - minIndex }}.
             </div>
           </template>
@@ -37,17 +37,20 @@
 
         <Column v-for="goal in getGoalKeys()" :field="goal.name" :header="getGoalLabel(goal)" :key="goal.name">
           <template #body="slotProps">
-            <bar :value="slotProps.data.goalValues[String(goal.name)]" color="teal" width="200"
-                 v-if="!isNaN(slotProps.data.goalValues[String(goal.name)])"
+            <div class="flex flex-column">
+            <bar :value="slotProps.data.goalValues[String(goal.name)]" color="teal" :width="350/getGoalKeys().length"
+                 v-if="!isNaN(slotProps.data.goalValues[String(goal.name)])" class="flex"
                  v-tooltip="(slotProps.data.goalValues[String(goal.name)]*100).toFixed(0) + '%'"></bar>
+
             <!-- show percentages of selected configs -->
             <div v-if="slotProps.data.config_name === 'current' &&
               JSON.stringify(slotProps.data.option) === JSON.stringify(this.selectedOption.option)
               || slotProps.data.config_name !== 'current' &&
                  !isNaN(slotProps.data.goalValues[String(goal.name)])"
-                 style="fontSize: 1.5rem">
+                 style="fontSize: 1.5rem" class="flex">
               {{ (slotProps.data.goalValues[String(goal.name)] * 100).toFixed(0) }} %
             </div>
+              </div>
           </template>
         </Column>
 
@@ -92,7 +95,7 @@ export default {
       return table
     },
     minIndex: function () {
-      return this.Store.compareConfig ? 1 : 0;
+      return 0;
     }
   },
   data() {
@@ -174,6 +177,10 @@ export default {
 ::v-deep(.overall) {
   //background-color: lightblue !important;
   border-bottom: 5px solid #607D8B;
+}
+
+.p-card{
+  box-shadow:none;
 }
 
 </style>

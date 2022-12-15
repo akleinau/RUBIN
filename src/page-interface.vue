@@ -11,11 +11,11 @@
         <Evidence class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col-5 h-full" :blocked="block.options">
+      <BlockUI class="col-4 h-full" :blocked="block.options">
         <Prediction class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col-4 h-full" :blocked="block.explain">
+      <BlockUI class="col-5 h-full" :blocked="block.explain">
         <Explanation class="h-full"/>
       </BlockUI>
     </div>
@@ -65,9 +65,11 @@ export default {
   },
   mounted: async function () {
     this.Store.language = this.$i18n.locale
-    this.Store.network = this.network
     this.Store.localNet = this.localNet
     await this.Store.loadNodes()
+  },
+  created: async function () {
+    this.Store.network = this.network
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template style="position:relative">
   <DataTable :value="data">
-    <Column :header="$t('Node')" field="label" :sortable="true"/>
+    <Column :header="$t('Node')" field="label" :sortable="true"  style="width:40%"/>
     <Column :header="$t('Prediction')" field="state"></Column>
     <Column :header="$t('Likeliness')">
       <template #body="slotProps">
