@@ -47,7 +47,7 @@ body, html {
   height: 100%;
   padding: 0;
   margin: 0;
-  background-color: #6eb5be;
+  background-color: #372f5e;
 }
 
 #app {
@@ -55,8 +55,6 @@ body, html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  background-color: #6eb5be;
   height: 93%;
 }
 

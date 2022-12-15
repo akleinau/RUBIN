@@ -17,19 +17,21 @@
     </template>
 
     <template #content>
-      <ScrollPanel style="height:100%">
 
         <!-- decision table -->
-        <div>
+        <div style="height:70%; border: solid 5px lightgray">
           <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
-          <optionsTable style="border: solid 5px lightgray"/>
+          <ScrollPanel class="h-full">
+          <optionsTable/>
+            </ScrollPanel>
         </div>
         <br>
 
         <!-- phases -->
+      <ScrollPanel style="height:30%">
         <TabView v-model:active-index="currentPhaseIndex">
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
-            <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
+            <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
               {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
@@ -48,10 +50,10 @@
             </div>
 
 
-            <h3 class="text-left" v-if="Store.patient.targets.length > 0 || this.givenTargets.length > 0 ||
-            this.givenTargets_compare.length > 0">
+            <div class="text-left" v-if="Store.patient.targets.length > 0 || this.givenTargets.length > 0 ||
+            this.givenTargets_compare.length > 0"> <b>
               {{ $t("Interventions") }}:
-            </h3>
+            </b></div>
             <div v-for="target in Store.patient.targets" :key="target.name">
               {{ Store.labels[target.name] }}
             </div>
@@ -67,21 +69,21 @@
 
           <TabPanel header="custom" v-bind:key="null">
             <!-- Desired Outcomes -->
-            <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
+            <div class="text-left"> <b>{{ $t("DesiredOutcomes") }}:</b></div>
             <GoalInput title="Desired Outcomes" :changeable="true"
                        :hideHeader="true"
                        @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
 
             <!-- Intervention Input -->
             <div>
-              <h3 class="text-left">{{ $t("Interventions") }}:</h3>
+              <br>
+              <div class="text-left"><b>{{ $t("Interventions") }}:</b></div>
               <optionsInput/>
 
             </div>
           </TabPanel>
         </TabView>
-
-      </ScrollPanel>
+</ScrollPanel>
     </template>
   </Card>
 

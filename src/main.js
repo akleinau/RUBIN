@@ -32,7 +32,7 @@ import BlockUI from 'primevue/blockui';
 import ToggleButton from 'primevue/togglebutton';
 import SelectButton from 'primevue/selectbutton';
 import Toolbar from 'primevue/toolbar';
-import 'primevue/resources/themes/saga-blue/theme.css';       //theme
+import 'primevue/resources/themes/tailwind-light/theme.css';       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css';
