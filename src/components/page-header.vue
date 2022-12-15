@@ -1,8 +1,8 @@
 <template>
 
-  <Menubar :model="items" ref="menu" class="p-0 -0" style="position:relative; z-index:10">
+  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1" style="position:relative; z-index:10">
     <template #end>
-      <div id="logo" class="r-2"><img src="../assets/DoctorBN_Logo.png" style="height: 1.5rem"></div>
+      <div id="logo" class="r-2"><img src="../assets/RUBIN_Logo_core.svg" style="height: 1.5rem"></div>
     </template>
   </Menubar>
 
