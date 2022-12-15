@@ -2,27 +2,24 @@
 
   <tutorial @setBlock="block = $event"/>
 
-  <div class="flex flex-column h-full">
-
-    <Header class="flex" ref="menu" @changePage="changePage()"/>
+    <Header ref="menu" @changePage="changePage()"/>
 
     <!-- main cards -->
-    <div class=" grid flex flex-grow-1 h-full overflow-hidden relative">
+    <div class=" grid flex-column h-full relative">
 
-      <BlockUI class="col-3 flex-column h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
+      <BlockUI class="col-3 h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
         <Evidence class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col h-full" :blocked="block.options">
+      <BlockUI class="col-5 h-full" :blocked="block.options">
         <Prediction class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col h-full" :blocked="block.explain">
+      <BlockUI class="col-4 h-full" :blocked="block.explain">
         <Explanation class="h-full"/>
       </BlockUI>
     </div>
 
-  </div>
 
 </template>
 
@@ -98,6 +95,7 @@ export default {
 
 ::v-deep(.p-scrollpanel) {
   .p-scrollpanel-bar {
+    background-color: #b3b3b3;
     opacity: 1;
     transition: background-color .2s;
   }

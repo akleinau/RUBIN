@@ -119,4 +119,12 @@ export default {
   }
 }
 
+::v-deep(.p-scrollpanel) {
+  .p-scrollpanel-bar {
+    background-color: #b3b3b3;
+    opacity: 1;
+    transition: background-color .2s;
+  }
+}
+
 </style>
