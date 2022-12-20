@@ -99,7 +99,7 @@ export const useStore = defineStore('store', {
                 for (const goal in this.patient.goals) {
                     if (!evidences[this.patient.goals[goal].name]) {
                         goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
-                        goalDirections[this.patient.goals[goal].name] = "maximize"
+                        goalDirections[this.patient.goals[goal].name] = this.patient.goals[goal].direction
                     }
                 }
 
@@ -185,7 +185,7 @@ export const useStore = defineStore('store', {
             for (var goal in this.patient.goals) {
                 if (!evidences[this.patient.goals[goal].name]) {
                     goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
-                    goalDirections[this.patient.goals[goal].name] = "maximize"
+                    goalDirections[this.patient.goals[goal].name] = this.patient.goals[goal].direction
                 }
             }
             let gResponse = null
@@ -404,7 +404,8 @@ export const useStore = defineStore('store', {
                     if (fullnode) {
                         let selectedOption = fullnode.options.find(o => o.name === a.option)
                         if (selectedOption) {
-                            goalList.push({"name": a.name, "selected": selectedOption, "options": fullnode.options})
+                            goalList.push({"name": a.name, "selected": selectedOption, "options": fullnode.options,
+                            "direction": a.direction})
                         }
                     }
                 })
