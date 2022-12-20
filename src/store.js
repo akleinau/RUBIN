@@ -1,5 +1,8 @@
 import {defineStore} from 'pinia';
 
+const address = "https://doctorbn-backend.herokuapp.com/"
+//const address = "http://127.0.0.1:5000/"
+
 export const useStore = defineStore('store', {
     state: () => ({
         //data that is specific to the patient
@@ -92,9 +95,11 @@ export const useStore = defineStore('store', {
 
                 //use current patient goals in both current config and compare config
                 let goals = {}
+                let goalDirections = {}
                 for (const goal in this.patient.goals) {
                     if (!evidences[this.patient.goals[goal].name]) {
                         goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
+                        goalDirections[this.patient.goals[goal].name] = "maximize"
                     }
                 }
 
@@ -106,7 +111,7 @@ export const useStore = defineStore('store', {
                 }
                 let gResponse = null
                 if (this.localNet) {
-                    gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcTargetForGoals", {
+                    gResponse = await fetch(address + "calcTargetForGoals", {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
@@ -117,11 +122,12 @@ export const useStore = defineStore('store', {
                             fileFormat: this.localNet.fileFormat,
                             evidences: evidences,
                             target: targets,
-                            goals: goals
+                            goals: goals,
+                            goalDirections: goalDirections
                         })
                     });
                 } else {
-                    gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcTargetForGoals", {
+                    gResponse = await fetch(address + "calcTargetForGoals", {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
@@ -130,7 +136,8 @@ export const useStore = defineStore('store', {
                             network: this.network,
                             evidences: evidences,
                             target: targets,
-                            goals: goals
+                            goals: goals,
+                            goalDirections: goalDirections
                         })
                     });
                 }
@@ -174,14 +181,16 @@ export const useStore = defineStore('store', {
             }
 
             let goals = {}
+            let goalDirections = {}
             for (var goal in this.patient.goals) {
                 if (!evidences[this.patient.goals[goal].name]) {
                     goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
+                    goalDirections[this.patient.goals[goal].name] = "maximize"
                 }
             }
             let gResponse = null
             if (this.localNet) {
-                gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcOptions", {
+                gResponse = await fetch(address + "calcOptions", {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json'
@@ -192,11 +201,12 @@ export const useStore = defineStore('store', {
                         fileFormat: this.localNet.fileFormat,
                         evidences: evidences,
                         options: predictions.selectedOption.option,
-                        goals: goals
+                        goals: goals,
+                        goalDirections: goalDirections
                     })
                 });
             } else {
-                gResponse = await fetch("https://doctorbn-backend.herokuapp.com/calcOptions", {
+                gResponse = await fetch(address + "calcOptions", {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json'
@@ -205,7 +215,8 @@ export const useStore = defineStore('store', {
                         network: this.network,
                         evidences: evidences,
                         options: predictions.selectedOption.option,
-                        goals: goals
+                        goals: goals,
+                        goalDirections: goalDirections
                     })
                 });
             }
@@ -220,7 +231,7 @@ export const useStore = defineStore('store', {
         async loadNodes(noPhase = false) {
             let gResponse = null
             if (this.localNet) {
-                gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getLocalNetwork", {
+                gResponse = await fetch(address + "getLocalNetwork", {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json'
@@ -232,7 +243,7 @@ export const useStore = defineStore('store', {
                     })
                 });
             } else {
-                gResponse = await fetch("https://doctorbn-backend.herokuapp.com/getNetwork?network=" + this.network);
+                gResponse = await fetch(address + "getNetwork?network=" + this.network);
             }
             const network = await gResponse.json();
             let customization = network.customization
