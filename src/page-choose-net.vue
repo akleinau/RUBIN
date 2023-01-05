@@ -5,7 +5,7 @@
       <template #content>
         <img src="./assets/RUBIN_Logo.svg" style="height: 150px"/>
         <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
-                  :value="$i18n.locale"
+                  :value="$i18n.locale" @change="languageChanged"
                   style="position:absolute; right:5%; top: 5%"/>
       </template>
     </Card>
@@ -67,7 +67,7 @@
   <Dialog v-model:visible="langOverlay" :modal="true" :dismissableMask="true">
     Choose language:
     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
-             :value="$i18n.locale"/>
+             :value="$i18n.locale" @change="languageChanged"/>
   </Dialog>
   </ScrollPanel>
 </template>
@@ -98,6 +98,11 @@ export default {
     },
     loadLocalNet(localNet) {
       this.$emit("loadLocalNet", localNet)
+    },
+    languageChanged(event) {
+      if (event.value == null) {
+        this.$i18n.locale = "en"
+      }
     }
   }
 }

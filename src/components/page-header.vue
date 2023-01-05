@@ -183,6 +183,10 @@ export default {
       this.$refs.langOverlay.toggle(event)
     },
     langChange() {
+       if (this.$i18n.locale == null) {
+        this.$i18n.locale = "en"
+      }
+
       this.items.forEach(a => {
         a.label = this.$t(a.key)
       })
