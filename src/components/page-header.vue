@@ -47,9 +47,9 @@ export default {
     patient: function (name) {
       let configItem = this.items.find(a => a.key === "Patient")
       if (name !== "") {
-        configItem.label = "Patient: " + name
+        configItem.label = "File: " + name
       } else {
-        configItem.label = "Patient"
+        configItem.label = "File"
       }
     }
   },
@@ -86,8 +86,8 @@ export default {
             }]
         },
         {
-          label: "Patient " + this.Store.patient.name,
-          icon: PrimeIcons.USER,
+          label: "File " + this.Store.patient.name,
+          icon: PrimeIcons.FILE,
           key: 'Patient',
           command: (event) => {
             this.loadPatient(event.originalEvent)
@@ -183,6 +183,10 @@ export default {
       this.$refs.langOverlay.toggle(event)
     },
     langChange() {
+       if (this.$i18n.locale == null) {
+        this.$i18n.locale = "en"
+      }
+
       this.items.forEach(a => {
         a.label = this.$t(a.key)
       })
