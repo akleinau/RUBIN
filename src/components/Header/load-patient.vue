@@ -6,7 +6,7 @@
     <FileUpload name="net-upload" url="./Patientupload" accept=".csv" :customUpload="true" chooseIcon="pi pi-upload"
                 mode="basic" :auto=true :chooseLabel="$t('Upload')" @uploader="read($event)"
                 class="flex"/>
-    <Button :label="$t('save')" @click="exportCSV()" icon="pi pi-download" class="flex"/>
+    <Button :label="$t('Download')" @click="exportCSV()" icon="pi pi-download" class="flex"/>
   </div>
 </template>
 

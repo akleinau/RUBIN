@@ -15,11 +15,11 @@
   "Reset": "Reset",
   "ChangeLanguage": "Change Language",
   "Evidence": "Evidence",
-  "EvidenceHelp": "Choose which variables are already set to a value. This will typically be your evidence and what you already know about the patient. Eg symptoms he shows, results of tests and personal information like age and gender.",
+  "EvidenceHelp": "Enter here what you already know about the patient. Eg symptoms, results of tests and personal information like age and gender.",
   "DesiredOutcomes": "Desired Outcomes",
   "DesiredOutcomesHelp": "Choose which variables you want to have a specific value. This will be your desired outcomes for the patient. For example, if you want the patient to survive, you can choose the 'Survival' variable and set it to 'yes'. The network will consider this in it's calculations.",
   "Treatment": "Prediction",
-  "TreatmentHelp":"This view is intended to find the best treatment for the chosen patient.",
+  "TreatmentHelp": "Here you can see the calculated probability of achieving your goal. Choose from different presets what goal you want to achieve, eg the survival of the patient, and what interventions are available, eg therapy. Use the 'custom' tab for individual configurations.",
   "Interventions": "Interventions",
   "InterventionsHelp": "You can add different variables that you are willing to change, eg the therapy or medication of the patient.",
   "Decision": "Decision",
@@ -28,7 +28,7 @@
   "DecisionRatingHelp": "Then, the network calculates all combinations of these variables to find the best treatment decisions. The decisions are rated by their 'joined probability', which is the probability that the decision will fulfill all desired outcomes.",
   "TreatmentChooseOne": "Choose one to get additional information in the 'explanation' view!",
   "Explanation": "Explanation",
-  "ExplanationHelp": "Here different types of explanation and additional information for the chosen treatment are displayed.",
+  "ExplanationHelp": "Here different types of explanation and additional information are displayed. If you want to see explanations considering an intervention, select it in the probability table to the left.",
   "Relevance": "Relevance for Outcome",
   "localRelevance": "Local Relevance",
   "RelevanceHelp": "This view displays the importance of all evidences and interventions for the desired outcomes. Changing variables with a higher relevance will impact the result more, than changing variables with lesser relevance.",
@@ -41,7 +41,7 @@
   "BestOption": "recommended",
   "ShowMore": "show more",
   "Node": "Variable",
-  "Tutorial2": "Enter here what you already know about the patient.",
+  "Tutorial2": "Enter here what you already know about the patient. Eg symptoms, results of tests and personal information like age and gender.",
   "Tutorial3a": "Here you can see the calculated probability of achieving your goal.",
   "Tutorial3b": "Choose from different presets what goal you want to achieve, eg the survival of the patient, and what interventions are available, eg therapy.",
   "Tutorial4": "Here different types of explanation and additional information are displayed. If you want to see explanations considering an intervention, select it in the probability table to the left.",
@@ -84,5 +84,4 @@
   "addEvidence": "add evidence",
   "addOutcome": "add outcome",
   "addTarget": "add intervention"
-
 }
