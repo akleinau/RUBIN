@@ -1,7 +1,5 @@
 <template>
-  <Card>
-    <template #content>
-      <DataTable :value="table" class="p-datatable-sm" :autoLayout="true" :rowClass="rowClass"
+      <DataTable :value="table" class="p-datatable-sm p-2" :autoLayout="true" :rowClass="rowClass"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
                  rowGroupMode="subheader" groupRowsBy="config_name"
                  @rowSelect="update" @rowUnselect="update">
@@ -63,8 +61,6 @@
         </Column>
 
       </DataTable>
-    </template>
-  </Card>
 </template>
 
 <script>

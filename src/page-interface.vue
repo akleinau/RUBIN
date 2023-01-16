@@ -5,17 +5,17 @@
     <Header ref="menu" @changePage="changePage()"/>
 
     <!-- main cards -->
-    <div class=" grid flex-column h-full relative">
+    <div class=" grid h-full relative">
 
-      <BlockUI class="col-3 h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
+      <BlockUI class="col-3 md:col-3 sm:col-12 h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
         <Evidence class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col-4 h-full" :blocked="block.options">
+      <BlockUI class="col-4 md:col-4 sm:col-12 h-full" :blocked="block.options">
         <Prediction class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col-5 h-full" :blocked="block.explain">
+      <BlockUI class="col-5 md:col-5 sm:col-12 h-full" :blocked="block.explain">
         <Explanation class="h-full"/>
       </BlockUI>
     </div>
@@ -88,6 +88,7 @@ export default {
 
 ::v-deep(.p-card-body) {
   height: 100% !important;
+  padding-bottom: 0rem;
 }
 
 #arrow {

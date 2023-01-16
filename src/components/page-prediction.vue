@@ -13,44 +13,43 @@
 
     <template #content>
 
-        <!-- decision table -->
-        <div style="height:70%; border: solid 5px lightgray">
-          <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
-          <ScrollPanel class="h-full">
+      <!-- decision table -->
+      <div style="height:60%; border: solid 5px lightgray" class="p-b-2">
+        <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
+        <ScrollPanel class="h-full">
           <optionsTable/>
-            </ScrollPanel>
-        </div>
-        <br>
+        </ScrollPanel>
+      </div>
 
-        <!-- phases -->
-      <ScrollPanel style="height:30%">
-        <TabView v-model:active-index="currentPhaseIndex">
+      <!-- phases -->
+      <ScrollPanel style="height:40%">
+        <TabView v-model:active-index="currentPhaseIndex" scrollable>
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
               {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
-              ({{getDirection(goal.direction)}})
+              ({{ getDirection(goal.direction) }})
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> compare: - given: {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
-                ({{getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction)}})
+                ({{ getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
               </span>
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
               {{ Store.labels[goal.name] }} - <b> given: {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
-              ({{getDirection(goal.direction)}})
+              ({{ getDirection(goal.direction) }})
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> compare: - given: {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
-                ({{getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction)}})
+                ({{ getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
               </span>
             </div>
 
 
             <div class="text-left" v-if="Store.patient.targets.length > 0 || this.givenTargets.length > 0 ||
-            this.givenTargets_compare.length > 0"> <b>
+            this.givenTargets_compare.length > 0"><b>
               {{ $t("Interventions") }}:
             </b></div>
             <div v-for="target in Store.patient.targets" :key="target.name">
@@ -68,7 +67,7 @@
 
           <TabPanel header="custom" v-bind:key="null">
             <!-- Desired Outcomes -->
-            <div class="text-left"> <b>{{ $t("DesiredOutcomes") }}:</b></div>
+            <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <GoalInput title="Desired Outcomes" :changeable="true"
                        :hideHeader="true"
                        @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
@@ -82,7 +81,7 @@
             </div>
           </TabPanel>
         </TabView>
-</ScrollPanel>
+      </ScrollPanel>
     </template>
   </Card>
 

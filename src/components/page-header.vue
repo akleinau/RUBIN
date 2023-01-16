@@ -5,7 +5,7 @@
       <div class="flex flex-row align-center">
         <Button class="p-button-text p-button-secondary" :label="this.$t('backToNetwork')"
                 @click="changePage()" icon="pi pi-home" style="color:#3f3f46"/>
-        <div id="logo" class="r-2 align-self-center"><img src="../assets/RUBIN_Logo_core.svg" style="height: 2rem">
+        <div id="logo" class="r-2 align-self-center"><img src="../assets/RUBIN_Logo_core.svg" style="height: 1.5rem">
         </div>
       </div>
     </template>
