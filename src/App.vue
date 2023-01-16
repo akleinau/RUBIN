@@ -16,7 +16,7 @@ export default {
     ChooseNet
   },
   created() {
-    document.title = "DoctorBN"
+    document.title = "RUBIN"
   },
   data() {
     return {
