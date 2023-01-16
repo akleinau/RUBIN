@@ -10,6 +10,14 @@
     </template>
     <template #content>
       <ScrollPanel style="height:100%">
+
+        <!-- Help box more evidence -->
+        <div v-if="Store.patient.evidence.length <= 3" >
+          <i class="pi pi-exclamation-circle" />
+          Add more evidence for more accurate information!
+        </div>
+
+        <!-- Evidence Table -->
         <DataTable class="p-datatable-sm" :class="{NoHeader: !Store.compareConfig}" id="table" :value="table"
                    rowGroupMode="subheader" groupRowsBy="group"
                    sortMode="multiple" :multiSortMeta="multiSortMeta">
