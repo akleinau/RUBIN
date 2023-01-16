@@ -7,6 +7,6 @@ app = express();
 
 app.use(servestatic(path.join(path.resolve(), 'dist')));
 
-app.set('title', 'DoctorBN')
+app.set('title', 'RUBIN')
 
 app.listen(port, () => {console.log("API server started on "+app.get('port'));});
