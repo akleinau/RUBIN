@@ -2,6 +2,7 @@
   <div>
     <DataTable class=" p-datatable-sm" :value="table"
                rowGroupMode="subheader" groupRowsBy="config_name"
+               responsiveLayout="scroll"
                :rowClass="isTherapyRow">
 
       <template #groupheader="slotProps">

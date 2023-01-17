@@ -1,7 +1,7 @@
 <template>
       <DataTable :value="table" class="p-datatable-sm p-2" :autoLayout="true" :rowClass="rowClass"
                  :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
-                 rowGroupMode="subheader" groupRowsBy="config_name"
+                 rowGroupMode="subheader" groupRowsBy="config_name" responsive-layout="scroll"
                  @rowSelect="update" @rowUnselect="update">
 
         <template #groupheader="slotProps">
