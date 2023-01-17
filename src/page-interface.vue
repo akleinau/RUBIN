@@ -7,15 +7,15 @@
     <!-- main cards -->
     <div class=" grid h-full relative">
 
-      <BlockUI class="col-3 md:col-3 sm:col-12 h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
+      <BlockUI class="xl:col-3 lg:col-3 md:col-3 sm:col-12 h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
         <Evidence class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col-4 md:col-4 sm:col-12 h-full" :blocked="block.options">
+      <BlockUI class="xl:col-4 lg:col-4 md:col-4 sm:col-12 h-full" :blocked="block.options">
         <Prediction class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col-5 md:col-5 sm:col-12 h-full" :blocked="block.explain">
+      <BlockUI class="xl:col-5 lg:col-5 md:col-5 sm:col-12 h-full" :blocked="block.explain">
         <Explanation class="h-full"/>
       </BlockUI>
     </div>
