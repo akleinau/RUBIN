@@ -19,7 +19,7 @@
 
         <!-- Evidence Table -->
         <DataTable class="p-datatable-sm" :class="{NoHeader: !Store.compareConfig}" id="table" :value="table"
-                   rowGroupMode="subheader" groupRowsBy="group"
+                   rowGroupMode="subheader" groupRowsBy="group" responsiveLayout="scroll"
                    sortMode="multiple" :multiSortMeta="multiSortMeta">
           <template #groupheader="slotProps">
             <br>
@@ -57,9 +57,10 @@
             </template>
           </Column>
         </DataTable>
+
         <!--    input dialog  -->
-        <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
-                :closable="false">
+        <Dialog header="  " v-model:visible="overlay" style=" background:white" :modal="true"
+                :closable="false" class="w-11 h-11">
           <template #header>
             <div class="flex justify-content-end w-full">
               <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
@@ -70,6 +71,7 @@
           <br>
           <DataTable :value="overlayNodes" rowGroupMode="subheader" groupRowsBy="group" class="p-datatable-sm"
                      sortMode="single" sortField="group" :sortOrder="1"
+                      responsiveLayout="scroll"
                      v-model:filters="filters" filterDisplay="menu" data-key="name">
             <template #header>
               <div class="flex justify-content-between">
