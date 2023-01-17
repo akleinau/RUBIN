@@ -1,12 +1,14 @@
 <template>
   <ScrollPanel class="max-h-screen">
   <div class="grid nested-grid flex-column m-1 overflow-hidden">
-    <Card id="header">
+    <Card id="header" class="mr-2 ml-2">
       <template #content>
-        <img src="./assets/RUBIN_Logo.svg" style="height: 150px"/>
+        <div class="flex flex-column">
+        <img src="./assets/RUBIN_Logo.svg" class="flex justify-content-center h-8rem lg:h-9rem xl:h-10rem"/>
         <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
                   :value="$i18n.locale" @change="languageChanged"
-                  style="position:absolute; right:5%; top: 5%"/>
+                   class="flex justify-content-center mr-2 ml-2 " />
+        </div>
       </template>
     </Card>
 
@@ -35,7 +37,7 @@
       </div>
     </div>
 
-    <Card class=" col">
+    <Card class=" col mr-2 ml-2">
       <template #title>
         <div class="text-left">FAQ</div>
       </template>
@@ -90,7 +92,7 @@ export default {
     Networklist
   },
   mounted() {
-    this.langOverlay = true
+    this.langOverlay = false //set to true for lang overlay
   },
   methods: {
     changePage(selectedNet) {
