@@ -11,7 +11,7 @@
     </Card>
 
     <div class="col grid vertical-container ">
-      <div class="col  stretched">
+      <div class="col-12 md:col-6 lg:col-6 xl:col-6 ">
         <Card class=" stretched">
           <template #title>
             {{ $t('selectNetwork') }}
@@ -21,7 +21,7 @@
           </template>
         </Card>
       </div>
-      <div class="col stretched">
+      <div class="col-12 md:col-6 lg:col-6 xl:col-6">
         <Card class=" stretched">
           <template #title>
             {{ $t('uploadNetwork') }}
