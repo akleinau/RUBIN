@@ -13,7 +13,11 @@
 
 <script>
 import {useStore} from '@/store'
-import {jsPDF} from 'jspdf'
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 
 export default {
   name: "load-patient",
@@ -106,77 +110,122 @@ export default {
       anchor.click();
     },
     exportPDF() {
-      let doc = new jsPDF({unit: 'px'})
 
-      doc.setFontSize(40)
-      doc.text(20, 20, 'Patient Summary')
-      doc.setFontSize(20)
-      doc.text(20, 30, 'Patient: ' + this.Store.patient.name)
-
-      let evidence = this.Store.patient.evidence.map(x => {
-        return {
-          "Evidence": this.Store.labels[x.name],
-          "option": this.Store.option_labels[x.name][x.selected.name]
+      let data = {
+        content: [],
+        styles: {
+          table: {
+            margin: [0, 5, 0, 15]
+          },
+          header: {
+            fontSize: 18,
+            bold: true
+          },
+          subheader: {
+            fontSize: 15,
+            bold: true
+          },
         }
-      })
-
-      doc.table(20, 40, evidence, ['Evidence', 'option'], {autoSize: true})
-
-      let goals = this.Store.patient.goals.map(x => {
-        return {
-          "Goal": this.Store.labels[x.name],
-          "option": this.Store.option_labels[x.name][x.selected.name],
-          "direction": x.direction
-        }
-      })
-
-      doc.table(20, 100, goals, ['Goal', 'option', 'direction'], {autoSize: true})
-
-      let targets = this.Store.patient.targets.map(x => {
-        return {
-          "Target": this.Store.labels[x.name]
-        }
-      })
-
-      if (targets.length > 0) {
-        doc.table(20, 160, targets, ['Target'], {autoSize: true})
       }
 
-      doc.addPage()
-      doc.text(20, 20, 'Predictions')
-
-      let predictions = this.Store.predictions.options.map(x => {
-        return {
-          "option": JSON.stringify(x.option)
-        }
+      data.content.push({
+        text: this.Store.network + ' - Patient Summary',
+        style: 'header'
       })
 
-      doc.table(20, 30, predictions, ['option'], {autoSize: true})
-
-      doc.addPage()
-
-      let explanations = this.Store.explain.relevance.map(x => {
-        return {
-          "label": this.Store.labels[x.node_name],
-          "overall relevance": x.overall_relevance.toFixed(2)
-        }
+      data.content.push({
+        text: 'Patient: ' + this.Store.patient.name,
+        style: 'subheader'
       })
 
-      doc.table(20, 30, explanations, ['label', 'overall relevance'], {autoSize: true})
+      data.content.push("  ")
 
-      doc.save('export.pdf')
+      //evidence
+      let evidence = [["evidence", "option"]]
+      this.Store.patient.evidence.map(x => {
+        evidence.push([this.Store.labels[x.name],
+          this.Store.option_labels[x.name][x.selected.name]
+        ])
+      })
 
-      /*let docHTML = new jsPDF()
-      doc.html(document.querySelector("#optionsTable"), {
-        callback: function (doc) {
-          doc.save('exportHTML.pdf');
-        },
-        x: 10,
-        y: 10,
+      data.content.push({text: "Evidence", style: 'subheader'})
+      data.content.push({style: "table", table: {body: evidence}})
 
-      });
 
-      */
+      //goals
+      let goals = [["goal", "option", "direction"]]
+      this.Store.patient.goals.map(x => {
+        goals.push([
+          this.Store.labels[x.name],
+          this.Store.option_labels[x.name][x.selected.name],
+          x.direction
+        ])
+      })
+
+      data.content.push({text: "Goals", style: 'subheader'})
+      data.content.push({style: "table", table: {body: goals}})
+
+      //targets
+      let targets = [["variable"]]
+      this.Store.patient.targets.map(x => {
+        targets.push([this.Store.labels[x.name]])
+      })
+
+      data.content.push({text: "Targets", style: 'subheader'})
+      data.content.push({style: "table", table: {body: targets}})
+
+
+      data.content.push({text: "Predictions", style: 'subheader'})
+
+      //predictions
+      let predictionsHeader = ["option"]
+
+      for (const goal of this.Store.patient.goals) {
+        predictionsHeader.push(this.Store.labels[goal.name])
+      }
+
+      let predictions = [predictionsHeader]
+      this.Store.predictions.options.map(x => {
+        let out = [JSON.stringify(x.option)]
+
+        for (const value of Object.values(x.goalValues)) {
+          out.push(value.toFixed(2))
+        }
+
+        predictions.push(out)
+      })
+
+
+      data.content.push({style: "table", table: {body: predictions}})
+
+      //Explanations
+      data.content.push({text: "Explanations", style: 'subheader'})
+
+      let explanationsHeader = ["variable", "relevance"]
+
+      for (const goal of this.Store.patient.goals) {
+        explanationsHeader.push(this.Store.labels[goal.name])
+      }
+
+      let explanations = [explanationsHeader]
+      this.Store.explain.relevance.map(x => {
+        let out = [
+          this.Store.labels[x.node_name],
+          x.overall_relevance.toFixed(2)
+        ]
+
+        for (const value of Object.values(x.relevancies)) {
+          out.push(value.toFixed(2))
+        }
+
+        explanations.push(out)
+      })
+
+      data.content.push({style: "table", table: {body: explanations}})
+
+
+      pdfMake.createPdf(data).open();
+
     }
   }
 }
