@@ -1,5 +1,5 @@
 {
-  "name": "doctorbn",
+  "name": "rubin",
   "version": "0.1.0",
   "engines": {
     "node": "16.18.0"
@@ -20,13 +20,14 @@
     "equal-vue": "^0.74.0",
     "eslint": "^8.14.0",
     "express": "^4.17.1",
+    "json5": "^2.2.3",
     "jspdf": "^2.5.1",
     "loader-utils": "^2.0.3",
     "pinia": "^2.0.13",
     "postcss": "^8.2.15",
-    "primeflex": "^3.2.1",
+    "primeflex": "^3.3.0",
     "primeicons": "5.0.0",
-    "primevue": "3.17.0",
+    "primevue": "3.22.1",
     "sass-loader": "^12.6.0",
     "vue": "^3.2.33",
     "vue-i18n": "^9.1.6",

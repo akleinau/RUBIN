@@ -18,9 +18,9 @@
       </div>
     </template>
     <template #content>
-      <ScrollPanel class="h-full">
+      <ScrollPanel class="h-full" >
         <ProgressBar v-if="Store.explanationLoading" mode="indeterminate" style="height: .5em"/>
-        <TabView v-else>
+        <TabView v-else scrollable>
           <!--   relevance  -->
           <TabPanel :header="$t('Relevance')">
             <Relevance/>

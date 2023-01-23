@@ -16,6 +16,16 @@
                 @click="deleteNode(slotProps.data)"/>
       </template>
     </Column>
+    <Column field="direction">
+            <template #body="slotProps">
+        <Dropdown v-model="slotProps.data.direction" :options="directionOptions"
+                  optionLabel="label" optionValue="name" optionKey="name"
+                  @change="onNodeChange(slotProps.data)"
+                  class="p-0 m-0">
+        </Dropdown>
+      </template>
+
+    </Column>
   </DataTable>
   <!--    input dialog  -->
   <Dialog header="  " v-model:visible="overlay" style="width: 80%; height: 90%; background:white" :modal="true"
@@ -49,6 +59,14 @@
                         :offLabel="Store.option_labels[slotProps.data.name][option.name]" offIcon="pi pi-plus">
           </ToggleButton>
 
+        </template>
+      </Column>
+      <Column field="direction" header="direction">
+        <template #body="slotProps">
+          <SelectButton class="m-2" :options="directionOptions" optionLabel="label" optionValue="name"
+                        v-model="slotProps.data.direction" v-if="nodesToAdd.find(a => a.name === slotProps.data.name)"
+                        @change="onOverlayDirectionChange(slotProps)">
+          </SelectButton>
         </template>
       </Column>
     </DataTable>
@@ -85,7 +103,11 @@ export default {
       filters: {
         'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
       },
-      nodesToAdd: []
+      nodesToAdd: [],
+      directionOptions: [
+        {name: "max", label: "maximize"},
+        {name: "min", label: "minimize"}
+      ]
     }
   },
   computed: {
@@ -100,7 +122,8 @@ export default {
                   name: option.name,
                   node: node.name
                 }
-              })
+              }),
+          direction: node.direction
         }
       })
     },
@@ -122,12 +145,20 @@ export default {
                   node: node.name
                 }
               }),
+              direction: this.getDirection(node)
             }
           }
       )
     }
   },
   methods: {
+    getDirection(node) {
+      let listNode = this.nodesToAdd.find(n => n.name === node.name)
+      if (listNode) {
+        return listNode.direction
+      }
+      return null
+    },
     onOverlayOptionChange(slotProps, option) {
       //deselect this and other options of the node
       this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
@@ -143,10 +174,14 @@ export default {
               name: option.name,
               node: slotProps.data.name
             }
-          })
+          }),
+          direction: "max"
         }
         this.nodesToAdd.push(item);
       }
+    },
+    onOverlayDirectionChange(slotProps) {
+      this.nodesToAdd.find(a => a.name === slotProps.data.name).direction = slotProps.data.direction
     },
     addNodesFromOverlay() {
       this.addNodes(this.nodesToAdd)

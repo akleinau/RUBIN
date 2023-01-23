@@ -2,6 +2,7 @@
   <div>
     <DataTable class=" p-datatable-sm" :value="table"
                rowGroupMode="subheader" groupRowsBy="config_name"
+               responsiveLayout="scroll"
                :rowClass="isTherapyRow">
 
       <template #groupheader="slotProps">
@@ -16,7 +17,7 @@
           <Column header="Influence on Outcome" :colspan="getGoalKeyNum()"></Column>
         </Row>
         <Row>
-          <Column v-for="goal in goalnames" :field="goal" :header="goal" :key="goal"/>
+          <Column v-for="goal in goalnames" :field="goal" :header="goal.label" :key="goal"/>
         </Row>
       </ColumnGroup>
 
@@ -36,10 +37,10 @@
                v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
         </template>
       </Column>
-      <Column v-for="goal in goalnames" :field="goal" :header="goal" :key="goal">
+      <Column v-for="goal in goalnames" :key="goal">
         <template #body="slotProps">
-          <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal)]"
-                       v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal)])"></twoSidedBar>
+          <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal.name)]"
+                       v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal.name)])"></twoSidedBar>
         </template>
       </Column>
     </DataTable>
@@ -72,23 +73,16 @@ export default {
       let goalnames = []
       if (this.Store.patient.goals != null && this.Store.explain.relevance != null) {
         this.Store.patient.goals.forEach(goal => {
-          goalnames.push(this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name])
+          goalnames.push({
+            "name": this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name],
+            "label": this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name] +
+                " (" + this.getDirection(goal.direction) + ")"
+          })
         })
       }
       return goalnames
     },
-    //does the same as goalnames, but updates when selectedConfig is loaded
-    compareGoalnames: function () {
-      let goalnames = []
-      if (this.Store.compareConfig != null) {
-        if (this.Store.patient.goals != null && this.Store.compareConfig.explain.relevance != null) {
-          this.Store.patient.goals.forEach(goal => {
-            goalnames.push(this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name])
-          })
-        }
-      }
-      return goalnames
-    },
+
     table: function () {
       if (this.Store.explain.relevance) {
         let table = []
@@ -191,6 +185,10 @@ export default {
       }
       return false
 
+    },
+    getDirection(name) {
+      if (name === "min") return "minimize"
+      return "maximize"
     }
   }
 }

@@ -2,27 +2,24 @@
 
   <tutorial @setBlock="block = $event"/>
 
-  <div class="flex flex-column h-full">
-
-    <Header class="flex" ref="menu" @changePage="changePage()"/>
+    <Header ref="menu" @changePage="changePage()"/>
 
     <!-- main cards -->
-    <div class=" grid flex flex-grow-1 h-full overflow-hidden relative">
+    <div class=" grid h-full relative">
 
-      <BlockUI class="col-3 flex-column h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
+      <BlockUI class="xl:col-3 lg:col-3 md:col-3 col-12 h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
         <Evidence class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col h-full" :blocked="block.options">
+      <BlockUI class="xl:col-4 lg:col-4 md:col-4 col-12 h-full" :blocked="block.options">
         <Prediction class="h-full"/>
       </BlockUI>
 
-      <BlockUI class="col h-full" :blocked="block.explain">
+      <BlockUI class="xl:col-5 lg:col-5 md:col-5 col-12 h-full" :blocked="block.explain">
         <Explanation class="h-full"/>
       </BlockUI>
     </div>
 
-  </div>
 
 </template>
 
@@ -68,9 +65,11 @@ export default {
   },
   mounted: async function () {
     this.Store.language = this.$i18n.locale
-    this.Store.network = this.network
     this.Store.localNet = this.localNet
     await this.Store.loadNodes()
+  },
+  created: async function () {
+    this.Store.network = this.network
   }
 }
 </script>
@@ -89,6 +88,7 @@ export default {
 
 ::v-deep(.p-card-body) {
   height: 100% !important;
+  padding-bottom: 0rem;
 }
 
 #arrow {

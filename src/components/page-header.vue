@@ -1,8 +1,13 @@
 <template>
 
-  <Menubar :model="items" ref="menu" class="p-0 -0" style="position:relative; z-index:10">
+  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1" style="position:relative; z-index:10">
     <template #end>
-      <div id="logo" class="r-2"><img src="../assets/DoctorBN_Logo.png" style="height: 1.5rem"></div>
+      <div class="flex flex-row align-center">
+        <Button class="p-button-text p-button-secondary" :label="this.$t('backToNetwork')"
+                @click="changePage()" icon="pi pi-home" style="color:#3f3f46"/>
+        <div id="logo" class="r-2 align-self-center"><img src="../assets/RUBIN_Logo_core.svg" style="height: 1.5rem">
+        </div>
+      </div>
     </template>
   </Menubar>
 
@@ -47,9 +52,9 @@ export default {
     patient: function (name) {
       let configItem = this.items.find(a => a.key === "Patient")
       if (name !== "") {
-        configItem.label = "Patient: " + name
+        configItem.label = "File: " + name
       } else {
-        configItem.label = "Patient"
+        configItem.label = "File"
       }
     }
   },
@@ -66,28 +71,8 @@ export default {
       configLabel: "start comparing",
       items: [
         {
-          label: this.$t('Settings'),
-          key: 'Settings',
-          icon: PrimeIcons.BARS,
-          items: [
-            {
-              label: this.$t('Reset'),
-              key: 'Reset',
-              command: () => {
-                this.reset()
-              }
-            },
-            {
-              label: this.$t('ChangeLanguage'),
-              key: 'ChangeLanguage',
-              command: (event) => {
-                this.showLanguage(event.originalEvent)
-              }
-            }]
-        },
-        {
-          label: "Patient " + this.Store.patient.name,
-          icon: PrimeIcons.USER,
+          label: "File " + this.Store.patient.name,
+          icon: PrimeIcons.FILE,
           key: 'Patient',
           command: (event) => {
             this.loadPatient(event.originalEvent)
@@ -112,6 +97,26 @@ export default {
           }
         },
         {
+          label: this.$t('Settings'),
+          key: 'Settings',
+          icon: PrimeIcons.BARS,
+          items: [
+            {
+              label: this.$t('Reset'),
+              key: 'Reset',
+              command: () => {
+                this.reset()
+              }
+            },
+            {
+              label: this.$t('ChangeLanguage'),
+              key: 'ChangeLanguage',
+              command: (event) => {
+                this.showLanguage(event.originalEvent)
+              }
+            }]
+        },
+        {
           label: "Help",
           key: 'Help',
           icon: PrimeIcons.QUESTION_CIRCLE,
@@ -133,7 +138,9 @@ export default {
               }
             }
           ]
-        },
+        }
+      ],
+      endMenu: [
         {
           label: this.$t("backToNetwork"),
           key: 'backToNetwork',
@@ -183,10 +190,14 @@ export default {
       this.$refs.langOverlay.toggle(event)
     },
     langChange() {
+      if (this.$i18n.locale == null) {
+        this.$i18n.locale = "en"
+      }
+
       this.items.forEach(a => {
         a.label = this.$t(a.key)
       })
-      this.Store.language=this.$i18n.locale
+      this.Store.language = this.$i18n.locale
       this.Store.updateLabels()
     },
     loadPatient(event) {

@@ -1,16 +1,19 @@
 <template>
-  <div class="grid p-nested-grid flex-column mx-1">
-    <Card class="col">
+  <ScrollPanel class="max-h-screen">
+  <div class="grid nested-grid flex-column m-1 overflow-hidden">
+    <Card id="header" class="mr-2 ml-2">
       <template #content>
-        <div id="logo"><img src="./assets/DoctorBN_Logo.png" style="height: 100px"/></div>
+        <div class="flex flex-column">
+        <img src="./assets/RUBIN_Logo.svg" class="flex justify-content-center h-8rem lg:h-9rem xl:h-10rem"/>
         <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
-                  :value="$i18n.locale"
-                  style="position:absolute; right:5%; top: 5%"/>
+                  :value="$i18n.locale" @change="languageChanged"
+                   class="flex justify-content-center mr-2 ml-2 " />
+        </div>
       </template>
     </Card>
 
-    <div class="col grid vertical-container " style="height:100%">
-      <div class="col  stretched">
+    <div class="col grid vertical-container ">
+      <div class="col-12 md:col-6 lg:col-6 xl:col-6 ">
         <Card class=" stretched">
           <template #title>
             {{ $t('selectNetwork') }}
@@ -20,7 +23,7 @@
           </template>
         </Card>
       </div>
-      <div class="col stretched">
+      <div class="col-12 md:col-6 lg:col-6 xl:col-6">
         <Card class=" stretched">
           <template #title>
             {{ $t('uploadNetwork') }}
@@ -34,29 +37,29 @@
       </div>
     </div>
 
-    <Card class=" col">
+    <Card class=" col mr-2 ml-2">
       <template #title>
         <div class="text-left">FAQ</div>
       </template>
       <template #content>
         <Accordion class="text-left">
-          <AccordionTab header="What is DoctorBN?">
-            DoctorBN is a tool to use Bayesian networks in clinical decision support. Bayesian networks provide a
+          <AccordionTab header="What is RUBIN?">
+            RUBIN is a tool to use Bayesian networks in clinical decision support. Bayesian networks provide a
             knowledge base about a specific topic. The clinician can insert data
-            about his current patient and what he wants to achieve. DoctorBN will then provide information on what
-            the network thinks would be the best treatment for the patient, to achieve these goals.
+            about his current patient and what they want to achieve. RUBIN will then provide information on what
+            the network thinks would be the outcome or best treatment for the patient.
             <br> <br>
-            DoctorBN is currently in development, feedback is welcome and appreciated!
+            RUBIN is currently in development, feedback is welcome and appreciated!
             The best way to reach us is through the person that sent you the link to this website.
           </AccordionTab>
           <AccordionTab header="What are Bayesian networks?">
             Bayesian networks are a type of artificial intelligence that is especially equipped to handle probabilities.
-            In clinical decision support, Bayesian networks can provide clinicians with a second opinion which
-            intervention
-            would be the best option for their patient.
+            In clinical decision support, Bayesian networks can provide clinicians with a second opinion based on
+            statistics and AI.
           </AccordionTab>
-          <AccordionTab header="Who is the team behind DoctorBN?">
-            DoctorBN is the bachelor project of Alex Mo and Anna Kleinau.
+          <AccordionTab header="Who is the team behind RUBIN?">
+            RUBIN is a cooperation of PLRI Hannover (previously with OVGU Magdeburg), University of Twente,
+            The Netherlands and Radboud University Medical Center, The Netherlands.
           </AccordionTab>
         </Accordion>
       </template>
@@ -66,9 +69,9 @@
   <Dialog v-model:visible="langOverlay" :modal="true" :dismissableMask="true">
     Choose language:
     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
-             :value="$i18n.locale"/>
+             :value="$i18n.locale" @change="languageChanged"/>
   </Dialog>
-
+  </ScrollPanel>
 </template>
 
 <script>
@@ -89,7 +92,7 @@ export default {
     Networklist
   },
   mounted() {
-    this.langOverlay = true
+    this.langOverlay = false //set to true for lang overlay
   },
   methods: {
     changePage(selectedNet) {
@@ -97,6 +100,11 @@ export default {
     },
     loadLocalNet(localNet) {
       this.$emit("loadLocalNet", localNet)
+    },
+    languageChanged(event) {
+      if (event.value == null) {
+        this.$i18n.locale = "en"
+      }
     }
   }
 }
@@ -110,6 +118,12 @@ export default {
 
 ::v-deep(.p-button.p-fileupload-choose){
         margin: auto !important;
+}
+
+::v-deep(#header) {
+  .p-card-body {
+    padding:0;
+  }
 }
 
 </style>

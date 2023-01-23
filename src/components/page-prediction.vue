@@ -6,52 +6,52 @@
       {{ $t("Prediction") }}
       <Button icon="pi pi-question" class="p-button-outlined p-button-secondary p-button-rounded p-button-raised help"
               @click="$refs.op.toggle($event)"/>
-      <OverlayPanel ref="op" style="width: 500px"> {{ $t("TreatmentHelp") }}
-        <h3>{{ $t("Interventions") }}</h3>
-        {{ $t("InterventionsHelp") }}
-        <h3>{{ $t("DecisionRatings") }}</h3>
-        {{ $t("DecisionRatingHelp") }}
-        <br><br>
-        {{ $t("TreatmentChooseOne") }}
+      <OverlayPanel ref="op" style="width: 500px">
+        {{ $t("TreatmentHelp") }}
       </OverlayPanel>
     </template>
 
     <template #content>
-      <ScrollPanel style="height:100%">
 
-        <!-- decision table -->
-        <div>
-          <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
-          <optionsTable style="border: solid 5px lightgray"/>
-        </div>
-        <br>
+      <!-- decision table -->
+      <div style="height:60%; border: solid 5px lightgray" class="p-b-2">
+        <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
+        <ScrollPanel class="h-full">
+          <optionsTable/>
+        </ScrollPanel>
+      </div>
 
-        <!-- phases -->
-        <TabView v-model:active-index="currentPhaseIndex">
+      <!-- phases -->
+      <ScrollPanel style="height:40%">
+        <TabView v-model:active-index="currentPhaseIndex" scrollable>
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
-            <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
+            <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
               {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
+              ({{ getDirection(goal.direction) }})
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> compare: - given: {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
+                ({{ getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
               </span>
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
               {{ Store.labels[goal.name] }} - <b> given: {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
+              ({{ getDirection(goal.direction) }})
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> compare: - given: {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
+                ({{ getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
               </span>
             </div>
 
 
-            <h3 class="text-left" v-if="Store.patient.targets.length > 0 || this.givenTargets.length > 0 ||
-            this.givenTargets_compare.length > 0">
+            <div class="text-left" v-if="Store.patient.targets.length > 0 || this.givenTargets.length > 0 ||
+            this.givenTargets_compare.length > 0"><b>
               {{ $t("Interventions") }}:
-            </h3>
+            </b></div>
             <div v-for="target in Store.patient.targets" :key="target.name">
               {{ Store.labels[target.name] }}
             </div>
@@ -67,20 +67,20 @@
 
           <TabPanel header="custom" v-bind:key="null">
             <!-- Desired Outcomes -->
-            <h3 class="text-left">{{ $t("DesiredOutcomes") }}:</h3>
+            <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <GoalInput title="Desired Outcomes" :changeable="true"
                        :hideHeader="true"
                        @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
 
             <!-- Intervention Input -->
             <div>
-              <h3 class="text-left">{{ $t("Interventions") }}:</h3>
+              <br>
+              <div class="text-left"><b>{{ $t("Interventions") }}:</b></div>
               <optionsInput/>
 
             </div>
           </TabPanel>
         </TabView>
-
       </ScrollPanel>
     </template>
   </Card>
@@ -186,6 +186,10 @@ export default {
   methods: {
     getGoalLabel(goal) {
       return this.Store.labels[goal.name] + ": " + goal.selected.name
+    },
+    getDirection(name) {
+      if (name === "min") return "minimize"
+      return "maximize"
     }
   }
 }
