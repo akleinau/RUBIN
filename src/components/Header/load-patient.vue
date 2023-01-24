@@ -13,6 +13,8 @@
 
 <script>
 import {useStore} from '@/store'
+import * as barvisjs from "@/components/visualisations/bar-vis-js.js";
+import * as twosidedbarvisjs from "@/components/visualisations/two-sided-bar-vis-js.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
@@ -149,7 +151,7 @@ export default {
       })
 
       data.content.push({text: "Evidence", style: 'subheader'})
-      data.content.push({style: "table", table: {body: evidence}})
+      data.content.push(this.pdfTable(evidence))
 
 
       //goals
@@ -158,27 +160,30 @@ export default {
         goals.push([
           this.Store.labels[x.name],
           this.Store.option_labels[x.name][x.selected.name],
-          x.direction
+          this.labelDirection(x.direction)
         ])
       })
 
       data.content.push({text: "Goals", style: 'subheader'})
-      data.content.push({style: "table", table: {body: goals}})
+      data.content.push(this.pdfTable(goals))
 
       //targets
-      let targets = [["variable"]]
-      this.Store.patient.targets.map(x => {
-        targets.push([this.Store.labels[x.name]])
-      })
+      if (this.Store.patient.targets.length > 0) {
+        let targets = [["variable"]]
+        this.Store.patient.targets.map(x => {
+          targets.push([this.Store.labels[x.name]])
+        })
 
-      data.content.push({text: "Targets", style: 'subheader'})
-      data.content.push({style: "table", table: {body: targets}})
+        data.content.push({text: "Targets", style: 'subheader'})
+        data.content.push(this.pdfTable(targets))
+
+      }
 
 
       data.content.push({text: "Predictions", style: 'subheader'})
 
       //predictions
-      let predictionsHeader = ["option"]
+      let predictionsHeader = [""]
 
       for (const goal of this.Store.patient.goals) {
         predictionsHeader.push(this.Store.labels[goal.name])
@@ -186,46 +191,122 @@ export default {
 
       let predictions = [predictionsHeader]
       this.Store.predictions.options.map(x => {
-        let out = [JSON.stringify(x.option)]
+        let outOption = ""
+        for (const [node, option] of Object.entries(x.option)) {
+          outOption += this.Store.labels[node] + ": " + this.Store.option_labels[node][option] + "\n"
+        }
+
+        if (outOption === "") {
+          outOption = "overall"
+        }
+
+        if (x === this.Store.predictions.selectedOption) {
+          outOption = {text: outOption, bold: true}
+        }
+
+        let out = [outOption]
 
         for (const value of Object.values(x.goalValues)) {
-          out.push(value.toFixed(2))
+          out.push([(value * 100).toFixed(0) + '%',
+            {svg: barvisjs.createSVG(200, value, "teal").outerHTML}])
         }
 
         predictions.push(out)
       })
 
 
-      data.content.push({style: "table", table: {body: predictions}})
+      data.content.push(this.pdfTable(predictions))
 
       //Explanations
       data.content.push({text: "Explanations", style: 'subheader'})
 
-      let explanationsHeader = ["variable", "relevance"]
+      if (this.Store.predictions.selectedOption) {
+        let currentOption = ""
+        for (const [node, option] of Object.entries(this.Store.predictions.selectedOption.option)) {
+          currentOption += this.Store.labels[node] + ": " + this.Store.option_labels[node][option] + "\n"
+        }
+        data.content.push({text: "for " + currentOption})
+      }
+
+      let explanationsHeader = ["", "Relevance for Outcome"]
 
       for (const goal of this.Store.patient.goals) {
-        explanationsHeader.push(this.Store.labels[goal.name])
+        explanationsHeader.push(this.Store.labels[goal.name] + ": " +
+            this.Store.option_labels[goal.name][goal.selected.name] + " (" +
+            this.labelDirection(goal.direction) + ")")
       }
 
       let explanations = [explanationsHeader]
       this.Store.explain.relevance.map(x => {
         let out = [
-          this.Store.labels[x.node_name],
-          x.overall_relevance.toFixed(2)
+          this.Store.labels[x.node_name] + ": " + this.getState(x.node_name),
+          {svg: barvisjs.createSVG(150, x.overall_relevance, "#004d80").outerHTML}
         ]
 
         for (const value of Object.values(x.relevancies)) {
-          out.push(value.toFixed(2))
+          out.push({svg: twosidedbarvisjs.createSVG(150, value).outerHTML})
         }
 
         explanations.push(out)
       })
 
-      data.content.push({style: "table", table: {body: explanations}})
+      data.content.push(this.pdfTable(explanations))
 
 
       pdfMake.createPdf(data).open();
 
+    },
+    pdfTable(data) {
+      let Ncolumn = data[0].length
+      console.log(Ncolumn)
+      let widths = [150]
+      for (let i = 1; i < Ncolumn; i++) {
+        widths.push('auto')
+      }
+      console.log(widths)
+      return {
+        style: "table",
+        table: {
+          headerRows: 1,
+          widths: widths,
+          body: data
+        },
+        layout:
+            {
+              hLineWidth: function (i, node) {
+                if (i === 1) return 2;
+                if (i === 0 || i === node.table.body.length) return 0;
+                return 1;
+              }
+              ,
+              vLineWidth: function (i, node) {
+                return ((i === 0 || i === node.table.widths.length)) ? 0 : 1;
+              }
+              ,
+              hLineColor: function (i) {
+                return (i === 1) ? 'black': 'gray';
+              }
+              ,
+              vLineColor: function () {
+                return 'gray';
+              }
+              ,
+            }
+      }
+    },
+    labelDirection(direction) {
+      if (direction === "min") return "minimize"
+      else if (direction === "max") return "maximize"
+      else return "no direction"
+    },
+    getState(name) {
+      let state = "unknown"
+      this.Store.explain.states.forEach(node => {
+        if (node.name === name) {
+          state = this.Store.option_labels[name][node.state]
+        }
+      })
+      return state
     }
   }
 }
