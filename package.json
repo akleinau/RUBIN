@@ -22,6 +22,7 @@
     "express": "^4.17.1",
     "json5": "^2.2.3",
     "loader-utils": "^2.0.3",
+    "pdfmake": "^0.2.7",
     "pinia": "^2.0.13",
     "postcss": "^8.2.15",
     "primeflex": "^3.3.0",
