@@ -7,11 +7,20 @@
                 mode="basic" :auto=true :chooseLabel="$t('Upload')" @uploader="read($event)"
                 class="flex"/>
     <Button :label="$t('Download')" @click="exportCSV()" icon="pi pi-download" class="flex"/>
+    <Button label="pdf export" icon="pi pi-download" @click="exportPDF" class="p-button-secondary"/>
   </div>
 </template>
 
 <script>
 import {useStore} from '@/store'
+import * as barvisjs from "@/components/visualisations/bar-vis-js.js";
+import * as twosidedbarvisjs from "@/components/visualisations/two-sided-bar-vis-js.js";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import * as logo from "@/components/Header/svg_logo.js";
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 
 export default {
   name: "load-patient",
@@ -103,6 +112,219 @@ export default {
       anchor.download = this.Store.patient.name + '.csv';
       anchor.click();
     },
+    exportPDF() {
+
+      let data = {
+        content: [],
+        styles: {
+          table: {
+            margin: [0, 5, 0, 15]
+          },
+          header: {
+            fontSize: 18,
+            bold: true,
+            alignment: 'center'
+          },
+          subheader: {
+            fontSize: 15,
+            bold: true
+          },
+        }
+      }
+
+      data.content.push({svg: logo.return_logo(), height: 50, alignment: 'right'})
+
+      data.content.push({
+        text: this.capitalize(this.Store.network) + ' - Patient Summary',
+        style: 'header'
+      });
+
+      data.content.push({
+        text: 'Patient: ' + this.Store.patient.name,
+        style: 'subheader'
+      })
+
+      data.content.push("  ")
+
+      this.pdf_add_evidence(data)
+      this.pdf_add_goals(data)
+      this.pdf_add_targets(data)
+      this.pdf_add_predictions(data)
+      this.pdf_add_explanations(data)
+
+      pdfMake.createPdf(data).open()
+
+    },
+    capitalize(string) {
+      //capitalizes each first letter of every word in a sentence
+      return string.split(" ").map( word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    },
+
+    pdfTable(data) {
+      let Ncolumn = data[0].length
+
+      let widths = [150]
+      for (let i = 1; i < Ncolumn; i++) {
+        widths.push('auto')
+      }
+
+      return {
+        style: "table",
+        table: {
+          headerRows: 1,
+          widths: widths,
+          body: data
+        },
+        layout:
+            {
+              hLineWidth: function (i, node) {
+                if (i === 1) return 2;
+                if (i === 0 || i === node.table.body.length) return 0;
+                return 1;
+              }
+              ,
+              vLineWidth: function (i, node) {
+                return ((i === 0 || i === node.table.widths.length)) ? 0 : 1;
+              }
+              ,
+              hLineColor: function (i) {
+                return (i === 1) ? 'black' : 'gray';
+              }
+              ,
+              vLineColor: function () {
+                return 'gray';
+              }
+              ,
+            }
+      }
+    },
+
+    pdf_add_evidence(data) {
+      let evidence = [["evidence", "option"]]
+      this.Store.patient.evidence.map(x => {
+        evidence.push([this.Store.labels[x.name],
+          this.Store.option_labels[x.name][x.selected.name]
+        ])
+      })
+
+      data.content.push({text: "Evidence", style: 'subheader'})
+      data.content.push(this.pdfTable(evidence))
+    },
+
+    pdf_add_goals(data) {
+            let goals = [["goal", "option", "direction"]]
+      this.Store.patient.goals.map(x => {
+        goals.push([
+          this.Store.labels[x.name],
+          this.Store.option_labels[x.name][x.selected.name],
+          this.labelDirection(x.direction)
+        ])
+      })
+
+      data.content.push({text: "Goals", style: 'subheader'})
+      data.content.push(this.pdfTable(goals))
+    },
+
+    pdf_add_targets: function (data) {
+      if (this.Store.patient.targets.length > 0) {
+        let targets = [["variable"]]
+        this.Store.patient.targets.map(x => {
+          targets.push([this.Store.labels[x.name]])
+        })
+
+        data.content.push({text: "Targets", style: 'subheader'})
+        data.content.push(this.pdfTable(targets))
+
+      }
+    },
+
+    pdf_add_predictions(data) {
+      data.content.push({text: "Predictions", style: 'subheader'})
+      let predictionsHeader = [""]
+
+      for (const goal of this.Store.patient.goals) {
+        predictionsHeader.push(this.Store.labels[goal.name] + ": " +
+            this.Store.option_labels[goal.name][goal.selected.name])
+      }
+
+      let predictions = [predictionsHeader]
+      this.Store.predictions.options.map(x => {
+        let outOption = ""
+        for (const [node, option] of Object.entries(x.option)) {
+          outOption += this.Store.labels[node] + ": " + this.Store.option_labels[node][option] + "\n"
+        }
+
+        if (outOption === "") {
+          outOption = "overall"
+        }
+
+        if (x === this.Store.predictions.selectedOption) {
+          outOption = {text: outOption, bold: true}
+        }
+
+        let out = [outOption]
+
+        for (const value of Object.values(x.goalValues)) {
+          out.push([(value * 100).toFixed(0) + '%',
+            {svg: barvisjs.createSVG(200, value, "teal").outerHTML}])
+        }
+
+        predictions.push(out)
+      })
+
+
+      data.content.push(this.pdfTable(predictions))
+    },
+
+    pdf_add_explanations(data) {
+      data.content.push({text: "Explanations", style: 'subheader'})
+
+      if (this.Store.predictions.selectedOption) {
+        let currentOption = ""
+        for (const [node, option] of Object.entries(this.Store.predictions.selectedOption.option)) {
+          currentOption += this.Store.labels[node] + ": " + this.Store.option_labels[node][option] + "\n"
+        }
+        data.content.push({text: "for " + currentOption})
+      }
+
+      let explanationsHeader = ["", "Relevance for Outcome"]
+
+      for (const goal of this.Store.patient.goals) {
+        explanationsHeader.push(this.Store.labels[goal.name] + ": " +
+            this.Store.option_labels[goal.name][goal.selected.name] + " (" +
+            this.labelDirection(goal.direction) + ")")
+      }
+
+      let explanations = [explanationsHeader]
+      this.Store.explain.relevance.map(x => {
+        let out = [
+          this.Store.labels[x.node_name] + ": " + this.getState(x.node_name),
+          {svg: barvisjs.createSVG(150, x.overall_relevance, "#004d80").outerHTML}
+        ]
+
+        for (const value of Object.values(x.relevancies)) {
+          out.push({svg: twosidedbarvisjs.createSVG(150, value).outerHTML})
+        }
+
+        explanations.push(out)
+      })
+
+      data.content.push(this.pdfTable(explanations))
+    },
+    labelDirection(direction) {
+      if (direction === "min") return "minimize"
+      else if (direction === "max") return "maximize"
+      else return "no direction"
+    },
+    getState(name) {
+      let state = "unknown"
+      this.Store.explain.states.forEach(node => {
+        if (node.name === name) {
+          state = this.Store.option_labels[name][node.state]
+        }
+      })
+      return state
+    }
   }
 }
 </script>
