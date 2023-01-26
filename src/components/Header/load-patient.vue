@@ -17,6 +17,7 @@ import * as barvisjs from "@/components/visualisations/bar-vis-js.js";
 import * as twosidedbarvisjs from "@/components/visualisations/two-sided-bar-vis-js.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import * as logo from "@/components/Header/svg_logo.js";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -121,7 +122,8 @@ export default {
           },
           header: {
             fontSize: 18,
-            bold: true
+            bold: true,
+            alignment: 'center'
           },
           subheader: {
             fontSize: 15,
@@ -130,10 +132,12 @@ export default {
         }
       }
 
+      data.content.push({svg: logo.return_logo(), height: 50, alignment: 'right'})
+
       data.content.push({
-        text: this.Store.network + ' - Patient Summary',
+        text: this.capitalize(this.Store.network) + ' - Patient Summary',
         style: 'header'
-      })
+      });
 
       data.content.push({
         text: 'Patient: ' + this.Store.patient.name,
@@ -142,7 +146,60 @@ export default {
 
       data.content.push("  ")
 
-      //evidence
+      this.pdf_add_evidence(data)
+      this.pdf_add_goals(data)
+      this.pdf_add_targets(data)
+      this.pdf_add_predictions(data)
+      this.pdf_add_explanations(data)
+
+      pdfMake.createPdf(data).open()
+
+    },
+    capitalize(string) {
+      //capitalizes each first letter of every word in a sentence
+      return string.split(" ").map( word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    },
+
+    pdfTable(data) {
+      let Ncolumn = data[0].length
+
+      let widths = [150]
+      for (let i = 1; i < Ncolumn; i++) {
+        widths.push('auto')
+      }
+
+      return {
+        style: "table",
+        table: {
+          headerRows: 1,
+          widths: widths,
+          body: data
+        },
+        layout:
+            {
+              hLineWidth: function (i, node) {
+                if (i === 1) return 2;
+                if (i === 0 || i === node.table.body.length) return 0;
+                return 1;
+              }
+              ,
+              vLineWidth: function (i, node) {
+                return ((i === 0 || i === node.table.widths.length)) ? 0 : 1;
+              }
+              ,
+              hLineColor: function (i) {
+                return (i === 1) ? 'black' : 'gray';
+              }
+              ,
+              vLineColor: function () {
+                return 'gray';
+              }
+              ,
+            }
+      }
+    },
+
+    pdf_add_evidence(data) {
       let evidence = [["evidence", "option"]]
       this.Store.patient.evidence.map(x => {
         evidence.push([this.Store.labels[x.name],
@@ -152,10 +209,10 @@ export default {
 
       data.content.push({text: "Evidence", style: 'subheader'})
       data.content.push(this.pdfTable(evidence))
+    },
 
-
-      //goals
-      let goals = [["goal", "option", "direction"]]
+    pdf_add_goals(data) {
+            let goals = [["goal", "option", "direction"]]
       this.Store.patient.goals.map(x => {
         goals.push([
           this.Store.labels[x.name],
@@ -166,8 +223,9 @@ export default {
 
       data.content.push({text: "Goals", style: 'subheader'})
       data.content.push(this.pdfTable(goals))
+    },
 
-      //targets
+    pdf_add_targets: function (data) {
       if (this.Store.patient.targets.length > 0) {
         let targets = [["variable"]]
         this.Store.patient.targets.map(x => {
@@ -178,15 +236,15 @@ export default {
         data.content.push(this.pdfTable(targets))
 
       }
+    },
 
-
+    pdf_add_predictions(data) {
       data.content.push({text: "Predictions", style: 'subheader'})
-
-      //predictions
       let predictionsHeader = [""]
 
       for (const goal of this.Store.patient.goals) {
-        predictionsHeader.push(this.Store.labels[goal.name])
+        predictionsHeader.push(this.Store.labels[goal.name] + ": " +
+            this.Store.option_labels[goal.name][goal.selected.name])
       }
 
       let predictions = [predictionsHeader]
@@ -216,8 +274,9 @@ export default {
 
 
       data.content.push(this.pdfTable(predictions))
+    },
 
-      //Explanations
+    pdf_add_explanations(data) {
       data.content.push({text: "Explanations", style: 'subheader'})
 
       if (this.Store.predictions.selectedOption) {
@@ -251,48 +310,6 @@ export default {
       })
 
       data.content.push(this.pdfTable(explanations))
-
-
-      pdfMake.createPdf(data).open();
-
-    },
-    pdfTable(data) {
-      let Ncolumn = data[0].length
-      console.log(Ncolumn)
-      let widths = [150]
-      for (let i = 1; i < Ncolumn; i++) {
-        widths.push('auto')
-      }
-      console.log(widths)
-      return {
-        style: "table",
-        table: {
-          headerRows: 1,
-          widths: widths,
-          body: data
-        },
-        layout:
-            {
-              hLineWidth: function (i, node) {
-                if (i === 1) return 2;
-                if (i === 0 || i === node.table.body.length) return 0;
-                return 1;
-              }
-              ,
-              vLineWidth: function (i, node) {
-                return ((i === 0 || i === node.table.widths.length)) ? 0 : 1;
-              }
-              ,
-              hLineColor: function (i) {
-                return (i === 1) ? 'black': 'gray';
-              }
-              ,
-              vLineColor: function () {
-                return 'gray';
-              }
-              ,
-            }
-      }
     },
     labelDirection(direction) {
       if (direction === "min") return "minimize"
