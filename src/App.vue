@@ -20,7 +20,6 @@ export default {
     if (window.location.search === "?network=endorisk") {
       this.loadNetwork("endometrial cancer")
     }
-    console.log(window.location)
   },
   data() {
     return {
