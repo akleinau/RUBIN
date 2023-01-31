@@ -25,15 +25,7 @@ export default {
         return
       }
       let selectedNet = this.$refs.selectMenu.modelValue.name
-      /*
-      fetch('http://localhost:5000/openNetwork', {
-        method: 'POST',
-        body: JSON.stringify(selectedNet),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      */
+
       this.$emit("changePage", selectedNet)
     },
     loadNetList: async function () {
