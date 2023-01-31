@@ -187,8 +187,8 @@ export default {
 
     },
     getDirection(name) {
-      if (name === "min") return "minimize"
-      return "maximize"
+      if (name === "min") return "lowest"
+      return "highest"
     }
   }
 }

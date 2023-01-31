@@ -315,8 +315,8 @@ export default {
       data.content.push(this.pdfTable(explanations))
     },
     labelDirection(direction) {
-      if (direction === "min") return "minimize"
-      else if (direction === "max") return "maximize"
+      if (direction === "min") return "lowest"
+      else if (direction === "max") return "highest"
       else return "no direction"
     },
     getState(name) {

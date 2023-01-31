@@ -188,8 +188,8 @@ export default {
       return this.Store.labels[goal.name] + ": " + goal.selected.name
     },
     getDirection(name) {
-      if (name === "min") return "minimize"
-      return "maximize"
+      if (name === "min") return "lowest"
+      return "highest"
     }
   }
 }
