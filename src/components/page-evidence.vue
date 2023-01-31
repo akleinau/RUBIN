@@ -12,9 +12,10 @@
       <ScrollPanel style="height:100%">
 
         <!-- Help box more evidence -->
-        <div v-if="Store.patient.evidence.length <= 3" >
-          <i class="pi pi-exclamation-circle" />
-          Add more evidence for more accurate information!
+        <div v-if="notEnoughEvidenceEndorisk()">
+          <i class="pi pi-exclamation-circle"/>
+          Add at least the preoperative tumor grade, three biomarkers and one clinical variable for more accurate
+          information!
         </div>
 
         <!-- Evidence Table -->
@@ -41,18 +42,18 @@
             </template>
           </Column>
 
-          <Column field="value" :header="Store.compareConfig ? 'current' : ''" class="optionCol" >
+          <Column field="value" :header="Store.compareConfig ? 'current' : ''" class="optionCol">
             <template #body="slotProps">
               <div class="flex flex-row flex-nowrap flex-shrink">
-              <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
-                        :optionLabel="get_option_label"
-                        placeholder="" @change="onNodeChange(slotProps.data)"
-                        class="flex p-0 m-0 flex-shrink"
-                        :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
-              </Dropdown>
-              <Button v-if="slotProps.data.selected" icon="pi pi-times"
-                      class="flex p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
-                      @click="deleteNode(slotProps.data)"/>
+                <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
+                          :optionLabel="get_option_label"
+                          placeholder="" @change="onNodeChange(slotProps.data)"
+                          class="flex p-0 m-0 flex-shrink"
+                          :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
+                </Dropdown>
+                <Button v-if="slotProps.data.selected" icon="pi pi-times"
+                        class="flex p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
+                        @click="deleteNode(slotProps.data)"/>
               </div>
             </template>
           </Column>
@@ -71,7 +72,7 @@
           <br>
           <DataTable :value="overlayNodes" rowGroupMode="subheader" groupRowsBy="group" class="p-datatable-sm"
                      sortMode="single" sortField="group" :sortOrder="1"
-                      responsiveLayout="scroll"
+                     responsiveLayout="scroll"
                      v-model:filters="filters" filterDisplay="menu" data-key="name">
             <template #header>
               <div class="flex justify-content-between">
@@ -135,9 +136,9 @@ export default {
       },
       nodesToAdd: [],
       multiSortMeta: [
-            {field: 'group', order: 1},
-            {field: 'name', order: 2}
-        ]
+        {field: 'group', order: 1},
+        {field: 'name', order: 2}
+      ]
     }
   },
   computed: {
@@ -246,6 +247,39 @@ export default {
     },
     get_option_label(option) {
       return this.Store.option_labels[option.node][option.name]
+    },
+    //directly coded in here, should be in the customization file
+    notEnoughEvidenceEndorisk() {
+      let notEnoughInformation = false
+      //tumor grade
+      if (!this.Store.patient.evidence.find(n => n.name === 'PrimaryTumor')) {
+        notEnoughInformation = true
+      }
+
+            //3 biomarkers
+      let biomarkers = 0
+      if (this.Store.patient.evidence.find(n => n.name === 'PR')) {
+        biomarkers += 1
+      }
+      if (this.Store.patient.evidence.find(n => n.name === 'ER')) {
+        biomarkers += 1
+      }
+      if (this.Store.patient.evidence.find(n => n.name === 'L1CAM')) {
+        biomarkers += 1
+      }
+      if (this.Store.patient.evidence.find(n => n.name === 'p53')) {
+        biomarkers += 1
+      }
+      if (biomarkers < 3) {
+        notEnoughInformation = true
+      }
+
+      //one clinical variable
+      if (!this.Store.patient.evidence.find(n => ['CA125', 'CTMRI', 'Platelets', 'Cytology'].includes(n.name))) {
+        notEnoughInformation = true
+      }
+
+      return notEnoughInformation
     }
   }
 }
