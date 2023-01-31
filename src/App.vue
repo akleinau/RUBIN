@@ -17,9 +17,10 @@ export default {
   },
   created() {
     document.title = "RUBIN"
-    if (window.location.pathname === "/endorisk") {
+    if (window.location.search === "?network=endorisk") {
       this.loadNetwork("endometrial cancer")
     }
+    console.log(window.location)
   },
   data() {
     return {
