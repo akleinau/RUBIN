@@ -66,7 +66,6 @@
             <div class="flex justify-content-end w-full">
               <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
               <Button class="p-button-secondary mr-2" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
-              <Button class="p-button-secondary" label="clear evidence" icon="pi pi-trash" @click="clearEvidence"/>
             </div>
           </template>
           <br>
@@ -110,6 +109,16 @@
         <div>
           <Button class="addButton" @click="overlay = true"
                   :label="$t('addEvidence')"></Button>
+          <Button class="p-button-text addButton mt-1 text-black-alpha-70" @click="clearEvidenceDialog = true"
+                  :label="$t('delete all evidence')"></Button>
+          <Dialog v-model:visible="clearEvidenceDialog">
+            <div class="m-2"> Are you sure you want to delete all evidence? <br></div>
+            <div class="flex justify-content-end">
+              <Button class="m-2 p-button-text" @click="clearEvidenceDialog = false"> cancel</Button>
+              <Button class="m-2" @click="clearEvidence()"> proceed</Button>
+            </div>
+
+          </Dialog>
         </div>
       </ScrollPanel>
     </template>
@@ -138,7 +147,8 @@ export default {
       multiSortMeta: [
         {field: 'group', order: 1},
         {field: 'name', order: 2}
-      ]
+      ],
+      clearEvidenceDialog: false
     }
   },
   computed: {
@@ -239,6 +249,8 @@ export default {
       this.Store.patient.evidence.forEach(ev => {
         this.Store.deleteEvidence(ev)
       })
+      document.activeElement.blur()
+      this.clearEvidenceDialog = false
 
     },
     isDifferentState(item) {
@@ -256,7 +268,7 @@ export default {
         notEnoughInformation = true
       }
 
-            //3 biomarkers
+      //3 biomarkers
       let biomarkers = 0
       if (this.Store.patient.evidence.find(n => n.name === 'PR')) {
         biomarkers += 1
