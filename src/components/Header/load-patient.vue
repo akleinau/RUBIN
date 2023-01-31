@@ -284,7 +284,10 @@ export default {
         for (const [node, option] of Object.entries(this.Store.predictions.selectedOption.option)) {
           currentOption += this.Store.labels[node] + ": " + this.Store.option_labels[node][option] + "\n"
         }
-        data.content.push({text: "for " + currentOption})
+
+        if (currentOption !== "") {
+          data.content.push({text: "for " + currentOption})
+        }
       }
 
       let explanationsHeader = ["", "Relevance for Outcome"]
