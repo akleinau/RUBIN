@@ -217,7 +217,7 @@ export default {
         goals.push([
           this.Store.labels[x.name],
           this.Store.option_labels[x.name][x.selected.name],
-          this.labelDirection(x.direction)
+          this.Store.getDirection(x.direction)
         ])
       })
 
@@ -295,7 +295,7 @@ export default {
       for (const goal of this.Store.patient.goals) {
         explanationsHeader.push(this.Store.labels[goal.name] + ": " +
             this.Store.option_labels[goal.name][goal.selected.name] + " (" +
-            this.labelDirection(goal.direction) + ")")
+            this.Store.getDirection(goal.direction) + ")")
       }
 
       let explanations = [explanationsHeader]
@@ -313,11 +313,6 @@ export default {
       })
 
       data.content.push(this.pdfTable(explanations))
-    },
-    labelDirection(direction) {
-      if (direction === "min") return "lowest"
-      else if (direction === "max") return "highest"
-      else return "no direction"
     },
     getState(name) {
       let state = "unknown"

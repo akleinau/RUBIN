@@ -40,7 +40,9 @@
       <Column v-for="goal in goalnames" :key="goal">
         <template #body="slotProps">
           <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal.name)]"
-                       v-tooltip="getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal.name)])"></twoSidedBar>
+                       v-tooltip.left="{value: getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal.name)],
+                       goal.direction, goal.label), fitContent: true}"
+          />
         </template>
       </Column>
     </DataTable>
@@ -75,8 +77,8 @@ export default {
         this.Store.patient.goals.forEach(goal => {
           goalnames.push({
             "name": this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name],
-            "label": this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name] +
-                " (" + this.getDirection(goal.direction) + ")"
+            "label": this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name],
+            "direction": goal.direction
           })
         })
       }
@@ -123,10 +125,17 @@ export default {
         return 0
       }
     },
-    getDirectionTooltip(number) {
-      if (number > 0.001) return this.$t("positiveInfluence")
-      else if (number < -0.001) return this.$t("negativeInfluence")
-      else return this.$t("noInfluence")
+    getDirectionTooltip(number, direction, label) {
+      if (direction === "min") {
+        if (number > 0.001) return "Decreases the probability of " + label
+        else if (number < -0.001) return "Increases the probability of " + label
+      }
+      if (direction === "max") {
+        if (number > 0.001) return "Increases the probability of " + label
+        else if (number < -0.001) return "Decreases the probability of " + label
+      }
+
+      return this.$t("noInfluence")
     },
     getIdentifier(label) {
       let identifier = "-1"
@@ -185,10 +194,6 @@ export default {
       }
       return false
 
-    },
-    getDirection(name) {
-      if (name === "min") return "lowest"
-      return "highest"
     }
   }
 }

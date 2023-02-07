@@ -404,8 +404,10 @@ export const useStore = defineStore('store', {
                     if (fullnode) {
                         let selectedOption = fullnode.options.find(o => o.name === a.option)
                         if (selectedOption) {
-                            goalList.push({"name": a.name, "selected": selectedOption, "options": fullnode.options,
-                            "direction": a.direction})
+                            goalList.push({
+                                "name": a.name, "selected": selectedOption, "options": fullnode.options,
+                                "direction": a.direction
+                            })
                         }
                     }
                 })
@@ -423,6 +425,10 @@ export const useStore = defineStore('store', {
             let missing = (a.filter(x => !b.includes(x))).length
             missing += (b.filter(x => !a.includes(x))).length
             return missing > 0
+        },
+        getDirection(name) {
+            if (name === "min") return "lower is better"
+            return "higher is better"
         }
     }
 })

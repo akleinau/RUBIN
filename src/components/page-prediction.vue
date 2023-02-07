@@ -28,22 +28,22 @@
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
               {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
-              ({{ getDirection(goal.direction) }})
+              ({{ Store.getDirection(goal.direction) }})
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> compare: - given: {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
-                ({{ getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
+                ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
               </span>
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
               {{ Store.labels[goal.name] }} - <b> given: {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
-              ({{ getDirection(goal.direction) }})
+              ({{ Store.getDirection(goal.direction) }})
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> compare: - given: {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
-                ({{ getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
+                ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
               </span>
             </div>
 
@@ -187,10 +187,6 @@ export default {
     getGoalLabel(goal) {
       return this.Store.labels[goal.name] + ": " + goal.selected.name
     },
-    getDirection(name) {
-      if (name === "min") return "lowest"
-      return "highest"
-    }
   }
 }
 </script>
