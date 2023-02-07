@@ -105,8 +105,8 @@ export default {
       },
       nodesToAdd: [],
       directionOptions: [
-        {name: "max", label: "maximize"},
-        {name: "min", label: "minimize"}
+        {name: "max", label: this.Store.getDirection("max")},
+        {name: "min", label: this.Store.getDirection("min")}
       ]
     }
   },

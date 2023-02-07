@@ -217,7 +217,7 @@ export default {
         goals.push([
           this.Store.labels[x.name],
           this.Store.option_labels[x.name][x.selected.name],
-          this.labelDirection(x.direction)
+          this.Store.getDirection(x.direction)
         ])
       })
 
@@ -284,7 +284,10 @@ export default {
         for (const [node, option] of Object.entries(this.Store.predictions.selectedOption.option)) {
           currentOption += this.Store.labels[node] + ": " + this.Store.option_labels[node][option] + "\n"
         }
-        data.content.push({text: "for " + currentOption})
+
+        if (currentOption !== "") {
+          data.content.push({text: "for " + currentOption})
+        }
       }
 
       let explanationsHeader = ["", "Relevance for Outcome"]
@@ -292,7 +295,7 @@ export default {
       for (const goal of this.Store.patient.goals) {
         explanationsHeader.push(this.Store.labels[goal.name] + ": " +
             this.Store.option_labels[goal.name][goal.selected.name] + " (" +
-            this.labelDirection(goal.direction) + ")")
+            this.Store.getDirection(goal.direction) + ")")
       }
 
       let explanations = [explanationsHeader]
@@ -310,11 +313,6 @@ export default {
       })
 
       data.content.push(this.pdfTable(explanations))
-    },
-    labelDirection(direction) {
-      if (direction === "min") return "minimize"
-      else if (direction === "max") return "maximize"
-      else return "no direction"
     },
     getState(name) {
       let state = "unknown"

@@ -12,9 +12,10 @@
       <ScrollPanel style="height:100%">
 
         <!-- Help box more evidence -->
-        <div v-if="Store.patient.evidence.length <= 3" >
-          <i class="pi pi-exclamation-circle" />
-          Add more evidence for more accurate information!
+        <div v-if="notEnoughEvidenceEndorisk()">
+          <i class="pi pi-exclamation-circle"/>
+          Add at least the preoperative tumor grade, three biomarkers and one clinical variable for more accurate
+          information!
         </div>
 
         <!-- Evidence Table -->
@@ -41,18 +42,18 @@
             </template>
           </Column>
 
-          <Column field="value" :header="Store.compareConfig ? 'current' : ''" class="optionCol" >
+          <Column field="value" :header="Store.compareConfig ? 'current' : ''" class="optionCol">
             <template #body="slotProps">
               <div class="flex flex-row flex-nowrap flex-shrink">
-              <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
-                        :optionLabel="get_option_label"
-                        placeholder="" @change="onNodeChange(slotProps.data)"
-                        class="flex p-0 m-0 flex-shrink"
-                        :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
-              </Dropdown>
-              <Button v-if="slotProps.data.selected" icon="pi pi-times"
-                      class="flex p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
-                      @click="deleteNode(slotProps.data)"/>
+                <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
+                          :optionLabel="get_option_label"
+                          placeholder="" @change="onNodeChange(slotProps.data)"
+                          class="flex p-0 m-0 flex-shrink"
+                          :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
+                </Dropdown>
+                <Button v-if="slotProps.data.selected" icon="pi pi-times"
+                        class="flex p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
+                        @click="deleteNode(slotProps.data)"/>
               </div>
             </template>
           </Column>
@@ -65,13 +66,12 @@
             <div class="flex justify-content-end w-full">
               <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
               <Button class="p-button-secondary mr-2" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
-              <Button class="p-button-secondary" label="clear evidence" icon="pi pi-trash" @click="clearEvidence"/>
             </div>
           </template>
           <br>
           <DataTable :value="overlayNodes" rowGroupMode="subheader" groupRowsBy="group" class="p-datatable-sm"
                      sortMode="single" sortField="group" :sortOrder="1"
-                      responsiveLayout="scroll"
+                     responsiveLayout="scroll"
                      v-model:filters="filters" filterDisplay="menu" data-key="name">
             <template #header>
               <div class="flex justify-content-between">
@@ -109,6 +109,16 @@
         <div>
           <Button class="addButton" @click="overlay = true"
                   :label="$t('addEvidence')"></Button>
+          <Button class="p-button-text addButton mt-1 text-black-alpha-70" @click="clearEvidenceDialog = true"
+                  :label="$t('delete all evidence')"></Button>
+          <Dialog v-model:visible="clearEvidenceDialog">
+            <div class="m-2"> Are you sure you want to delete all evidence? <br></div>
+            <div class="flex justify-content-end">
+              <Button class="m-2 p-button-text" @click="clearEvidenceDialog = false"> cancel</Button>
+              <Button class="m-2" @click="clearEvidence()"> proceed</Button>
+            </div>
+
+          </Dialog>
         </div>
       </ScrollPanel>
     </template>
@@ -135,9 +145,10 @@ export default {
       },
       nodesToAdd: [],
       multiSortMeta: [
-            {field: 'group', order: 1},
-            {field: 'name', order: 2}
-        ]
+        {field: 'group', order: 1},
+        {field: 'name', order: 2}
+      ],
+      clearEvidenceDialog: false
     }
   },
   computed: {
@@ -238,6 +249,8 @@ export default {
       this.Store.patient.evidence.forEach(ev => {
         this.Store.deleteEvidence(ev)
       })
+      document.activeElement.blur()
+      this.clearEvidenceDialog = false
 
     },
     isDifferentState(item) {
@@ -246,6 +259,39 @@ export default {
     },
     get_option_label(option) {
       return this.Store.option_labels[option.node][option.name]
+    },
+    //directly coded in here, should be in the customization file
+    notEnoughEvidenceEndorisk() {
+      let notEnoughInformation = false
+      //tumor grade
+      if (!this.Store.patient.evidence.find(n => n.name === 'PrimaryTumor')) {
+        notEnoughInformation = true
+      }
+
+      //3 biomarkers
+      let biomarkers = 0
+      if (this.Store.patient.evidence.find(n => n.name === 'PR')) {
+        biomarkers += 1
+      }
+      if (this.Store.patient.evidence.find(n => n.name === 'ER')) {
+        biomarkers += 1
+      }
+      if (this.Store.patient.evidence.find(n => n.name === 'L1CAM')) {
+        biomarkers += 1
+      }
+      if (this.Store.patient.evidence.find(n => n.name === 'p53')) {
+        biomarkers += 1
+      }
+      if (biomarkers < 3) {
+        notEnoughInformation = true
+      }
+
+      //one clinical variable
+      if (!this.Store.patient.evidence.find(n => ['CA125', 'CTMRI', 'Platelets', 'Cytology'].includes(n.name))) {
+        notEnoughInformation = true
+      }
+
+      return notEnoughInformation
     }
   }
 }
