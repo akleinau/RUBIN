@@ -56,15 +56,59 @@ export default {
     getProbability(node) {
       return this.nodes.find(d => d.name === node.data.id).probability
     },
+
+    getDetails(e) {
+      //move into focus
+      d3.select(e.target.parentNode).raise()
+      //size up node
+      d3.select(e.target.parentNode).selectAll(".box")
+          .attr("width", d => this.labels[d.data.id].length+60)
+          .attr("height", d => {
+            let node = this.nodes.find(node => node.name === d.data.id)
+            if (node.distribution) return node.distribution.length * 10 + 15
+            else return 15
+          })
+          .attr("transform", d => `translate(${-(this.labels[d.data.id].length+60)/2},-4)`)
+      //show full text
+      d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.labels[d.data.id]) + ": ")
+      // show all probabilities
+      d3.select(e.target.parentNode).selectAll(".textState").each(d => {
+        let node = this.nodes.find(node => node.name === d.data.id)
+        if (node.distribution) {
+          node.distribution.forEach((p, i) => {
+            d3.select(e.target.parentNode).append("rect")
+                .attr("class", "probBar")
+                .attr("width", p * 20)
+                .attr("height", 5)
+                .attr("transform", `translate(0,${i * 10 + 10})`)
+                .attr("fill", "darkblue")
+
+            d3.select(e.target.parentNode).append("text")
+                .text(node.stateNames[i])
+                .attr("class", "probState")
+                .attr("transform", `translate(-2,${i * 10 + 10})`)
+                .attr('font-size', '4px')
+                .attr('text-anchor', 'end')
+                .attr("dy", 4)
+          })
+        }
+
+      })
+
+    },
+
+    hideDetails(e) {
+      d3.select(e.target.parentNode).selectAll(".box").attr("width", 25)
+          .attr("height", 10)
+          .attr("transform", `translate(-12.5,-4)`)
+
+      d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.labels[d.data.id]).substring(0, 10) + ": ")
+
+      d3.select(e.target.parentNode).selectAll(".probBar").remove()
+      d3.select(e.target.parentNode).selectAll(".probState").remove()
+    },
+
     visualise() {
-
-      function longName(thisThing, node, d) {
-        d3.select(node.target).text(String(thisThing.labels[d.data.id]) + ": ")
-      }
-
-      function shortName(thisThing, node, d) {
-        d3.select(node.target).text(String(thisThing.labels[d.data.id]).substring(0, 10) + ": ")
-      }
 
 
       if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
@@ -82,9 +126,6 @@ export default {
 
         let {width, height} = layout(graph)
 
-        if (width > height) height = width; else width = height //makes the view quadratic so it fits in our layout
-
-
         var colorScale = d3.scaleQuantize()
             .domain([0, 1])
             .range(["red", "darkGoldenRod", "green"]);
@@ -99,7 +140,7 @@ export default {
 
         var svg = d3.select(this.$refs.container)
             .append("svg")
-            .attr("viewBox", [0, 0, width, height]);
+            .attr("viewBox", [-40, 0, width+80, height+50])
 
         const arrow = d3.symbol().type(d3.symbolTriangle).size(5);
         svg.append('g')
@@ -144,6 +185,7 @@ export default {
             .attr('transform', ({x, y}) => `translate(${x}, ${y})`)
 
         nodes.append('rect')
+            .attr("class", "box")
             .attr("width", 25)
             .attr("height", 10)
             .attr('fill', "white")
@@ -152,23 +194,28 @@ export default {
             .attr("rx", 2)
             .attr("ry", 2)
             .attr('transform', `translate(-12.5,-4)`)
+            .on("mouseenter", e => this.getDetails(e))
+            .on("mouseleave", e => this.hideDetails(e))
 
         // Add text to nodes
         nodes.append('text')
             .text(d => String(this.labels[d.data.id]).substring(0, 10) + ": ")
-            .attr("class", "text")
+            .attr("class", "textName")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')
-            .on("mouseenter", (e, d) => longName(this, e, d))
-            .on("mouseleave", (e, d) => shortName(this, e, d))
+            .on("mouseenter", e => this.getDetails(e))
+            .on("mouseleave", e => this.hideDetails(e))
+
 
         // Add text to nodes
         nodes.append('text')
             .text(d => String(this.getState(d)).substring(0, 10))
-            .attr("class", "text")
+            .attr("class", "textState")
             .attr('font-size', '4px')
             .attr('text-anchor', 'middle')
             .attr("dy", 5)
+            .on("mouseenter", e => this.getDetails(e))
+            .on("mouseleave", e => this.hideDetails(e))
 
 
       }
