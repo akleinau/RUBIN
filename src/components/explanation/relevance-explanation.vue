@@ -34,7 +34,7 @@
       <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2">
         <template #body="slotProps">
           <bar :value="slotProps.data.overall_relevance" color="#004d80" width="200"
-               v-tooltip="slotProps.data.overall_relevance.toFixed(2)*100 + '%'"></bar>
+               v-tooltip="(slotProps.data.overall_relevance*100).toFixed(0) + '%'"></bar>
         </template>
       </Column>
       <Column v-for="goal in goalnames" :key="goal">

@@ -19,7 +19,10 @@ export default {
   props: [
     "nodes",
     "edges",
-    "labels"
+    "labels",
+    "highlight",
+    "highlightNodes",
+    "highlightEdges"
   ],
   computed: {
     edgeList: function () {
@@ -57,43 +60,67 @@ export default {
       return this.nodes.find(d => d.name === node.data.id).probability
     },
 
-    getDetails(e) {
-      //move into focus
-      d3.select(e.target.parentNode).raise()
-      //size up node
-      d3.select(e.target.parentNode).selectAll(".box")
-          .attr("width", d => this.labels[d.data.id].length+60)
-          .attr("height", d => {
-            let node = this.nodes.find(node => node.name === d.data.id)
-            if (node.distribution) return node.distribution.length * 10 + 15
-            else return 15
-          })
-          .attr("transform", d => `translate(${-(this.labels[d.data.id].length+60)/2},-4)`)
-      //show full text
-      d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.labels[d.data.id]) + ": ")
-      // show all probabilities
-      d3.select(e.target.parentNode).selectAll(".textState").each(d => {
-        let node = this.nodes.find(node => node.name === d.data.id)
-        if (node.distribution) {
-          node.distribution.forEach((p, i) => {
-            d3.select(e.target.parentNode).append("rect")
-                .attr("class", "probBar")
-                .attr("width", p * 20)
-                .attr("height", 5)
-                .attr("transform", `translate(0,${i * 10 + 10})`)
-                .attr("fill", "darkblue")
+    isHighlightNode(node) {
+      if (this.highlight) {
+        return this.highlightNodes.find(n => n.name === node.data.id) !== undefined
+      }
+      return true
+    },
 
-            d3.select(e.target.parentNode).append("text")
-                .text(node.stateNames[i])
-                .attr("class", "probState")
-                .attr("transform", `translate(-2,${i * 10 + 10})`)
-                .attr('font-size', '4px')
-                .attr('text-anchor', 'end')
-                .attr("dy", 4)
-          })
-        }
+    isHighlightEdge(edge) {
+      if (this.highlight) {
+        return this.highlightEdges.find(e => e.source === edge.data[0] && e.target === edge.data[1]) !== undefined
+      }
+      return true
+    },
 
-      })
+    getDetails(e, d) {
+      if (!this.highlight || this.isHighlightNode(d)) {
+        //move into focus
+        d3.select(e.target.parentNode).raise()
+        //size up node
+        d3.select(e.target.parentNode).selectAll(".box")
+            .attr("width", d => this.labels[d.data.id].length + 60)
+            .attr("height", d => {
+              let node = this.nodes.find(node => node.name === d.data.id)
+              if (node.distribution) return node.distribution.length * 10 + 15
+              else return 15
+            })
+            .attr("transform", d => `translate(${-(this.labels[d.data.id].length + 60) / 2},-4)`)
+        //show full text
+        d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.labels[d.data.id]) + ": ")
+        // show all probabilities
+        d3.select(e.target.parentNode).selectAll(".textState").each(d => {
+          let node = this.nodes.find(node => node.name === d.data.id)
+          if (node.distribution) {
+            node.distribution.forEach((p, i) => {
+              d3.select(e.target.parentNode).append("rect")
+                  .attr("class", "probBar")
+                  .attr("width", p * 20)
+                  .attr("height", 5)
+                  .attr("transform", `translate(0,${i * 10 + 10})`)
+                  .attr("fill", "darkblue")
+
+              d3.select(e.target.parentNode).append("text")
+                  .text((p*100).toFixed(0) + '%')
+                  .attr("class", "probText")
+                  .attr('font-size', '4px')
+                  .attr("transform", `translate(${p*20+2},${i * 10 + 10})`)
+                  .attr("fill", "darkblue")
+                  .attr("dy", 4)
+
+              d3.select(e.target.parentNode).append("text")
+                  .text(node.stateNames[i])
+                  .attr("class", "probState")
+                  .attr("transform", `translate(-2,${i * 10 + 10})`)
+                  .attr('font-size', '4px')
+                  .attr('text-anchor', 'end')
+                  .attr("dy", 4)
+            })
+          }
+
+        })
+      }
 
     },
 
@@ -106,11 +133,10 @@ export default {
 
       d3.select(e.target.parentNode).selectAll(".probBar").remove()
       d3.select(e.target.parentNode).selectAll(".probState").remove()
+      d3.select(e.target.parentNode).selectAll(".probText").remove()
     },
 
     visualise() {
-
-
       if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
 
         var graph = dag.dagConnect()(this.edgeList)
@@ -140,7 +166,7 @@ export default {
 
         var svg = d3.select(this.$refs.container)
             .append("svg")
-            .attr("viewBox", [-40, 0, width+80, height+50])
+            .attr("viewBox", [-40, 0, width + 80, height + 50])
 
         const arrow = d3.symbol().type(d3.symbolTriangle).size(5);
         svg.append('g')
@@ -149,6 +175,7 @@ export default {
             .enter()
             .append('path')
             .attr('d', arrow)
+            .attr('opacity', d => this.isHighlightEdge(d) ? 1 : 0)
             .attr('transform', ({points}) => {
               const [end, start] = points.slice().reverse();
               // This sets the arrows the node radius (20) + a little bit (3) away from the node center, on the last line segment of the edge. This means that edges that only span ine level will work perfectly, but if the edge bends, this will be a little off.
@@ -175,6 +202,7 @@ export default {
             .attr('fill', 'none')
             .attr('stroke-width', 0.5)
             .attr('stroke', "black")
+            .attr('opacity', d => this.isHighlightEdge(d) ? 1 : 0.2)
 
 
         const nodes = svg.append('g')
@@ -189,12 +217,13 @@ export default {
             .attr("width", 25)
             .attr("height", 10)
             .attr('fill', "white")
+            .style('stroke-opacity', d => this.isHighlightNode(d) ? 1 : 0.2)
             .attr("stroke-width", 0.5)
             .attr("stroke", d => color(this.getProbability(d)))
             .attr("rx", 2)
             .attr("ry", 2)
             .attr('transform', `translate(-12.5,-4)`)
-            .on("mouseenter", e => this.getDetails(e))
+            .on("mouseenter", (e, d) => this.getDetails(e, d))
             .on("mouseleave", e => this.hideDetails(e))
 
         // Add text to nodes
@@ -203,7 +232,8 @@ export default {
             .attr("class", "textName")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')
-            .on("mouseenter", e => this.getDetails(e))
+            .style('opacity', d => this.isHighlightNode(d) ? 1 : 0)
+            .on("mouseenter", (e, d) => this.getDetails(e, d))
             .on("mouseleave", e => this.hideDetails(e))
 
 
@@ -212,9 +242,10 @@ export default {
             .text(d => String(this.getState(d)).substring(0, 10))
             .attr("class", "textState")
             .attr('font-size', '4px')
+            .style('opacity', d => this.isHighlightNode(d) ? 1 : 0)
             .attr('text-anchor', 'middle')
             .attr("dy", 5)
-            .on("mouseenter", e => this.getDetails(e))
+            .on("mouseenter", (e, d) => this.getDetails(e, d))
             .on("mouseleave", e => this.hideDetails(e))
 
 
