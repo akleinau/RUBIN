@@ -32,25 +32,26 @@
           <!--   compact network  -->
           <TabPanel :header="$t('CompactNetwork')">
             <div v-if="Store.compareConfig==null">
-              <sugiyama highlight="yes" :edges="Store.edges" :highlightEdges="getCompactEdges()"
+              <sugiyama :highlight="true" :edges="Store.edges" :highlightEdges="getCompactEdges()"
                         :nodes="Store.explain.states" :highlightNodes="getExNodes()"
                         :labels="Store.labels"/>
             </div>
             <div v-else>
-              <sugiyamaCompare :edges="getCompactEdges()" :nodes="getExNodes()"
+              <sugiyamaCompare :highlight="true" :highlightEdges="getCompactEdges()" :highlightNodes="getExNodes()"
+                               :nodes="Store.explain.states" :edges="Store.edges"
                                :nodes2="Store.compareConfig.explain.states"
-                               :name2="compare" :labels="Store.labels"/>
+                               :labels="Store.labels"/>
             </div>
           </TabPanel>
           <!--   full network  -->
           <TabPanel :header="$t('FullNetwork')">
             <div v-if="Store.compareConfig==null">
-              <sugiyama :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
+              <sugiyama :highlight="false" :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
             </div>
             <div v-else>
-              <sugiyamaCompare :edges="Store.edges" :nodes="Store.explain.states"
+              <sugiyamaCompare :highlight="false" :edges="Store.edges" :nodes="Store.explain.states"
                                :nodes2="Store.compareConfig.explain.states"
-                               :name2="compare" :labels="Store.labels"/>
+                               :labels="Store.labels"/>
             </div>
           </TabPanel>
         </TabView>
