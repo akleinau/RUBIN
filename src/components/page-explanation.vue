@@ -32,7 +32,9 @@
           <!--   compact network  -->
           <TabPanel :header="$t('CompactNetwork')">
             <div v-if="Store.compareConfig==null">
-              <sugiyama :edges="getCompactEdges()" :nodes="getExNodes()" :labels="Store.labels"/>
+              <sugiyama highlight="yes" :edges="Store.edges" :highlightEdges="getCompactEdges()"
+                        :nodes="Store.explain.states" :highlightNodes="getExNodes()"
+                        :labels="Store.labels"/>
             </div>
             <div v-else>
               <sugiyamaCompare :edges="getCompactEdges()" :nodes="getExNodes()"
