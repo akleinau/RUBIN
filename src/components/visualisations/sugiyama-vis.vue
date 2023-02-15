@@ -139,15 +139,21 @@ export default {
     visualise() {
       if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
 
+        let edgeColor = this.highlight? "darkslategray" : "darkgray"
+
         var graph = dag.dagConnect()(this.edgeList)
 
         const layout = dag.sugiyama()
             .layering(dag.layeringSimplex())
-            .decross(dag.decrossTwoLayer().order(dag.twolayerOpt()))
-            .coord(dag.coordCenter())
+            //.layering(dag.layeringLongestPath())
+            //.layering(dag.layeringCoffmanGraham())
+            .decross(dag.decrossTwoLayer().order(dag.twolayerGreedy().base(dag.twolayerAgg())))
+            //.decross(dag.decrossTwoLayer().order(dag.twolayerAgg()))
+            .coord(dag.coordSimplex())
+            //.coord(dag.coordCenter())
             .nodeSize((node) => {
-              const size = node instanceof dag.SugiDummyNode ? 2 : 11;
-              return [size * 3, size * 1.8];
+              const size = node ? 20 : 3;
+              return [1.5* size , size];
             })
 
         let {width, height} = layout(graph)
@@ -178,15 +184,17 @@ export default {
             .attr('opacity', d => this.isHighlightEdge(d) ? 1 : 0)
             .attr('transform', ({points}) => {
               const [end, start] = points.slice().reverse();
-              // This sets the arrows the node radius (20) + a little bit (3) away from the node center, on the last line segment of the edge. This means that edges that only span ine level will work perfectly, but if the edge bends, this will be a little off.
               const dx = start.x - end.x;
               const dy = start.y - end.y;
               const normal = Math.sqrt(dx * dx + dy * dy);
               // This is the angle of the last line segment
               const angle = Math.atan2(-dy, -dx) * 180 / Math.PI + 90;
-              return `translate(${end.x + 6 * dx / normal}, ${end.y + 6 * dy / normal}) rotate(${angle})`;
+              console.log(angle)
+              const y = Math.abs(angle-180) > 70 ? 4.5 : 6
+              const x = -y * normal / dy
+              return `translate(${end.x + x * dx / normal}, ${end.y - y}) rotate(${angle})`;
             })
-            .attr('fill', "black")
+            .attr('fill', edgeColor)
 
         const line = d3.line()
             .curve(d3.curveCatmullRom)
@@ -200,9 +208,11 @@ export default {
             .append('path')
             .attr('d', ({points}) => line(points))
             .attr('fill', 'none')
-            .attr('stroke-width', 0.5)
-            .attr('stroke', "black")
+            .attr('stroke-width', 0.8)
+            .attr('stroke', edgeColor)
             .attr('opacity', d => this.isHighlightEdge(d) ? 1 : 0.2)
+            .on("mouseenter", (e,d) => this.isHighlightEdge(d) ? d3.select(e.target).attr('stroke', "royalblue") : "")
+            .on("mouseleave", e => d3.select(e.target).attr('stroke', edgeColor))
 
 
         const nodes = svg.append('g')
