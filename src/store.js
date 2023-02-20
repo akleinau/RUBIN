@@ -427,8 +427,8 @@ export const useStore = defineStore('store', {
             return missing > 0
         },
         getDirection(name) {
-            if (name === "min") return "lower is better"
-            return "higher is better"
+            if (name === "min") return "low likelihood of"
+            return "high likelihood of"
         }
     }
 })

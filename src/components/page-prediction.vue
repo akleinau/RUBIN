@@ -27,23 +27,26 @@
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
-              {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
               ({{ Store.getDirection(goal.direction) }})
+              {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
-                ,<b> compare: - given: {{
+                ,<b> compare: - given:
+                 ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
+                {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
-                ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
               </span>
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
-              {{ Store.labels[goal.name] }} - <b> given: {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
+              {{ Store.labels[goal.name] }} - <b> given:
               ({{ Store.getDirection(goal.direction) }})
+              {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
-                ,<b> compare: - given: {{
+                ,<b> compare: - given:
+                ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
+                {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
-                ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
               </span>
             </div>
 
