@@ -5,14 +5,6 @@
                 :showUploadButton="false" @select="file = $event.files" :showCancelButton="false"
                 required/>
     <br>
-    <div v-if="file.length !== 0" class="flex justify-content-between">
-      <label>{{ $t('NetworkName') }}:
-        <InputText id="net-name" type="text" required/>
-      </label>
-      <label>{{ $t('OptDescription') }}: <Textarea id="net-description"></Textarea></label>
-      <Checkbox v-model="uploadToServer" :value="true" disabled="disabled"></Checkbox>
-      <label>{{ $t('RequestUpload') }}</label>
-    </div>
   </form>
   <br><br>
   <Button v-if="file.length !== 0" name="net-submit" type="submit" :label="$t('UploadNet')" @click="upload()"/>
@@ -30,8 +22,6 @@ export default {
   },
   methods: {
     upload: async function () {
-      let displayName = document.getElementById('net-name').value;
-      let netDescription = document.getElementById('net-description').value;
       let fileField = this.file;
       if (fileField.length === 0) {
         alert("Error: Please upload a file")
@@ -48,8 +38,8 @@ export default {
           let fileString = reader.result
           console.log(fileString)
           let localNet = {
-            "name": displayName,
-            "description": netDescription,
+            "name": nameSplit[0],
+            "description": "",
             "fileFormat": fileFormat,
             "fileString": fileString
           }
