@@ -269,7 +269,7 @@ export const useStore = defineStore('store', {
             this.network_translation.original_labels = network.labels
             this.labels = network.labels
 
-            if (customization !== null) {
+            if (customization !== undefined) {
                 this.phases = network.customization.phases
                 if (!noPhase) {
                     this.currentPhase = this.phases[0]
