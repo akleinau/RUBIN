@@ -4,8 +4,9 @@
     <template #end>
       <div class="flex flex-row align-center">
         <Button class="p-button-text p-button-secondary" :label="this.$t('backToNetwork')"
-                @click="changePage()" icon="pi pi-home" style="color:#3f3f46"/>
-        <div id="logo" class="r-2 align-self-center"><img id="logoSVG" src="../assets/RUBIN_Logo_core.svg" style="height: 1.5rem">
+                @click="NetworkSelectionDialog = true" icon="pi pi-home" style="color:#3f3f46"/>
+        <div id="logo" class="r-2 align-self-center"><img id="logoSVG" src="../assets/RUBIN_Logo_core.svg"
+                                                          style="height: 1.5rem">
         </div>
       </div>
     </template>
@@ -28,6 +29,15 @@
     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale"
              @change="langChange()"/>
   </OverlayPanel>
+
+  <Dialog v-model:visible="NetworkSelectionDialog" modal>
+    <div class="m-2"> Are you sure you want to go back to Network Selection? Patient information will be resetted. <br></div>
+    <div class="flex justify-content-end">
+      <Button class="m-2 p-button-text" @click="NetworkSelectionDialog = false"> cancel</Button>
+      <Button class="m-2" @click="changePage()"> proceed</Button>
+    </div>
+
+  </Dialog>
 
 </template>
 
@@ -69,6 +79,7 @@ export default {
       showNetworkDescription: false,
       SavePatientName: null,
       configLabel: "start comparing",
+      NetworkSelectionDialog: false,
       items: [
         {
           label: "File " + this.Store.patient.name,
@@ -139,21 +150,13 @@ export default {
             }
           ]
         }
-      ],
-      endMenu: [
-        {
-          label: this.$t("backToNetwork"),
-          key: 'backToNetwork',
-          icon: PrimeIcons.HOME,
-          command: () => {
-            this.changePage()
-          }
-        }
       ]
     }
   },
   methods: {
     changePage() {
+      this.Store.reset()
+      this.NetworkSelectionDialog = false
       this.$emit('changePage')
     },
     reset() {
@@ -206,7 +209,7 @@ export default {
 
     capitalize(string) {
       //capitalizes each first letter of every word in a sentence
-      return string.split(" ").map( word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
   }
 }

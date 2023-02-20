@@ -145,12 +145,8 @@ export default {
 
         const layout = dag.sugiyama()
             .layering(dag.layeringSimplex())
-            //.layering(dag.layeringLongestPath())
-            //.layering(dag.layeringCoffmanGraham())
             .decross(dag.decrossTwoLayer().order(dag.twolayerGreedy().base(dag.twolayerAgg())))
-            //.decross(dag.decrossTwoLayer().order(dag.twolayerAgg()))
             .coord(dag.coordSimplex())
-            //.coord(dag.coordCenter())
             .nodeSize((node) => {
               const size = node ? 20 : 3;
               return [1.5* size , size];
@@ -189,7 +185,6 @@ export default {
               const normal = Math.sqrt(dx * dx + dy * dy);
               // This is the angle of the last line segment
               const angle = Math.atan2(-dy, -dx) * 180 / Math.PI + 90;
-              console.log(angle)
               const y = Math.abs(angle-180) > 70 ? 4.5 : 6
               const x = -y * normal / dy
               return `translate(${end.x + x * dx / normal}, ${end.y - y}) rotate(${angle})`;

@@ -269,7 +269,7 @@ export const useStore = defineStore('store', {
             this.network_translation.original_labels = network.labels
             this.labels = network.labels
 
-            if (customization !== null) {
+            if (customization !== undefined) {
                 this.phases = network.customization.phases
                 if (!noPhase) {
                     this.currentPhase = this.phases[0]
@@ -427,8 +427,8 @@ export const useStore = defineStore('store', {
             return missing > 0
         },
         getDirection(name) {
-            if (name === "min") return "lower is better"
-            return "higher is better"
+            if (name === "min") return "low likelihood of"
+            return "high likelihood of"
         }
     }
 })

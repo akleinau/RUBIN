@@ -191,11 +191,11 @@ export default {
 
         const layout = dag.sugiyama()
             .layering(dag.layeringSimplex())
-            .decross(dag.decrossTwoLayer().order(dag.twolayerOpt()))
-            .coord(dag.coordCenter())
+            .decross(dag.decrossTwoLayer().order(dag.twolayerGreedy().base(dag.twolayerAgg())))
+            .coord(dag.coordSimplex())
             .nodeSize((node) => {
-              const size = node instanceof dag.SugiDummyNode ? 2 : 12;
-              return [size * 3, size * 1.8];
+              const size = node ? 20 : 3;
+              return [1.5* size , size];
             })
 
         let {width, height} = layout(graph)

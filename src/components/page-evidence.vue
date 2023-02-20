@@ -262,6 +262,7 @@ export default {
     },
     //directly coded in here, should be in the customization file
     notEnoughEvidenceEndorisk() {
+      if (this.Store.network !== "endorisk") return false
       let notEnoughInformation = false
       //tumor grade
       if (!this.Store.patient.evidence.find(n => n.name === 'PrimaryTumor')) {
