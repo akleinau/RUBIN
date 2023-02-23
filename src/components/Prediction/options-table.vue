@@ -1,66 +1,66 @@
 <template>
-      <DataTable :value="table" class="p-datatable-sm p-2" :autoLayout="true" :rowClass="rowClass"
-                 :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
-                 rowGroupMode="subheader" groupRowsBy="config_name" responsive-layout="scroll"
-                 @rowSelect="update" @rowUnselect="update">
+  <DataTable :value="table" class="p-datatable-sm p-2" :autoLayout="true" :rowClass="rowClass"
+             :dataKey="getOptionLabel(option)" selectionMode="single" v-model:selection="selectedOption"
+             rowGroupMode="subheader" groupRowsBy="config_name" responsive-layout="scroll"
+             @rowSelect="update" @rowUnselect="update">
 
-        <template #groupheader="slotProps">
-          <br>
-          <b v-if="Store.compareConfig">{{ slotProps.data.config_name }}:</b>
-        </template>
+    <template #groupheader="slotProps">
+      <br>
+      <b v-if="Store.compareConfig">{{ slotProps.data.config_name }}:</b>
+    </template>
 
-        <Column>
-          <template #body="slotProps">
-            <div v-if="slotProps.data.config_name === 'current' && slotProps.index > minIndex">
-              {{ slotProps.index - minIndex }}.
-            </div>
-          </template>
-        </Column>
+    <Column>
+      <template #body="slotProps">
+        <div v-if="slotProps.data.config_name === 'current' && slotProps.index > minIndex">
+          {{ slotProps.index - minIndex }}.
+        </div>
+      </template>
+    </Column>
 
-        <Column field="option">
-          <template #body="slotProps">
-            <div v-if="Object.keys(slotProps.data.option).length === 0"><b>overall</b></div>
-            <div v-else v-for="o in Object.keys(slotProps.data.option)" :key="o">
-              {{ Store.labels[o] }}: {{ Store.option_labels[o][slotProps.data.option[o]] }}
-            </div>
+    <Column field="option">
+      <template #body="slotProps">
+        <div v-if="Object.keys(slotProps.data.option).length === 0"><b>overall</b></div>
+        <div v-else v-for="o in Object.keys(slotProps.data.option)" :key="o">
+          {{ Store.labels[o] }}: {{ Store.option_labels[o][slotProps.data.option[o]] }}
+        </div>
 
-          </template>
-        </Column>
+      </template>
+    </Column>
 
-        <Column>
-          <template #body="slotProps">
-            <i v-if="slotProps.index === minIndex+1" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
-          </template>
-        </Column>
+    <Column>
+      <template #body="slotProps">
+        <i v-if="slotProps.index === minIndex+1" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
+      </template>
+    </Column>
 
-        <Column v-for="goal in getGoalKeys()" :field="goal.name" :header="getGoalLabel(goal)" :key="goal.name">
-          <template #body="slotProps">
-            <div class="flex flex-column">
-            <bar :value="slotProps.data.goalValues[String(goal.name)]" color="teal" :width="350/getGoalKeys().length"
-                 v-if="!isNaN(slotProps.data.goalValues[String(goal.name)])" class="flex"
-                 v-tooltip="(slotProps.data.goalValues[String(goal.name)]*100).toFixed(0) + '%'"></bar>
+    <Column v-for="goal in getGoalKeys()" :field="goal.name" :header="getGoalLabel(goal)" :key="goal.name">
+      <template #body="slotProps">
+        <div class="flex flex-column">
+          <bar :value="slotProps.data.goalValues[String(goal.name)]" color="teal" :width="getBarWidth(getGoalKeys().length)"
+               v-if="!isNaN(slotProps.data.goalValues[String(goal.name)])" class="flex"
+               v-tooltip="(slotProps.data.goalValues[String(goal.name)]*100).toFixed(0) + '%'"></bar>
 
-            <!-- show percentages of selected configs -->
-            <div v-if="slotProps.data.config_name === 'current' &&
+          <!-- show percentages of selected configs -->
+          <div v-if="slotProps.data.config_name === 'current' &&
               JSON.stringify(slotProps.data.option) === JSON.stringify(this.selectedOption.option)
               || slotProps.data.config_name !== 'current' &&
                  !isNaN(slotProps.data.goalValues[String(goal.name)])"
-                 style="fontSize: 1.5rem" class="flex">
-              {{ (slotProps.data.goalValues[String(goal.name)] * 100).toFixed(0) }} %
-            </div>
-              </div>
-          </template>
-        </Column>
+               style="fontSize: 1.5rem" class="flex">
+            {{ (slotProps.data.goalValues[String(goal.name)] * 100).toFixed(0) }} %
+          </div>
+        </div>
+      </template>
+    </Column>
 
-        <Column>
-          <template #body="slotProps">
-            <Button v-if="slotProps.data === Store.predictions.selectedOption"
-                    class="p-button-secondary p-button-text p-button-rounded"
-                    icon="pi pi-times" @click="deselect"/>
-          </template>
-        </Column>
+    <Column>
+      <template #body="slotProps">
+        <Button v-if="slotProps.data === Store.predictions.selectedOption"
+                class="p-button-secondary p-button-text p-button-rounded"
+                icon="pi pi-times" @click="deselect"/>
+      </template>
+    </Column>
 
-      </DataTable>
+  </DataTable>
 </template>
 
 <script>
@@ -160,6 +160,9 @@ export default {
     rowClass(data) {
       return Object.keys(data.option).length === 0 && data.config_name === "current" ? 'overall' : null;
     },
+    getBarWidth(num) {
+      return 100 / num + 100
+    }
   }
 }
 </script>
@@ -175,8 +178,8 @@ export default {
   border-bottom: 5px solid #607D8B;
 }
 
-.p-card{
-  box-shadow:none;
+.p-card {
+  box-shadow: none;
 }
 
 </style>
