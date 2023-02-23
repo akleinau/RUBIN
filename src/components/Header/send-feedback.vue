@@ -1,14 +1,16 @@
 <template>
   {{ $t("FeedbackInfo") }}
   <br> <br>
-  Description of the problem:
   <form>
+    Description of the problem:
     <Textarea v-model="description" rows="5" class="w-full mt-2 mb-2"/>
+    (optional) Your email address:
+    <InputText v-model="mail" class="w-full mt-2 mb-2"/>
     <div class="p-field-checkbox">
       <Checkbox id="checkConfig" v-model="sendConfig" :binary="true" value="true"></Checkbox>
       <label class="ml-2" for="checkConfig">{{ $t("IncludeConfig") }}</label>
     </div>
-    <Button class="mt-2" :label="$t('send')" @click="sendFeedback"></Button>
+    <Button class="mt-2" :label="$t('submit')" @click="sendFeedback"></Button>
   </form>
 </template>
 
@@ -25,7 +27,8 @@ export default {
   data() {
     return {
       sendConfig: true,
-      description: ""
+      description: "",
+      mail: ""
     }
   },
   methods: {
@@ -44,7 +47,8 @@ export default {
         },
         body: JSON.stringify({
           description: this.description,
-          csv: csv
+          csv: csv,
+          mail: this.mail
         })
       });
       const response = await gResponse;

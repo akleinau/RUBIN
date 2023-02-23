@@ -2,27 +2,19 @@
   <!-- Form to upload a network file -->
   <form @submit.prevent="upload" id="upload-form" enctype="multipart/form-data">
     <FileUpload name="net-upload" url="./upload" accept=".net, .bif" :customUpload="true" :chooseLabel="$t('Choose')"
-                :showUploadButton="false" @select="file = $event.files" :showCancelButton="false"
+                mode="basic" @uploader="upload" :auto="true"
                 required/>
-    <br>
   </form>
-  <br><br>
-  <Button v-if="file.length !== 0" name="net-submit" type="submit" :label="$t('UploadNet')" @click="upload()"/>
 </template>
 
 <script>
 export default {
   name: "upload-network",
   emits: ["reloadNetList", "loadLocalNet"],
-  data() {
-    return {
-      file: [],
-      uploadToServer: null,
-    }
-  },
   methods: {
-    upload: async function () {
-      let fileField = this.file;
+    upload(event) {
+      console.log("upload")
+      let fileField = event.files;
       if (fileField.length === 0) {
         alert("Error: Please upload a file")
       } else if (fileField.length > 1) {

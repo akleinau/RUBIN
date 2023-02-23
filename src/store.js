@@ -375,7 +375,7 @@ export const useStore = defineStore('store', {
             this.patient.nodes.push({name: node.name, options: node.options})
         },
         createCSVcontent() {
-            var csv = "Type; Variable; Option"
+            var csv = "Type; Variable; Option; Direction"
             this.patient.evidence.forEach(ev => {
                 csv += "\nevidence; " + ev.name + "; " + ev.selected.name
             })
@@ -383,7 +383,7 @@ export const useStore = defineStore('store', {
                 csv += "\ntarget; " + ev.name
             })
             this.patient.goals.forEach(ev => {
-                csv += "\ngoal; " + ev.name + "; " + ev.selected.name
+                csv += "\ngoal; " + ev.name + "; " + ev.selected.name + "; " + ev.direction
             })
             return csv
         },
@@ -394,8 +394,8 @@ export const useStore = defineStore('store', {
                 this.addTargets(this.patient.nodes.filter(a => this.currentPhase.sets.target.includes(a.name)))
                 reload = true
             }
-            if (this.differentLists(this.patient.goals.map(a => a.name + a.selected.name),
-                this.currentPhase.sets.goal.map(a => a.name + a.option))) {
+            if (this.differentLists(this.patient.goals.map(a => a.name + a.selected.name + a.direction),
+                this.currentPhase.sets.goal.map(a => a.name + a.option + a.direction))) {
                 this.patient.goals.forEach(a => this.deleteGoal(a))
 
                 let goalList = []
