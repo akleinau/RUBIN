@@ -1,13 +1,22 @@
 <template>
   <label> {{ $t("name") }}: </label>
+  <br>
   <InputText type="text" v-model="Store.patient.name"></InputText>
   <br><br>
-  <div class="flex align-items-center justify-content-between">
+  <div class="flex juistify-content-center flex-column align-items-stretch">
+    <Button label="pdf export" icon="pi pi-file-pdf" @click="exportPDF" class="mb-4"/>
+    <Button :label="$t('FileDownload')" @click="exportCSV()" icon="pi pi-download" class="flex p-button-secondary mb-2"/>
     <FileUpload name="net-upload" url="./Patientupload" accept=".csv" :customUpload="true" chooseIcon="pi pi-upload"
-                mode="basic" :auto=true :chooseLabel="$t('Upload')" @uploader="read($event)"
-                class="flex"/>
-    <Button :label="$t('Download')" @click="exportCSV()" icon="pi pi-download" class="flex"/>
-    <Button label="pdf export" icon="pi pi-download" @click="exportPDF" class="p-button-secondary"/>
+                mode="basic" :auto=true :chooseLabel="$t('FileUpload')" @uploader="readFile($event)"
+                class="flex p-button-secondary mb-2"/>
+
+    <Button label="Text upload" @click="TextUploadDialog = !TextUploadDialog" icon="pi pi-pencil"
+            class=" flex p-button-secondary"/>
+  </div>
+  <div v-if="TextUploadDialog">
+    <Textarea v-model="csvText" rows="5" class="mt-2 mb-2"/>
+    <br>
+    <Button label="upload" @click="readText"/>
   </div>
 </template>
 
@@ -35,40 +44,56 @@ export default {
         evidence: [],
         targets: [],
         goals: []
-      }
+      },
+      TextUploadDialog: false,
+      csvText: ""
     }
   },
   methods: {
-    read(fileField) {
+    readText() {
+      console.log(this.csvText)
+      this.read(this.csvText, "")
+    },
+    readFile(fileField) {
       const csvFile = fileField.files[0];
       const name = csvFile.name.replace('.csv', '')
       const reader = new FileReader();
       reader.onload = (event) => {
-        const str = event.target.result
-        const delimiter = '; '
-        const headers = ['type', 'name', 'option']
-        const rows = str.slice(str.indexOf("\n") + 1).split("\n");
-        const patientData = rows.map(function (row) {
-          const values = row.split(delimiter);
-          return headers.reduce(function (object, header, index) {
-            object[header] = values[index];
-            return object;
-          }, {});
-        });
-        this.load(patientData, name)
+        this.read(event.target.result, name)
       }
       reader.readAsText(csvFile)
     },
-    getCorrespondingNode(nodeArr) {
+    read(str, name) {
+      const delimiter = '; '
+      const headers = ['type', 'name', 'option', 'direction']
+      const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+      const patientData = rows.map(function (row) {
+        const values = row.split(delimiter);
+        return headers.reduce(function (object, header, index) {
+          object[header] = values[index];
+          return object;
+        }, {});
+      });
+      this.load(patientData, name)
+
+    },
+    getCorrespondingNode(nodeArr, type) {
       let correspondingNodes = []
       nodeArr.forEach(node => {
         let correspondingNode = this.Store.patient.nodes.find(x => x.name === node.name)
-        if (correspondingNode == null) console.log(node)
+        if (correspondingNode == null) console.log("Not found: " + node)
         let item = {
           name: correspondingNode.name,
-          selected: {name: node.option},
-          options: correspondingNode.options
+          selected: {name: node.option, node: node.name},
+          options: correspondingNode.options.map(option => { return {
+            "name": option.name,
+            "node": correspondingNode.name
+            }
+          })
         }
+        if (type === "evidence") item.group = this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[node.name]
+        if (type === "goal") item.direction = node.direction
+
         correspondingNodes.push(item)
       })
       return correspondingNodes
@@ -76,15 +101,17 @@ export default {
     async load(patientData, name) {
       for (var row in patientData) {
         let item = patientData[row]
-        let node = {
+        if (item.type === 'evidence') {
+          this.patient.evidence.push({
           name: item.name,
           option: item.option
-        }
-        if (item.type === 'evidence') {
-          console.log(this)
-          this.patient.evidence.push(node)
+        })
         } else if (item.type === 'goal') {
-          this.patient.goals.push(node)
+          this.patient.goals.push({
+            name: item.name,
+            option: item.option,
+            direction: item.direction
+          })
         } else if (item.type === 'target') {
           this.patient.targets.push({
             name: item.name
@@ -93,14 +120,16 @@ export default {
       }
       await this.Store.reset(true)
 
-      let evidenceNodes = this.getCorrespondingNode(this.patient.evidence)
-      let targetNodes = this.getCorrespondingNode(this.patient.targets)
-      let goalNodes = this.getCorrespondingNode(this.patient.goals)
+      this.Store.currentPhase = null
+
+      let evidenceNodes = this.getCorrespondingNode(this.patient.evidence, "evidence")
+      let targetNodes = this.getCorrespondingNode(this.patient.targets, "target")
+      let goalNodes = this.getCorrespondingNode(this.patient.goals, "goal")
       this.Store.addEvidences(evidenceNodes)
       this.Store.addTargets(targetNodes)
       this.Store.addGoals(goalNodes)
       this.Store.patient.name = name
-      console.log("Patient: " + name)
+      this.Store.calculate()
       this.$emit('loaded')
     },
     exportCSV() {
@@ -157,7 +186,7 @@ export default {
     },
     capitalize(string) {
       //capitalizes each first letter of every word in a sentence
-      return string.split(" ").map( word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
 
     pdfTable(data) {
@@ -212,7 +241,7 @@ export default {
     },
 
     pdf_add_goals(data) {
-            let goals = [["goal", "option", "direction"]]
+      let goals = [["goal", "option", "direction"]]
       this.Store.patient.goals.map(x => {
         goals.push([
           this.Store.labels[x.name],

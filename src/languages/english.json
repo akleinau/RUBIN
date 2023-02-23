@@ -63,7 +63,6 @@
   "SaveConfig": "Save new configuration",
   "ErrName": "ERROR: The name already exists.",
   "FeedbackInfo": "If the network classified a case incorrectly, please send it as feedback. Your feedback is anonymously collected in a database. If you want to receive an answer, please enter your email address.",
-
   "IncludeConfig": "Include network configuration",
   "send": "send",
   "name": "Pseudonym/ ID",
@@ -84,5 +83,7 @@
   "add": "add",
   "addEvidence": "add evidence",
   "addOutcome": "add outcome",
-  "addTarget": "add intervention"
+  "addTarget": "add intervention",
+  "FileUpload": "File Upload",
+  "FileDownload": "File Download"
 }
