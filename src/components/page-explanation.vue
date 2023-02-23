@@ -18,43 +18,48 @@
       </div>
     </template>
     <template #content>
-      <ScrollPanel class="h-full" >
+      <ScrollPanel class="h-full">
         <ProgressBar v-if="Store.explanationLoading" mode="indeterminate" style="height: .5em"/>
-        <TabView v-else scrollable>
-          <!--   relevance  -->
-          <TabPanel :header="$t('Relevance')">
-            <Relevance/>
-          </TabPanel>
-          <!--   all predictions  -->
-          <TabPanel :header="$t('AllPredictions')">
-            <NodeList/>
-          </TabPanel>
-          <!--   compact network  -->
-          <TabPanel :header="$t('CompactNetwork')">
-            <div v-if="Store.compareConfig==null">
-              <sugiyama :highlight="true" :edges="Store.edges" :highlightEdges="getCompactEdges()"
-                        :nodes="Store.explain.states" :highlightNodes="getExNodes()"
-                        :labels="Store.labels"/>
-            </div>
-            <div v-else>
-              <sugiyamaCompare :highlight="true" :highlightEdges="getCompactEdges()" :highlightNodes="getExNodes()"
-                               :nodes="Store.explain.states" :edges="Store.edges"
-                               :nodes2="Store.compareConfig.explain.states"
-                               :labels="Store.labels"/>
-            </div>
-          </TabPanel>
-          <!--   full network  -->
-          <TabPanel :header="$t('FullNetwork')">
-            <div v-if="Store.compareConfig==null">
-              <sugiyama :highlight="false" :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
-            </div>
-            <div v-else>
-              <sugiyamaCompare :highlight="false" :edges="Store.edges" :nodes="Store.explain.states"
-                               :nodes2="Store.compareConfig.explain.states"
-                               :labels="Store.labels"/>
-            </div>
-          </TabPanel>
-        </TabView>
+        <div v-else>
+          <Dropdown v-model="currentIndex" optionLabel="label" optionValue="value"
+                    :options="options"
+                    class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
+          <TabView v-model:active-index="currentIndex" scrollable>
+            <!--   relevance  -->
+            <TabPanel :header="$t('Relevance')">
+              <Relevance/>
+            </TabPanel>
+            <!--   all predictions  -->
+            <TabPanel :header="$t('AllPredictions')">
+              <NodeList/>
+            </TabPanel>
+            <!--   compact network  -->
+            <TabPanel :header="$t('CompactNetwork')">
+              <div v-if="Store.compareConfig==null">
+                <sugiyama :highlight="true" :edges="Store.edges" :highlightEdges="getCompactEdges()"
+                          :nodes="Store.explain.states" :highlightNodes="getExNodes()"
+                          :labels="Store.labels"/>
+              </div>
+              <div v-else>
+                <sugiyamaCompare :highlight="true" :highlightEdges="getCompactEdges()" :highlightNodes="getExNodes()"
+                                 :nodes="Store.explain.states" :edges="Store.edges"
+                                 :nodes2="Store.compareConfig.explain.states"
+                                 :labels="Store.labels"/>
+              </div>
+            </TabPanel>
+            <!--   full network  -->
+            <TabPanel :header="$t('FullNetwork')">
+              <div v-if="Store.compareConfig==null">
+                <sugiyama :highlight="false" :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
+              </div>
+              <div v-else>
+                <sugiyamaCompare :highlight="false" :edges="Store.edges" :nodes="Store.explain.states"
+                                 :nodes2="Store.compareConfig.explain.states"
+                                 :labels="Store.labels"/>
+              </div>
+            </TabPanel>
+          </TabView>
+        </div>
       </ScrollPanel>
     </template>
   </Card>
@@ -83,7 +88,14 @@ export default {
     return {
       onlyGlobal: true,
       compactEdges: null,
-      exNodes: null
+      exNodes: null,
+      currentIndex: 0,
+      options: [
+        {label: this.$t("Relevance"), value: 0},
+        {label: this.$t("AllPredictions"), value: 1},
+        {label: this.$t("CompactNetwork"), value: 2},
+        {label: this.$t("FullNetwork"), value: 3}
+      ]
     }
   },
   computed: {
@@ -188,6 +200,10 @@ export default {
 
 li {
   margin: 5px
+}
+
+::v-deep(.p-tabview-nav-container) {
+  Display: None;
 }
 
 </style>

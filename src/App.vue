@@ -52,6 +52,7 @@ body, html {
   padding: 0;
   margin: 0;
   background-color: #372f5e;
+  font-size: 16px
 }
 
 #app {

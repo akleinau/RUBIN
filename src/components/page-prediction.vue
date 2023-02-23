@@ -23,7 +23,9 @@
 
       <!-- phases -->
       <ScrollPanel style="height:40%">
-        <TabView v-model:active-index="currentPhaseIndex" scrollable>
+        <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="name" optionValue="index"
+                  class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
+        <TabView v-model:active-index="currentPhaseIndex" scrollable >
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
@@ -189,7 +191,13 @@ export default {
       }
 
       return givenTargets_compare
-    }
+    },
+    phases: function () {
+      let phases = []
+      this.Store.phases.forEach((p, i) => phases.push({"name": p.name, "index": i}))
+      phases.push({"name": "custom", "index": this.Store.phases.length})
+      return phases;
+    },
   },
   methods: {
     getGoalLabel(goal) {
@@ -203,6 +211,10 @@ export default {
 .help {
   position: absolute;
   right: 5%
+}
+
+::v-deep(.p-tabview-nav-container) {
+  Display: None;
 }
 
 </style>
