@@ -1,5 +1,5 @@
 <template>
-  <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm">
+  <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm" responsiveLayout="scroll">
     <Column field="direction">
       <template #body="slotProps">
         <Dropdown v-model="slotProps.data.direction" :options="directionOptions"
@@ -36,7 +36,7 @@
         <Button class="p-button-secondary" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
       </div>
     </template>
-    <DataTable :value="overlayNodes" class="p-datatable-sm"
+    <DataTable :value="overlayNodes" class="p-datatable-sm" responsiveLayout="scroll"
                v-model:filters="filters" filterDisplay="menu" data-key="name">
       <template #header>
         <div class="flex justify-content-between">
