@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <ScrollPanel class="h-full">
     <DataTable class=" p-datatable-sm" :value="table"
                rowGroupMode="subheader" groupRowsBy="config_name"
                responsiveLayout="scroll"
@@ -47,7 +47,7 @@
       </Column>
     </DataTable>
 
-  </div>
+  </ScrollPanel>
 </template>
 
 <script>
