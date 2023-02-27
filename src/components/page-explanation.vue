@@ -18,19 +18,18 @@
       </div>
     </template>
     <template #content>
-      <ScrollPanel class="h-full">
         <ProgressBar v-if="Store.explanationLoading" mode="indeterminate" style="height: .5em"/>
-        <div v-else>
+        <div v-else class="h-full overflow-hidden">
           <Dropdown v-model="currentIndex" optionLabel="label" optionValue="value"
                     :options="options"
                     class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
-          <TabView v-model:active-index="currentIndex" scrollable>
+          <TabView v-model:active-index="currentIndex" scrollable class="h-full" >
             <!--   relevance  -->
             <TabPanel :header="$t('Relevance')">
               <Relevance/>
             </TabPanel>
             <!--   all predictions  -->
-            <TabPanel :header="$t('AllPredictions')">
+            <TabPanel :header="$t('AllPredictions')" >
               <NodeList/>
             </TabPanel>
             <!--   compact network  -->
@@ -48,7 +47,7 @@
               </div>
             </TabPanel>
             <!--   full network  -->
-            <TabPanel :header="$t('FullNetwork')">
+            <TabPanel :header="$t('FullNetwork')" class="h-full overflow-hidden">
               <div v-if="Store.compareConfig==null">
                 <sugiyama :highlight="false" :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
               </div>
@@ -60,7 +59,6 @@
             </TabPanel>
           </TabView>
         </div>
-      </ScrollPanel>
     </template>
   </Card>
 </template>
@@ -204,6 +202,14 @@ li {
 
 ::v-deep(.p-tabview-nav-container) {
   Display: None;
+}
+
+::v-deep(.p-tabview-panels) {
+  height:100%
+}
+
+::v-deep(.p-tabview-panel) {
+   height:100%
 }
 
 </style>

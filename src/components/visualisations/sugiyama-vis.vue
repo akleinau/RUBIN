@@ -7,7 +7,9 @@
     , {{ $t('orTheValueIs') }}
     <Chip class="mx-1" style="background-color:black" :label="$t('given')"></Chip>
   </div>
-  <div ref="container"/>
+  <div ref="zoomDiv">
+  <div ref="container"  class="overflow-hidden"/>
+    </div>
 </template>
 
 <script>
@@ -102,10 +104,10 @@ export default {
                   .attr("fill", "darkblue")
 
               d3.select(e.target.parentNode).append("text")
-                  .text((p*100).toFixed(0) + '%')
+                  .text((p * 100).toFixed(0) + '%')
                   .attr("class", "probText")
                   .attr('font-size', '4px')
-                  .attr("transform", `translate(${p*20+2},${i * 10 + 10})`)
+                  .attr("transform", `translate(${p * 20 + 2},${i * 10 + 10})`)
                   .attr("fill", "darkblue")
                   .attr("dy", 4)
 
@@ -139,7 +141,7 @@ export default {
     visualise() {
       if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
 
-        let edgeColor = this.highlight? "darkslategray" : "darkgray"
+        let edgeColor = this.highlight ? "darkslategray" : "darkgray"
 
         var graph = dag.dagConnect()(this.edgeList)
 
@@ -149,7 +151,7 @@ export default {
             .coord(dag.coordSimplex())
             .nodeSize((node) => {
               const size = node ? 20 : 3;
-              return [1.5* size , size];
+              return [1.5 * size, size];
             })
 
         let {width, height} = layout(graph)
@@ -166,9 +168,13 @@ export default {
 
         d3.select(this.$refs.container).selectAll("*").remove()
 
+
         var svg = d3.select(this.$refs.container)
             .append("svg")
             .attr("viewBox", [-40, 0, width + 80, height + 50])
+            .style("transform-origin", "center")
+            .style("display", "inline-box")
+
 
         const arrow = d3.symbol().type(d3.symbolTriangle).size(5);
         svg.append('g')
@@ -185,7 +191,7 @@ export default {
               const normal = Math.sqrt(dx * dx + dy * dy);
               // This is the angle of the last line segment
               const angle = Math.atan2(-dy, -dx) * 180 / Math.PI + 90;
-              const y = Math.abs(angle-180) > 70 ? 4.5 : 6
+              const y = Math.abs(angle - 180) > 70 ? 4.5 : 6
               const x = -y * normal / dy
               return `translate(${end.x + x * dx / normal}, ${end.y - y}) rotate(${angle})`;
             })
@@ -206,7 +212,7 @@ export default {
             .attr('stroke-width', 0.8)
             .attr('stroke', edgeColor)
             .attr('opacity', d => this.isHighlightEdge(d) ? 1 : 0.2)
-            .on("mouseenter", (e,d) => this.isHighlightEdge(d) ? d3.select(e.target).attr('stroke', "royalblue") : "")
+            .on("mouseenter", (e, d) => this.isHighlightEdge(d) ? d3.select(e.target).attr('stroke', "royalblue") : "")
             .on("mouseleave", e => d3.select(e.target).attr('stroke', edgeColor))
 
 
@@ -216,6 +222,7 @@ export default {
             .enter()
             .append('g')
             .attr('transform', ({x, y}) => `translate(${x}, ${y})`)
+
 
         nodes.append('rect')
             .attr("class", "box")
@@ -252,6 +259,19 @@ export default {
             .attr("dy", 5)
             .on("mouseenter", (e, d) => this.getDetails(e, d))
             .on("mouseleave", e => this.hideDetails(e))
+
+        //Zoom
+        var zoomed = function ({transform}) {
+
+          svg.style("transform",  "translate(" + transform.x + "px," + transform.y + "px) scale(" + transform.k + ")")
+
+        }
+
+        var zoom = d3.zoom().on('zoom', zoomed)
+            .extent([[0,0], [width, height]])
+            .scaleExtent ([1, 10])
+
+        d3.select(this.$refs.zoomDiv).call(zoom)
 
 
       }

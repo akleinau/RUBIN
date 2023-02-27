@@ -1,4 +1,5 @@
-<template style="position:relative">
+<template>
+  <ScrollPanel class="h-full">
   <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false" class="w-full p-datatable-sm">
     <Column :header="$t('Node')" field="label" :sortable="true" class="w-5"/>
     <Column :header="$t('Prediction')" field="state"></Column>
@@ -15,6 +16,7 @@
       </template>
     </Column>
   </DataTable>
+    </ScrollPanel>
 </template>
 
 <script>
