@@ -251,6 +251,7 @@ export default {
       })
       document.activeElement.blur()
       this.clearEvidenceDialog = false
+      this.Store.calculate()
 
     },
     isDifferentState(item) {
