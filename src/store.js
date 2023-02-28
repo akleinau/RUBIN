@@ -49,7 +49,8 @@ export const useStore = defineStore('store', {
         evidenceGroupMap: null,
         currentPhase: null,
         showTutorial: false,
-        language: "en"
+        language: "en",
+        tutorialStep: 0,
     }),
     actions: {
         async reset(noPhase = false) {

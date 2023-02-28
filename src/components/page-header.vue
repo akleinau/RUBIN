@@ -1,6 +1,6 @@
 <template>
 
-  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1" style="position:relative; z-index:10">
+  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1" id="menu" style="position:relative; z-index:10">
     <template #end>
       <div class="flex flex-row align-center">
         <Button class="p-button-text p-button-secondary" :label="this.$t('backToNetwork')"

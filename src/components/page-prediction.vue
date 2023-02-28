@@ -17,7 +17,7 @@
       <div style="height:60%; border: solid 5px lightgray" class="p-b-2">
         <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
         <ScrollPanel class="h-full">
-          <optionsTable/>
+          <optionsTable id="optionsTable"/>
         </ScrollPanel>
       </div>
 

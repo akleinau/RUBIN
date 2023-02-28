@@ -44,7 +44,7 @@
   "Tutorial2": "Enter here what you already know about the patient. Eg symptoms, results of tests and personal information like age and gender.",
   "Tutorial3a": "Here you can see the calculated probability of achieving your goal.",
   "Tutorial3b": "Choose from different presets what goal you want to achieve, eg the survival of the patient, and what interventions are available, eg therapy.",
-  "Tutorial4": "Here different types of explanation and additional information are displayed. If you want to see explanations considering an intervention, select it in the probability table to the left.",
+  "Tutorial4": "Here different types of explanation and additional information are displayed.",
   "prev": "prev",
   "next": "next",
   "finish": "finish",

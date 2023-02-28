@@ -3,7 +3,7 @@
     <DataTable class=" p-datatable-sm" :value="table"
                rowGroupMode="subheader" groupRowsBy="config_name"
                responsiveLayout="scroll"
-               :rowClass="isTherapyRow">
+               :rowClass="isTherapyRow"  id="relevanceExplanation">
 
       <template #groupheader="slotProps">
         <br>
