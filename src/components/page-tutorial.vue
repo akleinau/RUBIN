@@ -1,14 +1,14 @@
 <template>
-    <Dialog v-model:visible="stepIs0" class="bg-blue-100 shadow-5 m-0 " header="Welcome!" :closable="false"
-            id="overlay0" modal style="z-index: 2000">
-      <div class="flex align-items-center flex-column" >
-        <span> Do you want to start the tutorial? </span>
+  <Dialog v-model:visible="stepIs0" class="bg-blue-100 shadow-5 m-0 " header="Welcome!" :closable="false"
+          id="overlay0" modal style="z-index: 2000">
+    <div class="flex align-items-center flex-column">
+      <span> Do you want to start the tutorial? </span>
       <br>
-        <div class="flex pt-3">
-      <Button class="p-button-text" label="start" icon="pi pi-check" @click="start()"/>
-      <Button class="p-button-text" label="close" icon="pi pi-times" @click="close()"/>
-          </div>
-        </div>
+      <div class="flex pt-3">
+        <Button class="p-button-text" label="start" icon="pi pi-check" @click="start()"/>
+        <Button class="p-button-text" label="close" icon="pi pi-times" @click="close()"/>
+      </div>
+    </div>
   </Dialog>
 
   <Button v-show="step < 9 && step > 0 " class=" p-1 m-2 absolute p-button-secondary "
@@ -50,7 +50,7 @@
     </template>
   </Card>
 
-    <Card v-show="step === 5" class="absolute bg-blue-100 shadow-5 m-0" id="overlay5" style="z-index: 2000">
+  <Card v-show="step === 5" class="absolute bg-blue-100 shadow-5 m-0" id="overlay5" style="z-index: 2000">
     <template #content>
       {{ $t("Tutorial3b") }}
       <br>
@@ -149,6 +149,11 @@ export default {
         "options": !(this.Store.tutorialStep >= 4 && this.Store.tutorialStep <= 5 || this.Store.tutorialStep > 9),
         "explain": !(this.Store.tutorialStep >= 6 && this.Store.tutorialStep !== 9),
       }
+
+      if (this.Store.tutorialStep === 9) {
+        window.scrollTo(0, 0);
+      }
+
       this.$emit("setBlock", newBlock)
 
     },
@@ -156,17 +161,15 @@ export default {
       if (document.getElementById(target)) {
         let boundingBox = document.getElementById(target).getBoundingClientRect()
         document.getElementById(overlay).style.width = boundingBox.width + "px";
-        document.getElementById(overlay).style.left = boundingBox.left + "px";
+        document.getElementById(overlay).style.left = boundingBox.left + document.body.scrollLeft + "px";
 
         if (position === "up") {
-          document.getElementById(overlay).style.top = boundingBox.bottom + 5 + "px";
-        }
-        else if (position==="middle") {
-          document.getElementById(overlay).style.top = boundingBox.top + "px";
+          document.getElementById(overlay).style.top = boundingBox.bottom + window.scrollY + 5 + "px";
+        } else if (position === "middle") {
+          document.getElementById(overlay).style.top = boundingBox.top + window.scrollY  + "px";
           document.getElementById(overlay).style.transform = "translateY(-50%)";
-        }
-        else if (position==="down") {
-          document.getElementById(overlay).style.top = boundingBox.top + "px";
+        } else if (position === "down") {
+          document.getElementById(overlay).style.top = boundingBox.top + window.scrollY  + "px";
           document.getElementById(overlay).style.transform = "translateY(-110%)";
         }
 
