@@ -145,7 +145,7 @@ export default {
               key: 'ShowTutorial',
               icon: PrimeIcons.QUESTION,
               command: () => {
-                this.Store.showTutorial = true
+                this.Store.tutorialStep = 1
               }
             }
           ]

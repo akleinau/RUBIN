@@ -1,4 +1,20 @@
 <template>
+    <Dialog v-model:visible="stepIs0" class="bg-blue-100 shadow-5 m-0 " header="Welcome!" :closable="false"
+            id="overlay0" modal style="z-index: 2000">
+      <div class="flex align-items-center flex-column" >
+        <span> Do you want to start the tutorial? </span>
+      <br>
+        <div class="flex pt-3">
+      <Button class="p-button-text" label="start" icon="pi pi-check" @click="start()"/>
+      <Button class="p-button-text" label="close" icon="pi pi-times" @click="close()"/>
+          </div>
+        </div>
+  </Dialog>
+
+  <Button v-show="step < 9 && step > 0 " class=" p-1 m-2 absolute p-button-secondary "
+          label="close tutorial" icon="pi pi-times"
+          @click="close()" style="z-index: 2000; right:15%"/>
+
   <Card v-show="step === 1" class="absolute bg-blue-100 shadow-5 m-0" id="overlay1" style="z-index: 2000">
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
@@ -29,19 +45,19 @@
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
       {{ $t("Tutorial3a") }}
-      {{ $t("Tutorial3b") }}
       <br>
       <Button class="p-button-text" label="next" @click="next()"/>
     </template>
   </Card>
 
-  <Card v-show="step === 5" class="absolute bg-blue-100 shadow-5 m-0" id="overlay5" style="z-index: 2000">
+    <Card v-show="step === 5" class="absolute bg-blue-100 shadow-5 m-0" id="overlay5" style="z-index: 2000">
     <template #content>
-      <Icon class="pi pi-arrow-up mb-2"/>
-      <br>
-      {{ $t("Tutorial4") }}
+      {{ $t("Tutorial3b") }}
       <br>
       <Button class="p-button-text" label="next" @click="next()"/>
+      <br>
+
+      <Icon class="pi pi-arrow-down mb-2"/>
     </template>
   </Card>
 
@@ -49,17 +65,27 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Here you can select other explanations.
+      Here you can see the relevance and influence of each evidence for the prediction.
+      <br>
+      <Button class="p-button-text" label="next" @click="next()"/>
     </template>
   </Card>
 
-  <Card v-show="step === 8" class="absolute bg-blue-100 shadow-5 m-0" id="overlay8" style="z-index: 2000">
+  <Card v-show="step === 7" class="absolute bg-blue-100 shadow-5 m-0" id="overlay7" style="z-index: 2000">
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Use the menu to compare patients, export pdf files or receive help!
+      Click here to view another explanation.
+    </template>
+  </Card>
+
+  <Card v-show="step === 9" class="absolute bg-blue-100 shadow-5 m-0" id="overlay9" style="z-index: 2000">
+    <template #content>
+      <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Congrats, you finished the tutorial!
+      Use the menu to compare patients, export pdf files or receive help.
+      <br> <br>
+      <b>Congrats, you finished the tutorial!</b>
       <br>
       <Button class="p-button-text" label="close" @click="close()"/>
     </template>
@@ -82,65 +108,46 @@ export default {
     const Store = useStore()
     return {Store}
   },
-  mounted() {
-    this.start()
-  },
   watch: {
-    showTutorial: function () {
-      if (this.Store.showTutorial === true) {
-        this.start()
-        console.log("tutorial started")
-      }
-    },
     tutorialStep: function () {
       this.sendBlock()
       setTimeout(() => {
         this.setOverlayPosition('addButton', 'overlay1', "up")
-        this.setOverlayPosition('evidenceOverlayTable', 'overlay2', "down")
+        this.setOverlayPosition('evidenceOverlayTable', 'overlay2', "middle")
         this.setOverlayPosition('addOverlayEvidence', 'overlay3', "up")
         this.setOverlayPosition('optionsTable', 'overlay4', "up")
-        this.setOverlayPosition('relevanceExplanation', 'overlay5', "up")
-        this.setOverlayPosition('explanationDropdown', 'overlay6', "up")
-        this.setOverlayPosition('menu', 'overlay8', "up")
+        this.setOverlayPosition('PhaseSelect', 'overlay5', "down")
+        this.setOverlayPosition('relevanceExplanation', 'overlay6', "up")
+        this.setOverlayPosition('explanationDropdown', 'overlay7', "up")
+        this.setOverlayPosition('menu', 'overlay9', "up")
         this.step = this.Store.tutorialStep
       }, 100)
 
     }
   },
   computed: {
-    showTutorial: function () {
-      return this.Store.showTutorial
-    },
     tutorialStep: function () {
       return this.Store.tutorialStep
+    },
+    stepIs0: function () {
+      return this.Store.tutorialStep === 0
     }
   },
   methods: {
     start() {
-      this.display = true //makes sure dialog is rendered on top of interface
       this.Store.tutorialStep = 1
-      this.sendBlock()
     },
     close() {
-      this.Store.tutorialStep = 9;
-      this.sendBlock()
-    },
-
-    prev() {
-      this.Store.tutorialStep === 1 ? this.Store.tutorialStep = 3 : this.Store.tutorialStep--;
-      this.sendBlock()
-
+      this.Store.tutorialStep = 10;
     },
     next() {
       this.Store.tutorialStep++;
-      this.sendBlock()
-
     },
     async sendBlock() {
       let newBlock = {
-        "evidence": !(this.tutorialStep <= 3 || this.Store.tutorialStep > 8),
-        "options": !(this.Store.tutorialStep === 4 || this.Store.tutorialStep > 8),
-        "explain": !(this.Store.tutorialStep >= 5 && this.Store.tutorialStep !== 8),
+        "evidence": !(this.tutorialStep <= 3 || this.Store.tutorialStep > 9),
+        "options": !(this.Store.tutorialStep >= 4 && this.Store.tutorialStep <= 5 || this.Store.tutorialStep > 9),
+        "explain": !(this.Store.tutorialStep >= 6 && this.Store.tutorialStep !== 9),
       }
       this.$emit("setBlock", newBlock)
 
@@ -153,9 +160,14 @@ export default {
 
         if (position === "up") {
           document.getElementById(overlay).style.top = boundingBox.bottom + 5 + "px";
-        } else if (position==="down") {
-          let height = document.getElementById(overlay).getBoundingClientRect().height
-          document.getElementById(overlay).style.top = boundingBox.top - height + "px";
+        }
+        else if (position==="middle") {
+          document.getElementById(overlay).style.top = boundingBox.top + "px";
+          document.getElementById(overlay).style.transform = "translateY(-50%)";
+        }
+        else if (position==="down") {
+          document.getElementById(overlay).style.top = boundingBox.top + "px";
+          document.getElementById(overlay).style.transform = "translateY(-110%)";
         }
 
       }

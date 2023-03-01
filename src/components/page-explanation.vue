@@ -183,11 +183,11 @@ export default {
       return (Object.entries(this.Store.predictions.selectedOption.option).length === 0) ? null : "treatmentCard"
     },
     DropdownClicked() {
-      if (this.Store.tutorialStep === 6) {
-        this.Store.tutorialStep = 7
+      if (this.Store.tutorialStep === 7) {
+        this.Store.tutorialStep = 8
         //sleep 5 seconds
         setTimeout(() => {
-          this.Store.tutorialStep = 8
+          this.Store.tutorialStep = 9
         }, 2000)
       }
     }

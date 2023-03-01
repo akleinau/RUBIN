@@ -51,10 +51,9 @@ export default {
   data() {
     return {
       block: {
-        goals: false,
-        evidence: true,
-        options: true,
-        explain: true
+        evidence: false,
+        options: false,
+        explain: false
       },
     }
   },

@@ -48,7 +48,6 @@ export const useStore = defineStore('store', {
         phases: [],
         evidenceGroupMap: null,
         currentPhase: null,
-        showTutorial: false,
         language: "en",
         tutorialStep: 0,
     }),

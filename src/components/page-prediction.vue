@@ -23,7 +23,7 @@
 
       <!-- phases -->
       <ScrollPanel style="height:40%">
-        <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="name" optionValue="index"
+        <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="name" optionValue="index" id="PhaseSelect"
                   class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
         <TabView v-model:active-index="currentPhaseIndex" scrollable >
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
