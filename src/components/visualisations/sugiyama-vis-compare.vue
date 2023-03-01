@@ -2,7 +2,7 @@
   in <span style="border:1px solid red; border-radius:5px"> changed nodes</span> the different states are color coded:
   <Chip class="mx-1" style="background-color:black" label="current"></Chip>
   <Chip class="mx-1" style="background-color:#6d00bf" label="compare"></Chip>
-  <div ref="container"/>
+  <div ref="container" class="overflow-hidden"/>
 </template>
 
 <script>
@@ -301,6 +301,17 @@ export default {
             .attr('fill', "#6d00bf")
             .on("mouseenter", (e, d) => this.getDetails(e, d))
             .on("mouseleave", e => this.hideDetails(e))
+
+        //Zoom
+        var zoomed = function ({transform}) {
+          svg.style("transform",  "translate(" + transform.x + "px," + transform.y + "px) scale(" + transform.k + ")")
+        }
+
+        var zoom = d3.zoom().on('zoom', zoomed)
+            .extent([[0,0], [width, height]])
+            .scaleExtent ([1, 10])
+
+        d3.select(this.$refs.container).call(zoom)
 
 
       }
