@@ -1,6 +1,6 @@
 <template>
 
-  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1" id="menu" style="position:relative; z-index:10">
+  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1" id="menu" style="position:relative">
     <template #end>
       <div class="flex flex-row align-center">
         <Button class="p-button-text p-button-secondary" :label="this.$t('backToNetwork')"
@@ -31,7 +31,8 @@
   </OverlayPanel>
 
   <Dialog v-model:visible="NetworkSelectionDialog" modal>
-    <div class="m-2"> Are you sure you want to go back to Network Selection? Patient information will be resetted. <br></div>
+    <div class="m-2"> Are you sure you want to go back to Network Selection? Patient information will be resetted. <br>
+    </div>
     <div class="flex justify-content-end">
       <Button class="m-2 p-button-text" @click="NetworkSelectionDialog = false"> cancel</Button>
       <Button class="m-2" @click="changePage()"> proceed</Button>

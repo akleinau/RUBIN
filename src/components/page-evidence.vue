@@ -1,5 +1,5 @@
 <template>
-  <Card style="position:relative" class="Evidence ml-1">
+  <Card style="position:relative" class="Evidence">
     <template #title>
       {{ $t("Evidence") }}
       <Button icon="pi pi-question" class="p-button-outlined p-button-secondary p-button-rounded p-button-raised help"

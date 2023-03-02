@@ -13,9 +13,9 @@
 
   <Button v-show="step < 9 && step > 0 " class=" p-1 m-2 absolute p-button-secondary "
           label="close tutorial" icon="pi pi-times"
-          @click="close()" style="z-index: 2000; right:15%"/>
+          @click="close()" style="z-index: 10000; right:15%"/>
 
-  <Card v-show="step === 1" class="absolute bg-blue-100 shadow-5 m-0" id="overlay1" style="z-index: 2000">
+  <Card v-show="step === 1" class="absolute bg-blue-100 shadow-5 m-0" id="overlay1" style="z-index: 20000">
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
@@ -23,7 +23,7 @@
     </template>
   </Card>
 
-  <Card v-show="step === 2" class="absolute bg-blue-100 shadow-5 m-0" id="overlay2" style="z-index: 2000">
+  <Card v-show="step === 2" class="absolute bg-blue-100 shadow-5 m-0" id="overlay2" style="z-index: 20000">
     <template #content>
       Select some evidence!
       <br>
@@ -32,7 +32,7 @@
     </template>
   </Card>
 
-  <Card v-show="step === 3" class="absolute bg-blue-100 shadow-5 m-0" id="overlay3" style="z-index: 2000">
+  <Card v-show="step === 3" class="absolute bg-blue-100 shadow-5 m-0" id="overlay3" style="z-index: 20000">
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
@@ -40,7 +40,7 @@
     </template>
   </Card>
 
-  <Card v-show="step === 4" class="absolute bg-blue-100 shadow-5 m-0" id="overlay4" style="z-index: 2000">
+  <Card v-show="step === 4" class="absolute bg-blue-100 shadow-5 m-0" id="overlay4" style="z-index: 20000">
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
@@ -50,7 +50,7 @@
     </template>
   </Card>
 
-  <Card v-show="step === 5" class="absolute bg-blue-100 shadow-5 m-0" id="overlay5" style="z-index: 2000">
+  <Card v-show="step === 5" class="absolute bg-blue-100 shadow-5 m-0" id="overlay5" style="z-index: 20000">
     <template #content>
       {{ $t("Tutorial3b") }}
       <br>
@@ -61,7 +61,7 @@
     </template>
   </Card>
 
-  <Card v-show="step === 6" class="absolute bg-blue-100 shadow-5 m-0" id="overlay6" style="z-index: 2000">
+  <Card v-show="step === 6" class="absolute bg-blue-100 shadow-5 m-0" id="overlay6" style="z-index: 20000">
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
@@ -71,7 +71,7 @@
     </template>
   </Card>
 
-  <Card v-show="step === 7" class="absolute bg-blue-100 shadow-5 m-0" id="overlay7" style="z-index: 2000">
+  <Card v-show="step === 7" class="absolute bg-blue-100 shadow-5 m-0" id="overlay7" style="z-index: 5">
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
@@ -79,7 +79,7 @@
     </template>
   </Card>
 
-  <Card v-show="step === 9" class="absolute bg-blue-100 shadow-5 m-0" id="overlay9" style="z-index: 2000">
+  <Card v-show="step === 9" class="absolute bg-blue-100 shadow-5 m-0" id="overlay9" style="z-index: 20000">
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
@@ -97,6 +97,7 @@ import {useStore} from '@/store'
 
 export default {
   name: "page-tutorial",
+  props: ["loading"],
   emits: ["setBlock"],
   data() {
     return {
@@ -111,18 +112,12 @@ export default {
   watch: {
     tutorialStep: function () {
       this.sendBlock()
-      setTimeout(() => {
-        this.setOverlayPosition('addButton', 'overlay1', "up")
-        this.setOverlayPosition('evidenceOverlayTable', 'overlay2', "middle")
-        this.setOverlayPosition('addOverlayEvidence', 'overlay3', "up")
-        this.setOverlayPosition('optionsTable', 'overlay4', "up")
-        this.setOverlayPosition('PhaseSelect', 'overlay5', "down")
-        this.setOverlayPosition('relevanceExplanation', 'overlay6', "up")
-        this.setOverlayPosition('explanationDropdown', 'overlay7', "up")
-        this.setOverlayPosition('menu', 'overlay9', "up")
-        this.step = this.Store.tutorialStep
-      }, 100)
+      this.setAllOverlayPositions()
 
+
+    },
+    loading: function () {
+      this.setAllOverlayPositions()
     }
   },
   computed: {
@@ -136,6 +131,7 @@ export default {
   methods: {
     start() {
       this.Store.tutorialStep = 1
+
     },
     close() {
       this.Store.tutorialStep = 10;
@@ -150,13 +146,28 @@ export default {
         "explain": !(this.Store.tutorialStep >= 6 && this.Store.tutorialStep !== 9),
       }
 
-      if (this.Store.tutorialStep === 9) {
+      if (this.Store.tutorialStep === 1 || this.Store.tutorialStep === 9) {
         window.scrollTo(0, 0);
       }
+
 
       this.$emit("setBlock", newBlock)
 
     },
+    setAllOverlayPositions() {
+      setTimeout(() => {
+        this.setOverlayPosition('addButton', 'overlay1', "up")
+        this.setOverlayPosition('evidenceOverlayTable', 'overlay2', "middle")
+        this.setOverlayPosition('addOverlayEvidence', 'overlay3', "up")
+        this.setOverlayPosition('optionsTable', 'overlay4', "up")
+        this.setOverlayPosition('PhaseSelect', 'overlay5', "down")
+        this.setOverlayPosition('relevanceExplanation', 'overlay6', "up")
+        this.setOverlayPosition('explanationDropdown', 'overlay7', "up")
+        this.setOverlayPosition('menu', 'overlay9', "up")
+        this.step = this.Store.tutorialStep
+      }, 100)
+    },
+
     setOverlayPosition(target, overlay, position) {
       if (document.getElementById(target)) {
         let boundingBox = document.getElementById(target).getBoundingClientRect()
@@ -166,13 +177,17 @@ export default {
         if (position === "up") {
           document.getElementById(overlay).style.top = boundingBox.bottom + window.scrollY + 5 + "px";
         } else if (position === "middle") {
-          document.getElementById(overlay).style.top = boundingBox.top + window.scrollY  + "px";
+          document.getElementById(overlay).style.top = boundingBox.top + window.scrollY + "px";
           document.getElementById(overlay).style.transform = "translateY(-50%)";
         } else if (position === "down") {
-          document.getElementById(overlay).style.top = boundingBox.top + window.scrollY  + "px";
+          document.getElementById(overlay).style.top = boundingBox.top + window.scrollY + "px";
           document.getElementById(overlay).style.transform = "translateY(-110%)";
         }
 
+      } else {
+        document.getElementById(overlay).style.top = "0px"
+        document.getElementById(overlay).style.left = "0px"
+        document.getElementById(overlay).style.width = "200px"
       }
     }
   }
