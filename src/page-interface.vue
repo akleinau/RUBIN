@@ -1,11 +1,11 @@
 <template>
 
-  <tutorial @setBlock="block = $event"/>
+  <tutorial @setBlock="block = $event" :loading="Store.optionsLoading || Store.explanationLoading"/>
 
-    <Header ref="menu" @changePage="changePage()"/>
+    <Header ref="menu" @changePage="changePage()" style="z-index:8000"/>
 
     <!-- main cards -->
-    <div class=" grid h-full relative">
+    <div class=" grid w-full h-full relative">
 
       <BlockUI class="xl:col-3 lg:col-3 md:col-3 col-12 h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
         <Evidence class="h-full"/>
@@ -51,10 +51,9 @@ export default {
   data() {
     return {
       block: {
-        goals: false,
-        evidence: true,
-        options: true,
-        explain: true
+        evidence: false,
+        options: false,
+        explain: false
       },
     }
   },
@@ -77,9 +76,8 @@ export default {
 <style lang="scss" scoped>
 
 .grid {
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-right: 0
+  margin: 0;
+  padding: 0;
 }
 
 ::v-deep(.p-card-content) {
@@ -88,7 +86,7 @@ export default {
 
 ::v-deep(.p-card-body) {
   height: 100% !important;
-  padding-bottom: 0rem;
+  padding-bottom: 0;
 }
 
 #arrow {

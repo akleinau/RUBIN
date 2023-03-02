@@ -21,7 +21,7 @@
         <ProgressBar v-if="Store.explanationLoading" mode="indeterminate" style="height: .5em"/>
         <div v-else class="h-full overflow-hidden">
           <Dropdown v-model="currentIndex" optionLabel="label" optionValue="value"
-                    :options="options"
+                    :options="options" id="explanationDropdown" @change="DropdownClicked"
                     class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
           <TabView v-model:active-index="currentIndex" scrollable class="h-full" >
             <!--   relevance  -->
@@ -96,7 +96,17 @@ export default {
       ]
     }
   },
+  watch: {
+    tutorialStep: function() {
+      if (this.tutorialStep === 1) {
+        this.currentIndex = 0
+      }
+    }
+  },
   computed: {
+    tutorialStep: function () {
+      return this.Store.tutorialStep
+    },
     compactNetwork: function () {
       if (this.Store.explain.explanation == null) {
         return null
@@ -171,6 +181,15 @@ export default {
       if (this.Store.predictions.selectedOption === null) return null
       if (this.Store.predictions.selectedOption === undefined) return null
       return (Object.entries(this.Store.predictions.selectedOption.option).length === 0) ? null : "treatmentCard"
+    },
+    DropdownClicked() {
+      if (this.Store.tutorialStep === 7) {
+        this.Store.tutorialStep = 8
+        //sleep 5 seconds
+        setTimeout(() => {
+          this.Store.tutorialStep = 9
+        }, 2000)
+      }
     }
   }
 }

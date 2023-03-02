@@ -17,13 +17,13 @@
       <div style="height:60%; border: solid 5px lightgray" class="p-b-2">
         <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
         <ScrollPanel class="h-full">
-          <optionsTable/>
+          <optionsTable id="optionsTable"/>
         </ScrollPanel>
       </div>
 
       <!-- phases -->
       <ScrollPanel style="height:40%">
-        <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="name" optionValue="index"
+        <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="name" optionValue="index" id="PhaseSelect"
                   class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
         <TabView v-model:active-index="currentPhaseIndex" scrollable >
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">

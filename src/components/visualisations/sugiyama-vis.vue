@@ -7,9 +7,9 @@
     , {{ $t('orTheValueIs') }}
     <Chip class="mx-1" style="background-color:black" :label="$t('given')"></Chip>
   </div>
-  <div ref="zoomDiv">
+
   <div ref="container"  class="overflow-hidden"/>
-    </div>
+
 </template>
 
 <script>
@@ -259,19 +259,6 @@ export default {
             .attr("dy", 5)
             .on("mouseenter", (e, d) => this.getDetails(e, d))
             .on("mouseleave", e => this.hideDetails(e))
-
-        //Zoom
-        var zoomed = function ({transform}) {
-
-          svg.style("transform",  "translate(" + transform.x + "px," + transform.y + "px) scale(" + transform.k + ")")
-
-        }
-
-        var zoom = d3.zoom().on('zoom', zoomed)
-            .extent([[0,0], [width, height]])
-            .scaleExtent ([1, 10])
-
-        d3.select(this.$refs.zoomDiv).call(zoom)
 
 
       }

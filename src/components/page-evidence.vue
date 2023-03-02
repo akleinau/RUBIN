@@ -1,5 +1,5 @@
 <template>
-  <Card style="position:relative" class="Evidence ml-1">
+  <Card style="position:relative" class="Evidence">
     <template #title>
       {{ $t("Evidence") }}
       <Button icon="pi pi-question" class="p-button-outlined p-button-secondary p-button-rounded p-button-raised help"
@@ -64,14 +64,15 @@
                 :closable="false" class="w-11 h-11">
           <template #header>
             <div class="flex justify-content-end w-full">
-              <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
+              <Button class="mr-2" label="add" icon="pi pi-check" id="addOverlayEvidence"
+                      @click="addNodesFromOverlay()"/>
               <Button class="p-button-secondary mr-2" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
             </div>
           </template>
           <br>
           <DataTable :value="overlayNodes" rowGroupMode="subheader" groupRowsBy="group" class="p-datatable-sm"
                      sortMode="single" sortField="group" :sortOrder="1"
-                     responsiveLayout="scroll"
+                     responsiveLayout="scroll" id="evidenceOverlayTable"
                      v-model:filters="filters" filterDisplay="menu" data-key="name">
             <template #header>
               <div class="flex justify-content-between">
@@ -107,7 +108,7 @@
 
         <!-- Buttons -->
         <div>
-          <Button class="addButton" @click="overlay = true"
+          <Button class="addButton" @click="addButtonClicked" id="addButton"
                   :label="$t('addEvidence')"></Button>
           <Button class="p-button-text addButton mt-1 text-black-alpha-70" @click="clearEvidenceDialog = true"
                   :label="$t('delete all evidence')"></Button>
@@ -200,6 +201,12 @@ export default {
     }
   },
   methods: {
+    addButtonClicked() {
+      this.overlay = true
+      if (this.Store.tutorialStep === 1) {
+        this.Store.tutorialStep = 2
+      }
+    },
     onOverlayOptionChange(slotProps, option) {
       //deselect this and other options of the node
       this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
@@ -220,11 +227,17 @@ export default {
         }
         this.nodesToAdd.push(item);
       }
+      if (this.Store.tutorialStep === 2) {
+        this.Store.tutorialStep = 3
+      }
     },
     addNodesFromOverlay() {
       this.addNodes(this.nodesToAdd)
       this.nodesToAdd = []
       this.overlay = false
+      if (this.Store.tutorialStep === 3) {
+        this.Store.tutorialStep = 4
+      }
     },
     deleteNode(node) {
       this.Store.deleteEvidence(node)
@@ -251,6 +264,7 @@ export default {
       })
       document.activeElement.blur()
       this.clearEvidenceDialog = false
+      this.Store.calculate()
 
     },
     isDifferentState(item) {

@@ -2,7 +2,7 @@
   <form @submit.prevent="openNetwork" method="POST" id="selectNetForm" name="selectNetForm">
     <Listbox v-model="selectedNetwork" ref="selectMenu" :filter="true" empty-message="Loading networks ..."
              emptyFilterMessage="No networks found" :options="networks" option-label="name"
-             placeholder="Select a network" required/>
+             placeholder="Select a network" required @click="clicked"/>
     <br>
     <Button type="submit">{{ $t('openNetwork') }}</Button>
   </form>
@@ -15,16 +15,24 @@ export default {
   data() {
     return {
       networks: [],
-      selectedNetwork: ''
+      selectedNetwork: '',
+      prevSelectedNetwork: ''
     }
   },
   methods: {
+    clicked: function () {
+      if (this.selectedNetwork === null) {
+        this.selectedNetwork = this.prevSelectedNetwork
+        this.openNetwork()
+      }
+      this.prevSelectedNetwork = this.selectedNetwork
+    },
     openNetwork: async function () {
-      if (typeof (this.$refs.selectMenu.modelValue.name) == 'undefined') {
+      if (typeof (this.selectedNetwork.name) == 'undefined') {
         alert("No network selected")
         return
       }
-      let selectedNet = this.$refs.selectMenu.modelValue.name
+      let selectedNet = this.selectedNetwork.name
 
       this.$emit("changePage", selectedNet)
     },
@@ -37,6 +45,7 @@ export default {
       }
       if (this.networks.length > 0) {
         this.selectedNetwork = this.networks[0]
+        this.prevSelectedNetwork = this.selectedNetwork
       }
 
       this.$emit('updated')
