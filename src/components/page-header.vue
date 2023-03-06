@@ -67,12 +67,20 @@ export default {
       } else {
         configItem.label = "File"
       }
+    },
+    compareConfig: function() {
+      if (this.compareConfig == null) {
+        this.stopComparing()
+      }
     }
   },
   computed: {
     patient: function () {
       return this.Store.patient.name
-    }
+    },
+    compareConfig: function () {
+      return this.Store.compareConfig
+    },
   },
   data() {
     return {
@@ -117,7 +125,7 @@ export default {
               label: this.$t('Reset'),
               key: 'Reset',
               command: () => {
-                this.reset()
+                this.Store.reset(false)
               }
             },
             {
@@ -156,12 +164,9 @@ export default {
   },
   methods: {
     changePage() {
-      this.Store.reset()
+      this.Store.reset(true)
       this.NetworkSelectionDialog = false
       this.$emit('changePage')
-    },
-    reset() {
-      this.Store.reset()
     },
     startComparing() {
       this.Store.compareConfig = {

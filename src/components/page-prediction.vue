@@ -25,30 +25,39 @@
       <ScrollPanel style="height:40%">
         <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="name" optionValue="index" id="PhaseSelect"
                   class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
-        <TabView v-model:active-index="currentPhaseIndex" scrollable >
+        <TabView v-model:active-index="currentPhaseIndex" scrollable>
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
-              ({{ Store.getDirection(goal.direction) }})
               {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
+              <span class="text-color-secondary">
+               ({{ Store.getDirection(goal.direction) }})
+              </span>
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> compare: - given:
-                 ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
                 {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
+                <span class="text-color-secondary">
+                   ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
+                </span>
               </span>
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
               {{ Store.labels[goal.name] }} - <b> given:
-              ({{ Store.getDirection(goal.direction) }})
               {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
+              <span class="text-color-secondary">
+                ({{ Store.getDirection(goal.direction) }})
+              </span>
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> compare: - given:
-                ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
                 {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
-                }} </b>
+                }}
+                <span class="text-color-secondary">
+                  ({{ Store.getDirection(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
+                </span>
+              </b>
               </span>
             </div>
 

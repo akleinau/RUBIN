@@ -53,23 +53,22 @@ export const useStore = defineStore('store', {
     }),
     actions: {
         async reset(noPhase = false) {
-            this.patient.targets = []
-            this.patient.evidence = []
-            this.patient.goals = []
-            this.patient.nodes = []
+            this.compareConfig = null
+            this.patient.evidence.forEach(a => this.deleteEvidence(a))
             this.patient.name = ""
 
-            this.predictions.options = null
-            this.predictions.selectedOption = null
-            this.predictions.likelyResult = null
+            if (noPhase || this.phases.length === 0) {
+                this.currentPhase = null
+                this.patient.goals.forEach(a => this.deleteGoal(a))
+                this.patient.targets.forEach(a => this.deleteTarget(a))
+            }
+            else {
+                this.currentPhase = this.phases[0]
+                this.phase_change()
+            }
 
-            this.explain.relevance = null
-            this.explain.states = null
-            this.explain.explanation = null
 
-            this.currentPhase = null
-
-            await this.loadNodes(noPhase)
+            await this.calculate()
 
         },
         //calculate overall results & changes through therapy options
@@ -289,6 +288,12 @@ export const useStore = defineStore('store', {
                     this.network_translation.custom_labels = network.customization.translation
                 }
             }
+            else {
+                this.phases = []
+                this.evidenceGroupMap = {}
+                nodes.forEach(node => { this.evidenceGroupMap[node.name] = "" })
+                this.network_translation.custom_labels = {}
+            }
 
             this.updateLabels()
 
@@ -427,8 +432,8 @@ export const useStore = defineStore('store', {
             return missing > 0
         },
         getDirection(name) {
-            if (name === "min") return "low likelihood of"
-            return "high likelihood of"
+            if (name === "min") return "prefer low likelihoods"
+            return "prefer high likelihoods"
         }
     }
 })
