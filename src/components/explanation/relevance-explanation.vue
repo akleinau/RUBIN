@@ -1,8 +1,7 @@
 <template>
-  <ScrollPanel class="h-full">
-    <DataTable class=" p-datatable-sm" :value="table"
+    <DataTable class="w-full p-datatable-sm" :value="table"
                rowGroupMode="subheader" groupRowsBy="config_name"
-               responsiveLayout="scroll"
+               responsiveLayout="scroll" :scrollable="true" scrollHeight="flex"
                :rowClass="isTherapyRow"  id="relevanceExplanation">
 
       <template #groupheader="slotProps">
@@ -47,7 +46,6 @@
       </Column>
     </DataTable>
 
-  </ScrollPanel>
 </template>
 
 <script>
@@ -211,10 +209,6 @@ export default {
 
 ::v-deep(.therapy) {
   background-color: rgba(55, 55, 55, 0.15) !important;
-}
-
-img {
-  width: 100%;
 }
 
 .highlightCompare {
