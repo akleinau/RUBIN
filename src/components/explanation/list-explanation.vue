@@ -1,6 +1,7 @@
 <template>
-  <ScrollPanel class="h-full">
-  <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false" class="w-full p-datatable-sm">
+
+  <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false"  sortField="label" :sortOrder="1"
+             class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex">
     <Column :header="$t('Node')" field="label" :sortable="true" class="w-5"/>
     <Column :header="$t('Prediction')" field="state"></Column>
     <Column :header="$t('Likeliness')">
@@ -16,7 +17,7 @@
       </template>
     </Column>
   </DataTable>
-    </ScrollPanel>
+
 </template>
 
 <script>
@@ -44,6 +45,7 @@ export default {
             "beforeProb": 0
           })
         })
+        console.log(data)
         return data
       } else {
         let data = []

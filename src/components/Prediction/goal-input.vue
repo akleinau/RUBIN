@@ -1,15 +1,6 @@
 <template>
-  <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm" responsiveLayout="scroll">
-    <Column field="direction">
-      <template #body="slotProps">
-        <Dropdown v-model="slotProps.data.direction" :options="directionOptions"
-                  optionLabel="label" optionValue="name" optionKey="name"
-                  @change="onNodeChange(slotProps.data)"
-                  class="p-0 m-0">
-        </Dropdown>
-      </template>
-
-    </Column>
+  <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm"
+             responsiveLayout="scroll">
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
         {{ Store.labels[slotProps.data.name] }}
@@ -24,6 +15,15 @@
         </Dropdown>
         <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
                 @click="deleteNode(slotProps.data)"/>
+      </template>
+    </Column>
+     <Column field="direction">
+      <template #body="slotProps">
+        <Dropdown v-model="slotProps.data.direction" :options="directionOptions"
+                  optionLabel="label" optionValue="name" optionKey="name"
+                  @change="onNodeChange(slotProps.data)"
+                  class="p-0 m-0">
+        </Dropdown>
       </template>
     </Column>
   </DataTable>
@@ -46,14 +46,6 @@
                 </span>
         </div>
       </template>
-      <Column field="direction" header="direction">
-        <template #body="slotProps">
-          <SelectButton class="m-2" :options="directionOptions" optionLabel="label" optionValue="name"
-                        v-model="slotProps.data.direction" v-if="nodesToAdd.find(a => a.name === slotProps.data.name)"
-                        @change="onOverlayDirectionChange(slotProps)">
-          </SelectButton>
-        </template>
-      </Column>
       <Column field="name" :header="$t('Node')">
         <template #body="slotProps">
           {{ Store.labels[slotProps.data.name] }}
@@ -67,6 +59,14 @@
                         :offLabel="Store.option_labels[slotProps.data.name][option.name]" offIcon="pi pi-plus">
           </ToggleButton>
 
+        </template>
+      </Column>
+      <Column field="direction" header="direction">
+        <template #body="slotProps">
+          <SelectButton class="m-2" :options="directionOptions" optionLabel="label" optionValue="name"
+                        v-model="slotProps.data.direction" v-if="nodesToAdd.find(a => a.name === slotProps.data.name)"
+                        @change="onOverlayDirectionChange(slotProps)">
+          </SelectButton>
         </template>
       </Column>
     </DataTable>
