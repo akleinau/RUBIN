@@ -50,6 +50,7 @@ export const useStore = defineStore('store', {
         currentPhase: null,
         language: "en",
         tutorialStep: 0,
+        error: false
     }),
     actions: {
         async reset(noPhase = false) {
@@ -61,8 +62,7 @@ export const useStore = defineStore('store', {
                 this.currentPhase = null
                 this.patient.goals.forEach(a => this.deleteGoal(a))
                 this.patient.targets.forEach(a => this.deleteTarget(a))
-            }
-            else {
+            } else {
                 this.currentPhase = this.phases[0]
                 this.phase_change()
             }
@@ -140,34 +140,50 @@ export const useStore = defineStore('store', {
                         })
                     });
                 }
-
-                let nodeDict = await gResponse.json();
-                if (patient.targets.length !== 0) {
-                    predictions.options = nodeDict.optionResults
-                } else {
-                    predictions.options = []
+                //catch errors
+                console.log(gResponse)
+                if (!gResponse.ok) {
+                    console.log("error")
+                    this.optionsLoading = false
+                    const message = `An error has occured: ${gResponse.status}`;
+                    throw new Error(message);
                 }
-                predictions.likelyResult = [{
-                    option: {}, value: nodeDict.likelyResults.value,
-                    goalValues: nodeDict.likelyResults.goalValues
-                }]
-                predictions.options.unshift(predictions.likelyResult[0])
 
-                //don't overwrite the saved selected option
-                if (predictions.selectedOption) {
-                    let oldOption = predictions.options.find(a => JSON.stringify(a.option) ===
-                        JSON.stringify(predictions.selectedOption.option))
-                    if (oldOption) {
-                        predictions.selectedOption = oldOption
+                this.error = false
+                //catch json parse error
+                let nodeDict = await gResponse.json().catch((error) => {
+                    console.log("error: " + error)
+                    this.error = true
+
+                });
+                if (!this.error) {
+                    if (patient.targets.length !== 0) {
+                        predictions.options = nodeDict.optionResults
+                    } else {
+                        predictions.options = []
+                    }
+                    predictions.likelyResult = [{
+                        option: {}, value: nodeDict.likelyResults.value,
+                        goalValues: nodeDict.likelyResults.goalValues
+                    }]
+                    predictions.options.unshift(predictions.likelyResult[0])
+
+                    //don't overwrite the saved selected option
+                    if (predictions.selectedOption) {
+                        let oldOption = predictions.options.find(a => JSON.stringify(a.option) ===
+                            JSON.stringify(predictions.selectedOption.option))
+                        if (oldOption) {
+                            predictions.selectedOption = oldOption
+                        } else {
+                            predictions.selectedOption = predictions.likelyResult[0]
+                        }
                     } else {
                         predictions.selectedOption = predictions.likelyResult[0]
                     }
-                } else {
-                    predictions.selectedOption = predictions.likelyResult[0]
-                }
 
-                this.optionsLoading = false
-                await this.calculateExplanations(patient, predictions, explain)
+                    this.optionsLoading = false
+                    await this.calculateExplanations(patient, predictions, explain)
+                }
             }
         },
         //calculate explanations based on current option
@@ -287,11 +303,12 @@ export const useStore = defineStore('store', {
                 if (network.customization.translation) {
                     this.network_translation.custom_labels = network.customization.translation
                 }
-            }
-            else {
+            } else {
                 this.phases = []
                 this.evidenceGroupMap = {}
-                nodes.forEach(node => { this.evidenceGroupMap[node.name] = "" })
+                nodes.forEach(node => {
+                    this.evidenceGroupMap[node.name] = ""
+                })
                 this.network_translation.custom_labels = {}
             }
 
