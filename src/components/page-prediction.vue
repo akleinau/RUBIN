@@ -15,10 +15,17 @@
 
       <!-- decision table -->
       <div style="height:60%; border: solid 5px lightgray" class="p-b-2">
+        <div v-if="!Store.error">
         <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
         <ScrollPanel class="h-full">
           <optionsTable id="optionsTable"/>
         </ScrollPanel>
+          </div>
+        <div v-else class="p-4">
+          <b>Error in calculation! </b>
+          <br>
+          Please check if your evidence contains contradictions.
+        </div>
       </div>
 
       <!-- phases -->

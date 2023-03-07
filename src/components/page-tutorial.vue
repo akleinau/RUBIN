@@ -27,7 +27,6 @@
     <template #content>
       Select some evidence!
       <br>
-
       <Icon class="pi pi-arrow-down mb-2"/>
     </template>
   </Card>
@@ -56,7 +55,6 @@
       <br>
       <Button class="p-button-text" label="next" @click="next()"/>
       <br>
-
       <Icon class="pi pi-arrow-down mb-2"/>
     </template>
   </Card>
@@ -79,17 +77,43 @@
     </template>
   </Card>
 
-  <Card v-show="step === 9" class="absolute bg-blue-100 shadow-5 m-0" id="overlay9" style="z-index: 20000">
+  <Card v-show="step === 8" class="absolute bg-blue-100 shadow-5 m-0" id="overlay8" style="z-index: 5">
+    <template #content>
+      Select "All predictions"
+      <br>
+      <Icon class="pi pi-arrow-down mb-2"/>
+    </template>
+  </Card>
+
+  <Card v-show="step === 9" class="absolute bg-blue-100 shadow-5 m-0" id="overlay9" style="z-index: 5">
+    <template #content>
+      <Icon class="pi pi-arrow-up mb-2"/>
+      <br>
+      Here you can see all predictions of the model with their likelihoods.
+      <br>
+      <Button class="p-button-text" label="next" @click="next()"/>
+    </template>
+  </Card>
+
+  <Card v-show="step === 10" class="absolute bg-blue-100 shadow-5 m-0" id="overlay10" style="z-index: 20000">
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
       Use the menu to compare patients, export pdf files or receive help.
-      <br> <br>
-      <b>Congrats, you finished the tutorial!</b>
       <br>
-      <Button class="p-button-text" label="close" @click="close()"/>
+      <Button class="p-button-text" label="next" @click="next()"/>
     </template>
   </Card>
+
+    <Dialog v-model:visible="stepIs11" class="bg-blue-100 shadow-5 m-0 " header="Congrats!" :closable="false"
+          id="overlay11" modal style="z-index: 2000">
+    <div class="flex align-items-center flex-column">
+      <span> <b>You finished the tutorial!</b> </span>
+      <span class="p-2"> If you have further questions, click on the question marks on top of each view.</span>
+        <Button class="p-button-text pt-4" label="close" icon="pi pi-times" @click="close()"/>
+    </div>
+  </Dialog>
+
 </template>
 
 <script>
@@ -102,7 +126,8 @@ export default {
   data() {
     return {
       display: false,
-      step: 0
+      step: 0,
+      finalStep: 12
     }
   },
   setup() {
@@ -126,7 +151,10 @@ export default {
     },
     stepIs0: function () {
       return this.Store.tutorialStep === 0
-    }
+    },
+    stepIs11: function () {
+      return this.Store.tutorialStep === 11
+    },
   },
   methods: {
     start() {
@@ -134,19 +162,19 @@ export default {
 
     },
     close() {
-      this.Store.tutorialStep = 10;
+      this.Store.tutorialStep = this.finalStep;
     },
     next() {
       this.Store.tutorialStep++;
     },
     async sendBlock() {
       let newBlock = {
-        "evidence": !(this.tutorialStep <= 3 || this.Store.tutorialStep > 9),
-        "options": !(this.Store.tutorialStep >= 4 && this.Store.tutorialStep <= 5 || this.Store.tutorialStep > 9),
-        "explain": !(this.Store.tutorialStep >= 6 && this.Store.tutorialStep !== 9),
+        "evidence": !(this.tutorialStep <= 3 || this.Store.tutorialStep >= this.finalStep),
+        "options": !(this.Store.tutorialStep >= 4 && this.Store.tutorialStep <= 5 || this.Store.tutorialStep >= this.finalStep),
+        "explain": !(this.Store.tutorialStep >= 6 && this.Store.tutorialStep !== this.finalStep - 1),
       }
 
-      if (this.Store.tutorialStep === 1 || this.Store.tutorialStep === 9) {
+      if (this.Store.tutorialStep === 1 || this.Store.tutorialStep === this.finalStep) {
         window.scrollTo(0, 0);
       }
 
@@ -161,9 +189,11 @@ export default {
         this.setOverlayPosition('addOverlayEvidence', 'overlay3', "up")
         this.setOverlayPosition('optionsTable', 'overlay4', "up")
         this.setOverlayPosition('PhaseSelect', 'overlay5', "down")
-        this.setOverlayPosition('relevanceExplanation', 'overlay6', "up")
+        this.setOverlayPosition('relevanceExplanation', 'overlay6', "low_up")
         this.setOverlayPosition('explanationDropdown', 'overlay7', "up")
-        this.setOverlayPosition('menu', 'overlay9', "up")
+        this.setOverlayPosition('explanationDropdown', 'overlay8', "down")
+        this.setOverlayPosition('listExplanation', 'overlay9', "low_up")
+        this.setOverlayPosition('menu', 'overlay10', "up")
         this.step = this.Store.tutorialStep
       }, 100)
     },
@@ -181,6 +211,9 @@ export default {
           document.getElementById(overlay).style.transform = "translateY(-50%)";
         } else if (position === "down") {
           document.getElementById(overlay).style.top = boundingBox.top + window.scrollY + "px";
+          document.getElementById(overlay).style.transform = "translateY(-110%)";
+        } else if (position === "low_up") {
+          document.getElementById(overlay).style.top = boundingBox.bottom + window.scrollY + 5 + "px";
           document.getElementById(overlay).style.transform = "translateY(-110%)";
         }
 
