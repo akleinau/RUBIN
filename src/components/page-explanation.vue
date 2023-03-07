@@ -21,7 +21,7 @@
       <ProgressBar v-if="Store.explanationLoading" mode="indeterminate" style="height: .5em"/>
       <div v-else class="flex flex-column overflow-hidden h-full flex-align-full w-full">
         <Dropdown v-model="currentIndex" optionLabel="label" optionValue="value"
-                  :options="options" id="explanationDropdown" @change="DropdownClicked"
+                  :options="options" id="explanationDropdown" @click="DropdownClicked" @change="DropdownChanged"
                   class="flex mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
         <TabView v-model:active-index="currentIndex" scrollable class="flex-1 overflow-hidden">
           <!--   relevance  -->
@@ -185,12 +185,16 @@ export default {
     DropdownClicked() {
       if (this.Store.tutorialStep === 7) {
         this.Store.tutorialStep = 8
-        //sleep 5 seconds
-        setTimeout(() => {
-          this.Store.tutorialStep = 9
-        }, 2000)
       }
-    }
+    },
+    DropdownChanged() {
+      if (this.Store.tutorialStep === 8 && this.currentIndex === 1) {
+        this.Store.tutorialStep = 9
+      }
+      else if (this.Store.tutorialStep === 8) {
+        this.Store.tutorialStep = 7
+      }
+    },
   }
 }
 </script>
