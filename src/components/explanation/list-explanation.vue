@@ -45,7 +45,6 @@ export default {
             "beforeProb": 0
           })
         })
-        console.log(data)
         return data
       } else {
         let data = []
