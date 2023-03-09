@@ -31,11 +31,11 @@
   </OverlayPanel>
 
   <Dialog v-model:visible="NetworkSelectionDialog" modal>
-    <div class="m-2"> Are you sure you want to go back to Network Selection? Patient information will be resetted. <br>
+    <div class="m-2"> {{$t("BackToNetworkSelection")}} <br>
     </div>
     <div class="flex justify-content-end">
-      <Button class="m-2 p-button-text" @click="NetworkSelectionDialog = false"> cancel</Button>
-      <Button class="m-2" @click="changePage()"> proceed</Button>
+      <Button class="m-2 p-button-text" @click="NetworkSelectionDialog = false"> {{$t("Cancel")}}</Button>
+      <Button class="m-2" @click="changePage()"> {{$t("proceed")}}</Button>
     </div>
 
   </Dialog>
@@ -63,9 +63,9 @@ export default {
     patient: function (name) {
       let configItem = this.items.find(a => a.key === "Patient")
       if (name !== "") {
-        configItem.label = "File: " + name
+        configItem.label = this.$t('File') + ": " + name
       } else {
-        configItem.label = "File"
+        configItem.label = this.$t('Network')
       }
     },
     compareConfig: function() {
@@ -87,11 +87,11 @@ export default {
       showFeedback: false,
       showNetworkDescription: false,
       SavePatientName: null,
-      configLabel: "start comparing",
+      configLabel: this.$t('startComparing'),
       NetworkSelectionDialog: false,
       items: [
         {
-          label: "File " + this.Store.patient.name,
+          label: this.$t('File') + ": " + this.Store.patient.name,
           icon: PrimeIcons.FILE,
           key: 'Patient',
           command: (event) => {
@@ -110,7 +110,7 @@ export default {
         },
         {
           key: "savedConfigurations",
-          label: "start comparing",
+          label: this.$t('startComparing'),
           icon: PrimeIcons.BOOKMARK,
           command: () => {
             this.startComparing()
@@ -137,7 +137,7 @@ export default {
             }]
         },
         {
-          label: "Help",
+          label: this.$t('help'),
           key: 'Help',
           icon: PrimeIcons.QUESTION_CIRCLE,
           items: [
@@ -150,7 +150,7 @@ export default {
               }
             },
             {
-              label: "Show tutorial",
+              label: this.$t('showTutorial'),
               key: 'ShowTutorial',
               icon: PrimeIcons.QUESTION,
               command: () => {
@@ -177,7 +177,7 @@ export default {
 
       //change header
       let configItem = this.items.find(a => a.key === "savedConfigurations")
-      configItem.label = "stop comparing"
+      configItem.label = this.$t('stopComparing')
       configItem.icon = "pi pi-fw pi-times"
       configItem.command = () => {
         this.stopComparing()
@@ -185,7 +185,7 @@ export default {
     },
     stopComparing() {
       let configItem = this.items.find(a => a.key === "savedConfigurations")
-      configItem.label = "start comparing"
+      configItem.label = this.$t('startComparing')
       configItem.icon = PrimeIcons.BOOKMARK
       configItem.command = () => {
         this.startComparing()

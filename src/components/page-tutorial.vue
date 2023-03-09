@@ -1,17 +1,17 @@
 <template>
-  <Dialog v-model:visible="stepIs0" class="bg-blue-100 shadow-5 m-0 " header="Welcome!" :closable="false"
+  <Dialog v-model:visible="stepIs0" class="bg-blue-100 shadow-5 m-0 " :header="this.$t('Tutorial1a')" :closable="false"
           id="overlay0" modal style="z-index: 2000">
     <div class="flex align-items-center flex-column">
-      <span> Do you want to start the tutorial? </span>
+      <span> {{ $t("Tutorial1b") }} </span>
       <br>
       <div class="flex pt-3">
-        <Button class="p-button-text" label="start" icon="pi pi-check" @click="start()"/>
-        <Button class="p-button-text" label="close" icon="pi pi-times" @click="close()"/>
+        <Button class="p-button-text" :label="this.$t('start')" icon="pi pi-check" @click="start()"/>
+        <Button class="p-button-text" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
       </div>
     </div>
   </Dialog>
 
-  <Button v-show="step < 9 && step > 0 " class=" p-1 m-2 absolute p-button-secondary "
+  <Button v-show="step < finalStep && step > 0 " class=" p-1 m-2 absolute p-button-secondary "
           label="close tutorial" icon="pi pi-times"
           @click="close()" style="z-index: 10000; right:15%"/>
 
@@ -19,13 +19,13 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      {{ $t("Tutorial2") }}
+      {{ $t("Tutorial2a") }}
     </template>
   </Card>
 
   <Card v-show="step === 2" class="absolute bg-blue-100 shadow-5 m-0" id="overlay2" style="z-index: 20000">
     <template #content>
-      Select some evidence!
+      {{ $t("Tutorial2b") }}
       <br>
       <Icon class="pi pi-arrow-down mb-2"/>
     </template>
@@ -35,7 +35,7 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Click to add!
+      {{ $t("Tutorial2c") }}
     </template>
   </Card>
 
@@ -45,7 +45,7 @@
       <br>
       {{ $t("Tutorial3a") }}
       <br>
-      <Button class="p-button-text" label="next" @click="next()"/>
+      <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
     </template>
   </Card>
 
@@ -53,7 +53,7 @@
     <template #content>
       {{ $t("Tutorial3b") }}
       <br>
-      <Button class="p-button-text" label="next" @click="next()"/>
+      <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
       <br>
       <Icon class="pi pi-arrow-down mb-2"/>
     </template>
@@ -63,9 +63,9 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Here you can see the relevance and influence of each evidence for the prediction.
+      {{ $t("Tutorial4a") }}
       <br>
-      <Button class="p-button-text" label="next" @click="next()"/>
+      <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
     </template>
   </Card>
 
@@ -73,13 +73,13 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Click here to view another explanation.
+      {{ $t("Tutorial4b") }}
     </template>
   </Card>
 
   <Card v-show="step === 8" class="absolute bg-blue-100 shadow-5 m-0" id="overlay8" style="z-index: 5">
     <template #content>
-      Select "All predictions"
+      {{ $t("Tutorial4c") }}
       <br>
       <Icon class="pi pi-arrow-down mb-2"/>
     </template>
@@ -89,9 +89,9 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Here you can see all predictions of the model with their likelihoods.
+      {{ $t("Tutorial4d") }}
       <br>
-      <Button class="p-button-text" label="next" @click="next()"/>
+      <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
     </template>
   </Card>
 
@@ -99,18 +99,18 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Use the menu to compare patients, export pdf files or receive help.
+      {{ $t("Tutorial5") }}
       <br>
-      <Button class="p-button-text" label="next" @click="next()"/>
+      <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
     </template>
   </Card>
 
-    <Dialog v-model:visible="stepIs11" class="bg-blue-100 shadow-5 m-0 " header="Congrats!" :closable="false"
+    <Dialog v-model:visible="stepIs11" class="bg-blue-100 shadow-5 m-0 " :header="this.$t('Tutorial6a')" :closable="false"
           id="overlay11" modal style="z-index: 2000">
     <div class="flex align-items-center flex-column">
-      <span> <b>You finished the tutorial!</b> </span>
-      <span class="p-2"> If you have further questions, click on the question marks on top of each view.</span>
-        <Button class="p-button-text pt-4" label="close" icon="pi pi-times" @click="close()"/>
+      <span> <b>{{ $t("Tutorial6b") }}</b> </span>
+      <span class="p-2">{{ $t("Tutorial6c") }} </span>
+        <Button class="p-button-text pt-4" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
     </div>
   </Dialog>
 
