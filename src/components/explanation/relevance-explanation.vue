@@ -13,7 +13,7 @@
         <Row>
           <Column header="" field="node_name" :rowspan="2"/>
           <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2"/>
-          <Column header="Influence on Outcome" :colspan="getGoalKeyNum()"></Column>
+          <Column :header="$t('localRelevance')" :colspan="getGoalKeyNum()"></Column>
         </Row>
         <Row>
           <Column v-for="goal in goalnames" :field="goal" :header="goal.label" :key="goal"/>

@@ -64,9 +64,9 @@
                 :closable="false" class="w-11 h-11">
           <template #header>
             <div class="flex justify-content-end w-full">
-              <Button class="mr-2" label="add" icon="pi pi-check" id="addOverlayEvidence"
+              <Button class="mr-2" :label="this.$t('add')" icon="pi pi-check" id="addOverlayEvidence"
                       @click="addNodesFromOverlay()"/>
-              <Button class="p-button-secondary mr-2" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
+              <Button class="p-button-secondary mr-2" :label="this.$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
             </div>
           </template>
           <br>
