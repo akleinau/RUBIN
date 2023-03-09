@@ -11,7 +11,7 @@
     </div>
   </Dialog>
 
-  <Button v-show="step < 9 && step > 0 " class=" p-1 m-2 absolute p-button-secondary "
+  <Button v-show="step < finalStep && step > 0 " class=" p-1 m-2 absolute p-button-secondary "
           label="close tutorial" icon="pi pi-times"
           @click="close()" style="z-index: 10000; right:15%"/>
 

@@ -18,7 +18,7 @@
       </div>
     </template>
     <template #content>
-      <div v-if="!Store.optionsLoading">
+      <div v-if="!Store.optionsLoading" class="h-full">
         <ProgressBar v-if="Store.explanationLoading" mode="indeterminate" style="height: .5em"/>
         <div v-else class="flex flex-column overflow-hidden h-full flex-align-full w-full">
           <Dropdown v-model="currentIndex" optionLabel="label" optionValue="value"
