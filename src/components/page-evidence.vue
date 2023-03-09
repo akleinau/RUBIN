@@ -111,12 +111,12 @@
           <Button class="addButton" @click="addButtonClicked" id="addButton"
                   :label="$t('addEvidence')"></Button>
           <Button class="p-button-text addButton mt-1 text-black-alpha-70" @click="clearEvidenceDialog = true"
-                  :label="$t('delete all evidence')"></Button>
+                  :label="$t('DeleteAllEvidence')"></Button>
           <Dialog v-model:visible="clearEvidenceDialog">
-            <div class="m-2"> Are you sure you want to delete all evidence? <br></div>
+            <div class="m-2">{{$t("DeleteAllEvidenceDialog")}}  <br></div>
             <div class="flex justify-content-end">
-              <Button class="m-2 p-button-text" @click="clearEvidenceDialog = false"> cancel</Button>
-              <Button class="m-2" @click="clearEvidence()"> proceed</Button>
+              <Button class="m-2 p-button-text" @click="clearEvidenceDialog = false"> {{$t("Cancel")}}</Button>
+              <Button class="m-2" @click="clearEvidence()"> {{$t("proceed")}}</Button>
             </div>
 
           </Dialog>

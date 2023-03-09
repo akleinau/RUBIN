@@ -2,7 +2,7 @@
   <Dialog v-model:visible="stepIs0" class="bg-blue-100 shadow-5 m-0 " header="Welcome!" :closable="false"
           id="overlay0" modal style="z-index: 2000">
     <div class="flex align-items-center flex-column">
-      <span> Do you want to start the tutorial? </span>
+      <span> {{ $t("Tutorial1") }} </span>
       <br>
       <div class="flex pt-3">
         <Button class="p-button-text" label="start" icon="pi pi-check" @click="start()"/>
@@ -19,13 +19,13 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      {{ $t("Tutorial2") }}
+      {{ $t("Tutorial2a") }}
     </template>
   </Card>
 
   <Card v-show="step === 2" class="absolute bg-blue-100 shadow-5 m-0" id="overlay2" style="z-index: 20000">
     <template #content>
-      Select some evidence!
+      {{ $t("Tutorial2b") }}
       <br>
       <Icon class="pi pi-arrow-down mb-2"/>
     </template>
@@ -35,7 +35,7 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Click to add!
+      {{ $t("Tutorial2c") }}
     </template>
   </Card>
 
@@ -63,7 +63,7 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Here you can see the relevance and influence of each evidence for the prediction.
+      {{ $t("Tutorial4a") }}
       <br>
       <Button class="p-button-text" label="next" @click="next()"/>
     </template>
@@ -73,13 +73,13 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Click here to view another explanation.
+      {{ $t("Tutorial4b") }}
     </template>
   </Card>
 
   <Card v-show="step === 8" class="absolute bg-blue-100 shadow-5 m-0" id="overlay8" style="z-index: 5">
     <template #content>
-      Select "All predictions"
+      {{ $t("Tutorial4c") }}
       <br>
       <Icon class="pi pi-arrow-down mb-2"/>
     </template>
@@ -89,7 +89,7 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Here you can see all predictions of the model with their likelihoods.
+      {{ $t("Tutorial4d") }}
       <br>
       <Button class="p-button-text" label="next" @click="next()"/>
     </template>
@@ -99,7 +99,7 @@
     <template #content>
       <Icon class="pi pi-arrow-up mb-2"/>
       <br>
-      Use the menu to compare patients, export pdf files or receive help.
+      {{ $t("Tutorial5") }}
       <br>
       <Button class="p-button-text" label="next" @click="next()"/>
     </template>
@@ -108,8 +108,8 @@
     <Dialog v-model:visible="stepIs11" class="bg-blue-100 shadow-5 m-0 " header="Congrats!" :closable="false"
           id="overlay11" modal style="z-index: 2000">
     <div class="flex align-items-center flex-column">
-      <span> <b>You finished the tutorial!</b> </span>
-      <span class="p-2"> If you have further questions, click on the question marks on top of each view.</span>
+      <span> <b>{{ $t("Tutorial6a") }}</b> </span>
+      <span class="p-2">{{ $t("Tutorial6b") }} </span>
         <Button class="p-button-text pt-4" label="close" icon="pi pi-times" @click="close()"/>
     </div>
   </Dialog>

@@ -2,9 +2,9 @@
   {{ $t("FeedbackInfo") }}
   <br> <br>
   <form>
-    Description of the problem:
+     {{ $t("FeedbackProblemDescription") }}:
     <Textarea v-model="description" rows="5" class="w-full mt-2 mb-2"/>
-    (optional) Your email address:
+    {{ $t("FeedbackMail") }}:
     <InputText v-model="mail" class="w-full mt-2 mb-2"/>
     <div class="p-field-checkbox">
       <Checkbox id="checkConfig" v-model="sendConfig" :binary="true" value="true"></Checkbox>

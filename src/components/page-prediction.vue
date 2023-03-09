@@ -22,9 +22,9 @@
         </ScrollPanel>
           </div>
         <div v-else class="p-4">
-          <b>Error in calculation! </b>
+          <b>{{ $t("CalculationError1") }} </b>
           <br>
-          Please check if your evidence contains contradictions.
+          {{ $t("CalculationError2") }}
         </div>
       </div>
 
@@ -41,7 +41,7 @@
                ({{ Store.getDirection(goal.direction) }})
               </span>
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
-                ,<b> compare: - given:
+                ,<b> {{ $t("compare") }}: - {{ $t("given")}}:
                 {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
@@ -51,13 +51,13 @@
               </span>
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
-              {{ Store.labels[goal.name] }} - <b> given:
+              {{ Store.labels[goal.name] }} - <b> {{ $t("given")}}:
               {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
               <span class="text-color-secondary">
                 ({{ Store.getDirection(goal.direction) }})
               </span>
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
-                ,<b> compare: - given:
+                ,<b> {{ $t("compare") }}: - {{ $t("given")}}:
                 {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }}
@@ -77,11 +77,11 @@
               {{ Store.labels[target.name] }}
             </div>
             <div v-for="target in this.givenTargets" :key="target.name">
-              {{ Store.labels[target.name] }} - <b> given:
+              {{ Store.labels[target.name] }} - <b> {{ $t("given")}}:
               {{ Store.option_labels[target.name][target.selected.name] }} </b>
             </div>
             <div v-for="target in this.givenTargets_compare" :key="target.name">
-              compare: {{ Store.labels[target.name] }} - <b> given:
+              {{ $t("compare") }}: {{ Store.labels[target.name] }} - <b> {{ $t("given")}}:
               {{ Store.option_labels[target.name][target.selected.name] }} </b>
             </div>
           </TabPanel>
