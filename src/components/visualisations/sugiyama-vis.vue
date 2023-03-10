@@ -8,13 +8,14 @@
     <Chip class="mx-1" style="background-color:black" :label="$t('given')"></Chip>
   </div>
 
-  <div ref="container"  class="overflow-hidden"/>
+  <div ref="container" class="overflow-hidden"/>
 
 </template>
 
 <script>
 import * as d3 from "d3";
 import * as dag from "d3-dag"
+import {useStore} from '@/store'
 
 export default {
   name: "sugiyama-vis",
@@ -26,6 +27,10 @@ export default {
     "highlightNodes",
     "highlightEdges"
   ],
+  setup() {
+    const Store = useStore()
+    return {Store}
+  },
   computed: {
     edgeList: function () {
       const list = []
@@ -55,8 +60,9 @@ export default {
     return {}
   },
   methods: {
-    getState(node) {
-      return this.nodes.find(d => d.name === node.data.id).state
+    getState(n) {
+      let node = this.nodes.find(d => d.name === n.data.id)
+      return this.Store.option_labels[node.name][node.state]
     },
     getProbability(node) {
       return this.nodes.find(d => d.name === node.data.id).probability
@@ -82,15 +88,15 @@ export default {
         d3.select(e.target.parentNode).raise()
         //size up node
         d3.select(e.target.parentNode).selectAll(".box")
-            .attr("width", d => this.labels[d.data.id].length + 60)
+            .attr("width", d => this.Store.labels[d.data.id].length + 60)
             .attr("height", d => {
               let node = this.nodes.find(node => node.name === d.data.id)
               if (node.distribution) return node.distribution.length * 10 + 15
               else return 15
             })
-            .attr("transform", d => `translate(${-(this.labels[d.data.id].length + 60) / 2},-4)`)
+            .attr("transform", d => `translate(${-(this.Store.labels[d.data.id].length + 60) / 2},-4)`)
         //show full text
-        d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.labels[d.data.id]) + ": ")
+        d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels[d.data.id]) + ": ")
         // show all probabilities
         d3.select(e.target.parentNode).selectAll(".textState").each(d => {
           let node = this.nodes.find(node => node.name === d.data.id)
@@ -112,7 +118,7 @@ export default {
                   .attr("dy", 4)
 
               d3.select(e.target.parentNode).append("text")
-                  .text(node.stateNames[i])
+                  .text(this.Store.option_labels[node.name][node.stateNames[i]])
                   .attr("class", "probState")
                   .attr("transform", `translate(-2,${i * 10 + 10})`)
                   .attr('font-size', '4px')
@@ -131,7 +137,7 @@ export default {
           .attr("height", 10)
           .attr("transform", `translate(-12.5,-4)`)
 
-      d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.labels[d.data.id]).substring(0, 10) + ": ")
+      d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels[d.data.id]).substring(0, 10) + ": ")
 
       d3.select(e.target.parentNode).selectAll(".probBar").remove()
       d3.select(e.target.parentNode).selectAll(".probState").remove()
@@ -240,7 +246,7 @@ export default {
 
         // Add text to nodes
         nodes.append('text')
-            .text(d => String(this.labels[d.data.id]).substring(0, 10) + ": ")
+            .text(d => String(this.Store.labels[d.data.id]).substring(0, 10) + ": ")
             .attr("class", "textName")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')
@@ -259,6 +265,17 @@ export default {
             .attr("dy", 5)
             .on("mouseenter", (e, d) => this.getDetails(e, d))
             .on("mouseleave", e => this.hideDetails(e))
+
+        //Zoom
+        var zoomed = function ({transform}) {
+          svg.style("transform", "translate(" + transform.x + "px," + transform.y + "px) scale(" + transform.k + ")")
+        }
+
+        var zoom = d3.zoom().on('zoom', zoomed)
+            .extent([[0, 0], [width, height]])
+            .scaleExtent([1, 10])
+
+        d3.select(this.$refs.container).call(zoom)
 
 
       }

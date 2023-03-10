@@ -37,25 +37,22 @@
             <TabPanel :header="$t('CompactNetwork')">
               <div v-if="Store.compareConfig==null">
                 <sugiyama :highlight="true" :edges="Store.edges" :highlightEdges="getCompactEdges()"
-                          :nodes="Store.explain.states" :highlightNodes="getExNodes()"
-                          :labels="Store.labels"/>
+                          :nodes="Store.explain.states" :highlightNodes="getExNodes()"/>
               </div>
               <div v-else>
                 <sugiyamaCompare :highlight="true" :highlightEdges="getCompactEdges()" :highlightNodes="getExNodes()"
                                  :nodes="Store.explain.states" :edges="Store.edges"
-                                 :nodes2="Store.compareConfig.explain.states"
-                                 :labels="Store.labels"/>
+                                 :nodes2="Store.compareConfig.explain.states"/>
               </div>
             </TabPanel>
             <!--   full network  -->
             <TabPanel :header="$t('FullNetwork')" class="overflow-hidden">
               <div v-if="Store.compareConfig==null">
-                <sugiyama :highlight="false" :edges="Store.edges" :nodes="Store.explain.states" :labels="Store.labels"/>
+                <sugiyama :highlight="false" :edges="Store.edges" :nodes="Store.explain.states"/>
               </div>
               <div v-else>
                 <sugiyamaCompare :highlight="false" :edges="Store.edges" :nodes="Store.explain.states"
-                                 :nodes2="Store.compareConfig.explain.states"
-                                 :labels="Store.labels"/>
+                                 :nodes2="Store.compareConfig.explain.states"/>
               </div>
             </TabPanel>
           </TabView>

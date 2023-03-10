@@ -448,9 +448,5 @@ export const useStore = defineStore('store', {
             missing += (b.filter(x => !a.includes(x))).length
             return missing > 0
         },
-        getDirection(name) {
-            if (name === "min") return "prefer low likelihoods"
-            return "prefer high likelihoods"
-        }
     }
 })

@@ -6,7 +6,7 @@
 
     <template #groupheader="slotProps">
       <br>
-      <b v-if="Store.compareConfig">{{ slotProps.data.config_name }}:</b>
+      <b v-if="Store.compareConfig">{{ $t(slotProps.data.config_name) }}:</b>
     </template>
 
     <Column>
@@ -19,7 +19,7 @@
 
     <Column field="option">
       <template #body="slotProps">
-        <div v-if="Object.keys(slotProps.data.option).length === 0"><b>overall</b></div>
+        <div v-if="Object.keys(slotProps.data.option).length === 0"><b>{{$t("noInterventions")}}</b></div>
         <div v-else v-for="o in Object.keys(slotProps.data.option)" :key="o">
           {{ Store.labels[o] }}: {{ Store.option_labels[o][slotProps.data.option[o]] }}
         </div>

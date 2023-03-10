@@ -6,7 +6,7 @@
 
       <template #groupheader="slotProps">
         <br>
-        <b v-if="Store.compareConfig">{{ slotProps.data.config_name }}:</b>
+        <b v-if="Store.compareConfig">{{ $t(slotProps.data.config_name) }}:</b>
       </template>
 
       <ColumnGroup type="header">
@@ -38,8 +38,8 @@
       </Column>
       <Column v-for="goal in goalnames" :key="goal">
         <template #body="slotProps">
-          <twoSidedBar :value="slotProps.data.relevancies[getIdentifier(goal.name)]"
-                       v-tooltip.left="{value: getDirectionTooltip(slotProps.data.relevancies[getIdentifier(goal.name)],
+          <twoSidedBar :value="slotProps.data.relevancies[goal.name]"
+                       v-tooltip.left="{value: getDirectionTooltip(slotProps.data.relevancies[goal.name],
                        goal.direction, goal.label), fitContent: true}"
           />
         </template>
@@ -74,7 +74,7 @@ export default {
       if (this.Store.patient.goals != null && this.Store.explain.relevance != null) {
         this.Store.patient.goals.forEach(goal => {
           goalnames.push({
-            "name": this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name],
+            "name": goal.name + ": " + goal.selected.name,
             "label": this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name],
             "direction": goal.direction
           })
@@ -125,25 +125,15 @@ export default {
     },
     getDirectionTooltip(number, direction, label) {
       if (direction === "min") {
-        if (number > 0.001) return "Decreases the probability of " + label
-        else if (number < -0.001) return "Increases the probability of " + label
+        if (number > 0.001) return this.$t("decreasesProbability") + " " + label
+        else if (number < -0.001) return this.$t("increasesProbability") + " " + label
       }
       if (direction === "max") {
-        if (number > 0.001) return "Increases the probability of " + label
-        else if (number < -0.001) return "Decreases the probability of " + label
+        if (number > 0.001) return this.$t("increasesProbability") + " " + label
+        else if (number < -0.001) return this.$t("decreasesProbability") + " " + label
       }
 
       return this.$t("noInfluence")
-    },
-    getIdentifier(label) {
-      let identifier = "-1"
-      let labelFirstPart = label.split(":")[0]
-      Object.entries(this.Store.labels).forEach(([key, value]) => {
-        if (value === labelFirstPart) {
-          identifier = key
-        }
-      })
-      return identifier + ":" + label.split(":")[1]
     },
     getState(name) {
       let state = "unknown"

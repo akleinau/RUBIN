@@ -1,13 +1,16 @@
 <template>
-  in <span style="border:1px solid red; border-radius:5px"> changed nodes</span> the different states are color coded:
-  <Chip class="mx-1" style="background-color:black" label="current"></Chip>
-  <Chip class="mx-1" style="background-color:#6d00bf" label="compare"></Chip>
+  {{ $t("networkColorExplanation1") }} <span
+    style="border:1px solid red; border-radius:5px"> {{ $t("networkColorExplanation2") }}</span>
+  {{ $t("networkColorExplanation3") }}:
+  <Chip class="mx-1" style="background-color:black" :label="$t('current')"></Chip>
+  <Chip class="mx-1" style="background-color:#6d00bf" :label="$t('compare')"></Chip>
   <div ref="container" class="overflow-hidden"/>
 </template>
 
 <script>
 import * as d3 from "d3";
 import * as dag from "d3-dag"
+import {useStore} from '@/store'
 
 export default {
   name: "sugiyama-vis-compare",
@@ -20,6 +23,10 @@ export default {
     "highlightNodes",
     "highlightEdges"
   ],
+  setup() {
+    const Store = useStore()
+    return {Store}
+  },
   computed: {
     edgeList: function () {
       const list = []
@@ -46,11 +53,13 @@ export default {
     }
   },
   methods: {
-    getState(node) {
-      return this.nodes.find(d => d.name === node.data.id).state
+    getState(n) {
+      let node = this.nodes.find(d => d.name === n.data.id)
+      return this.Store.option_labels[node.name][node.state]
     },
-    getState2(node) {
-      if (this.isChanged(node)) return "(" + this.nodes2.find(d => d.name === node.data.id).state + ")"
+    getState2(n) {
+      let node = this.nodes2.find(d => d.name === n.data.id)
+      if (this.isChanged(n)) return "(" +  this.Store.option_labels[node.name][node.state] + ")"
       else return ""
     },
     getProbability(node) {
@@ -82,7 +91,7 @@ export default {
         d3.select(e.target.parentNode).raise()
         //size up node
         d3.select(e.target.parentNode).selectAll(".box")
-            .attr("width", d => this.labels[d.data.id].length + 60)
+            .attr("width", d => this.Store.labels[d.data.id].length + 90)
             .attr("height", d => {
               let height = 15
               let node = this.nodes.find(node => node.name === d.data.id)
@@ -91,9 +100,9 @@ export default {
               if (node2.distribution) height += node2.distribution.length * 10 + 10
               return height
             })
-            .attr("transform", d => `translate(${-(this.labels[d.data.id].length + 60) / 2},-4)`)
+            .attr("transform", d => `translate(${-(this.Store.labels[d.data.id].length + 90) / 2},-4)`)
         //show full text
-        d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.labels[d.data.id]) + ": ")
+        d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels[d.data.id]) + ": ")
         // show all probabilities
         d3.select(e.target.parentNode).selectAll(".textState").each(d => {
           let node = this.nodes.find(node => node.name === d.data.id)
@@ -115,7 +124,7 @@ export default {
                   .attr("dy", 4)
 
               d3.select(e.target.parentNode).append("text")
-                  .text(node.stateNames[i])
+                  .text(this.Store.option_labels[node.name][node.stateNames[i]])
                   .attr("class", "probState")
                   .attr("transform", `translate(-2,${i * 10 + 10})`)
                   .attr('font-size', '4px')
@@ -133,7 +142,7 @@ export default {
             let displacement = (nodeCompare.distribution) ? nodeCompare.distribution.length * 10 + 10 : 10
             d3.select(e.target.parentNode).selectAll(".textState2")
                 .attr("dy", displacement + 5)
-                .text("compare: " + String(this.getState2(d)))
+                .text(this.$t('compare') + ": " + String(this.getState2(d)))
 
 
             node.distribution.forEach((p, i) => {
@@ -153,7 +162,7 @@ export default {
                   .attr("dy", 4)
 
               d3.select(e.target.parentNode).append("text")
-                  .text(node.stateNames[i])
+                  .text(this.Store.option_labels[node.name][node.stateNames[i]])
                   .attr("class", "probState")
                   .attr("transform", `translate(-2,${displacement + i * 10 + 10})`)
                   .attr('font-size', '4px')
@@ -173,7 +182,7 @@ export default {
           .attr("height", d => 10 * (this.isChanged(d) * 0.5 + 1))
           .attr("transform", `translate(-12.5,-4)`)
 
-      d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.labels[d.data.id]).substring(0, 10) + ": ")
+      d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels[d.data.id]).substring(0, 10) + ": ")
 
       d3.select(e.target.parentNode).selectAll(".textState2")
           .attr("dy", 10)
@@ -195,7 +204,7 @@ export default {
             .coord(dag.coordSimplex())
             .nodeSize((node) => {
               const size = node ? 20 : 3;
-              return [1.5* size , size];
+              return [1.5 * size, size];
             })
 
         let {width, height} = layout(graph)
@@ -209,7 +218,7 @@ export default {
 
         var svg = d3.select(this.$refs.container)
             .append("svg")
-            .attr("viewBox", [-40, 0, width + 80, height + 50])
+            .attr("viewBox", [-40, 0, width + 80, height + 100])
 
         const arrow = d3.symbol().type(d3.symbolTriangle).size(5);
         svg.append('g')
@@ -271,7 +280,7 @@ export default {
 
         // Add text to nodes
         nodes.append('text')
-            .text(d => String(this.labels[d.data.id]).substring(0, 10) + ": ")
+            .text(d => String(this.Store.labels[d.data.id]).substring(0, 10) + ": ")
             .attr("class", "textName")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')
@@ -304,12 +313,12 @@ export default {
 
         //Zoom
         var zoomed = function ({transform}) {
-          svg.style("transform",  "translate(" + transform.x + "px," + transform.y + "px) scale(" + transform.k + ")")
+          svg.style("transform", "translate(" + transform.x + "px," + transform.y + "px) scale(" + transform.k + ")")
         }
 
         var zoom = d3.zoom().on('zoom', zoomed)
-            .extent([[0,0], [width, height]])
-            .scaleExtent ([1, 10])
+            .extent([[0, 0], [width, height]])
+            .scaleExtent([1, 10])
 
         d3.select(this.$refs.container).call(zoom)
 
