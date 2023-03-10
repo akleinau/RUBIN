@@ -246,7 +246,7 @@ export default {
         goals.push([
           this.Store.labels[x.name],
           this.Store.option_labels[x.name][x.selected.name],
-          this.Store.getDirection(x.direction)
+          this.$t(x.direction)
         ])
       })
 
@@ -324,7 +324,7 @@ export default {
       for (const goal of this.Store.patient.goals) {
         explanationsHeader.push(this.Store.labels[goal.name] + ": " +
             this.Store.option_labels[goal.name][goal.selected.name] + " (" +
-            this.Store.getDirection(goal.direction) + ")")
+            this.$t(goal.direction) + ")")
       }
 
       let explanations = [explanationsHeader]

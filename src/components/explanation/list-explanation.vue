@@ -12,7 +12,7 @@
     </Column>
     <Column header="" field="beforeState" v-if="Store.compareConfig">
       <template #body="slotProps">
-        <div v-if="slotProps.data.beforeState !== ''">compare: &nbsp;</div>
+        <div v-if="slotProps.data.beforeState !== ''">{{$t("compare")}}: &nbsp;</div>
         <div :style="{color: color(slotProps.data.beforeProb)}"> {{ slotProps.data.beforeState }}</div>
       </template>
     </Column>

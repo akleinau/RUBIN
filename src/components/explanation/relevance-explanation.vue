@@ -6,7 +6,7 @@
 
       <template #groupheader="slotProps">
         <br>
-        <b v-if="Store.compareConfig">{{ slotProps.data.config_name }}:</b>
+        <b v-if="Store.compareConfig">{{ $t(slotProps.data.config_name) }}:</b>
       </template>
 
       <ColumnGroup type="header">
@@ -125,12 +125,12 @@ export default {
     },
     getDirectionTooltip(number, direction, label) {
       if (direction === "min") {
-        if (number > 0.001) return "Decreases the probability of " + label
-        else if (number < -0.001) return "Increases the probability of " + label
+        if (number > 0.001) return this.$t("decreasesProbability") + " " + label
+        else if (number < -0.001) return this.$t("increasesProbability") + " " + label
       }
       if (direction === "max") {
-        if (number > 0.001) return "Increases the probability of " + label
-        else if (number < -0.001) return "Decreases the probability of " + label
+        if (number > 0.001) return this.$t("increasesProbability") + " " + label
+        else if (number < -0.001) return this.$t("decreasesProbability") + " " + label
       }
 
       return this.$t("noInfluence")

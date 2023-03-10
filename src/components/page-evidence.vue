@@ -35,14 +35,14 @@
           </Column>
 
           <!--compare column -->
-          <Column class="optionCol" header="compare" v-if="Store.compareConfig">
+          <Column class="optionCol" :header="$t('compare')" v-if="Store.compareConfig">
             <template #body="slotProps">
               <div v-if="slotProps.data.selectedCompare === ''"></div>
               <div v-else> {{ Store.option_labels[slotProps.data.name][slotProps.data.selectedCompare] }}</div>
             </template>
           </Column>
 
-          <Column field="value" :header="Store.compareConfig ? 'current' : ''" class="optionCol">
+          <Column field="value" :header="Store.compareConfig ? $t('current') : ''" class="optionCol">
             <template #body="slotProps">
               <div class="flex flex-row flex-nowrap flex-shrink">
                 <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"

@@ -1,7 +1,7 @@
 <template>
-  in <span style="border:1px solid red; border-radius:5px"> changed nodes</span> the different states are color coded:
-  <Chip class="mx-1" style="background-color:black" label="current"></Chip>
-  <Chip class="mx-1" style="background-color:#6d00bf" label="compare"></Chip>
+  {{$t("networkColorExplanation1")}} <span style="border:1px solid red; border-radius:5px"> {{$t("networkColorExplanation2")}}</span> {{$t("networkColorExplanation3")}}:
+  <Chip class="mx-1" style="background-color:black" :label="$t('current')"></Chip>
+  <Chip class="mx-1" style="background-color:#6d00bf" :label="$t('compare')"></Chip>
   <div ref="container" class="overflow-hidden"/>
 </template>
 
@@ -133,7 +133,7 @@ export default {
             let displacement = (nodeCompare.distribution) ? nodeCompare.distribution.length * 10 + 10 : 10
             d3.select(e.target.parentNode).selectAll(".textState2")
                 .attr("dy", displacement + 5)
-                .text("compare: " + String(this.getState2(d)))
+                .text(this.$t('compare') + ": " + String(this.getState2(d)))
 
 
             node.distribution.forEach((p, i) => {
