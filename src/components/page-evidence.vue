@@ -77,7 +77,7 @@
             <template #header>
               <div class="flex justify-content-between">
                 <span class="p-input-icon-right" style="width:100%">
-                    <InputText style="width:100%" v-model="filters['name'].value" placeholder="Search"/>
+                    <InputText style="width:100%" v-model="filters['name'].value" :placeholder="$t('search') + '...'"/>
                   <i class="pi pi-search"/>
                 </span>
               </div>

@@ -32,8 +32,8 @@
           :closable="false">
     <template #header>
       <div class="flex justify-content-end w-full">
-        <Button class="mr-2" label="add" icon="pi pi-check" @click="addNodesFromOverlay()"/>
-        <Button class="p-button-secondary" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
+        <Button class="mr-2" :label="this.$t('add')" icon="pi pi-check" @click="addNodesFromOverlay()"/>
+        <Button class="p-button-secondary" :label="this.$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
       </div>
     </template>
     <DataTable :value="overlayNodes" class="p-datatable-sm" responsiveLayout="scroll"
@@ -41,7 +41,7 @@
       <template #header>
         <div class="flex justify-content-between">
                 <span class="p-input-icon-right" style="width:100%">
-                    <InputText style="width:100%" v-model="filters['name'].value" placeholder="Search"/>
+                    <InputText style="width:100%" v-model="filters['name'].value" :placeholder="$t('search') + '...'"/>
                   <i class="pi pi-search"/>
                 </span>
         </div>
@@ -61,7 +61,7 @@
 
         </template>
       </Column>
-      <Column field="direction" header="direction">
+      <Column field="direction" header="">
         <template #body="slotProps">
           <SelectButton class="m-2" :options="directionOptions" optionLabel="label" optionValue="name"
                         v-model="slotProps.data.direction" v-if="nodesToAdd.find(a => a.name === slotProps.data.name)"
