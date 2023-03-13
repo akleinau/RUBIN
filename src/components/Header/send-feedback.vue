@@ -10,7 +10,7 @@
       <Checkbox id="checkConfig" v-model="sendConfig" :binary="true" value="true"></Checkbox>
       <label class="ml-2" for="checkConfig">{{ $t("IncludeConfig") }}</label>
     </div>
-    <Button class="mt-2" :label="$t('submit')" @click="sendFeedback"></Button>
+    <Button class="mt-2" :label="$t('send')" @click="sendFeedback"></Button>
   </form>
 </template>
 

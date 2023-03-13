@@ -62,7 +62,7 @@
   "ComparingTo": "comparing to ",
   "FeedbackInfo": "If the network classified a case incorrectly, please send it as feedback. Your feedback is anonymously collected in a database. If you want to receive an answer, please enter your email address.",
   "IncludeConfig": "Include network configuration",
-  "send": "send",
+  "send": "submit",
   "name": "Pseudonym/ ID",
   "NetworkName": "Network name",
   "OptDescription": "Description (optional)",
@@ -101,5 +101,8 @@
   "networkColorExplanation2": "changed nodes",
   "networkColorExplanation3": "the different states are color coded",
   "min": "prefer low likelihoods",
-  "max": "prefer high likelihoods"
+  "max": "prefer high likelihoods",
+  "search": "search",
+  "pdfExport": "pdf Export",
+  "textUpload": "Text Upload"
 }

@@ -102,5 +102,8 @@
   "networkColorExplanation2": "gewijzigde variabelen",
   "networkColorExplanation3": "zijn de verschillende toestanden kleurgecodeerd",
   "min": "geef de voorkeur aan lage kansen",
-  "max": "geef de voorkeur aan hoge kansen"
+  "max": "geef de voorkeur aan hoge kansen",
+  "search": "zoeken",
+  "pdfExport": "pdf exporteren",
+  "textUpload": "tekst uploaden"
 } 

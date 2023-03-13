@@ -18,8 +18,8 @@
     :closable="false">
       <template #header>
       <div class="flex justify-content-end w-full">
-        <Button class="mr-2" label="add" icon="pi pi-check" @click="addTargetsFromOverlay()"/>
-        <Button class="p-button-secondary" label="cancel" icon="pi pi-times" @click="cancelOverlay"/>
+        <Button class="mr-2" :label="this.$t('add')" icon="pi pi-check" @click="addTargetsFromOverlay()"/>
+        <Button class="p-button-secondary" :label="this.$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
       </div>
     </template>
       <Listbox v-model="selected" class="t-2" :options="overlayNodes" optionLabel="name"

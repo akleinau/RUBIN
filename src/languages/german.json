@@ -62,7 +62,6 @@
   "ComparingTo": "Vergleich zu ",
   "FeedbackInfo": "Wenn das Netwerk einen Fall falsch klassifiziert hat, sende ihn bitte als Feedback.",
   "IncludeConfig": "Sende den Netzwerkzustand mit",
-  "send": "senden",
   "name": "Name",
   "NetworkName": "Name des Netzwerks",
   "OptDescription": "Beschreibung (optional)",
@@ -102,5 +101,8 @@
   "networkColorExplanation2": "geänderten Variablen",
   "networkColorExplanation3": "sind die verschiedenen Zustände farbcodiert",
   "min": "bevorzuge niedrige Wahrscheinlichkeiten",
-  "max": "bevorzuge hohe Wahrscheinlichkeiten"
+  "max": "bevorzuge hohe Wahrscheinlichkeiten",
+  "search": "suchen",
+  "pdfExport": "pdf Export",
+  "textUpload": "Text hochladen"
 }
