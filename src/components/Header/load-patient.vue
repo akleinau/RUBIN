@@ -169,7 +169,7 @@ export default {
       });
 
       data.content.push({
-        text: 'Patient: ' + this.Store.patient.name,
+        text: this.$t('Patient') + ': ' + this.Store.patient.name,
         style: 'subheader'
       })
 
@@ -229,46 +229,46 @@ export default {
     },
 
     pdf_add_evidence(data) {
-      let evidence = [["evidence", "option"]]
+      let evidence = [[this.$t("Node"), ""]]
       this.Store.patient.evidence.map(x => {
         evidence.push([this.Store.labels[x.name],
           this.Store.option_labels[x.name][x.selected.name]
         ])
       })
 
-      data.content.push({text: "Evidence", style: 'subheader'})
+      data.content.push({text: this.$t("Evidence"), style: 'subheader'})
       data.content.push(this.pdfTable(evidence))
     },
 
     pdf_add_goals(data) {
-      let goals = [["goal", "option", "direction"]]
+      let goals = [[this.$t("Node"), "", ""]]
       this.Store.patient.goals.map(x => {
         goals.push([
           this.Store.labels[x.name],
           this.Store.option_labels[x.name][x.selected.name],
-          this.$t(x.direction)
+          "(" + this.$t(x.direction) +")"
         ])
       })
 
-      data.content.push({text: "Goals", style: 'subheader'})
+      data.content.push({text: this.$t("DesiredOutcomes"), style: 'subheader'})
       data.content.push(this.pdfTable(goals))
     },
 
     pdf_add_targets: function (data) {
       if (this.Store.patient.targets.length > 0) {
-        let targets = [["variable"]]
+        let targets = [[this.$t("Node")]]
         this.Store.patient.targets.map(x => {
           targets.push([this.Store.labels[x.name]])
         })
 
-        data.content.push({text: "Targets", style: 'subheader'})
+        data.content.push({text: this.$t("Interventions"), style: 'subheader'})
         data.content.push(this.pdfTable(targets))
 
       }
     },
 
     pdf_add_predictions(data) {
-      data.content.push({text: "Predictions", style: 'subheader'})
+      data.content.push({text: this.$t("Treatment"), style: 'subheader'})
       let predictionsHeader = [""]
 
       for (const goal of this.Store.patient.goals) {
@@ -284,7 +284,7 @@ export default {
         }
 
         if (outOption === "") {
-          outOption = "overall"
+          outOption = this.$t("noInterventions")
         }
 
         if (x === this.Store.predictions.selectedOption) {
@@ -306,7 +306,7 @@ export default {
     },
 
     pdf_add_explanations(data) {
-      data.content.push({text: "Explanations", style: 'subheader'})
+      data.content.push({text: this.$t("Explanation"), style: 'subheader'})
 
       if (this.Store.predictions.selectedOption) {
         let currentOption = ""
@@ -315,11 +315,11 @@ export default {
         }
 
         if (currentOption !== "") {
-          data.content.push({text: "for " + currentOption})
+          data.content.push({text: currentOption})
         }
       }
 
-      let explanationsHeader = ["", "Relevance for Outcome"]
+      let explanationsHeader = ["", this.$t("Relevance")]
 
       for (const goal of this.Store.patient.goals) {
         explanationsHeader.push(this.Store.labels[goal.name] + ": " +
