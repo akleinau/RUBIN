@@ -22,7 +22,7 @@
         <Dropdown v-model="slotProps.data.direction" :options="directionOptions"
                   optionLabel="label" optionValue="name" optionKey="name"
                   @change="onNodeChange(slotProps.data)"
-                  class="p-0 m-0">
+                  class="p-0 m-0 w-7">
         </Dropdown>
       </template>
     </Column>

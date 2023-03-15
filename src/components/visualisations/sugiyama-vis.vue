@@ -88,16 +88,17 @@ export default {
         d3.select(e.target.parentNode).raise()
         //size up node
         d3.select(e.target.parentNode).selectAll(".box")
-            .attr("width", d => this.Store.labels[d.data.id].length + 60)
+            .attr("width", d => this.Store.labels[d.data.id].length + 90)
             .attr("height", d => {
               let node = this.nodes.find(node => node.name === d.data.id)
               if (node.distribution) return node.distribution.length * 10 + 15
               else return 15
             })
-            .attr("transform", d => `translate(${-(this.Store.labels[d.data.id].length + 60) / 2},-4)`)
+            .attr("transform", d => `translate(${-(this.Store.labels[d.data.id].length + 90) / 2},-4)`)
         //show full text
         d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels[d.data.id]) + ": ")
         // show all probabilities
+        d3.select(e.target.parentNode).selectAll(".textState").text(d => String(this.getState(d)))
         d3.select(e.target.parentNode).selectAll(".textState").each(d => {
           let node = this.nodes.find(node => node.name === d.data.id)
           if (node.distribution) {
@@ -138,7 +139,7 @@ export default {
           .attr("transform", `translate(-12.5,-4)`)
 
       d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels[d.data.id]).substring(0, 10) + ": ")
-
+      d3.select(e.target.parentNode).selectAll(".textState").text(d => String(this.getState(d).substring(0, 10)))
       d3.select(e.target.parentNode).selectAll(".probBar").remove()
       d3.select(e.target.parentNode).selectAll(".probState").remove()
       d3.select(e.target.parentNode).selectAll(".probText").remove()
@@ -177,7 +178,7 @@ export default {
 
         var svg = d3.select(this.$refs.container)
             .append("svg")
-            .attr("viewBox", [-40, 0, width + 80, height + 50])
+            .attr("viewBox", [-40, 0, width + 80, height + 100])
             .style("transform-origin", "center")
             .style("display", "inline-box")
 
