@@ -104,5 +104,6 @@
   "max": "prefer high likelihoods",
   "search": "search",
   "pdfExport": "pdf Export",
-  "textUpload": "Text Upload"
+  "textUpload": "Text Upload",
+  "CaseSummary": "Case Summary"
 }

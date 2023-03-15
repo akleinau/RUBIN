@@ -1,6 +1,6 @@
 <template>
   <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm"
-             responsiveLayout="scroll">
+             responsiveLayout="scroll" >
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
         {{ Store.labels[slotProps.data.name] }}
@@ -22,7 +22,7 @@
         <Dropdown v-model="slotProps.data.direction" :options="directionOptions"
                   optionLabel="label" optionValue="name" optionKey="name"
                   @change="onNodeChange(slotProps.data)"
-                  class="p-0 m-0">
+                  class="p-0 m-0 w-7">
         </Dropdown>
       </template>
     </Column>

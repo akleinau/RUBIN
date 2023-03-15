@@ -164,7 +164,7 @@ export default {
       data.content.push({svg: logo.return_logo(), height: 50, alignment: 'right'})
 
       data.content.push({
-        text: this.capitalize(this.Store.network) + ' - Patient Summary',
+        text: this.capitalize(this.Store.network) + ' - ' + this.$t('CaseSummary'),
         style: 'header'
       });
 

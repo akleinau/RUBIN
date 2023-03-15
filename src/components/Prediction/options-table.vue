@@ -29,7 +29,8 @@
 
     <Column>
       <template #body="slotProps">
-        <i v-if="slotProps.index === minIndex+1" class="pi pi-thumbs-up" name="star" v-tooltip="$t('BestOption')"/>
+        <i v-if="slotProps.index === minIndex+1 && slotProps.data.config_name === 'current'"
+           class="pi pi-thumbs-up" v-tooltip="$t('BestOption')"/>
       </template>
     </Column>
 

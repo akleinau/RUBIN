@@ -14,25 +14,27 @@
     <template #content>
 
       <!-- decision table -->
-      <div style="height:60%; border: solid 5px lightgray" class="p-b-2">
-        <div v-if="!Store.error">
-        <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
+      <div style="height:60%; border: solid 5px lightgray" class="p-b-2 overlap-hidden">
         <ScrollPanel class="h-full">
-          <optionsTable id="optionsTable"/>
-        </ScrollPanel>
+          <div v-if="!Store.error">
+            <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
+            <ScrollPanel class="h-full overlap-hidden">
+              <optionsTable id="optionsTable" class="h-full overlap-hidden"/>
+            </ScrollPanel>
           </div>
-        <div v-else class="p-4">
-          <b>{{ $t("CalculationError1") }} </b>
-          <br>
-          {{ $t("CalculationError2") }}
-        </div>
+          <div v-else class="p-4">
+            <b>{{ $t("CalculationError1") }} </b>
+            <br>
+            {{ $t("CalculationError2") }}
+          </div>
+        </ScrollPanel>
       </div>
 
       <!-- phases -->
       <ScrollPanel style="height:40%">
         <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="name" optionValue="index" id="PhaseSelect"
                   class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
-        <TabView v-model:active-index="currentPhaseIndex" scrollable>
+        <TabView v-model:active-index="currentPhaseIndex" scrollable class="text-left">
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
@@ -41,7 +43,7 @@
                ({{ $t(goal.direction) }})
               </span>
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
-                ,<b> {{ $t("compare") }}: - {{ $t("given")}}:
+                ,<b> {{ $t("compare") }}: - {{ $t("given") }}:
                 {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
@@ -51,13 +53,13 @@
               </span>
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
-              {{ Store.labels[goal.name] }} - <b> {{ $t("given")}}:
+              {{ Store.labels[goal.name] }} - <b> {{ $t("given") }}:
               {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
               <span class="text-color-secondary">
                 ({{ $t(goal.direction) }})
               </span>
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
-                ,<b> {{ $t("compare") }}: - {{ $t("given")}}:
+                ,<b> {{ $t("compare") }}: - {{ $t("given") }}:
                 {{
                   Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }}
@@ -69,7 +71,7 @@
             </div>
 
 
-            <div class="text-left" v-if="Store.patient.targets.length > 0 || this.givenTargets.length > 0 ||
+            <div class="text-left pt-4" v-if="Store.patient.targets.length > 0 || this.givenTargets.length > 0 ||
             this.givenTargets_compare.length > 0"><b>
               {{ $t("Interventions") }}:
             </b></div>
@@ -77,11 +79,11 @@
               {{ Store.labels[target.name] }}
             </div>
             <div v-for="target in this.givenTargets" :key="target.name">
-              {{ Store.labels[target.name] }} - <b> {{ $t("given")}}:
+              {{ Store.labels[target.name] }} - <b> {{ $t("given") }}:
               {{ Store.option_labels[target.name][target.selected.name] }} </b>
             </div>
             <div v-for="target in this.givenTargets_compare" :key="target.name">
-              {{ $t("compare") }}: {{ Store.labels[target.name] }} - <b> {{ $t("given")}}:
+              {{ $t("compare") }}: {{ Store.labels[target.name] }} - <b> {{ $t("given") }}:
               {{ Store.option_labels[target.name][target.selected.name] }} </b>
             </div>
           </TabPanel>
