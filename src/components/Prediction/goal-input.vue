@@ -1,6 +1,6 @@
 <template>
   <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm"
-             responsiveLayout="scroll">
+             responsiveLayout="scroll" >
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
         {{ Store.labels[slotProps.data.name] }}
