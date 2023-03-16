@@ -1,23 +1,30 @@
 <template>
-
-  <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false"  sortField="label" :sortOrder="1"
-             class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="listExplanation">
-    <Column :header="$t('Node')" field="label" :sortable="true" class="w-5"/>
-    <Column :header="$t('Prediction')" field="state"></Column>
-    <Column :header="$t('Likeliness')">
-      <template #body="slotProps">
-        <Chip class="mx-1" :style="{backgroundColor: color(slotProps.data.probability)}"
-              :label="getLabel(slotProps.data.probability)"/>
-      </template>
-    </Column>
-    <Column header="" field="beforeState" v-if="Store.compareConfig">
-      <template #body="slotProps">
-        <div v-if="slotProps.data.beforeState !== ''">{{$t("compare")}}: &nbsp;</div>
-        <div :style="{color: color(slotProps.data.beforeProb)}"> {{ slotProps.data.beforeState }}</div>
-      </template>
-    </Column>
-  </DataTable>
-
+  <div class="flex flex-column h-full">
+    <div class="mb-1">
+      {{ $t('theNetworkIs') }}
+      <span style="color: mediumblue"> {{ $t('verySure') }} </span>
+      -
+      <span  :style="{color: color(0.2)}"> {{ $t('notSure') }} </span>
+      , {{ $t('orTheValueIs') }}
+      <span style="color: black"> {{ $t('given') }} </span>
+    </div>
+    <br>
+    <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false" sortField="label" :sortOrder="1"
+               class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="listExplanation">
+      <Column :header="$t('Node')" field="label" :sortable="true" class="w-5"/>
+      <Column :header="$t('Prediction')" field="state">
+        <template #body="slotProps">
+          <div :style="{color:color(slotProps.data.probability)}"> {{ slotProps.data.state }}</div>
+        </template>
+      </Column>
+      <Column header="" field="beforeState" v-if="Store.compareConfig">
+        <template #body="slotProps">
+          <div v-if="slotProps.data.beforeState !== ''">{{ $t("compare") }}: &nbsp;</div>
+          <div :style="{color: color(slotProps.data.beforeProb)}"> {{ slotProps.data.beforeState }}</div>
+        </template>
+      </Column>
+    </DataTable>
+  </div>
 </template>
 
 <script>
@@ -58,7 +65,7 @@ export default {
             "label": this.Store.labels[a.name],
             "probability": a.probability,
             "beforeState": state_label === compare_state_label ? "" : compare_state_label,
-            "beforeProb": state_label=== compare_state_label ? 0 : compareNode.probability
+            "beforeProb": state_label === compare_state_label ? 0 : compareNode.probability
           })
         })
         return data
@@ -68,17 +75,14 @@ export default {
   methods: {
     color(probability) {
       if (probability === 1) return "black"
-      const colorScale = d3.scaleQuantize()
+      const colorScale = d3.scaleSequential()
           .domain([0, 1])
-          .range(["red", "darkGoldenRod", "green"]);
+          .range(["lightgray", "mediumblue"]);
       return colorScale(probability)
     },
     getLabel(probability) {
       if (probability === 1) return this.$t("given")
-      const labelScale = d3.scaleQuantize()
-          .domain([0, 1])
-          .range([this.$t("notSure"), this.$t("lessSure"), this.$t("verySure")]);
-      return labelScale(probability)
+      return Math.round(probability * 100) + "%"
     }
   }
 }

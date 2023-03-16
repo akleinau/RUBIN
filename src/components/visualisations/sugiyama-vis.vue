@@ -1,11 +1,11 @@
 <template>
   <div>
     {{ $t('theNetworkIs') }}
-    <Chip class="mx-1" style="background-color:green" :label="$t('verySure')"></Chip>
-    <Chip class="mx-1" style="background-color:darkgoldenrod" :label="$t('lessSure')"></Chip>
-    <Chip class="mx-1" style="background-color:red" :label="$t('notSure')"></Chip>
+    <Chip class="mx-1 bg-white text-color" style="border:2px solid mediumblue" :label="$t('verySure')"></Chip>
+    -
+    <Chip class="mx-1 bg-white text-color" style="border:2px solid lightgray" :label="$t('notSure')"></Chip>
     , {{ $t('orTheValueIs') }}
-    <Chip class="mx-1" style="background-color:black" :label="$t('given')"></Chip>
+    <Chip class="mx-1 bg-white text-color" style="border:2px solid black" :label="$t('given')"></Chip>
   </div>
 
   <div ref="container" class="overflow-hidden"/>
@@ -163,9 +163,9 @@ export default {
 
         let {width, height} = layout(graph)
 
-        var colorScale = d3.scaleQuantize()
+        var colorScale = d3.scaleSequential()
             .domain([0, 1])
-            .range(["red", "darkGoldenRod", "green"]);
+            .range(["lightgray", "mediumblue"]);
 
         var color = d => {
           if (d === 1) return "black"
