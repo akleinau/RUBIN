@@ -105,5 +105,6 @@
   "search": "suchen",
   "pdfExport": "pdf Export",
   "textUpload": "Text hochladen",
-  "CaseSummary": "Fall Zusammenfassung"
+  "CaseSummary": "Fall Zusammenfassung",
+  "custom": "konfigurieren"
 }

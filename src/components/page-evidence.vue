@@ -167,7 +167,7 @@ export default {
                   node: node.name
                 }
               }),
-              group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[node.name]
+              group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(node.name)
             }
           }
       )
@@ -273,6 +273,22 @@ export default {
     },
     get_option_label(option) {
       return this.Store.option_labels[option.node][option.name]
+    },
+    get_group_label(name) {
+      let id = this.Store.evidenceGroupMap[name]
+      if (id === "") return ""
+      let label_element = this.Store.labels_evidence_groups[id]
+
+      //find label based on language
+      let label = id
+      if (label_element.labels[this.Store.language]) {
+        label = label_element.labels[this.Store.language]
+      }
+      else if (label_element.labels["standard"]) {
+        label = label_element.labels["standard"]
+      }
+
+      return label_element.num + " " + label
     },
     //directly coded in here, should be in the customization file
     notEnoughEvidenceEndorisk() {

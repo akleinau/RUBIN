@@ -97,6 +97,7 @@
   "Upload": "Upload",
   "decreasesProbability": "Decreases the probability of",
   "increasesProbability": "Increases the probability of",
+  "current": "current",
   "networkColorExplanation1": "In",
   "networkColorExplanation2": "changed nodes",
   "networkColorExplanation3": "the different states are color coded",
@@ -105,5 +106,6 @@
   "search": "search",
   "pdfExport": "pdf Export",
   "textUpload": "Text Upload",
-  "CaseSummary": "Case Summary"
+  "CaseSummary": "Case Summary",
+  "custom": "custom"
 }

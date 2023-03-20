@@ -35,6 +35,7 @@ export const useStore = defineStore('store', {
         },
         labels: null,
         option_labels: null,
+        labels_evidence_groups: null,
 
         configurations: [],
         compareConfig: null, //{patient, explain, predictions}
@@ -284,6 +285,9 @@ export const useStore = defineStore('store', {
             this.network_translation.original_labels = network.labels
             this.labels = network.labels
 
+            this.evidenceGroupMap = {}
+            this.labels_evidence_groups = {}
+
             if (customization !== undefined) {
                 this.phases = network.customization.phases
                 if (!noPhase) {
@@ -292,11 +296,12 @@ export const useStore = defineStore('store', {
                 }
 
                 if (network.customization.evidence_groups) {
-                    this.evidenceGroupMap = {}
                     network.customization.evidence_groups.forEach((g, i) => {
                         g.variables.forEach(v => {
-                            this.evidenceGroupMap[v] = i + " " + g.name
+                            this.evidenceGroupMap[v] = g.name
                         })
+                        this.labels_evidence_groups[g.name] = {"num": i, "labels": g.labels}
+
                     })
                 }
 
@@ -305,7 +310,6 @@ export const useStore = defineStore('store', {
                 }
             } else {
                 this.phases = []
-                this.evidenceGroupMap = {}
                 nodes.forEach(node => {
                     this.evidenceGroupMap[node.name] = ""
                 })
