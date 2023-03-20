@@ -106,5 +106,6 @@
   "search": "search",
   "pdfExport": "pdf Export",
   "textUpload": "Text Upload",
-  "CaseSummary": "Case Summary"
+  "CaseSummary": "Case Summary",
+  "custom": "custom"
 }

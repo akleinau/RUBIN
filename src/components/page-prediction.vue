@@ -32,7 +32,7 @@
 
       <!-- phases -->
       <ScrollPanel style="height:40%">
-        <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="name" optionValue="index" id="PhaseSelect"
+        <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="label" optionValue="index" id="PhaseSelect"
                   class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
         <TabView v-model:active-index="currentPhaseIndex" scrollable class="text-left">
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
@@ -212,8 +212,19 @@ export default {
     },
     phases: function () {
       let phases = []
-      this.Store.phases.forEach((p, i) => phases.push({"name": p.name, "index": i}))
-      phases.push({"name": "custom", "index": this.Store.phases.length})
+      this.Store.phases.forEach((p, i) => {
+        //find label based on language
+        let label = p.name
+        if (p.labels[this.Store.language]) {
+          label = p.labels[this.Store.language]
+        }
+        else if (p.labels["standard"]) {
+          label = p.labels["standard"]
+        }
+
+        phases.push({"name": p.name, "label": label, "index": i})
+      })
+      phases.push({"name": "custom", "label": this.$t("custom"), "index": this.Store.phases.length})
       return phases;
     },
   },
