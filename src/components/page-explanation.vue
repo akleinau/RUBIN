@@ -82,18 +82,16 @@ export default {
     const Store = useStore()
     return {Store}
   },
+  created() {
+    this.options = this.getOptions()
+  },
   data() {
     return {
       onlyGlobal: true,
       compactEdges: null,
       exNodes: null,
       currentIndex: 0,
-      options: [
-        {label: this.$t("Relevance"), value: 0},
-        {label: this.$t("AllPredictions"), value: 1},
-        {label: this.$t("CompactNetwork"), value: 2},
-        {label: this.$t("FullNetwork"), value: 3}
-      ]
+      options: null
     }
   },
   watch: {
@@ -101,6 +99,9 @@ export default {
       if (this.tutorialStep === 1) {
         this.currentIndex = 0
       }
+    },
+    language: function () {
+      this.options = this.getOptions()
     }
   },
   computed: {
@@ -159,7 +160,10 @@ export default {
         "compactEdges": edges,
         "compactNodes": explanationNodes
       }
-    }
+    },
+    language: function () {
+      return this.Store.language
+    },
   },
   methods: {
     getExEdges() {
@@ -194,6 +198,14 @@ export default {
         this.Store.tutorialStep = 7
       }
     },
+    getOptions() {
+      return [
+        {label: this.$t("Relevance"), value: 0},
+        {label: this.$t("AllPredictions"), value: 1},
+        {label: this.$t("CompactNetwork"), value: 2},
+        {label: this.$t("FullNetwork"), value: 3}
+      ]
+    }
   }
 }
 </script>
