@@ -1,7 +1,7 @@
 <template>
   <div style="position:relative">
 
-      <Listbox :options="Store.patient.targets" :optionLabel="name" listStyle="max-height:300px"
+      <Listbox :options="Store.patient.targets" listStyle="max-height:300px"
                emptyMessage=" ">
         <template #option="slotProps">
           <div class="text-center rowContent">
@@ -40,7 +40,7 @@
 import {useStore} from '@/store'
 
 export default {
-  name: "therapy-input",
+  name: "options-input",
   setup() {
     const Store = useStore()
     return {Store}

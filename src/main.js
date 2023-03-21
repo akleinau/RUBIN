@@ -39,23 +39,9 @@ import 'primeflex/primeflex.css';
 
 import { createPinia } from 'pinia'
 import Button from 'primevue/button';
-import { createI18n } from 'vue-i18n'
-let enMessages = require('./languages/english.json');
-let deMessages = require('./languages/german.json');
-let nlMessages = require('./languages/dutch.json');
+import i18n from './i18n'
 
-const i18n = createI18n({
-  legacy: false,
-  locale: 'en',
-  fallbackLocale: 'de',
-  globalInjection: true,
-  messages: {
-    en: enMessages,
-    de: deMessages,
-    nl: nlMessages
 
-}
-})
 
 let vueApp = createApp(App)
 

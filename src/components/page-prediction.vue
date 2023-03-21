@@ -33,7 +33,7 @@
       <!-- phases -->
       <ScrollPanel style="height:40%">
         <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="label" optionValue="index" id="PhaseSelect"
-                  class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
+                  class="flex flex-align-full mt-4 "/>
         <TabView v-model:active-index="currentPhaseIndex" scrollable class="text-left">
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
@@ -91,9 +91,7 @@
           <TabPanel header="custom" v-bind:key="null">
             <!-- Desired Outcomes -->
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
-            <GoalInput title="Desired Outcomes" :changeable="true"
-                       :hideHeader="true"
-                       @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
+            <GoalInput/>
 
             <!-- Intervention Input -->
             <div>
@@ -245,5 +243,11 @@ export default {
 ::v-deep(.p-tabview-nav-container) {
   Display: None;
 }
+
+::v-deep(.p-dropdown-label) {
+  color:#4F46E5;
+  font-weight: 700
+}
+
 
 </style>

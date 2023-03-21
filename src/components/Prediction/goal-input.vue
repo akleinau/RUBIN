@@ -1,5 +1,5 @@
 <template>
-  <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm"
+  <DataTable id="table" :value="selection" class="NoHeader p-datatable-sm"
              responsiveLayout="scroll" >
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
@@ -87,11 +87,7 @@ import {FilterMatchMode} from 'primevue/api';
 import {useStore} from "@/store";
 
 export default {
-  name: "node-input",
-  props: [
-    "title",
-    "hideHeader"
-  ],
+  name: "goal-input",
   setup() {
     const Store = useStore()
     return {Store}

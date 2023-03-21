@@ -187,7 +187,7 @@ export default {
               selected: '',
               selectedCompare: n.selected.name,
               options: n.options,
-              group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[n.name]
+              group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(n.name)
             })
           } else {
             foundNode.selectedCompare = n.selected.name
@@ -223,7 +223,7 @@ export default {
               node: slotProps.data.name,
             }
           }),
-          group: this.Store.evidenceGroupMap === null ? "" : this.Store.evidenceGroupMap[slotProps.data.name]
+          group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(slotProps.data.name)
         }
         this.nodesToAdd.push(item);
       }
