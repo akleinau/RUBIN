@@ -26,7 +26,7 @@
   </OverlayPanel>
 
   <OverlayPanel ref="langOverlay">
-    <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale"
+    <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales"
              @change="langChange()"/>
   </OverlayPanel>
 
