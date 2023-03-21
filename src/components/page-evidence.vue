@@ -30,7 +30,7 @@
           <Column field="group"/>
           <Column field="name" style="padding: 0; border: 0; width:50%" frozen>
             <template #body="slotProps">
-              {{ Store.labels[slotProps.data.name] }}
+              {{ Store.labels.nodes[slotProps.data.name] }}
             </template>
           </Column>
 
@@ -38,7 +38,7 @@
           <Column class="optionCol" :header="$t('compare')" v-if="Store.compareConfig">
             <template #body="slotProps">
               <div v-if="slotProps.data.selectedCompare === ''"></div>
-              <div v-else> {{ Store.option_labels[slotProps.data.name][slotProps.data.selectedCompare] }}</div>
+              <div v-else> {{ Store.labels.states[slotProps.data.name][slotProps.data.selectedCompare] }}</div>
             </template>
           </Column>
 
@@ -88,7 +88,7 @@
             </template>
             <Column field="name" :header="$t('Node')">
               <template #body="slotProps">
-                {{ Store.labels[slotProps.data.name] }}
+                {{ Store.labels.nodes[slotProps.data.name] }}
               </template>
             </Column>
             <Column field="group" header="group">
@@ -97,8 +97,8 @@
               <template #body="slotProps">
                 <ToggleButton class="m-2" v-for="option in slotProps.data.options" :key="option"
                               v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
-                              :onLabel="Store.option_labels[slotProps.data.name][option.name]" onIcon="pi pi-check"
-                              :offLabel="Store.option_labels[slotProps.data.name][option.name]" offIcon="pi pi-plus">
+                              :onLabel="Store.labels.states[slotProps.data.name][option.name]" onIcon="pi pi-check"
+                              :offLabel="Store.labels.states[slotProps.data.name][option.name]" offIcon="pi pi-plus">
                 </ToggleButton>
 
               </template>
@@ -272,12 +272,12 @@ export default {
       return item.selected.name !== item.selectedCompare
     },
     get_option_label(option) {
-      return this.Store.option_labels[option.node][option.name]
+      return this.Store.labels.states[option.node][option.name]
     },
     get_group_label(name) {
       let id = this.Store.evidenceGroupMap[name]
       if (id === "") return ""
-      let label_element = this.Store.labels_evidence_groups[id]
+      let label_element = this.Store.labels.evidence_groups[id]
 
       //find label based on language
       let label = id

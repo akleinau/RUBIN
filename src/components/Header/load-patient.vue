@@ -231,8 +231,8 @@ export default {
     pdf_add_evidence(data) {
       let evidence = [[this.$t("Node"), ""]]
       this.Store.patient.evidence.map(x => {
-        evidence.push([this.Store.labels[x.name],
-          this.Store.option_labels[x.name][x.selected.name]
+        evidence.push([this.Store.labels.nodes[x.name],
+          this.Store.labels.states[x.name][x.selected.name]
         ])
       })
 
@@ -244,8 +244,8 @@ export default {
       let goals = [[this.$t("Node"), "", ""]]
       this.Store.patient.goals.map(x => {
         goals.push([
-          this.Store.labels[x.name],
-          this.Store.option_labels[x.name][x.selected.name],
+          this.Store.labels.nodes[x.name],
+          this.Store.labels.states[x.name][x.selected.name],
           "(" + this.$t(x.direction) +")"
         ])
       })
@@ -258,7 +258,7 @@ export default {
       if (this.Store.patient.targets.length > 0) {
         let targets = [[this.$t("Node")]]
         this.Store.patient.targets.map(x => {
-          targets.push([this.Store.labels[x.name]])
+          targets.push([this.Store.labels.nodes[x.name]])
         })
 
         data.content.push({text: this.$t("Interventions"), style: 'subheader'})
@@ -272,15 +272,15 @@ export default {
       let predictionsHeader = [""]
 
       for (const goal of this.Store.patient.goals) {
-        predictionsHeader.push(this.Store.labels[goal.name] + ": " +
-            this.Store.option_labels[goal.name][goal.selected.name])
+        predictionsHeader.push(this.Store.labels.nodes[goal.name] + ": " +
+            this.Store.labels.states[goal.name][goal.selected.name])
       }
 
       let predictions = [predictionsHeader]
       this.Store.predictions.options.map(x => {
         let outOption = ""
         for (const [node, option] of Object.entries(x.option)) {
-          outOption += this.Store.labels[node] + ": " + this.Store.option_labels[node][option] + "\n"
+          outOption += this.Store.labels.nodes[node] + ": " + this.Store.labels.states[node][option] + "\n"
         }
 
         if (outOption === "") {
@@ -311,7 +311,7 @@ export default {
       if (this.Store.predictions.selectedOption) {
         let currentOption = ""
         for (const [node, option] of Object.entries(this.Store.predictions.selectedOption.option)) {
-          currentOption += this.Store.labels[node] + ": " + this.Store.option_labels[node][option] + "\n"
+          currentOption += this.Store.labels.nodes[node] + ": " + this.Store.labels.states[node][option] + "\n"
         }
 
         if (currentOption !== "") {
@@ -322,15 +322,15 @@ export default {
       let explanationsHeader = ["", this.$t("Relevance")]
 
       for (const goal of this.Store.patient.goals) {
-        explanationsHeader.push(this.Store.labels[goal.name] + ": " +
-            this.Store.option_labels[goal.name][goal.selected.name] + " (" +
+        explanationsHeader.push(this.Store.labels.nodes[goal.name] + ": " +
+            this.Store.labels.states[goal.name][goal.selected.name] + " (" +
             this.$t(goal.direction) + ")")
       }
 
       let explanations = [explanationsHeader]
       this.Store.explain.relevance.map(x => {
         let out = [
-          this.Store.labels[x.node_name] + ": " + this.getState(x.node_name),
+          this.Store.labels.nodes[x.node_name] + ": " + this.getState(x.node_name),
           {svg: barvisjs.createSVG(150, x.overall_relevance, "#004d80").outerHTML}
         ]
 
@@ -347,7 +347,7 @@ export default {
       let state = "unknown"
       this.Store.explain.states.forEach(node => {
         if (node.name === name) {
-          state = this.Store.option_labels[name][node.state]
+          state = this.Store.labels.states[name][node.state]
         }
       })
       return state

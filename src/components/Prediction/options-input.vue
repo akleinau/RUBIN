@@ -5,7 +5,7 @@
                emptyMessage=" ">
         <template #option="slotProps">
           <div class="text-center rowContent">
-            {{ Store.labels[slotProps.option.name] }}
+            {{ Store.labels.nodes[slotProps.option.name] }}
             <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text xButton"
                     @click="deleteNode(slotProps.option)"/>
           </div>
@@ -27,7 +27,7 @@
                :filter="true" filterPlaceholder="Search">
         <template #option="slotProps">
           <i class="pi pi-check" v-if="selected && selected.find(n => n.name === slotProps.option.name)"/>
-          {{ Store.labels[slotProps.option.name] }}
+          {{ Store.labels.nodes[slotProps.option.name] }}
         </template>
       </Listbox>
     </Dialog>

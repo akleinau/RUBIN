@@ -75,7 +75,7 @@ export default {
         this.Store.patient.goals.forEach(goal => {
           goalnames.push({
             "name": goal.name + ": " + goal.selected.name,
-            "label": this.Store.labels[goal.name] + ": " + this.Store.option_labels[goal.name][goal.selected.name],
+            "label": this.Store.labels.nodes[goal.name] + ": " + this.Store.labels.states[goal.name][goal.selected.name],
             "direction": goal.direction
           })
         })
@@ -89,7 +89,7 @@ export default {
         this.Store.explain.relevance.forEach(n => {
           table.push({
             config_name: "current",
-            label: this.Store.labels[n.node_name],
+            label: this.Store.labels.nodes[n.node_name],
             node_name: n.node_name,
             state: this.getState(n.node_name),
             overall_relevance: n.overall_relevance,
@@ -102,7 +102,7 @@ export default {
           this.Store.compareConfig.explain.relevance.forEach(n => {
             table.push({
               config_name: "compare",
-              label: this.Store.labels[n.node_name],
+              label: this.Store.labels.nodes[n.node_name],
               node_name: n.node_name,
               state: this.getCompareState(n.node_name),
               overall_relevance: n.overall_relevance,
@@ -139,7 +139,7 @@ export default {
       let state = "unknown"
       this.Store.explain.states.forEach(node => {
         if (node.name === name) {
-          state = this.Store.option_labels[name][node.state]
+          state = this.Store.labels.states[name][node.state]
         }
       })
       return state
@@ -148,7 +148,7 @@ export default {
       let state = "unknown"
       this.Store.compareConfig.explain.states.forEach(node => {
         if (node.name === name) {
-          state = this.Store.option_labels[name][node.state]
+          state = this.Store.labels.states[name][node.state]
         }
       })
       return state
