@@ -38,8 +38,8 @@ export default {
         this.Store.explain.states.forEach(a => {
           data.push({
             "name": a.name,
-            "label": this.Store.labels[a.name],
-            "state": this.Store.option_labels[a.name][a.state],
+            "label": this.Store.labels.nodes[a.name],
+            "state": this.Store.labels.states[a.name][a.state],
             "probability": a.probability,
             "beforeState": "",
             "beforeProb": 0
@@ -50,12 +50,12 @@ export default {
         let data = []
         this.Store.explain.states.forEach(a => {
           let compareNode = this.Store.compareConfig.explain.states.find(n => n.name === a.name)
-          let state_label = this.Store.option_labels[a.name][a.state]
-          let compare_state_label = this.Store.option_labels[a.name][compareNode.state]
+          let state_label = this.Store.labels.states[a.name][a.state]
+          let compare_state_label = this.Store.labels.states[a.name][compareNode.state]
           data.push({
             "name": a.name,
             "state": state_label,
-            "label": this.Store.labels[a.name],
+            "label": this.Store.labels.nodes[a.name],
             "probability": a.probability,
             "beforeState": state_label === compare_state_label ? "" : compare_state_label,
             "beforeProb": state_label=== compare_state_label ? 0 : compareNode.probability

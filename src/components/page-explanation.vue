@@ -14,7 +14,7 @@
     </template>
     <template #subtitle v-if="Store.predictions.selectedOption">
       <div v-for="o in Object.keys(Store.predictions.selectedOption.option)" :key="o">
-        <b> {{ Store.labels[o] }}: {{ Store.predictions.selectedOption.option[o] }} </b>
+        <b> {{ Store.labels.nodes[o] }}: {{ Store.predictions.selectedOption.option[o] }} </b>
       </div>
     </template>
     <template #content>

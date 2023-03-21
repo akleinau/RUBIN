@@ -33,9 +33,12 @@ export const useStore = defineStore('store', {
             original_labels: null,
             custom_labels: null
         },
-        labels: null,
-        option_labels: null,
-        labels_evidence_groups: null,
+
+        labels: {
+            nodes: null,
+            states: null,
+            evidence_groups: null
+        },
 
         configurations: [],
         compareConfig: null, //{patient, explain, predictions}
@@ -264,12 +267,12 @@ export const useStore = defineStore('store', {
             const network = await gResponse.json();
             let customization = network.customization
             let nodes = []
-            this.option_labels = {}
+            this.labels.states = {}
             for (var key in network.states) {
                 let options = []
-                this.option_labels[key] = {}
+                this.labels.states[key] = {}
                 network.states[key].forEach(option_name => {
-                    this.option_labels[key][option_name] = option_name
+                    this.labels.states[key][option_name] = option_name
                     options.push({'name': option_name})
                 })
                 nodes.push({'name': key, 'options': options})
@@ -283,10 +286,10 @@ export const useStore = defineStore('store', {
 
             this.description = network.description
             this.network_translation.original_labels = network.labels
-            this.labels = network.labels
+            this.labels.nodes = network.labels
 
             this.evidenceGroupMap = {}
-            this.labels_evidence_groups = {}
+            this.labels.evidence_groups = {}
 
             if (customization !== undefined) {
                 this.phases = network.customization.phases
@@ -300,7 +303,7 @@ export const useStore = defineStore('store', {
                         g.variables.forEach(v => {
                             this.evidenceGroupMap[v] = g.name
                         })
-                        this.labels_evidence_groups[g.name] = {"num": i, "labels": g.labels}
+                        this.labels.evidence_groups[g.name] = {"num": i, "labels": g.labels}
 
                     })
                 }
@@ -340,11 +343,11 @@ export const useStore = defineStore('store', {
                     }
 
                 }
-                this.labels[name] = label
+                this.labels.nodes[name] = label
             }
 
-            for (const name in this.option_labels) {
-                for (const option_name in this.option_labels[name]) {
+            for (const name in this.labels.states) {
+                for (const option_name in this.labels.states[name]) {
 
                     //prio 3: original name
                     let label = option_name
@@ -363,7 +366,7 @@ export const useStore = defineStore('store', {
                         }
 
                     }
-                    this.option_labels[name][option_name] = label
+                    this.labels.states[name][option_name] = label
                 }
             }
         },
