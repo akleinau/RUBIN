@@ -2,7 +2,7 @@
 
   <tutorial @setBlock="block = $event" :loading="Store.optionsLoading || Store.explanationLoading"/>
 
-    <Header ref="menu" @changePage="changePage()" style="z-index:8000"/>
+    <Header ref="menu" @changePage="changePage()"/>
 
     <!-- main cards -->
     <div class=" grid w-full h-full relative">

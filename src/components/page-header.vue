@@ -1,4 +1,4 @@
-<template>
+<template style="z-index:8000">
 
   <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1" id="menu" style="position:relative">
     <template #end>

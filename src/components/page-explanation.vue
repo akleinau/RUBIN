@@ -14,7 +14,7 @@
     </template>
     <template #subtitle v-if="Store.predictions.selectedOption">
       <div v-for="o in Object.keys(Store.predictions.selectedOption.option)" :key="o">
-        <b> {{ Store.labels.nodes[o] }}: {{ Store.predictions.selectedOption.option[o] }} </b>
+        <b> {{ Store.labels.nodes[o] }}: {{ Store.labels.states[o][Store.predictions.selectedOption.option[o]] }} </b>
       </div>
     </template>
     <template #content>
@@ -23,7 +23,8 @@
         <div v-else class="flex flex-column overflow-hidden h-full flex-align-full w-full">
           <Dropdown v-model="currentIndex" optionLabel="label" optionValue="value"
                     :options="options" id="explanationDropdown" @click="DropdownClicked" @change="DropdownChanged"
-                    class="flex mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
+                    class="flex mt-4 ">
+          </Dropdown>
           <TabView v-model:active-index="currentIndex" scrollable class="flex-1 overflow-hidden">
             <!--   relevance  -->
             <TabPanel :header="$t('Relevance')">
@@ -231,6 +232,11 @@ li {
 
 ::v-deep(.p-tabview-panel) {
   height: 100%
+}
+
+::v-deep(.p-dropdown-label) {
+  color:#4F46E5;
+  font-weight: 700
 }
 
 </style>
