@@ -17,7 +17,7 @@
 
   <Card v-show="step === 1" class="absolute bg-blue-100 shadow-5 m-0" id="overlay1" style="z-index: 20000">
     <template #content>
-      <Icon class="pi pi-arrow-up mb-2"/>
+      <i class="pi pi-arrow-up mb-2"/>
       <br>
       {{ $t("Tutorial2a") }}
     </template>
@@ -27,13 +27,13 @@
     <template #content>
       {{ $t("Tutorial2b") }}
       <br>
-      <Icon class="pi pi-arrow-down mb-2"/>
+      <i class="pi pi-arrow-down mb-2"/>
     </template>
   </Card>
 
   <Card v-show="step === 3" class="absolute bg-blue-100 shadow-5 m-0" id="overlay3" style="z-index: 20000">
     <template #content>
-      <Icon class="pi pi-arrow-up mb-2"/>
+      <i class="pi pi-arrow-up mb-2"/>
       <br>
       {{ $t("Tutorial2c") }}
     </template>
@@ -41,7 +41,7 @@
 
   <Card v-show="step === 4" class="absolute bg-blue-100 shadow-5 m-0" id="overlay4" style="z-index: 20000">
     <template #content>
-      <Icon class="pi pi-arrow-up mb-2"/>
+      <i class="pi pi-arrow-up mb-2"/>
       <br>
       {{ $t("Tutorial3a") }}
       <br>
@@ -55,13 +55,13 @@
       <br>
       <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
       <br>
-      <Icon class="pi pi-arrow-down mb-2"/>
+      <i class="pi pi-arrow-down mb-2"/>
     </template>
   </Card>
 
   <Card v-show="step === 6" class="absolute bg-blue-100 shadow-5 m-0" id="overlay6" style="z-index: 20000">
     <template #content>
-      <Icon class="pi pi-arrow-up mb-2"/>
+      <i class="pi pi-arrow-up mb-2"/>
       <br>
       {{ $t("Tutorial4a") }}
       <br>
@@ -71,7 +71,7 @@
 
   <Card v-show="step === 7" class="absolute bg-blue-100 shadow-5 m-0" id="overlay7" style="z-index: 5">
     <template #content>
-      <Icon class="pi pi-arrow-up mb-2"/>
+      <i class="pi pi-arrow-up mb-2"/>
       <br>
       {{ $t("Tutorial4b") }}
     </template>
@@ -81,13 +81,13 @@
     <template #content>
       {{ $t("Tutorial4c") }}
       <br>
-      <Icon class="pi pi-arrow-down mb-2"/>
+      <i class="pi pi-arrow-down mb-2"/>
     </template>
   </Card>
 
   <Card v-show="step === 9" class="absolute bg-blue-100 shadow-5 m-0" id="overlay9" style="z-index: 5">
     <template #content>
-      <Icon class="pi pi-arrow-up mb-2"/>
+      <i class="pi pi-arrow-up mb-2"/>
       <br>
       {{ $t("Tutorial4d") }}
       <br>
@@ -97,7 +97,7 @@
 
   <Card v-show="step === 10" class="absolute bg-blue-100 shadow-5 m-0" id="overlay10" style="z-index: 20000">
     <template #content>
-      <Icon class="pi pi-arrow-up mb-2"/>
+      <i class="pi pi-arrow-up mb-2"/>
       <br>
       {{ $t("Tutorial5") }}
       <br>

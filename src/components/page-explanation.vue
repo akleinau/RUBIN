@@ -46,7 +46,7 @@
               </div>
             </TabPanel>
             <!--   full network  -->
-            <TabPanel :header="$t('FullNetwork')" class="overflow-hidden">
+            <TabPanel :header="$t('FullNetwork')">
               <div v-if="Store.compareConfig==null">
                 <sugiyama :highlight="false" :edges="Store.edges" :nodes="Store.explain.states"/>
               </div>

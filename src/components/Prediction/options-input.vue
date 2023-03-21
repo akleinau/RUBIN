@@ -40,7 +40,7 @@
 import {useStore} from '@/store'
 
 export default {
-  name: "therapy-input",
+  name: "options-input",
   setup() {
     const Store = useStore()
     return {Store}

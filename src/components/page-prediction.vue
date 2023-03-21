@@ -91,9 +91,7 @@
           <TabPanel header="custom" v-bind:key="null">
             <!-- Desired Outcomes -->
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
-            <GoalInput title="Desired Outcomes" :changeable="true"
-                       :hideHeader="true"
-                       @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
+            <GoalInput/>
 
             <!-- Intervention Input -->
             <div>

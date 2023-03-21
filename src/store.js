@@ -145,7 +145,6 @@ export const useStore = defineStore('store', {
                     });
                 }
                 //catch errors
-                console.log(gResponse)
                 if (!gResponse.ok) {
                     console.log("error")
                     this.optionsLoading = false
@@ -325,7 +324,7 @@ export const useStore = defineStore('store', {
         },
         updateLabels() {
 
-            for (const name in this.labels) {
+            for (const name in this.labels.nodes) {
                 //prio 3: original name
                 let label = this.network_translation.original_labels[name]
 
