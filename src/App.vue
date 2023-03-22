@@ -1,5 +1,5 @@
 <template>
-  <div class="p-0 m-0 h-full" style="background-color: #372f5e">
+  <div class="p-0 m-0 min-h-full" style="background-color: #372f5e">
       <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork($event)"
                  @loadLocalNet="loadLocalNet($event)"></ChooseNet>
       <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'" :network="selectedNetwork"

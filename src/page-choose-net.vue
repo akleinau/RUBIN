@@ -1,5 +1,5 @@
 <template>
-    <div class="grid nested-grid flex-column m-1 mt-0 pt-2 overflow-hidden">
+    <div class="grid nested-grid flex flex-column m-1 mt-0 pt-2 overflow-hidden">
       <Card id="header" class="mr-2 ml-2">
         <template #content>
           <div class="flex flex-column">
