@@ -1,8 +1,10 @@
 <template>
-  <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork($event)"
-             @loadLocalNet="loadLocalNet($event)"></ChooseNet>
-  <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'" :network="selectedNetwork"
-             :localNet="localNet"/>
+  <div class="p-0 m-0 min-h-full" style="background-color: #372f5e">
+      <ChooseNet v-if="page === 'chooseNet'" @changePage="loadNetwork($event)"
+                 @loadLocalNet="loadLocalNet($event)"></ChooseNet>
+      <Interface v-if="page === 'interface'" @changePage="page = 'chooseNet'" :network="selectedNetwork"
+                 :localNet="localNet"/>
+  </div>
 </template>
 
 <script>
@@ -51,7 +53,6 @@ body, html {
   height: 100%;
   padding: 0;
   margin: 0;
-  background-color: #372f5e;
   font-size: 16px
 }
 
@@ -60,7 +61,7 @@ body, html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  height: 90%;
+  height:100%;
 }
 
 

@@ -1,25 +1,26 @@
 <template>
+  <div class="flex flex-column min-h-screen" :style="{'background-color': backcolor}">
 
   <tutorial @setBlock="block = $event" :loading="Store.optionsLoading || Store.explanationLoading"/>
 
     <Header ref="menu" @changePage="changePage()"/>
 
     <!-- main cards -->
-    <div class=" grid w-full h-full relative">
+    <div class="grid w-full relative">
 
-      <BlockUI class="xl:col-3 lg:col-3 md:col-3 col-12 h-full" :blocked="block.evidence"> <!-- style="height:70%" -->
-        <Evidence class="h-full"/>
+      <BlockUI class="xl:col-3 lg:col-3 md:col-3 col-12" :blocked="block.evidence" style="height:90vh">
+        <Evidence/>
       </BlockUI>
 
-      <BlockUI class="xl:col-4 lg:col-4 md:col-4 col-12 h-full" :blocked="block.options">
-        <Prediction class="h-full"/>
+      <BlockUI class="xl:col-4 lg:col-4 md:col-4 col-12" :blocked="block.options" style="height:90vh">
+        <Prediction/>
       </BlockUI>
 
-      <BlockUI class="xl:col-5 lg:col-5 md:col-5 col-12 h-full" :blocked="block.explain">
-        <Explanation class="h-full"/>
+      <BlockUI class="xl:col-5 lg:col-5 md:col-5 col-12" :blocked="block.explain" style="height:90vh">
+        <Explanation/>
       </BlockUI>
     </div>
-
+</div>
 
 </template>
 
@@ -54,7 +55,7 @@ export default {
         evidence: false,
         options: false,
         explain: false
-      },
+      }
     }
   },
   methods: {
@@ -69,6 +70,11 @@ export default {
   },
   created: async function () {
     this.Store.network = this.network
+  },
+  computed: {
+    backcolor: function () {
+      return this.Store.network === "endometrial cancer" ? "#2f67b2" : "#372f5e"
+    }
   }
 }
 </script>

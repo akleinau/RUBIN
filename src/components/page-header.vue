@@ -1,6 +1,6 @@
 <template style="z-index:8000">
 
-  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1" id="menu" style="position:relative">
+  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1 z-3" id="menu" style="position:relative">
     <template #end>
       <div class="flex flex-row align-center">
         <Button class="p-button-text p-button-secondary" :label="this.$t('backToNetwork')"
@@ -29,6 +29,10 @@
     <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales"
              @change="langChange()"/>
   </OverlayPanel>
+
+  <Dialog :header="$t('Contact')" v-model:visible="showContact" style="width: 50%" :modal="true">
+    Placeholder for legal and contact information
+  </Dialog>
 
   <Dialog v-model:visible="NetworkSelectionDialog" modal>
     <div class="m-2"> {{ $t("BackToNetworkSelection") }} <br>
@@ -89,6 +93,7 @@ export default {
     return {
       showFeedback: false,
       showNetworkDescription: false,
+      showContact: false,
       SavePatientName: null,
       configLabel: this.$t('startComparing'),
       NetworkSelectionDialog: false,
@@ -213,6 +218,14 @@ export default {
               icon: PrimeIcons.SEND,
               command: () => {
                 this.showFeedback = true
+              }
+            },
+            {
+              label: this.$t('Contact'),
+              key: 'Contact',
+              icon: PrimeIcons.MAP_MARKER,
+              command: () => {
+                this.showContact = true
               }
             },
             {
