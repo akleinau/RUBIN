@@ -1,13 +1,4 @@
 <template>
-  <div>
-    {{ $t('theNetworkIs') }}
-    <Chip class="mx-1 bg-white text-color" style="border:2px solid mediumblue" :label="$t('verySure')"></Chip>
-    -
-    <Chip class="mx-1 bg-white text-color" style="border:2px solid lightgray" :label="$t('notSure')"></Chip>
-    , {{ $t('orTheValueIs') }}
-    <Chip class="mx-1 bg-white text-color" style="border:2px solid black" :label="$t('given')"></Chip>
-  </div>
-
   <div ref="container" class="overflow-hidden"/>
 
 </template>
@@ -107,21 +98,21 @@ export default {
                   .attr("class", "probBar")
                   .attr("width", p * 20)
                   .attr("height", 5)
-                  .attr("transform", `translate(0,${i * 10 + 10})`)
+                  .attr("transform", `translate(0,${i * 10 + 11})`)
                   .attr("fill", "darkblue")
 
               d3.select(e.target.parentNode).append("text")
                   .text((p * 100).toFixed(0) + '%')
                   .attr("class", "probText")
                   .attr('font-size', '4px')
-                  .attr("transform", `translate(${p * 20 + 2},${i * 10 + 10})`)
+                  .attr("transform", `translate(${p * 20 + 2},${i * 10 + 11})`)
                   .attr("fill", "darkblue")
                   .attr("dy", 4)
 
               d3.select(e.target.parentNode).append("text")
                   .text(this.Store.labels.states[node.name][node.stateNames[i]])
                   .attr("class", "probState")
-                  .attr("transform", `translate(-2,${i * 10 + 10})`)
+                  .attr("transform", `translate(-2,${i * 10 + 11})`)
                   .attr('font-size', '4px')
                   .attr('text-anchor', 'end')
                   .attr("dy", 4)
@@ -135,7 +126,7 @@ export default {
 
     hideDetails(e) {
       d3.select(e.target.parentNode).selectAll(".box").attr("width", 25)
-          .attr("height", 10)
+          .attr("height", 13)
           .attr("transform", `translate(-12.5,-4)`)
 
       d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels.nodes[d.data.id]).substring(0, 10) + ": ")
@@ -163,13 +154,9 @@ export default {
 
         let {width, height} = layout(graph)
 
-        var colorScale = d3.scaleSequential()
-            .domain([0, 1])
-            .range(["lightgray", "mediumblue"]);
-
         var color = d => {
           if (d === 1) return "black"
-          else return colorScale(d)
+          else return "mediumblue"
         }
 
 
@@ -234,10 +221,10 @@ export default {
         nodes.append('rect')
             .attr("class", "box")
             .attr("width", 25)
-            .attr("height", 10)
+            .attr("height", d => this.isHighlightNode(d)  && this.getProbability(d) !== 1 ? 13 : 10)
             .attr('fill', "white")
             .style('stroke-opacity', d => this.isHighlightNode(d) ? 1 : 0.2)
-            .attr("stroke-width", 0.5)
+            .attr("stroke-width", 0.4)
             .attr("stroke", d => color(this.getProbability(d)))
             .attr("rx", 2)
             .attr("ry", 2)
@@ -245,7 +232,7 @@ export default {
             .on("mouseenter", (e, d) => this.getDetails(e, d))
             .on("mouseleave", e => this.hideDetails(e))
 
-        // Add text to nodes
+        // Add variable name to nodes
         nodes.append('text')
             .text(d => String(this.Store.labels.nodes[d.data.id]).substring(0, 10) + ": ")
             .attr("class", "textName")
@@ -256,7 +243,7 @@ export default {
             .on("mouseleave", e => this.hideDetails(e))
 
 
-        // Add text to nodes
+        // Add variable state to nodes
         nodes.append('text')
             .text(d => String(this.getState(d)).substring(0, 10))
             .attr("class", "textState")
@@ -266,6 +253,28 @@ export default {
             .attr("dy", 5)
             .on("mouseenter", (e, d) => this.getDetails(e, d))
             .on("mouseleave", e => this.hideDetails(e))
+
+        // Add variable probability to nodes
+        nodes.append('rect')
+            .attr("class", "mainProbBar")
+            .attr("width", 20)
+            .attr("height", 1)
+            .attr("fill", "lightgray")
+            .attr('transform', `translate(-10,7)`)
+            .attr("opacity", d => this.getProbability(d) === 1 ? 0 : 1)
+            .style('opacity', d => this.isHighlightNode(d) && this.getProbability(d) !== 1 ? 1 : 0)
+            .on("mouseenter", (e, d) => this.getDetails(e, d))
+            .on("mouseleave", e => this.hideDetails(e))
+        nodes.append('rect')
+            .attr("class", "mainProbBar")
+            .attr("width", d => this.getProbability(d) * 20)
+            .attr("height", 1)
+            .attr("fill", "slategray")
+            .attr('transform', `translate(-10,7)`)
+            .style('opacity', d => this.isHighlightNode(d) && this.getProbability(d) !== 1 ? 1 : 0)
+            .on("mouseenter", (e, d) => this.getDetails(e, d))
+            .on("mouseleave", e => this.hideDetails(e))
+
 
         //Zoom
         var zoomed = function ({transform}) {
