@@ -1,31 +1,36 @@
 <template>
-
-  <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false"  sortField="label" :sortOrder="1"
+  <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false" sortField="label" :sortOrder="1"
              class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="listExplanation">
     <Column :header="$t('Node')" field="label" :sortable="true" class="w-5"/>
-    <Column :header="$t('Prediction')" field="state"></Column>
-    <Column :header="$t('Likeliness')">
+    <Column :header="$t('Prediction')" field="state">
       <template #body="slotProps">
-        <Chip class="mx-1" :style="{backgroundColor: color(slotProps.data.probability)}"
-              :label="getLabel(slotProps.data.probability)"/>
+        <div :style="{color:color(slotProps.data.probability)}"> {{ slotProps.data.state }}</div>
+      </template>
+    </Column>
+    <Column :header="$t('Likeliness')" field="probability">
+      <template #body="slotProps">
+        <bar v-if="slotProps.data.probability !== 1" :value="slotProps.data.probability" color="slategray"
+             :width="150"/>
       </template>
     </Column>
     <Column header="" field="beforeState" v-if="Store.compareConfig">
       <template #body="slotProps">
-        <div v-if="slotProps.data.beforeState !== ''">{{$t("compare")}}: &nbsp;</div>
+        <div v-if="slotProps.data.beforeState !== ''">{{ $t("compare") }}: &nbsp;</div>
         <div :style="{color: color(slotProps.data.beforeProb)}"> {{ slotProps.data.beforeState }}</div>
       </template>
     </Column>
   </DataTable>
-
 </template>
 
 <script>
-import * as d3 from "d3";
 import {useStore} from '@/store'
+import bar from "@/components/visualisations/bar-vis.vue";
 
 export default {
   name: "list-explanation",
+  components: {
+    bar
+  },
   setup() {
     const Store = useStore()
     return {Store}
@@ -58,7 +63,7 @@ export default {
             "label": this.Store.labels.nodes[a.name],
             "probability": a.probability,
             "beforeState": state_label === compare_state_label ? "" : compare_state_label,
-            "beforeProb": state_label=== compare_state_label ? 0 : compareNode.probability
+            "beforeProb": state_label === compare_state_label ? 0 : compareNode.probability
           })
         })
         return data
@@ -68,17 +73,11 @@ export default {
   methods: {
     color(probability) {
       if (probability === 1) return "black"
-      const colorScale = d3.scaleQuantize()
-          .domain([0, 1])
-          .range(["red", "darkGoldenRod", "green"]);
-      return colorScale(probability)
+      return "mediumblue"
     },
     getLabel(probability) {
       if (probability === 1) return this.$t("given")
-      const labelScale = d3.scaleQuantize()
-          .domain([0, 1])
-          .range([this.$t("notSure"), this.$t("lessSure"), this.$t("verySure")]);
-      return labelScale(probability)
+      return Math.round(probability * 100) + "%"
     }
   }
 }
