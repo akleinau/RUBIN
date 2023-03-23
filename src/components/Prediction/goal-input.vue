@@ -1,9 +1,9 @@
 <template>
-  <DataTable :class="{NoHeader: hideHeader}" id="table" :value="selection" class="p-datatable-sm"
+  <DataTable id="table" :value="selection" class="NoHeader p-datatable-sm"
              responsiveLayout="scroll" >
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
-        {{ Store.labels[slotProps.data.name] }}
+        {{ Store.labels.nodes[slotProps.data.name] }}
       </template>
     </Column>
     <Column field="value" class="optionCol">
@@ -48,15 +48,15 @@
       </template>
       <Column field="name" :header="$t('Node')">
         <template #body="slotProps">
-          {{ Store.labels[slotProps.data.name] }}
+          {{ Store.labels.nodes[slotProps.data.name] }}
         </template>
       </Column>
       <Column field="options">
         <template #body="slotProps">
           <ToggleButton class="m-2" v-for="option in slotProps.data.options" :key="option"
                         v-model="option.checked" @change="onOverlayOptionChange(slotProps, option)"
-                        :onLabel="Store.option_labels[slotProps.data.name][option.name]" onIcon="pi pi-check"
-                        :offLabel="Store.option_labels[slotProps.data.name][option.name]" offIcon="pi pi-plus">
+                        :onLabel="Store.labels.states[slotProps.data.name][option.name]" onIcon="pi pi-check"
+                        :offLabel="Store.labels.states[slotProps.data.name][option.name]" offIcon="pi pi-plus">
           </ToggleButton>
 
         </template>
@@ -87,11 +87,7 @@ import {FilterMatchMode} from 'primevue/api';
 import {useStore} from "@/store";
 
 export default {
-  name: "node-input",
-  props: [
-    "title",
-    "hideHeader"
-  ],
+  name: "goal-input",
   setup() {
     const Store = useStore()
     return {Store}
@@ -213,7 +209,7 @@ export default {
       this.overlay = false
     },
     get_option_label(option) {
-      return this.Store.option_labels[option.node][option.name]
+      return this.Store.labels.states[option.node][option.name]
     }
   }
 }

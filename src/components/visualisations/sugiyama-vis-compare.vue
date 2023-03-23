@@ -55,11 +55,11 @@ export default {
   methods: {
     getState(n) {
       let node = this.nodes.find(d => d.name === n.data.id)
-      return this.Store.option_labels[node.name][node.state]
+      return this.Store.labels.states[node.name][node.state]
     },
     getState2(n) {
       let node = this.nodes2.find(d => d.name === n.data.id)
-      if (this.isChanged(n)) return "(" +  this.Store.option_labels[node.name][node.state] + ")"
+      if (this.isChanged(n)) return "(" +  this.Store.labels.states[node.name][node.state] + ")"
       else return ""
     },
     getProbability(node) {
@@ -91,7 +91,7 @@ export default {
         d3.select(e.target.parentNode).raise()
         //size up node
         d3.select(e.target.parentNode).selectAll(".box")
-            .attr("width", d => this.Store.labels[d.data.id].length + 90)
+            .attr("width", d => this.Store.labels.nodes[d.data.id].length + 90)
             .attr("height", d => {
               let height = 15
               let node = this.nodes.find(node => node.name === d.data.id)
@@ -100,9 +100,9 @@ export default {
               if (node2.distribution) height += node2.distribution.length * 10 + 10
               return height
             })
-            .attr("transform", d => `translate(${-(this.Store.labels[d.data.id].length + 90) / 2},-4)`)
+            .attr("transform", d => `translate(${-(this.Store.labels.nodes[d.data.id].length + 90) / 2},-4)`)
         //show full text
-        d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels[d.data.id]) + ": ")
+        d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels.nodes[d.data.id]) + ": ")
         // show all probabilities
         d3.select(e.target.parentNode).selectAll(".textState").each(d => {
           let node = this.nodes.find(node => node.name === d.data.id)
@@ -124,7 +124,7 @@ export default {
                   .attr("dy", 4)
 
               d3.select(e.target.parentNode).append("text")
-                  .text(this.Store.option_labels[node.name][node.stateNames[i]])
+                  .text(this.Store.labels.states[node.name][node.stateNames[i]])
                   .attr("class", "probState")
                   .attr("transform", `translate(-2,${i * 10 + 10})`)
                   .attr('font-size', '4px')
@@ -162,7 +162,7 @@ export default {
                   .attr("dy", 4)
 
               d3.select(e.target.parentNode).append("text")
-                  .text(this.Store.option_labels[node.name][node.stateNames[i]])
+                  .text(this.Store.labels.states[node.name][node.stateNames[i]])
                   .attr("class", "probState")
                   .attr("transform", `translate(-2,${displacement + i * 10 + 10})`)
                   .attr('font-size', '4px')
@@ -182,7 +182,7 @@ export default {
           .attr("height", d => 10 * (this.isChanged(d) * 0.5 + 1))
           .attr("transform", `translate(-12.5,-4)`)
 
-      d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels[d.data.id]).substring(0, 10) + ": ")
+      d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels.nodes[d.data.id]).substring(0, 10) + ": ")
 
       d3.select(e.target.parentNode).selectAll(".textState2")
           .attr("dy", 10)
@@ -280,7 +280,7 @@ export default {
 
         // Add text to nodes
         nodes.append('text')
-            .text(d => String(this.Store.labels[d.data.id]).substring(0, 10) + ": ")
+            .text(d => String(this.Store.labels.nodes[d.data.id]).substring(0, 10) + ": ")
             .attr("class", "textName")
             .attr('text-anchor', 'middle')
             .attr('font-size', '4px')

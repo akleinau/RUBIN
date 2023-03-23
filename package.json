@@ -1,15 +1,13 @@
 {
   "name": "rubin",
   "version": "0.1.0",
-  "engines": {
-    "node": "16.18.0"
-  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "start": "node server.js",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\"",
+    "start": "node server.js"
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.17.0",
@@ -23,24 +21,27 @@
     "express": "^4.17.1",
     "json5": "^2.2.3",
     "loader-utils": "^2.0.3",
+    "node": "^19.8.1",
     "pdfmake": "^0.2.7",
     "pinia": "^2.0.13",
     "postcss": "^8.2.15",
     "primeflex": "^3.3.0",
     "primeicons": "5.0.0",
-    "primevue": "3.23.0",
-    "sass-loader": "^12.6.0",
+    "primevue": "3.26.0",
+    "sass-loader": "^13.2.1",
     "vue": "^3.2.33",
-    "vue-i18n": "^9.1.6",
+    "vue-i18n": "^9.2.2",
     "vue-router": "4.0.5"
   },
   "devDependencies": {
+    "@intlify/vue-i18n-loader": "^3.0.0",
     "@vue/cli-plugin-babel": "^5.0.4",
     "@vue/cli-plugin-eslint": "^5.0.4",
     "@vue/cli-service": "^5.0.4",
     "@vue/compiler-sfc": "^3.2.33",
     "eslint-plugin-vue": "^8.7.1",
-    "node-sass": "7.0.3"
+    "node-sass": "^8.0.0",
+    "vue-cli-plugin-i18n": "~2.3.1"
   },
   "eslintConfig": {
     "root": true,
@@ -60,5 +61,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "engines": {
+    "node": "18.15.0"
+  }
 }

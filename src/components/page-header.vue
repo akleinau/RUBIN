@@ -1,6 +1,6 @@
-<template>
+<template style="z-index:8000">
 
-  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1" id="menu" style="position:relative">
+  <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1 z-3" id="menu" style="position:relative">
     <template #end>
       <div class="flex flex-row align-center">
         <Button class="p-button-text p-button-secondary" :label="this.$t('backToNetwork')"
@@ -26,16 +26,20 @@
   </OverlayPanel>
 
   <OverlayPanel ref="langOverlay">
-    <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${locale}`" :value="locale"
+    <Listbox v-model="$i18n.locale" :options="$i18n.availableLocales"
              @change="langChange()"/>
   </OverlayPanel>
 
+  <Dialog :header="$t('Contact')" v-model:visible="showContact" style="width: 50%" :modal="true">
+    Placeholder for legal and contact information
+  </Dialog>
+
   <Dialog v-model:visible="NetworkSelectionDialog" modal>
-    <div class="m-2"> {{$t("BackToNetworkSelection")}} <br>
+    <div class="m-2"> {{ $t("BackToNetworkSelection") }} <br>
     </div>
     <div class="flex justify-content-end">
-      <Button class="m-2 p-button-text" @click="NetworkSelectionDialog = false"> {{$t("Cancel")}}</Button>
-      <Button class="m-2" @click="changePage()"> {{$t("proceed")}}</Button>
+      <Button class="m-2 p-button-text" @click="NetworkSelectionDialog = false"> {{ $t("Cancel") }}</Button>
+      <Button class="m-2" @click="changePage()"> {{ $t("proceed") }}</Button>
     </div>
 
   </Dialog>
@@ -59,6 +63,9 @@ export default {
     const Store = useStore()
     return {Store}
   },
+  created() {
+      this.items = this.getItems()
+  },
   watch: {
     patient: function (name) {
       let configItem = this.items.find(a => a.key === "Patient")
@@ -68,7 +75,7 @@ export default {
         configItem.label = this.$t('Network')
       }
     },
-    compareConfig: function() {
+    compareConfig: function () {
       if (this.compareConfig == null) {
         this.stopComparing()
       }
@@ -86,10 +93,74 @@ export default {
     return {
       showFeedback: false,
       showNetworkDescription: false,
+      showContact: false,
       SavePatientName: null,
       configLabel: this.$t('startComparing'),
       NetworkSelectionDialog: false,
-      items: [
+      items: null
+    }
+  },
+  methods: {
+    changePage() {
+      this.Store.reset(true)
+      this.NetworkSelectionDialog = false
+      this.$emit('changePage')
+    },
+    startComparing() {
+      this.Store.compareConfig = {
+        "patient": JSON.parse(JSON.stringify(this.Store.patient)),
+        "predictions": JSON.parse(JSON.stringify(this.Store.predictions)),
+        "explain": JSON.parse(JSON.stringify(this.Store.explain))
+      }
+
+      //change header
+      let configItem = this.items.find(a => a.key === "savedConfigurations")
+      configItem.label = this.$t('stopComparing')
+      configItem.icon = "pi pi-fw pi-times"
+      configItem.command = () => {
+        this.stopComparing()
+      }
+    },
+    stopComparing() {
+      let configItem = this.items.find(a => a.key === "savedConfigurations")
+      configItem.label = this.$t('startComparing')
+      configItem.icon = PrimeIcons.BOOKMARK
+      configItem.command = () => {
+        this.startComparing()
+      }
+      this.Store.compareConfig = null
+    },
+    sendFeedback() {
+      this.showFeedback = false
+    },
+    showLanguage(event) {
+      this.$refs.langOverlay.toggle(event)
+    },
+    langChange() {
+      if (this.$i18n.locale == null) {
+        this.$i18n.locale = "en"
+      }
+
+      this.items.forEach(a => {
+        a.label = this.$t(a.key)
+      })
+      this.Store.language = this.$i18n.locale
+      this.Store.updateLabels()
+
+      this.items = this.getItems()
+
+    },
+    loadPatient(event) {
+      this.$refs.loadOverlay.toggle(event)
+    },
+
+    capitalize(string) {
+      //capitalizes each first letter of every word in a sentence
+      return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    },
+
+    getItems() {
+      return [
         {
           label: this.$t('File') + ": " + this.Store.patient.name,
           icon: PrimeIcons.FILE,
@@ -150,6 +221,14 @@ export default {
               }
             },
             {
+              label: this.$t('Contact'),
+              key: 'Contact',
+              icon: PrimeIcons.MAP_MARKER,
+              command: () => {
+                this.showContact = true
+              }
+            },
+            {
               label: this.$t('showTutorial'),
               key: 'ShowTutorial',
               icon: PrimeIcons.QUESTION,
@@ -161,62 +240,6 @@ export default {
         }
       ]
     }
-  },
-  methods: {
-    changePage() {
-      this.Store.reset(true)
-      this.NetworkSelectionDialog = false
-      this.$emit('changePage')
-    },
-    startComparing() {
-      this.Store.compareConfig = {
-        "patient": JSON.parse(JSON.stringify(this.Store.patient)),
-        "predictions": JSON.parse(JSON.stringify(this.Store.predictions)),
-        "explain": JSON.parse(JSON.stringify(this.Store.explain))
-      }
-
-      //change header
-      let configItem = this.items.find(a => a.key === "savedConfigurations")
-      configItem.label = this.$t('stopComparing')
-      configItem.icon = "pi pi-fw pi-times"
-      configItem.command = () => {
-        this.stopComparing()
-      }
-    },
-    stopComparing() {
-      let configItem = this.items.find(a => a.key === "savedConfigurations")
-      configItem.label = this.$t('startComparing')
-      configItem.icon = PrimeIcons.BOOKMARK
-      configItem.command = () => {
-        this.startComparing()
-      }
-      this.Store.compareConfig = null
-    },
-    sendFeedback() {
-      this.showFeedback = false
-    },
-    showLanguage(event) {
-      this.$refs.langOverlay.toggle(event)
-    },
-    langChange() {
-      if (this.$i18n.locale == null) {
-        this.$i18n.locale = "en"
-      }
-
-      this.items.forEach(a => {
-        a.label = this.$t(a.key)
-      })
-      this.Store.language = this.$i18n.locale
-      this.Store.updateLabels()
-    },
-    loadPatient(event) {
-      this.$refs.loadOverlay.toggle(event)
-    },
-
-    capitalize(string) {
-      //capitalizes each first letter of every word in a sentence
-      return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    },
   }
 }
 </script>

@@ -14,7 +14,7 @@
     </template>
     <template #subtitle v-if="Store.predictions.selectedOption">
       <div v-for="o in Object.keys(Store.predictions.selectedOption.option)" :key="o">
-        <b> {{ Store.labels[o] }}: {{ Store.predictions.selectedOption.option[o] }} </b>
+        <b> {{ Store.labels.nodes[o] }}: {{ Store.labels.states[o][Store.predictions.selectedOption.option[o]] }} </b>
       </div>
     </template>
     <template #content>
@@ -23,7 +23,8 @@
         <div v-else class="flex flex-column overflow-hidden h-full flex-align-full w-full">
           <Dropdown v-model="currentIndex" optionLabel="label" optionValue="value"
                     :options="options" id="explanationDropdown" @click="DropdownClicked" @change="DropdownChanged"
-                    class="flex mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
+                    class="flex mt-4 ">
+          </Dropdown>
           <TabView v-model:active-index="currentIndex" scrollable class="flex-1 overflow-hidden">
             <!--   relevance  -->
             <TabPanel :header="$t('Relevance')">
@@ -46,7 +47,7 @@
               </div>
             </TabPanel>
             <!--   full network  -->
-            <TabPanel :header="$t('FullNetwork')" class="overflow-hidden">
+            <TabPanel :header="$t('FullNetwork')">
               <div v-if="Store.compareConfig==null">
                 <sugiyama :highlight="false" :edges="Store.edges" :nodes="Store.explain.states"/>
               </div>
@@ -81,18 +82,16 @@ export default {
     const Store = useStore()
     return {Store}
   },
+  created() {
+    this.options = this.getOptions()
+  },
   data() {
     return {
       onlyGlobal: true,
       compactEdges: null,
       exNodes: null,
       currentIndex: 0,
-      options: [
-        {label: this.$t("Relevance"), value: 0},
-        {label: this.$t("AllPredictions"), value: 1},
-        {label: this.$t("CompactNetwork"), value: 2},
-        {label: this.$t("FullNetwork"), value: 3}
-      ]
+      options: null
     }
   },
   watch: {
@@ -100,6 +99,9 @@ export default {
       if (this.tutorialStep === 1) {
         this.currentIndex = 0
       }
+    },
+    language: function () {
+      this.options = this.getOptions()
     }
   },
   computed: {
@@ -158,7 +160,10 @@ export default {
         "compactEdges": edges,
         "compactNodes": explanationNodes
       }
-    }
+    },
+    language: function () {
+      return this.Store.language
+    },
   },
   methods: {
     getExEdges() {
@@ -193,6 +198,14 @@ export default {
         this.Store.tutorialStep = 7
       }
     },
+    getOptions() {
+      return [
+        {label: this.$t("Relevance"), value: 0},
+        {label: this.$t("AllPredictions"), value: 1},
+        {label: this.$t("CompactNetwork"), value: 2},
+        {label: this.$t("FullNetwork"), value: 3}
+      ]
+    }
   }
 }
 </script>
@@ -231,6 +244,11 @@ li {
 
 ::v-deep(.p-tabview-panel) {
   height: 100%
+}
+
+::v-deep(.p-dropdown-label) {
+  color:#4F46E5;
+  font-weight: 700
 }
 
 </style>

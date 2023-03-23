@@ -32,20 +32,20 @@
 
       <!-- phases -->
       <ScrollPanel style="height:40%">
-        <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="name" optionValue="index" id="PhaseSelect"
-                  class="flex flex-align-full mt-4 " inputStyle="color:#4F46E5; font-weight: 700"/>
+        <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="label" optionValue="index" id="PhaseSelect"
+                  class="flex flex-align-full mt-4 "/>
         <TabView v-model:active-index="currentPhaseIndex" scrollable class="text-left">
           <TabPanel v-for="phase in Store.phases" :key="phase.name" :header="phase.name">
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
             <div v-for="goal in Store.patient.goals" :key="goal.name">
-              {{ Store.labels[goal.name] }} : {{ Store.option_labels[goal.name][goal.selected.name] }}
+              {{ Store.labels.nodes[goal.name] }} : {{ Store.labels.states[goal.name][goal.selected.name] }}
               <span class="text-color-secondary">
                ({{ $t(goal.direction) }})
               </span>
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> {{ $t("compare") }}: - {{ $t("given") }}:
                 {{
-                  Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
+                  Store.labels.states[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }} </b>
                 <span class="text-color-secondary">
                    ({{ $t(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
@@ -53,15 +53,15 @@
               </span>
             </div>
             <div v-for="goal in this.givenGoals" :key="goal.name">
-              {{ Store.labels[goal.name] }} - <b> {{ $t("given") }}:
-              {{ Store.option_labels[goal.name][goal.selected.name] }} </b>
+              {{ Store.labels.nodes[goal.name] }} - <b> {{ $t("given") }}:
+              {{ Store.labels.states[goal.name][goal.selected.name] }} </b>
               <span class="text-color-secondary">
                 ({{ $t(goal.direction) }})
               </span>
               <span v-if="this.givenGoals_compare.find(a => a.name === goal.name)">
                 ,<b> {{ $t("compare") }}: - {{ $t("given") }}:
                 {{
-                  Store.option_labels[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
+                  Store.labels.states[goal.name][this.givenGoals_compare.find(a => a.name === goal.name).selected.name]
                 }}
                 <span class="text-color-secondary">
                   ({{ $t(this.givenGoals_compare.find(a => a.name === goal.name).direction) }})
@@ -76,24 +76,22 @@
               {{ $t("Interventions") }}:
             </b></div>
             <div v-for="target in Store.patient.targets" :key="target.name">
-              {{ Store.labels[target.name] }}
+              {{ Store.labels.nodes[target.name] }}
             </div>
             <div v-for="target in this.givenTargets" :key="target.name">
-              {{ Store.labels[target.name] }} - <b> {{ $t("given") }}:
-              {{ Store.option_labels[target.name][target.selected.name] }} </b>
+              {{ Store.labels.nodes[target.name] }} - <b> {{ $t("given") }}:
+              {{ Store.labels.states[target.name][target.selected.name] }} </b>
             </div>
             <div v-for="target in this.givenTargets_compare" :key="target.name">
-              {{ $t("compare") }}: {{ Store.labels[target.name] }} - <b> {{ $t("given") }}:
-              {{ Store.option_labels[target.name][target.selected.name] }} </b>
+              {{ $t("compare") }}: {{ Store.labels.nodes[target.name] }} - <b> {{ $t("given") }}:
+              {{ Store.labels.states[target.name][target.selected.name] }} </b>
             </div>
           </TabPanel>
 
           <TabPanel header="custom" v-bind:key="null">
             <!-- Desired Outcomes -->
             <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
-            <GoalInput title="Desired Outcomes" :changeable="true"
-                       :hideHeader="true"
-                       @addNodes="Store.addGoals($event)" @deleteNode="Store.deleteGoal($event)"/>
+            <GoalInput/>
 
             <!-- Intervention Input -->
             <div>
@@ -212,14 +210,25 @@ export default {
     },
     phases: function () {
       let phases = []
-      this.Store.phases.forEach((p, i) => phases.push({"name": p.name, "index": i}))
-      phases.push({"name": "custom", "index": this.Store.phases.length})
+      this.Store.phases.forEach((p, i) => {
+        //find label based on language
+        let label = p.name
+        if (p.labels[this.Store.language]) {
+          label = p.labels[this.Store.language]
+        }
+        else if (p.labels["standard"]) {
+          label = p.labels["standard"]
+        }
+
+        phases.push({"name": p.name, "label": label, "index": i})
+      })
+      phases.push({"name": "custom", "label": this.$t("custom"), "index": this.Store.phases.length})
       return phases;
     },
   },
   methods: {
     getGoalLabel(goal) {
-      return this.Store.labels[goal.name] + ": " + goal.selected.name
+      return this.Store.labels.nodes[goal.name] + ": " + goal.selected.name
     },
   }
 }
@@ -234,5 +243,11 @@ export default {
 ::v-deep(.p-tabview-nav-container) {
   Display: None;
 }
+
+::v-deep(.p-dropdown-label) {
+  color:#4F46E5;
+  font-weight: 700
+}
+
 
 </style>
