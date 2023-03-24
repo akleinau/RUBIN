@@ -54,7 +54,8 @@ export const useStore = defineStore('store', {
         currentPhase: null,
         language: "en",
         tutorialStep: 0,
-        error: false
+        error: false,
+        backgroundColor: "#372f5e"
     }),
     actions: {
         async reset(noPhase = false) {
@@ -289,6 +290,7 @@ export const useStore = defineStore('store', {
 
             this.evidenceGroupMap = {}
             this.labels.evidence_groups = {}
+            this.backgroundColor = "#372f5e"
 
             if (customization !== undefined) {
                 this.phases = network.customization.phases
@@ -310,6 +312,11 @@ export const useStore = defineStore('store', {
                 if (network.customization.translation) {
                     this.network_translation.custom_labels = network.customization.translation
                 }
+
+                if (network.customization.backgroundColor) {
+                    this.backgroundColor = network.customization.backgroundColor
+                }
+
             } else {
                 this.phases = []
                 nodes.forEach(node => {

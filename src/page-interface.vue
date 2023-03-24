@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-column min-h-screen" :style="{'background-color': backcolor}">
+  <div class="flex flex-column min-h-screen" :style="{'background-color': Store.backgroundColor}">
 
   <tutorial @setBlock="block = $event" :loading="Store.optionsLoading || Store.explanationLoading"/>
 
@@ -70,11 +70,6 @@ export default {
   },
   created: async function () {
     this.Store.network = this.network
-  },
-  computed: {
-    backcolor: function () {
-      return this.Store.network === "endometrial cancer" ? "#2f67b2" : "#372f5e"
-    }
   }
 }
 </script>
