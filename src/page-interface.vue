@@ -82,12 +82,11 @@ export default {
 }
 
 ::v-deep(.p-card-content) {
-  height: 90% !important;
+  height: 100% !important;
 }
 
 ::v-deep(.p-card-body) {
   height: 100% !important;
-  padding-bottom: 0;
 }
 
 #arrow {
