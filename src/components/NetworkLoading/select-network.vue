@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: "load-network-list",
+  name: "select-network",
   emits: ["changePage", "updated"],
   data() {
     return {

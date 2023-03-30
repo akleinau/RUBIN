@@ -20,7 +20,7 @@
   <!--   dialogs/ overlays  -->
 
   <OverlayPanel ref="loadOverlay">
-    <LoadPatient @loaded="loadPatient"></LoadPatient>
+    <PatientFile @loaded="loadPatient"></PatientFile>
   </OverlayPanel>
 
   <Dialog :header="$t('Feedback')" v-model:visible="showFeedback" style="width: 50%" :modal="true">
@@ -53,7 +53,7 @@
 
 <script>
 import Feedback from "@/components/Header/send-feedback";
-import LoadPatient from "@/components/Header/load-patient";
+import PatientFile from "@/components/Header/patient-file.vue";
 import {useStore} from '@/store'
 import {PrimeIcons} from 'primevue/api';
 
@@ -62,7 +62,7 @@ export default {
   emits: ["changePage", "loadPatient", "exportCSV"],
   components: {
     Feedback,
-    LoadPatient
+    PatientFile
   },
   setup() {
     const Store = useStore()

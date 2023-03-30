@@ -20,7 +20,7 @@
               {{ $t('selectNetwork') }}
             </template>
             <template #content>
-              <Networklist ref="netList" @updated="$forceUpdate()" @changePage="changePage"/>
+              <SelectNetwork ref="netList" @updated="$forceUpdate()" @changePage="changePage"/>
             </template>
           </Card>
         </div>
@@ -30,8 +30,8 @@
               {{ $t('uploadNetwork') }}
             </template>
             <template #content>
-              <Upload ref="uploadField" @reloadNetList="$refs.netList.loadNetList()"
-                      @loadLocalNet="loadLocalNet($event)"></Upload>
+              <UploadNetwork ref="uploadField" @reloadNetList="$refs.netList.loadNetList()"
+                      @loadLocalNet="loadLocalNet($event)"></UploadNetwork>
               <br> <br>
             </template>
           </Card>
@@ -77,8 +77,8 @@
 </template>
 
 <script>
-import Upload from "./components/NetworkLoading/upload-network";
-import Networklist from "./components/NetworkLoading/load-network-list"
+import UploadNetwork from "./components/NetworkLoading/upload-network";
+import SelectNetwork from "./components/NetworkLoading/select-network.vue"
 
 export default {
   name: "page-choose-net",
@@ -90,8 +90,8 @@ export default {
     }
   },
   components: {
-    Upload,
-    Networklist
+    UploadNetwork,
+    SelectNetwork
   },
   mounted() {
     this.langOverlay = false //set to true for lang overlay

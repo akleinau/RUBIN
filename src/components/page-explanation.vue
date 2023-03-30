@@ -65,9 +65,9 @@
 
 <script>
 import Relevance from "@/components/explanation/relevance-explanation";
-import sugiyama from "@/components/visualisations/sugiyama-vis";
+import sugiyama from "@/components/explanation/sugiyama-vis.vue";
 import NodeList from "@/components/explanation/list-explanation";
-import sugiyamaCompare from "@/components/visualisations/sugiyama-vis-compare";
+import sugiyamaCompare from "@/components/explanation/sugiyama-vis-compare.vue";
 import {useStore} from '@/store'
 
 export default {
