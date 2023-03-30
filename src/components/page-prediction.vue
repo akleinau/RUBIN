@@ -19,7 +19,7 @@
           <div v-if="!Store.error">
             <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
             <ScrollPanel class="h-full overlap-hidden">
-              <optionsTable id="optionsTable" class="h-full overlap-hidden"/>
+              <PredictionsTable id="optionsTable" class="h-full overlap-hidden"/>
             </ScrollPanel>
           </div>
           <div v-else class="p-4">
@@ -110,16 +110,16 @@
 
 <script>
 import optionsInput from "@/components/Prediction/options-input";
-import optionsTable from "@/components/Prediction/options-table"
+import PredictionsTable from "@/components/Prediction/predictions-table.vue"
 import GoalInput from "@/components/Prediction/goal-input";
 import {useStore} from '@/store'
 
 export default {
-  name: "therapy-options",
+  name: "page-prediction",
   emits: ["update"],
   components: {
     optionsInput,
-    optionsTable,
+    PredictionsTable,
     GoalInput
   },
   setup() {

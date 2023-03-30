@@ -69,7 +69,7 @@ import bar from "@/components/visualisations/bar-vis";
 import {useStore} from '@/store'
 
 export default {
-  name: "options-table",
+  name: "predictions-table",
   components: {
     bar
   },

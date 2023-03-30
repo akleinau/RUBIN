@@ -32,7 +32,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
 export default {
-  name: "load-patient",
+  name: "patient-file",
   emits: ["loaded"],
   setup() {
     const Store = useStore()

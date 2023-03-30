@@ -132,7 +132,7 @@ import {useStore} from '@/store'
 import {FilterMatchMode} from "primevue/api";
 
 export default {
-  name: "evidence-input",
+  name: "page-evidence",
   setup() {
     const Store = useStore()
     return {Store}
