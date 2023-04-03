@@ -2,12 +2,12 @@
   <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false" sortField="label" :sortOrder="1"
              class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="listExplanation">
     <Column :header="$t('Node')" field="label" :sortable="true" class="w-5"/>
-    <Column :header="$t('Prediction')" field="state">
+    <Column :header="$t('Prediction')" field="state" :sortable="true">
       <template #body="slotProps">
         <div :style="{color:color(slotProps.data.probability)}"> {{ slotProps.data.state }}</div>
       </template>
     </Column>
-    <Column :header="$t('Likeliness')" field="probability">
+    <Column :header="$t('Likeliness')" field="probability" :sortable="true">
       <template #body="slotProps">
         <bar v-if="slotProps.data.probability !== 1" :value="slotProps.data.probability" color="slategray"
              :width="150"/>
