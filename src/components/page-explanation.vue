@@ -1,5 +1,5 @@
 <template>
-  <Card :class="getCardClass()">
+  <Card :class="getCardClass()" class="h-full overflow-hidden">
     <template #title>
       {{ $t("Explanation") }}
       <Button icon="pi pi-question" class="p-button-outlined p-button-secondary p-button-rounded p-button-raised help"
