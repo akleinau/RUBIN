@@ -12,6 +12,11 @@ export default {
   name: "upload-network",
   emits: ["reloadNetList", "loadLocalNet"],
   methods: {
+      /**
+       * loads interface using uploaded file
+       *
+       * @param event
+       */
     upload(event) {
       console.log("upload")
       let fileField = event.files;
@@ -36,23 +41,6 @@ export default {
             "fileString": fileString
           }
           thisRef.$emit("loadLocalNet", localNet);
-
-          if (this.uploadToServer) {
-            //send request to upload to server
-            let gResponse = await fetch("https://doctorbn-backend.herokuapp.com/sendNetworkRequest", {
-              method: 'POST',
-              headers: {
-                'content-type': 'application/json'
-              },
-              body: JSON.stringify({
-                name: localNet.name,
-                fileString: localNet.fileString,
-                fileFormat: localNet.fileFormat,
-              })
-            })
-            let result = await gResponse.json();
-            console.log(result)
-          }
         }
       }
     }
