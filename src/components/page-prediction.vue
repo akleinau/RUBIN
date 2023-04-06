@@ -98,11 +98,6 @@ export default {
         this.Store.currentPhase = this.Store.phases[this.currentPhaseIndex]
         this.Store.phase_change()
       }
-    },
-    "Store.currentPhase": function () {
-      if (this.Store.currentPhase === null) {
-        this.currentPhaseIndex = this.Store.phases.length
-      }
     }
   },
   computed: {
