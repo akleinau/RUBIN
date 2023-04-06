@@ -31,11 +31,22 @@ export default {
     }
   },
   methods: {
+      /**
+       * Gets called when a predefined network is selected
+       *
+       * @param {string} selectedNet - the name of the selected network
+       */
     loadNetwork(selectedNet) {
       this.page = 'interface'
       this.selectedNetwork = selectedNet
       this.localNet = null
     },
+
+      /**
+       * Gets called when a network is uploaded from the user's file system
+       *
+       * @param {Object} localNet - The Object containing the network file information and content
+       */
     loadLocalNet(localNet) {
       this.page = 'interface'
       this.selectedNetwork = localNet.name

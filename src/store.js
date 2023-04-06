@@ -58,6 +58,12 @@ export const useStore = defineStore('store', {
         backgroundColor: "#372f5e"
     }),
     actions: {
+        /**
+         * gets called when all patient information is resetted
+         *
+         * @param {boolean} noPhase - true when the first phase should be selected, false when no phase should be selected
+         * @returns {Promise<void>}
+         */
         async reset(noPhase = false) {
             this.compareConfig = null
             this.patient.evidence.forEach(a => this.deleteEvidence(a))
@@ -76,7 +82,12 @@ export const useStore = defineStore('store', {
             await this.calculate()
 
         },
-        //calculate overall results & changes through therapy options
+        /**
+         * calculates data for prediction view: overall results & changes through therapy options
+         *
+         * @param {boolean} compare - true when the calculations should be done for the compare configuration
+         * @returns {Promise<void>}
+         */
         async calculate(compare = false) {
             let patient = this.patient
             let predictions = this.predictions
@@ -190,7 +201,14 @@ export const useStore = defineStore('store', {
                 }
             }
         },
-        //calculate explanations based on current option
+        /**
+         * calculate data for explanation view: explanations based on current option
+         *
+         * @param {Object} patient - patient information
+         * @param {Object} predictions - prediction data
+         * @param {Object} explain - explanation object used to save the results of the calculation
+         * @returns {Promise<void>}
+         */
         async calculateExplanations(patient, predictions, explain) {
             this.explanationLoading = true
 
@@ -246,7 +264,12 @@ export const useStore = defineStore('store', {
             explain.explanation = nodeDict.explanation
             this.explanationLoading = false
         },
-        //load network at the beginning from server or local file
+        /**
+         * load network nodes and configuration at the beginning, from server or local file
+         *
+         * @param {boolean} noPhase - true when the first phase should be selected, false when no phase should be selected
+         * @returns {Promise<void>}
+         */
         async loadNodes(noPhase = false) {
             let gResponse = null
             if (this.localNet) {
@@ -329,6 +352,10 @@ export const useStore = defineStore('store', {
 
             await this.calculate()
         },
+
+        /**
+         * updates node and node state labels based on selected language
+         */
         updateLabels() {
 
             for (const name in this.labels.nodes) {
@@ -376,7 +403,11 @@ export const useStore = defineStore('store', {
                 }
             }
         },
-
+        /**
+         * adds nodes as patient evidence and deletes them from remaining node list
+         *
+         * @param {Object[]} nodes - List of nodes that should be added
+         */
         addEvidences(nodes) {
             nodes.forEach(node => {
                 this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
@@ -384,20 +415,40 @@ export const useStore = defineStore('store', {
                 this.patient.evidence.push(node)
             })
         },
+        /**
+         * deletes nodes from patient evidence and adds them to remaining node list
+         *
+         * @param {Object} node - the node that should be deleted
+         */
         deleteEvidence(node) {
             this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
             this.patient.nodes.push({name: node.name, options: node.options})
         },
+        /**
+         * adds nodes as patient target and deletes them from remaining node list
+         *
+         * @param {Object[]} nodes - List of nodes that should be added
+         */
         addTargets(nodes) {
             nodes.forEach(node => {
                 this.patient.targets.push(node)
                 this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
             })
         },
+        /**
+         * deletes nodes from patient target and adds them to remaining node list
+         *
+         * @param {Object} node - the node that should be deleted
+         */
         deleteTarget(node) {
             this.patient.targets = this.patient.targets.filter(x => x.name !== node.name)
             this.patient.nodes.push(node)
         },
+        /**
+         * adds nodes as patient goals and deletes them from remaining node list
+         *
+         * @param {Object[]} nodes - List of nodes that should be added
+         */
         addGoals(nodes) {
             nodes.forEach(node => {
                 this.patient.goals = this.patient.goals.filter(x => x.name !== node.name)
@@ -405,10 +456,20 @@ export const useStore = defineStore('store', {
                 this.patient.goals.push(node)
             })
         },
+        /**
+         * deletes nodes from patient targets and adds them to remaining node list
+         *
+         * @param {Object} node - the node that should be deleted
+         */
         deleteGoal(node) {
             this.patient.goals = this.patient.goals.filter(x => x.name !== node.name)
             this.patient.nodes.push({name: node.name, options: node.options})
         },
+        /**
+         * creates csv file content for download of patient configuration
+         *
+         * @returns {string}
+         */
         createCSVcontent() {
             var csv = "Type; Variable; Option; Direction"
             this.patient.evidence.forEach(ev => {
@@ -422,13 +483,20 @@ export const useStore = defineStore('store', {
             })
             return csv
         },
+        /**
+         * checks if phase was changed and triggers recalculation of data accordingly
+         */
         phase_change() {
-            let reload = false
+            let reload = false //if recalculation has to happen
+
+            //updates targets
             if (this.differentLists(this.patient.targets.map(a => a.name), this.currentPhase.sets.target)) {
                 this.patient.targets.forEach(a => this.deleteTarget(a))
                 this.addTargets(this.patient.nodes.filter(a => this.currentPhase.sets.target.includes(a.name)))
                 reload = true
             }
+
+            //updates goals
             if (this.differentLists(this.patient.goals.map(a => a.name + a.selected.name + a.direction),
                 this.currentPhase.sets.goal.map(a => a.name + a.option + a.direction))) {
                 this.patient.goals.forEach(a => this.deleteGoal(a))
@@ -449,6 +517,8 @@ export const useStore = defineStore('store', {
                 this.addGoals(goalList)
                 reload = true
             }
+
+            // triggers recalculation
             if (reload) {
                 this.calculate()
                 if (this.compareConfig) {
@@ -456,6 +526,13 @@ export const useStore = defineStore('store', {
                 }
             }
         },
+        /**
+         * returns true when two lists contain different items
+         *
+         * @param a
+         * @param b
+         * @returns {boolean}
+         */
         differentLists(a, b) {
             let missing = (a.filter(x => !b.includes(x))).length
             missing += (b.filter(x => !a.includes(x))).length
