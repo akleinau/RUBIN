@@ -36,6 +36,11 @@ export default {
     return {Store}
   },
   computed: {
+      /**
+       * computes data for the table
+       *
+       * @returns {*[]|null}
+       */
     data: function () {
       if (this.Store.explain.states === null) return null
       if (this.Store.compareConfig == null) {
@@ -71,20 +76,19 @@ export default {
     }
   },
   methods: {
+      /**
+       * returns color used to encode the probability of the node
+       *
+       * @param probability
+       * @returns {string}
+       */
     color(probability) {
       if (probability === 1) return "black"
       return "mediumblue"
-    },
-    getLabel(probability) {
-      if (probability === 1) return this.$t("given")
-      return Math.round(probability * 100) + "%"
     }
   }
 }
 </script>
 
 <style scoped>
-.p-chip {
-  color: white;
-}
 </style>

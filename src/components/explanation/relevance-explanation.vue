@@ -69,6 +69,11 @@ export default {
     }
   },
   computed: {
+      /**
+       * computes the column names of the individual goal's columns
+       *
+       * @returns {Object[]}
+       */
     goalnames: function () {
       let goalnames = []
       if (this.Store.patient.goals != null && this.Store.explain.relevance != null) {
@@ -83,6 +88,11 @@ export default {
       return goalnames
     },
 
+      /**
+       * returns data for the relevance table
+       *
+       * @returns {*[]}
+       */
     table: function () {
       if (this.Store.explain.relevance) {
         let table = []
@@ -116,6 +126,11 @@ export default {
     }
   },
   methods: {
+      /**
+       * returns number of goals
+       *
+       * @returns {number}
+       */
     getGoalKeyNum() {
       if (this.Store.patient.goals != null) {
         return this.Store.patient.goals.length
@@ -123,6 +138,14 @@ export default {
         return 0
       }
     },
+      /**
+       * returns tooltips for the two-sided bars showing influence on outcomes.
+       *
+       * @param number - the numerical influence score
+       * @param direction - if for the current goal minimal or maximal values are preferred
+       * @param label - name of the goal
+       * @returns {*|string}
+       */
     getDirectionTooltip(number, direction, label) {
       if (direction === "min") {
         if (number > 0.001) return this.$t("decreasesProbability") + " " + label
@@ -135,6 +158,12 @@ export default {
 
       return this.$t("noInfluence")
     },
+      /**
+       * returns state of a node
+       *
+       * @param name - node name
+       * @returns {string}
+       */
     getState(name) {
       let state = "unknown"
       this.Store.explain.states.forEach(node => {
@@ -144,6 +173,12 @@ export default {
       })
       return state
     },
+      /**
+       * returns compare config state of a node
+       *
+       * @param name - node name
+       * @returns {string}
+       */
     getCompareState(name) {
       let state = "unknown"
       this.Store.compareConfig.explain.states.forEach(node => {
@@ -153,6 +188,12 @@ export default {
       })
       return state
     },
+      /**
+       * returns if a row contains a target node
+       *
+       * @param row
+       * @returns {null}
+       */
     isTherapyRow(row) {
       let rowClass = null
       this.Store.patient.targets.forEach(target => {
@@ -160,6 +201,12 @@ export default {
       })
       return rowClass
     },
+      /**
+       * returns true if a node is part of the current or compare configuration, but not the other
+       *
+       * @param row
+       * @returns {boolean}
+       */
     isDifferentName(row) {
       if (row.config_name === "compare") {
         return !this.Store.explain.relevance.find(a => a.node_name === row.node_name);
@@ -169,6 +216,12 @@ export default {
       }
       return false
     },
+      /**
+       * returns true if the node state of the current and compare configuration are different
+       *
+       * @param row
+       * @returns {boolean}
+       */
     isDifferentState(row) {
       if (row.config_name === "compare") {
         let node = this.Store.explain.relevance.find(a => a.node_name === row.node_name)

@@ -20,13 +20,22 @@ export default {
     }
   },
   methods: {
+      /**
+       * Gets called when an element of the network list is clicked
+       */
     clicked: function () {
+        //open network in case of double click (the component natually deselects the element if you do that)
       if (this.selectedNetwork === null) {
         this.selectedNetwork = this.prevSelectedNetwork
         this.openNetwork()
       }
       this.prevSelectedNetwork = this.selectedNetwork
     },
+      /**
+       * opens interface using selected network
+       *
+       * @returns {Promise<void>}
+       */
     openNetwork: async function () {
       if (typeof (this.selectedNetwork.name) == 'undefined') {
         alert("No network selected")
@@ -36,6 +45,11 @@ export default {
 
       this.$emit("changePage", selectedNet)
     },
+      /**
+       * loads network list from server
+       *
+       * @returns {Promise<void>}
+       */
     loadNetList: async function () {
       const gResponse = await fetch("https://doctorbn-backend.herokuapp.com/loadNetList");
       const netList = await gResponse.json();
