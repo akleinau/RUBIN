@@ -95,11 +95,17 @@ export default {
     }
   },
   watch: {
+      /**
+       * shows relevance view when tutorial is started
+       */
     tutorialStep: function () {
       if (this.tutorialStep === 1) {
         this.currentIndex = 0
       }
     },
+      /**
+       * updates menu when language is changed. Necessary as translations were buggy otherwise
+       */
     language: function () {
       this.options = this.getOptions()
     }
@@ -108,6 +114,11 @@ export default {
     tutorialStep: function () {
       return this.Store.tutorialStep
     },
+      /**
+       * computes all necessary information for the compact network view
+       *
+       * @returns {{compactNodes: *[], compactEdges: *[]}|null}
+       */
     compactNetwork: function () {
       if (this.Store.explain.explanation == null) {
         return null
@@ -166,31 +177,48 @@ export default {
     },
   },
   methods: {
-    getExEdges() {
-      if (this.Store.explain.explanation != null) {
-        return this.Store.explain.explanation["edges"]
-      }
-    },
+      /**
+       * returns compact network edges
+       *
+       * @returns {*[]}
+       */
     getCompactEdges() {
       if (this.compactNetwork != null) {
         return this.compactNetwork.compactEdges
       }
     },
+      /**
+       * returns compact network nodes
+       *
+       * @returns {*[]}
+       */
     getExNodes() {
       if (this.compactNetwork != null) {
         return this.compactNetwork.compactNodes
       }
     },
+      /**
+       * sets "treatmentCard" class when a treatment is selected in prediction view.
+       * As a result, a gray box is shown around the explanation view to highlight the change.
+       *
+       * @returns {null|string}
+       */
     getCardClass() {
       if (this.Store.predictions.selectedOption === null) return null
       if (this.Store.predictions.selectedOption === undefined) return null
       return (Object.entries(this.Store.predictions.selectedOption.option).length === 0) ? null : "treatmentCard"
     },
+      /**
+       * updates tutorial when dropdown is selected
+       */
     DropdownClicked() {
       if (this.Store.tutorialStep === 7) {
         this.Store.tutorialStep = 8
       }
     },
+       /**
+       * updates tutorial when dropdown is changed
+       */
     DropdownChanged() {
       if (this.Store.tutorialStep === 8 && this.currentIndex === 1) {
         this.Store.tutorialStep = 9
@@ -198,6 +226,11 @@ export default {
         this.Store.tutorialStep = 7
       }
     },
+      /**
+       * returns options for explanation dropdown menu
+       *
+       * @returns {Object[]}
+       */
     getOptions() {
       return [
         {label: this.$t("Relevance"), value: 0},

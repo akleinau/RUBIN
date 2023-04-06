@@ -153,7 +153,11 @@ export default {
     }
   },
   computed: {
-    //adds 'checked' property to every option of every node of the overlay
+      /**
+       * calculates overlay nodes adding 'checked' property to every option of every remaining patient node
+       *
+       * @returns {{name: *, options: *, group: string|*}[]}
+       */
     overlayNodes: function () {
       let nodes = this.Store.patient.nodes
 
@@ -172,6 +176,11 @@ export default {
           }
       )
     },
+      /**
+       * calculates displayed table by combining evidence of current and (optional) compared patient
+       *
+       * @returns {any}
+       */
     table: function () {
       let table = JSON.parse(JSON.stringify(this.Store.patient.evidence))
 
@@ -201,12 +210,22 @@ export default {
     }
   },
   methods: {
+      /**
+       * Gets called when user clicks on the "add evidence" button.
+       */
     addButtonClicked() {
       this.overlay = true
       if (this.Store.tutorialStep === 1) {
         this.Store.tutorialStep = 2
       }
     },
+
+      /**
+       * Gets called when user selects/ deselects something in the overlay
+       *
+       * @param slotProps - the changed node
+       * @param option - the selected/ deselected option
+       */
     onOverlayOptionChange(slotProps, option) {
       //deselect this and other options of the node
       this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
@@ -231,6 +250,9 @@ export default {
         this.Store.tutorialStep = 3
       }
     },
+      /**
+       * Adds selected nodes from overlay to patient evidence
+       */
     addNodesFromOverlay() {
       this.addNodes(this.nodesToAdd)
       this.nodesToAdd = []
@@ -239,24 +261,50 @@ export default {
         this.Store.tutorialStep = 4
       }
     },
+      /**
+       * deletes evidence node
+       *
+       * @param node
+       */
     deleteNode(node) {
       this.Store.deleteEvidence(node)
       this.Store.calculate()
     },
+      /**
+       * removes node from the list of nodes that will be added to evidence at the end of using the overlay
+       *
+       * @param node
+       */
     deleteNodeFromOverlay(node) {
       this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
     },
+      /**
+       * Gets called when for an evidence item a different option is selected via dropdown menu
+       *
+       * @param node
+       */
     onNodeChange(node) {
       this.addNodes([node])
     },
+      /**
+       * adds nodes to patient evidence and calls recalculation
+       *
+       * @param nodes
+       */
     addNodes(nodes) {
       this.Store.addEvidences(nodes)
       this.Store.calculate()
     },
+      /**
+       * Gets called when the overlay is closed
+       */
     cancelOverlay() {
       this.nodesToAdd = []
       this.overlay = false
     },
+      /**
+       * deletes all evidence
+       */
     clearEvidence() {
       this.cancelOverlay()
       this.Store.patient.evidence.forEach(ev => {
@@ -267,13 +315,31 @@ export default {
       this.Store.calculate()
 
     },
+      /**
+       * checks if a node has the same state selected in current and compare configuration
+       *
+       * @param item
+       * @returns {boolean}
+       */
     isDifferentState(item) {
       if (item.selectedCompare === '') return false
       return item.selected.name !== item.selectedCompare
     },
+      /**
+       * returns the option label
+       *
+       * @param option
+       * @returns {*}
+       */
     get_option_label(option) {
       return this.Store.labels.states[option.node][option.name]
     },
+      /**
+       * returns the group label
+       *
+       * @param name
+       * @returns {string}
+       */
     get_group_label(name) {
       let id = this.Store.evidenceGroupMap[name]
       if (id === "") return ""
@@ -291,6 +357,11 @@ export default {
       return label_element.num + " " + label
     },
     //directly coded in here, should be in the customization file
+      /**
+       * returns if for the endorisk model enough evidence is added
+       *
+       * @returns {boolean}
+       */
     notEnoughEvidenceEndorisk() {
       if (this.Store.network !== "endometrial cancer") return false
       let notEnoughInformation = false

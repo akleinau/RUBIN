@@ -88,6 +88,9 @@ export default {
     }
   },
   watch: {
+      /**
+       * triggers phase change if the currentPhaseIndex changes
+       */
     currentPhaseIndex() {
       if (this.currentPhaseIndex === this.Store.phases.length) {
         this.Store.currentPhase = null
@@ -95,14 +98,14 @@ export default {
         this.Store.currentPhase = this.Store.phases[this.currentPhaseIndex]
         this.Store.phase_change()
       }
-    },
-    "Store.currentPhase": function () {
-      if (this.Store.currentPhase === null) {
-        this.currentPhaseIndex = this.Store.phases.length
-      }
     }
   },
   computed: {
+      /**
+       * computes list of phases for phase dropdown
+       *
+       * @returns {*[]}
+       */
     phases: function () {
       let phases = []
       this.Store.phases.forEach((p, i) => {
@@ -122,6 +125,12 @@ export default {
     },
   },
   methods: {
+      /**
+       * returns goal label
+       *
+       * @param goal
+       * @returns {string}
+       */
     getGoalLabel(goal) {
       return this.Store.labels.nodes[goal.name] + ": " + goal.selected.name
     },

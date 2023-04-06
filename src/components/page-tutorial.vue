@@ -135,12 +135,16 @@ export default {
     return {Store}
   },
   watch: {
+      /**
+       * updates tutorial when the step is changed elsewhere
+       */
     tutorialStep: function () {
       this.sendBlock()
       this.setAllOverlayPositions()
-
-
     },
+      /**
+       * updates positions when all element of UI are loaded
+       */
     loading: function () {
       this.setAllOverlayPositions()
     }
@@ -167,6 +171,11 @@ export default {
     next() {
       this.Store.tutorialStep++;
     },
+      /**
+       * updates which elements of the UI are blocked during the tutorial
+       *
+       * @returns {Promise<void>}
+       */
     async sendBlock() {
       let newBlock = {
         "evidence": !(this.tutorialStep <= 3 || this.Store.tutorialStep >= this.finalStep),
@@ -182,6 +191,9 @@ export default {
       this.$emit("setBlock", newBlock)
 
     },
+      /**
+       * sets positions of all tutorial overlays
+       */
     setAllOverlayPositions() {
       setTimeout(() => {
         this.setOverlayPosition('addButton', 'overlay1', "up")
@@ -198,6 +210,13 @@ export default {
       }, 100)
     },
 
+      /**
+       * sets position of the specified tutorial overlay
+       *
+       * @param {string} target - the id of the target UI element to attach the overlay too
+       * @param {string} overlay - the id of the overlay
+       * @param {string} position - relative position of overlay to target
+       */
     setOverlayPosition(target, overlay, position) {
       if (document.getElementById(target)) {
         let boundingBox = document.getElementById(target).getBoundingClientRect()

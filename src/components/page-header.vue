@@ -72,6 +72,11 @@ export default {
     this.items = this.getItems()
   },
   watch: {
+      /**
+       * watches patient name to update in header
+       *
+       * @param name
+       */
     patient: function (name) {
       let configItem = this.items.find(a => a.key === "Patient")
       if (name !== "") {
@@ -80,6 +85,9 @@ export default {
         configItem.label = this.$t('Network')
       }
     },
+      /**
+       * watches compareConfig to update in header
+       */
     compareConfig: function () {
       if (this.compareConfig == null) {
         this.stopComparing()
@@ -106,11 +114,17 @@ export default {
     }
   },
   methods: {
+      /**
+       * called when the network selection should be opened
+       */
     changePage() {
       this.Store.reset(true)
       this.NetworkSelectionDialog = false
       this.$emit('changePage')
     },
+      /**
+       * called when compare feature is started
+       */
     startComparing() {
       this.Store.compareConfig = {
         "patient": JSON.parse(JSON.stringify(this.Store.patient)),
@@ -126,6 +140,9 @@ export default {
         this.stopComparing()
       }
     },
+      /**
+       * called when compare feature is stopped
+       */
     stopComparing() {
       let configItem = this.items.find(a => a.key === "savedConfigurations")
       configItem.label = this.$t('startComparing')
@@ -135,12 +152,23 @@ export default {
       }
       this.Store.compareConfig = null
     },
+      /**
+       * called when feedback is sent to close dialog
+       */
     sendFeedback() {
       this.showFeedback = false
     },
+      /**
+       * toggles language dialog
+       *
+       * @param event
+       */
     showLanguage(event) {
       this.$refs.langOverlay.toggle(event)
     },
+      /**
+       * changes language
+       */
     langChange() {
       if (this.$i18n.locale == null) {
         this.$i18n.locale = "en"
@@ -155,15 +183,30 @@ export default {
       this.items = this.getItems()
 
     },
+      /**
+       * called when patient is loaded to toggle dialog
+       *
+       * @param event
+       */
     loadPatient(event) {
       this.$refs.loadOverlay.toggle(event)
     },
 
+      /**
+       * capitalizes each first letter of every word in a sentence
+       *
+       * @param string
+       * @returns {string}
+       */
     capitalize(string) {
-      //capitalizes each first letter of every word in a sentence
       return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
 
+      /**
+       * returns header menu items
+       *
+       * @returns {Object[]}
+       */
     getItems() {
       return [
         {
