@@ -23,6 +23,11 @@ export default {
     return {Store}
   },
   computed: {
+    /**
+     * restructures edges to be usable by the sugiyama method
+     *
+     * @returns {*[]}
+     */
     edgeList: function () {
       const list = []
       if (this.edges) {
@@ -51,14 +56,33 @@ export default {
     return {}
   },
   methods: {
+    /**
+     * gets current state of a node
+     *
+     * @param n - the name of node
+     * @returns {*}
+     */
     getState(n) {
       let node = this.nodes.find(d => d.name === n.data.id)
       return this.Store.labels.states[node.name][node.state]
     },
+    /**
+     * gets probability of current state of a node
+     *
+     * @param node
+     * @returns {string|*}
+     */
     getProbability(node) {
       return this.nodes.find(d => d.name === node.data.id).probability
     },
 
+    /**
+     * true when node should be fully visible, either in full network view or as one
+     * of the highlighted nodes in compact network view
+     *
+     * @param node
+     * @returns {boolean}
+     */
     isHighlightNode(node) {
       if (this.highlight) {
         return this.highlightNodes.find(n => n.name === node.data.id) !== undefined
@@ -66,6 +90,13 @@ export default {
       return true
     },
 
+    /**
+     * true when edge should be fully visible, either in full network view or as one
+     * of the highlighted nodes in compact network view
+     *
+     * @param edge
+     * @returns {boolean}
+     */
     isHighlightEdge(edge) {
       if (this.highlight) {
         return this.highlightEdges.find(e => e.source === edge.data[0] && e.target === edge.data[1]) !== undefined
@@ -73,6 +104,12 @@ export default {
       return true
     },
 
+    /**
+     * displays additional information box when hovered over a node
+     *
+     * @param e - the hover event
+     * @param d - the data of the event
+     */
     getDetails(e, d) {
       if (!this.highlight || this.isHighlightNode(d)) {
         //move into focus
@@ -124,6 +161,11 @@ export default {
 
     },
 
+    /**
+     * hides additional information box of a node again after the mouse leaves
+     *
+     * @param e - the event
+     */
     hideDetails(e) {
       d3.select(e.target.parentNode).selectAll(".box").attr("width", 25)
           .attr("height", 13)
@@ -136,6 +178,9 @@ export default {
       d3.select(e.target.parentNode).selectAll(".probText").remove()
     },
 
+    /**
+     * displays network in sugiyama layout
+     */
     visualise() {
       if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
 
