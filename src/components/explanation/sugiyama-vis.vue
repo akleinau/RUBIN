@@ -1,5 +1,6 @@
 <template>
   <div ref="container" class="overflow-hidden"/>
+  <div ref="legend" class="absolute w-full" style="left:20px; bottom:20px;"/>
 
 </template>
 
@@ -266,7 +267,7 @@ export default {
         nodes.append('rect')
             .attr("class", "box")
             .attr("width", 25)
-            .attr("height", d => this.isHighlightNode(d)  && this.getProbability(d) !== 1 ? 13 : 10)
+            .attr("height", d => this.isHighlightNode(d) && this.getProbability(d) !== 1 ? 13 : 10)
             .attr('fill', "white")
             .style('stroke-opacity', d => this.isHighlightNode(d) ? 1 : 0.2)
             .attr("stroke-width", 0.4)
@@ -332,9 +333,76 @@ export default {
 
         d3.select(this.$refs.container).call(zoom)
 
+        this.showLegend(width)
 
       }
 
+    },
+    showLegend(width) {
+
+
+      d3.select(this.$refs.legend).selectAll("*").remove()
+
+
+      var svg = d3.select(this.$refs.legend)
+          .append("svg")
+          .attr("viewBox", [0, 0, width + 120, 30])
+
+      svg.append("rect")
+          .attr("width", 26)
+          .attr("height", 22)
+          .attr('fill', "white")
+          .attr("stroke", "slateblue")
+          .attr("stroke-width", 0.4)
+          .attr("rx", 2)
+          .attr("ry", 2)
+          .attr("transform", "translate(2,4)")
+
+      svg.append('text')
+          .text("node name:")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(15,8)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("state")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(15,12)")
+          .attr("fill", "darkslategray")
+
+      svg.append('rect')
+          .attr("width", 20)
+          .attr("height", 1)
+          .attr("fill", "lightgray")
+          .attr('transform', `translate(5,14)`)
+      svg.append('rect')
+          .attr("width", 15)
+          .attr("height", 1)
+          .attr("fill", "slategray")
+          .attr('transform', `translate(5,14)`)
+
+      svg.append('text')
+          .text("0%")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(8,20)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("100%")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(20,20)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("probability")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(15,24)")
+          .attr("fill", "darkslategray")
 
     }
   }
