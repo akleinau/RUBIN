@@ -249,7 +249,8 @@ export default {
 <style lang="scss" scoped>
 
 ::v-deep(.p-card-body) {
-  padding: 0.3rem;
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
 }
 
 </style>
