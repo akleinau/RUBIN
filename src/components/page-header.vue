@@ -191,6 +191,19 @@ export default {
     loadPatient(event) {
       this.$refs.loadOverlay.toggle(event)
     },
+    /**
+     * formats network name shown in header
+     *
+     * @param networkName
+     */
+    format(networkName) {
+      if (networkName.length > 15) {
+        return this.capitalize(networkName).substring(0, 14) + "..."
+      }
+      else {
+        return this.capitalize(networkName)
+      }
+    },
 
       /**
        * capitalizes each first letter of every word in a sentence
@@ -219,7 +232,7 @@ export default {
           items: []
         },
         {
-          label: this.$t('Network') + ": " + this.capitalize(this.Store.network),
+          label: this.$t('Network') + ": " + this.format(this.Store.network),
           key: 'NetworkDescription',
           icon: PrimeIcons.BOOK,
           command: (event) => {

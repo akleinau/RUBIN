@@ -23,7 +23,7 @@
         <div v-else class="flex flex-column overflow-hidden h-full flex-align-full w-full">
           <Dropdown v-model="currentIndex" optionLabel="label" optionValue="value"
                     :options="options" id="explanationDropdown" @click="DropdownClicked" @change="DropdownChanged"
-                    class="flex mt-4 ">
+                    class="flex">
           </Dropdown>
           <TabView v-model:active-index="currentIndex" scrollable class="flex-1 overflow-hidden">
             <!--   relevance  -->

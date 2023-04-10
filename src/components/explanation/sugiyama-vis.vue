@@ -1,5 +1,6 @@
 <template>
   <div ref="container" class="overflow-hidden"/>
+  <div ref="legend" class="absolute w-full" style="left:20px; bottom:20px;"/>
 
 </template>
 
@@ -23,6 +24,11 @@ export default {
     return {Store}
   },
   computed: {
+    /**
+     * restructures edges to be usable by the sugiyama method
+     *
+     * @returns {*[]}
+     */
     edgeList: function () {
       const list = []
       if (this.edges) {
@@ -51,14 +57,33 @@ export default {
     return {}
   },
   methods: {
+    /**
+     * gets current state of a node
+     *
+     * @param n - the name of node
+     * @returns {*}
+     */
     getState(n) {
       let node = this.nodes.find(d => d.name === n.data.id)
       return this.Store.labels.states[node.name][node.state]
     },
+    /**
+     * gets probability of current state of a node
+     *
+     * @param node
+     * @returns {string|*}
+     */
     getProbability(node) {
       return this.nodes.find(d => d.name === node.data.id).probability
     },
 
+    /**
+     * true when node should be fully visible, either in full network view or as one
+     * of the highlighted nodes in compact network view
+     *
+     * @param node
+     * @returns {boolean}
+     */
     isHighlightNode(node) {
       if (this.highlight) {
         return this.highlightNodes.find(n => n.name === node.data.id) !== undefined
@@ -66,6 +91,13 @@ export default {
       return true
     },
 
+    /**
+     * true when edge should be fully visible, either in full network view or as one
+     * of the highlighted nodes in compact network view
+     *
+     * @param edge
+     * @returns {boolean}
+     */
     isHighlightEdge(edge) {
       if (this.highlight) {
         return this.highlightEdges.find(e => e.source === edge.data[0] && e.target === edge.data[1]) !== undefined
@@ -73,6 +105,12 @@ export default {
       return true
     },
 
+    /**
+     * displays additional information box when hovered over a node
+     *
+     * @param e - the hover event
+     * @param d - the data of the event
+     */
     getDetails(e, d) {
       if (!this.highlight || this.isHighlightNode(d)) {
         //move into focus
@@ -124,6 +162,11 @@ export default {
 
     },
 
+    /**
+     * hides additional information box of a node again after the mouse leaves
+     *
+     * @param e - the event
+     */
     hideDetails(e) {
       d3.select(e.target.parentNode).selectAll(".box").attr("width", 25)
           .attr("height", 13)
@@ -136,6 +179,9 @@ export default {
       d3.select(e.target.parentNode).selectAll(".probText").remove()
     },
 
+    /**
+     * displays network in sugiyama layout
+     */
     visualise() {
       if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
 
@@ -221,7 +267,7 @@ export default {
         nodes.append('rect')
             .attr("class", "box")
             .attr("width", 25)
-            .attr("height", d => this.isHighlightNode(d)  && this.getProbability(d) !== 1 ? 13 : 10)
+            .attr("height", d => this.isHighlightNode(d) && this.getProbability(d) !== 1 ? 13 : 10)
             .attr('fill', "white")
             .style('stroke-opacity', d => this.isHighlightNode(d) ? 1 : 0.2)
             .attr("stroke-width", 0.4)
@@ -287,9 +333,76 @@ export default {
 
         d3.select(this.$refs.container).call(zoom)
 
+        this.showLegend(width)
 
       }
 
+    },
+    showLegend(width) {
+
+
+      d3.select(this.$refs.legend).selectAll("*").remove()
+
+
+      var svg = d3.select(this.$refs.legend)
+          .append("svg")
+          .attr("viewBox", [0, 0, width + 120, 30])
+
+      svg.append("rect")
+          .attr("width", 26)
+          .attr("height", 22)
+          .attr('fill', "white")
+          .attr("stroke", "slateblue")
+          .attr("stroke-width", 0.4)
+          .attr("rx", 2)
+          .attr("ry", 2)
+          .attr("transform", "translate(2,4)")
+
+      svg.append('text')
+          .text("node name:")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(15,8)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("state")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(15,12)")
+          .attr("fill", "darkslategray")
+
+      svg.append('rect')
+          .attr("width", 20)
+          .attr("height", 1)
+          .attr("fill", "lightgray")
+          .attr('transform', `translate(5,14)`)
+      svg.append('rect')
+          .attr("width", 15)
+          .attr("height", 1)
+          .attr("fill", "slategray")
+          .attr('transform', `translate(5,14)`)
+
+      svg.append('text')
+          .text("0%")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(8,20)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("100%")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(20,20)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("probability")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(15,24)")
+          .attr("fill", "darkslategray")
 
     }
   }
