@@ -25,7 +25,6 @@ export function createSVG(width, value) {
     let x = 0
 
     let absValue = value
-
     if (value < 0) {
         absValue *= -1
         x = -length(absValue)
