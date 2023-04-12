@@ -15,6 +15,9 @@ export default {
     this.visualise()
   },
   methods: {
+    /**
+     * displays two-sided relevance bar
+     */
     visualise() {
 
       let svg = twosidedbarvisjs.createSVG(300, this.value)

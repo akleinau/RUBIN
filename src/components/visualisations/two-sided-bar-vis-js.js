@@ -1,5 +1,12 @@
 import * as d3 from "d3";
 
+/**
+ * returns svg to display two-sided bar with given width and value
+ *
+ * @param width
+ * @param value
+ * @returns {*}
+ */
 export function createSVG(width, value) {
     let height = 50
 

@@ -59,6 +59,11 @@ export default {
     return {Store}
   },
   computed: {
+    /**
+     * returns goals that are predefined by the current phase but already entered as evidence
+     *
+     * @returns {Object[]}
+     */
     givenGoals: function () {
       let givenGoals = []
       if (this.Store.currentPhase !== null) {
@@ -72,6 +77,12 @@ export default {
       }
       return givenGoals
     },
+
+    /**
+     * returns goals that are predefined by the current phase but already entered as evidence of the compare config
+     *
+     * @returns {Object[]}
+     */
     givenGoals_compare: function () {
       let givenGoals_compare = []
       if (this.Store.currentPhase !== null) {
@@ -87,6 +98,12 @@ export default {
       }
       return givenGoals_compare
     },
+
+    /**
+     * returns targets that are predefined by the current phase but already entered as evidence
+     *
+     * @returns {Object[]}
+     */
     givenTargets: function () {
       let givenTargets = []
       if (this.Store.currentPhase !== null) {
@@ -101,6 +118,12 @@ export default {
 
       return givenTargets
     },
+
+    /**
+     * returns targets that are predefined by the current phase but already entered as evidence of the compare config
+     *
+     * @returns {Object[]}
+     */
     givenTargets_compare: function () {
       let givenTargets_compare = []
       if (this.Store.currentPhase !== null) {

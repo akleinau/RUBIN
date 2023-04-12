@@ -52,14 +52,19 @@ export default {
     }
   },
   computed: {
+    /**
+     * returns nodes that should be displayed in overlay
+     *
+     * @returns {Object[]}
+     */
     overlayNodes: function () {
-      if (this.Store.currentPhase != null) {
-        return this.Store.patient.nodes.filter(x => this.Store.currentPhase.sets.target.includes(x.name))
-      }
-      return this.Store.patient.nodes //.filter(x => this.nodesToAdd.find(node => node.name === x.name) == null)
+      return this.Store.patient.nodes
     }
   },
   methods: {
+    /**
+     * adds selected nodes from overlay to targets
+     */
     addTargetsFromOverlay() {
       if (this.selected != null) {
         this.Store.addTargets(this.selected)
@@ -68,10 +73,18 @@ export default {
       this.selected = []
       this.overlay = false
     },
+    /**
+     * deletes target
+     *
+     * @param node
+     */
     deleteNode(node) {
       this.Store.deleteTarget(node)
       this.Store.calculate()
     },
+    /**
+     * hides overlay
+     */
     cancelOverlay() {
       this.selected = []
       this.overlay = false

@@ -1,5 +1,5 @@
 <template>
-  <DataTable id="table" :value="selection" class="NoHeader p-datatable-sm"
+  <DataTable id="table" :value="table" class="NoHeader p-datatable-sm"
              responsiveLayout="scroll" >
     <Column field="name" style="padding: 0; border: 0;">
       <template #body="slotProps">
@@ -107,7 +107,12 @@ export default {
     }
   },
   computed: {
-    selection: function () {
+      /**
+       * calculates data of displayed table of current goals
+       *
+       * @returns {any}
+       */
+    table: function () {
       return this.Store.patient.goals.map(node => {
         return {
           name: node.name,
@@ -123,7 +128,12 @@ export default {
         }
       })
     },
-    //adds 'checked' property to every option of every node of the overlay
+
+    /**
+     * calculates data for overlay table, adding 'checked' property to every option of every node
+     *
+     * @returns {Object[]}
+     */
     overlayNodes: function () {
       let nodes = this.Store.patient.nodes
       if (this.Store.currentPhase !== null) {
@@ -148,6 +158,12 @@ export default {
     }
   },
   methods: {
+    /**
+     * returns direction of a node of the overlay, if that node is supposed to be added as goal
+     *
+     * @param node
+     * @returns {*|null}
+     */
     getDirection(node) {
       let listNode = this.nodesToAdd.find(n => n.name === node.name)
       if (listNode) {
@@ -155,6 +171,13 @@ export default {
       }
       return null
     },
+
+    /**
+     * Called when the user clicks on a node of the overlay
+     *
+     * @param slotProps
+     * @param option
+     */
     onOverlayOptionChange(slotProps, option) {
       //deselect this and other options of the node
       this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
@@ -176,14 +199,29 @@ export default {
         this.nodesToAdd.push(item);
       }
     },
+
+    /**
+     * changes direction of a node when it is changed in the overlay
+     *
+     * @param slotProps
+     */
     onOverlayDirectionChange(slotProps) {
       this.nodesToAdd.find(a => a.name === slotProps.data.name).direction = slotProps.data.direction
     },
+
+    /**
+     * adds selected nodes from overlay as goals
+     */
     addNodesFromOverlay() {
       this.addNodes(this.nodesToAdd)
       this.nodesToAdd = []
       this.overlay = false
     },
+    /**
+     * deletes goal
+     *
+     * @param node
+     */
     deleteNode(node) {
       this.Store.deleteGoal(node)
       this.Store.calculate()
@@ -191,12 +229,25 @@ export default {
         this.Store.calculate(true)
       }
     },
+    /**
+     * deselects node from overlay
+     *
+     * @param node
+     */
     deleteNodeFromOverlay(node) {
       this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
     },
+    /**
+     * Called when a different state is selected via the dropdown menu of a goal
+     *
+     * @param node
+     */
     onNodeChange(node) {
       this.addNodes([node])
     },
+    /**
+     * adds nodes as goals
+     */
     addNodes(nodes) {
       this.Store.addGoals(nodes)
       this.Store.calculate()
@@ -204,10 +255,19 @@ export default {
         this.Store.calculate(true)
       }
     },
+    /**
+     * hides overlay
+     */
     cancelOverlay() {
       this.nodesToAdd = []
       this.overlay = false
     },
+    /**
+     * returns label of an option
+     *
+     * @param option
+     * @returns {*}
+     */
     get_option_label(option) {
       return this.Store.labels.states[option.node][option.name]
     }

@@ -1,5 +1,13 @@
 import * as d3 from "d3";
 
+/**
+ * returns svg to display percentage bar with given width and color
+ *
+ * @param width
+ * @param value
+ * @param color_name
+ * @returns {*}
+ */
 export function createSVG(width, value, color_name) {
 
     let height = 50

@@ -50,10 +50,18 @@ export default {
     }
   },
   methods: {
+    /**
+     * reads text when it is entered directly via textbox
+     */
     readText() {
       console.log(this.csvText)
       this.read(this.csvText, "")
     },
+    /**
+     * reads file content uploaded
+     *
+     * @param fileField
+     */
     readFile(fileField) {
       const csvFile = fileField.files[0];
       const name = csvFile.name.replace('.csv', '')
@@ -63,6 +71,12 @@ export default {
       }
       reader.readAsText(csvFile)
     },
+    /**
+     * reads string patient configuration and converts it to patient data
+     *
+     * @param str
+     * @param name
+     */
     read(str, name) {
       const delimiter = '; '
       const headers = ['type', 'name', 'option', 'direction']
@@ -77,6 +91,13 @@ export default {
       this.load(patientData, name)
 
     },
+    /**
+     * returns node objects corresponding to array of node names
+     *
+     * @param nodeArr
+     * @param type
+     * @returns {*[]}
+     */
     getCorrespondingNode(nodeArr, type) {
       let correspondingNodes = []
       nodeArr.forEach(node => {
@@ -98,6 +119,14 @@ export default {
       })
       return correspondingNodes
     },
+
+    /**
+     * loads patient data as current patient configuration
+     *
+     * @param patientData
+     * @param name
+     * @returns {Promise<void>}
+     */
     async load(patientData, name) {
       for (var row in patientData) {
         let item = patientData[row]
@@ -132,6 +161,9 @@ export default {
       this.Store.calculate()
       this.$emit('loaded')
     },
+    /**
+     * exports current patient configuration as csv file
+     */
     exportCSV() {
       const csv = this.Store.createCSVcontent();
 
@@ -141,6 +173,9 @@ export default {
       anchor.download = this.Store.patient.name + '.csv';
       anchor.click();
     },
+    /**
+     * exports current data as pdf document
+     */
     exportPDF() {
 
       let data = {
@@ -184,11 +219,22 @@ export default {
       pdfMake.createPdf(data).open()
 
     },
+    /**
+     * capitalizes each first letter of every word in a sentence
+     *
+     * @param string
+     * @returns {*}
+     */
     capitalize(string) {
-      //capitalizes each first letter of every word in a sentence
       return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
 
+    /**
+     * helper function to create pdf table out of given data
+     *
+     * @param data
+     * @returns {Object}
+     */
     pdfTable(data) {
       let Ncolumn = data[0].length
 
@@ -228,6 +274,11 @@ export default {
       }
     },
 
+    /**
+     * adds evidence info to pdf
+     *
+     * @param data
+     */
     pdf_add_evidence(data) {
       let evidence = [[this.$t("Node"), ""]]
       this.Store.patient.evidence.map(x => {
@@ -240,6 +291,11 @@ export default {
       data.content.push(this.pdfTable(evidence))
     },
 
+    /**
+     * addds goal info to pdf
+     *
+     * @param data
+     */
     pdf_add_goals(data) {
       let goals = [[this.$t("Node"), "", ""]]
       this.Store.patient.goals.map(x => {
@@ -254,6 +310,11 @@ export default {
       data.content.push(this.pdfTable(goals))
     },
 
+    /**
+     * adds target info to pdf
+     *
+     * @param data
+     */
     pdf_add_targets: function (data) {
       if (this.Store.patient.targets.length > 0) {
         let targets = [[this.$t("Node")]]
@@ -267,6 +328,11 @@ export default {
       }
     },
 
+    /**
+     * adds prediction info to pdf
+     *
+     * @param data
+     */
     pdf_add_predictions(data) {
       data.content.push({text: this.$t("Treatment"), style: 'subheader'})
       let predictionsHeader = [""]
@@ -305,6 +371,11 @@ export default {
       data.content.push(this.pdfTable(predictions))
     },
 
+    /**
+     * adds explanation info to pdf
+     *
+     * @param data
+     */
     pdf_add_explanations(data) {
       data.content.push({text: this.$t("Explanation"), style: 'subheader'})
 
@@ -343,6 +414,13 @@ export default {
 
       data.content.push(this.pdfTable(explanations))
     },
+
+    /**
+     * returns state of a node
+     *
+     * @param name
+     * @returns {string}
+     */
     getState(name) {
       let state = "unknown"
       this.Store.explain.states.forEach(node => {
