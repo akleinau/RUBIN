@@ -32,6 +32,11 @@ export default {
     }
   },
   methods: {
+    /**
+     * sends feedback to backend to be saved in database
+     *
+     * @returns {Promise<void>}
+     */
     async sendFeedback() {
       const address = "https://doctorbn-backend.herokuapp.com/"
       //const address = "http://127.0.0.1:5000/"

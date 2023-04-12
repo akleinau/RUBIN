@@ -25,6 +25,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * displays percentage bar
+     */
     visualise() {
 
       let svg = barvisjs.createSVG(this.width, this.value, this.color)

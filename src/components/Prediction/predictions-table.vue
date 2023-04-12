@@ -78,6 +78,11 @@ export default {
     return {Store}
   },
   computed: {
+    /**
+     * returns data of table by combining current and (optional) compare configuration
+     *
+     * @returns {any}
+     */
     table: function () {
       let table = JSON.parse(JSON.stringify(this.Store.predictions.options))
       if (table !== null) {
@@ -91,6 +96,11 @@ export default {
       this.updateSelected(table)
       return table
     },
+    /**
+     * returns minimal index of an option of the table
+     *
+     * @returns {number}
+     */
     minIndex: function () {
       return 0;
     }
@@ -101,11 +111,22 @@ export default {
     }
   },
   methods: {
+    /**
+     * returns goals for the columns
+     *
+     * @returns {[]}
+     */
     getGoalKeys() {
       if (this.Store.patient.goals != null) {
         return this.Store.patient.goals
       }
     },
+    /**
+     * returns string of the target combination of an option, or null if it's the basic option
+     *
+     * @param option
+     * @returns {string|null}
+     */
     getOptionLabel(option) {
       if (option == null) return null
       let label = ""
@@ -114,6 +135,12 @@ export default {
       })
       return label
     },
+
+    /**
+     * updates table if an option is selected/ deselected
+     *
+     * @param event
+     */
     update(event) {
       if (this.table !== null && this.table !== undefined) {
 
@@ -135,6 +162,11 @@ export default {
         }
       }
     },
+    /**
+     * updates currently selected option when table is recomputed
+     *
+     * @param table
+     */
     updateSelected(table) {
       if (table !== null && table !== undefined) {
         if (this.selectedOption) {
@@ -151,16 +183,37 @@ export default {
         }
       }
     },
+    /**
+     * returns column name of a goal column
+     *
+     * @param goal
+     * @returns {string}
+     */
     getGoalLabel(goal) {
       return this.Store.labels.nodes[goal.name] + ": " + this.Store.labels.states[goal.name][goal.selected.name]
     },
+    /**
+     * called when an option is deselected. Resets selection to standard.
+     */
     deselect() {
       this.Store.predictions.selectedOption = this.Store.predictions.likelyResult[0]
       this.update()
     },
+    /**
+     * sets "overall" class to "overall" options
+     *
+     * @param data
+     * @returns {string|null}
+     */
     rowClass(data) {
       return Object.keys(data.option).length === 0 && data.config_name === "current" ? 'overall' : null;
     },
+    /**
+     * returns dynamically adjusted bar width given the number of rows
+     *
+     * @param num - number of rows
+     * @returns {number}
+     */
     getBarWidth(num) {
       return 100 / num + 100
     }
@@ -175,8 +228,7 @@ export default {
 }
 
 ::v-deep(.overall) {
-  //background-color: lightblue !important;
-  border-bottom: 5px solid #607D8B;
+  border-bottom: 5px solid #607D8B; //I have no idea why this is currently not displayed
 }
 
 .p-card {
