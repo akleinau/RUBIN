@@ -1,6 +1,6 @@
 <template>
   <div ref="container" class="overflow-hidden"/>
-  <div ref="legend" class="absolute w-full" style="left:20px; bottom:20px;"/>
+  <div ref="legend" class="absolute w-5" style="left:20px; bottom:20px;"/>
 
 </template>
 
@@ -338,6 +338,11 @@ export default {
       }
 
     },
+    /**
+     * displays legend
+     *
+     * @param width - width of the svg viewport of the network
+     */
     showLegend(width) {
 
 
@@ -346,7 +351,31 @@ export default {
 
       var svg = d3.select(this.$refs.legend)
           .append("svg")
-          .attr("viewBox", [0, 0, width + 120, 30])
+          .attr("viewBox", [-3, -10, width/2 + 30, 40])
+
+       svg.append("rect")
+          .attr("width", 70)
+          .attr("height", 36)
+          .attr('fill', "white")
+          .attr("stroke", "darkslategray")
+          .attr("stroke-width", 0.4)
+          .attr("transform", "translate(-1,-8)")
+
+      svg.append('text')
+          .text("legend")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr('font-style', 'bold')
+          .attr("transform", "translate(35,-4)")
+
+
+      //predicted nodes
+      svg.append('text')
+          .text("predicted nodes")
+          .attr('text-anchor', 'start')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(2,2)")
+          .attr("fill", "darkslategray")
 
       svg.append("rect")
           .attr("width", 26)
@@ -359,7 +388,7 @@ export default {
           .attr("transform", "translate(2,4)")
 
       svg.append('text')
-          .text("node name:")
+          .text("name:")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
           .attr("transform", "translate(15,8)")
@@ -402,6 +431,38 @@ export default {
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
           .attr("transform", "translate(15,24)")
+          .attr("fill", "darkslategray")
+
+      //given nodes
+      svg.append('text')
+          .text("given nodes")
+          .attr('text-anchor', 'start')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(40,2)")
+          .attr("fill", "darkslategray")
+
+      svg.append("rect")
+          .attr("width", 26)
+          .attr("height", 10)
+          .attr('fill', "white")
+          .attr("stroke", "black")
+          .attr("stroke-width", 0.4)
+          .attr("rx", 2)
+          .attr("ry", 2)
+          .attr("transform", "translate(40,4)")
+
+      svg.append('text')
+          .text("name:")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(53,8)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("state")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(53,12)")
           .attr("fill", "darkslategray")
 
     }
