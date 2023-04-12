@@ -1,10 +1,6 @@
 <template>
-  {{ $t("networkColorExplanation1") }} <span
-    style="border:1px solid red; border-radius:5px"> {{ $t("networkColorExplanation2") }}</span>
-  {{ $t("networkColorExplanation3") }}:
-  <Chip class="mx-1" style="background-color:black" :label="$t('current')"></Chip>
-  <Chip class="mx-1" style="background-color:#6d00bf" :label="$t('compare')"></Chip>
   <div ref="container" class="overflow-hidden"/>
+  <div ref="legend" class="absolute w-5" style="left:20px; bottom:20px;"/>
 </template>
 
 <script>
@@ -28,6 +24,11 @@ export default {
     return {Store}
   },
   computed: {
+    /**
+     * restructures edges to be usable by the sugiyama method
+     *
+     * @returns {*[]}
+     */
     edgeList: function () {
       const list = []
       this.edges.forEach(d => {
@@ -53,24 +54,45 @@ export default {
     }
   },
   methods: {
+    /**
+     * gets current state of a node
+     *
+     * @param n
+     * @returns {*}
+     */
     getState(n) {
       let node = this.nodes.find(d => d.name === n.data.id)
       return this.Store.labels.states[node.name][node.state]
     },
+    /**
+     * gets state of the compare node, if it is different from current state
+     *
+     * @param n
+     * @returns {*}
+     */
     getState2(n) {
       let node = this.nodes2.find(d => d.name === n.data.id)
       if (this.isChanged(n)) return "(" +  this.Store.labels.states[node.name][node.state] + ")"
       else return ""
     },
-    getProbability(node) {
-      return this.nodes.find(d => d.name === node.data.id).probability
-    },
+    /**
+     * returns 1 when the current and compare state are different, else 0
+     *
+     * @param node
+     * @returns {number}
+     */
     isChanged(node) {
       let node1 = this.nodes.find(d => d.name === node.data.id).state
       let node2 = this.nodes2.find(d => d.name === node.data.id).state
       return node1 === node2 ? 0 : 1
     },
-
+    /**
+     * true when node should be fully visible, either in full network view or as one
+     * of the highlighted nodes in compact network view
+     *
+     * @param node
+     * @returns {boolean}
+     */
     isHighlightNode(node) {
       if (this.highlight) {
         return this.highlightNodes.find(n => n.name === node.data.id) !== undefined
@@ -78,6 +100,13 @@ export default {
       return true
     },
 
+    /**
+     * true when edge should be fully visible, either in full network view or as one
+     * of the highlighted nodes in compact network view
+     *
+     * @param edge
+     * @returns {boolean}
+     */
     isHighlightEdge(edge) {
       if (this.highlight) {
         return this.highlightEdges.find(e => e.source === edge.data[0] && e.target === edge.data[1]) !== undefined
@@ -85,6 +114,12 @@ export default {
       return true
     },
 
+    /**
+     * displays additional information box when hovered over a node
+     *
+     * @param e - the hover event
+     * @param d - the data of the event
+     */
     getDetails(e, d) {
       if (!this.highlight || this.isHighlightNode(d)) {
         //move into focus
@@ -177,6 +212,11 @@ export default {
 
     },
 
+    /**
+     * hides additional information box of a node again after the mouse leaves
+     *
+     * @param e - the event
+     */
     hideDetails(e) {
       d3.select(e.target.parentNode).selectAll(".box").attr("width", 25)
           .attr("height", d => 10 * (this.isChanged(d) * 0.5 + 1))
@@ -192,9 +232,14 @@ export default {
       d3.select(e.target.parentNode).selectAll(".probText").remove()
     },
 
+    /**
+     * displays network in sugiyama layout
+     */
     visualise() {
 
       if (this.nodes !== null && this.edgeList !== null && this.edgeList.length !== 0 && this.nodes2 !== null) {
+
+        let edgeColor = this.highlight ? "darkslategray" : "darkgray"
 
         var graph = dag.dagConnect()(this.edgeList)
 
@@ -211,7 +256,7 @@ export default {
 
         var color = d3.scaleQuantize()
             .domain([0, 1])
-            .range(["black", "red"]);
+            .range(["gray", "red"]);
 
 
         d3.select(this.$refs.container).selectAll("*").remove()
@@ -220,6 +265,7 @@ export default {
             .append("svg")
             .attr("viewBox", [-40, 0, width + 80, height + 100])
 
+        //arrow heads
         const arrow = d3.symbol().type(d3.symbolTriangle).size(5);
         svg.append('g')
             .selectAll('path')
@@ -238,8 +284,9 @@ export default {
               const angle = Math.atan2(-dy, -dx) * 180 / Math.PI + 90;
               return `translate(${end.x + 6 * dx / normal}, ${end.y + 6 * dy / normal}) rotate(${angle})`;
             })
-            .attr('fill', "black")
+            .attr('fill', edgeColor)
 
+        //edges
         const line = d3.line()
             .curve(d3.curveCatmullRom)
             .x(d => d.x)
@@ -252,11 +299,13 @@ export default {
             .append('path')
             .attr('d', ({points}) => line(points))
             .attr('fill', 'none')
-            .attr('stroke-width', 0.5)
-            .attr('stroke', "black")
+            .attr('stroke-width', 0.8)
+            .attr('stroke', edgeColor)
             .attr('opacity', d => this.isHighlightEdge(d) ? 1 : 0.2)
+            .on("mouseenter", (e, d) => this.isHighlightEdge(d) ? d3.select(e.target).attr('stroke', "royalblue") : "")
+            .on("mouseleave", e => d3.select(e.target).attr('stroke', edgeColor))
 
-
+        //nodes
         const nodes = svg.append('g')
             .selectAll('g')
             .data(graph.descendants())
@@ -269,7 +318,7 @@ export default {
             .attr("width", 25)
             .attr("height", d => 10 * (this.isChanged(d) * 0.5 + 1))
             .attr('fill', "white")
-            .attr("stroke-width", 0.5)
+            .attr("stroke-width", 0.4)
             .attr("stroke", d => color(this.isChanged(d)))
             .attr("rx", 2)
             .attr("ry", 2)
@@ -312,19 +361,123 @@ export default {
             .on("mouseleave", e => this.hideDetails(e))
 
         //Zoom
-        var zoomed = function ({transform}) {
+        const zoomed = function ({transform}) {
           svg.style("transform", "translate(" + transform.x + "px," + transform.y + "px) scale(" + transform.k + ")")
         }
 
-        var zoom = d3.zoom().on('zoom', zoomed)
+        const zoom = d3.zoom().on('zoom', zoomed)
             .extent([[0, 0], [width, height]])
             .scaleExtent([1, 10])
 
         d3.select(this.$refs.container).call(zoom)
 
+        this.showLegend(width)
 
       }
 
+
+    },
+    /**
+     * displays legend
+     *
+     * @param width - width of the svg viewport of the network
+     */
+    showLegend(width) {
+
+
+      d3.select(this.$refs.legend).selectAll("*").remove()
+
+
+      var svg = d3.select(this.$refs.legend)
+          .append("svg")
+          .attr("viewBox", [-3, -10, width/2 + 30, 40])
+
+       svg.append("rect")
+          .attr("width", 76)
+          .attr("height", 36)
+          .attr('fill', "white")
+          .attr("stroke", "darkslategray")
+          .attr("stroke-width", 0.4)
+          .attr("transform", "translate(-1,-8)")
+
+      svg.append('text')
+          .text("legend")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr('font-style', 'bold')
+          .attr("transform", "translate(38,-4)")
+
+
+      //unchanged nodes
+      svg.append('text')
+          .text("unchanged nodes")
+          .attr('text-anchor', 'start')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(2,2)")
+          .attr("fill", "darkslategray")
+
+      svg.append("rect")
+          .attr("width", 26)
+          .attr("height", 10)
+          .attr('fill', "white")
+          .attr("stroke", "gray")
+          .attr("stroke-width", 0.4)
+          .attr("rx", 2)
+          .attr("ry", 2)
+          .attr("transform", "translate(2,4)")
+
+      svg.append('text')
+          .text("name:")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(15,8)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("state")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(15,12)")
+          .attr("fill", "darkslategray")
+
+      //changed nodes
+      svg.append('text')
+          .text("changed nodes")
+          .attr('text-anchor', 'start')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(40,2)")
+          .attr("fill", "darkslategray")
+
+      svg.append("rect")
+          .attr("width", 32)
+          .attr("height", 14)
+          .attr('fill', "white")
+          .attr("stroke", "red")
+          .attr("stroke-width", 0.4)
+          .attr("rx", 2)
+          .attr("ry", 2)
+          .attr("transform", "translate(40,4)")
+
+      svg.append('text')
+          .text("name:")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(56,8)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("current state")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(56,12)")
+          .attr("fill", "darkslategray")
+
+      svg.append('text')
+          .text("(compare state)")
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '4px')
+          .attr("transform", "translate(56,16)")
+          .attr("fill", "#6d00bf")
 
     }
   }
@@ -334,9 +487,5 @@ export default {
 </script>
 
 <style scoped>
-
-.p-chip {
-  color: white;
-}
 
 </style>

@@ -60,7 +60,7 @@ export default {
     /**
      * gets current state of a node
      *
-     * @param n - the name of node
+     * @param n
      * @returns {*}
      */
     getState(n) {
@@ -200,8 +200,8 @@ export default {
 
         let {width, height} = layout(graph)
 
-        var color = d => {
-          if (d === 1) return "black"
+        const color = probability => {
+          if (probability === 1) return "black"
           else return "mediumblue"
         }
 
@@ -216,6 +216,7 @@ export default {
             .style("display", "inline-box")
 
 
+        //arrow heads
         const arrow = d3.symbol().type(d3.symbolTriangle).size(5);
         svg.append('g')
             .selectAll('path')
@@ -237,6 +238,7 @@ export default {
             })
             .attr('fill', edgeColor)
 
+        //edges
         const line = d3.line()
             .curve(d3.curveCatmullRom)
             .x(d => d.x)
@@ -256,6 +258,7 @@ export default {
             .on("mouseleave", e => d3.select(e.target).attr('stroke', edgeColor))
 
 
+        //nodes
         const nodes = svg.append('g')
             .selectAll('g')
             .data(graph.descendants())
@@ -323,13 +326,13 @@ export default {
 
 
         //Zoom
-        var zoomed = function ({transform}) {
+        const zoomed = function ({transform}) {
           svg.style("transform", "translate(" + transform.x + "px," + transform.y + "px) scale(" + transform.k + ")")
-        }
+        };
 
-        var zoom = d3.zoom().on('zoom', zoomed)
+        const zoom = d3.zoom().on('zoom', zoomed)
             .extent([[0, 0], [width, height]])
-            .scaleExtent([1, 10])
+            .scaleExtent([1, 10]);
 
         d3.select(this.$refs.container).call(zoom)
 
@@ -354,7 +357,7 @@ export default {
           .attr("viewBox", [-3, -10, width/2 + 30, 40])
 
        svg.append("rect")
-          .attr("width", 70)
+          .attr("width", 76)
           .attr("height", 36)
           .attr('fill', "white")
           .attr("stroke", "darkslategray")
@@ -366,7 +369,7 @@ export default {
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
           .attr('font-style', 'bold')
-          .attr("transform", "translate(35,-4)")
+          .attr("transform", "translate(38,-4)")
 
 
       //predicted nodes
@@ -473,9 +476,5 @@ export default {
 </script>
 
 <style scoped>
-
-.p-chip {
-  color: white;
-}
 
 </style>
