@@ -53,7 +53,7 @@ export const useStore = defineStore('store', {
         evidenceGroupMap: null,
         currentPhase: null,
         language: "en",
-        tutorialStep: 0,
+        tutorialStep: -1,
         error: false,
         backgroundColor: "#372f5e"
     }),

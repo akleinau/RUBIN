@@ -2,9 +2,15 @@
   <Dialog v-model:visible="stepIs0" class="bg-blue-100 shadow-5 m-0 " :header="this.$t('Tutorial1a')" :closable="false"
           id="overlay0" modal style="z-index: 2000">
     <div class="flex align-items-center flex-column">
+      <div class="flex align-items-center mb-2">
+        <span class="mr-2"> {{$t("Language")}}:</span>
+        <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
+                  :value="$i18n.locale" @change="languageChanged"/>
+      </div>
       <span> {{ $t("Tutorial1b") }} </span>
+      <span class="pt-1"> {{ $t("Tutorial1c") }} </span>
       <br>
-      <div class="flex pt-3">
+      <div class="flex pt-1">
         <Button class="p-button-text" :label="this.$t('start')" icon="pi pi-check" @click="start()"/>
         <Button class="p-button-text" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
       </div>
@@ -15,7 +21,7 @@
           label="close tutorial" icon="pi pi-times"
           @click="close()" style="z-index: 10000; right:15%"/>
 
-  <Card v-show="step === 1" class="absolute bg-blue-100 shadow-5 m-0" id="overlay1" style="z-index: 20000">
+  <Card v-show="step === 1" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_addButton" style="z-index: 20000">
     <template #content>
       <i class="pi pi-arrow-up mb-2"/>
       <br>
@@ -23,7 +29,8 @@
     </template>
   </Card>
 
-  <Card v-show="step === 2" class="absolute bg-blue-100 shadow-5 m-0" id="overlay2" style="z-index: 20000">
+  <Card v-show="step === 2" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_evidenceOverlayTable"
+        style="z-index: 20000">
     <template #content>
       {{ $t("Tutorial2b") }}
       <br>
@@ -31,7 +38,8 @@
     </template>
   </Card>
 
-  <Card v-show="step === 3" class="absolute bg-blue-100 shadow-5 m-0" id="overlay3" style="z-index: 20000">
+  <Card v-show="step === 3" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_addOverlayEvidence"
+        style="z-index: 20000">
     <template #content>
       <i class="pi pi-arrow-up mb-2"/>
       <br>
@@ -39,7 +47,18 @@
     </template>
   </Card>
 
-  <Card v-show="step === 4" class="absolute bg-blue-100 shadow-5 m-0" id="overlay4" style="z-index: 20000">
+  <Card v-show="step === 4" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_PhaseSelect" style="z-index: 5">
+    <template #content>
+      <span v-if="Store.phases.length > 0"> {{ $t("Tutorial3b") }} </span>
+      <span v-else> {{ $t("Tutorial3c") }}</span>
+      <br>
+      <Button v-if="Store.patient.goals.length > 0" class="p-button-text" :label="this.$t('next')" @click="next()"/>
+      <br>
+      <i class="pi pi-arrow-down mb-2"/>
+    </template>
+  </Card>
+
+  <Card v-show="step === 5" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_optionsTable" style="z-index: 20000">
     <template #content>
       <i class="pi pi-arrow-up mb-2"/>
       <br>
@@ -49,17 +68,8 @@
     </template>
   </Card>
 
-  <Card v-show="step === 5" class="absolute bg-blue-100 shadow-5 m-0" id="overlay5" style="z-index: 20000">
-    <template #content>
-      {{ $t("Tutorial3b") }}
-      <br>
-      <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
-      <br>
-      <i class="pi pi-arrow-down mb-2"/>
-    </template>
-  </Card>
-
-  <Card v-show="step === 6" class="absolute bg-blue-100 shadow-5 m-0" id="overlay6" style="z-index: 20000">
+  <Card v-show="step === 6" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_relevanceExplanation"
+        style="z-index: 20000">
     <template #content>
       <i class="pi pi-arrow-up mb-2"/>
       <br>
@@ -69,7 +79,8 @@
     </template>
   </Card>
 
-  <Card v-show="step === 7" class="absolute bg-blue-100 shadow-5 m-0" id="overlay7" style="z-index: 5">
+  <Card v-show="step === 7" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_explanationDropdown"
+        style="z-index: 5">
     <template #content>
       <i class="pi pi-arrow-up mb-2"/>
       <br>
@@ -77,7 +88,8 @@
     </template>
   </Card>
 
-  <Card v-show="step === 8" class="absolute bg-blue-100 shadow-5 m-0" id="overlay8" style="z-index: 5">
+  <Card v-show="step === 8" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_explanationDropdown2"
+        style="z-index: 5">
     <template #content>
       {{ $t("Tutorial4c") }}
       <br>
@@ -85,7 +97,7 @@
     </template>
   </Card>
 
-  <Card v-show="step === 9" class="absolute bg-blue-100 shadow-5 m-0" id="overlay9" style="z-index: 5">
+  <Card v-show="step === 9" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_listExplanation" style="z-index: 5">
     <template #content>
       <i class="pi pi-arrow-up mb-2"/>
       <br>
@@ -95,7 +107,7 @@
     </template>
   </Card>
 
-  <Card v-show="step === 10" class="absolute bg-blue-100 shadow-5 m-0" id="overlay10" style="z-index: 20000">
+  <Card v-show="step === 10" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_menu" style="z-index: 20000">
     <template #content>
       <i class="pi pi-arrow-up mb-2"/>
       <br>
@@ -105,12 +117,12 @@
     </template>
   </Card>
 
-    <Dialog v-model:visible="stepIs11" class="bg-blue-100 shadow-5 m-0 " :header="this.$t('Tutorial6a')" :closable="false"
-          id="overlay11" modal style="z-index: 2000">
+  <Dialog v-model:visible="stepIs11" class="bg-blue-100 shadow-5 m-0 " :header="this.$t('Tutorial6a')" :closable="false"
+          id="overlay_addButton1" modal style="z-index: 2000">
     <div class="flex align-items-center flex-column">
       <span> <b>{{ $t("Tutorial6b") }}</b> </span>
       <span class="p-2">{{ $t("Tutorial6c") }} </span>
-        <Button class="p-button-text pt-4" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
+      <Button class="p-button-text pt-4" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
     </div>
   </Dialog>
 
@@ -135,16 +147,16 @@ export default {
     return {Store}
   },
   watch: {
-      /**
-       * updates tutorial when the step is changed elsewhere
-       */
+    /**
+     * updates tutorial when the step is changed elsewhere
+     */
     tutorialStep: function () {
       this.sendBlock()
       this.setAllOverlayPositions()
     },
-      /**
-       * updates positions when all element of UI are loaded
-       */
+    /**
+     * updates positions when all element of UI are loaded
+     */
     loading: function () {
       this.setAllOverlayPositions()
     }
@@ -171,11 +183,11 @@ export default {
     next() {
       this.Store.tutorialStep++;
     },
-      /**
-       * updates which elements of the UI are blocked during the tutorial
-       *
-       * @returns {Promise<void>}
-       */
+    /**
+     * updates which elements of the UI are blocked during the tutorial
+     *
+     * @returns {Promise<void>}
+     */
     async sendBlock() {
       let newBlock = {
         "evidence": !(this.tutorialStep <= 3 || this.Store.tutorialStep >= this.finalStep),
@@ -191,32 +203,32 @@ export default {
       this.$emit("setBlock", newBlock)
 
     },
-      /**
-       * sets positions of all tutorial overlays
-       */
+    /**
+     * sets positions of all tutorial overlays
+     */
     setAllOverlayPositions() {
       setTimeout(() => {
-        this.setOverlayPosition('addButton', 'overlay1', "up")
-        this.setOverlayPosition('evidenceOverlayTable', 'overlay2', "middle")
-        this.setOverlayPosition('addOverlayEvidence', 'overlay3', "up")
-        this.setOverlayPosition('optionsTable', 'overlay4', "up")
-        this.setOverlayPosition('PhaseSelect', 'overlay5', "down")
-        this.setOverlayPosition('relevanceExplanation', 'overlay6', "low_up")
-        this.setOverlayPosition('explanationDropdown', 'overlay7', "up")
-        this.setOverlayPosition('explanationDropdown', 'overlay8', "down")
-        this.setOverlayPosition('listExplanation', 'overlay9', "low_up")
-        this.setOverlayPosition('menu', 'overlay10', "up")
+        this.setOverlayPosition('addButton', 'overlay_addButton', "up")
+        this.setOverlayPosition('evidenceOverlayTable', 'overlay_evidenceOverlayTable', "middle")
+        this.setOverlayPosition('addOverlayEvidence', 'overlay_addOverlayEvidence', "up")
+        this.setOverlayPosition('optionsTable', 'overlay_optionsTable', "up")
+        this.setOverlayPosition('PhaseSelect', 'overlay_PhaseSelect', "down")
+        this.setOverlayPosition('relevanceExplanation', 'overlay_relevanceExplanation', "low_up")
+        this.setOverlayPosition('explanationDropdown', 'overlay_explanationDropdown', "up")
+        this.setOverlayPosition('explanationDropdown', 'overlay_explanationDropdown2', "down")
+        this.setOverlayPosition('listExplanation', 'overlay_listExplanation', "low_up")
+        this.setOverlayPosition('menu', 'overlay_menu', "up")
         this.step = this.Store.tutorialStep
       }, 100)
     },
 
-      /**
-       * sets position of the specified tutorial overlay
-       *
-       * @param {string} target - the id of the target UI element to attach the overlay too
-       * @param {string} overlay - the id of the overlay
-       * @param {string} position - relative position of overlay to target
-       */
+    /**
+     * sets position of the specified tutorial overlay
+     *
+     * @param {string} target - the id of the target UI element to attach the overlay too
+     * @param {string} overlay - the id of the overlay
+     * @param {string} position - relative position of overlay to target
+     */
     setOverlayPosition(target, overlay, position) {
       if (document.getElementById(target)) {
         let boundingBox = document.getElementById(target).getBoundingClientRect()
@@ -241,6 +253,11 @@ export default {
         document.getElementById(overlay).style.left = "0px"
         document.getElementById(overlay).style.width = "200px"
       }
+    },
+    languageChanged(event) {
+      if (event.value == null) {
+        this.$i18n.locale = "en"
+      }
     }
   }
 }
@@ -249,8 +266,8 @@ export default {
 <style lang="scss" scoped>
 
 ::v-deep(.p-card-body) {
-    padding-bottom: 0 !important;
-    padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
 }
 
 </style>

@@ -34,12 +34,14 @@
   "BestOption": "aanbevolen",
   "Node": "Variabele",
   "Tutorial1a": "Welkom!",
-  "Tutorial1b": "Wil je de tutorial starten?",
+  "Tutorial1b": "Met RUBIN kunt u uitkomsten voorspellen op basis van bewijs van patiënten.",
+  "Tutorial1c": "Wil je de tutorial starten?",
   "Tutorial2a": "Vul hier in wat je al weet over de patiënt. Bijvoorbeeld symptomen, resultaten van tests en persoonlijke informatie zoals leeftijd en geslacht.",
   "Tutorial2b": "Selecteer wat evidentie!!",
   "Tutorial2c": "Klik om toe te voegen!",
   "Tutorial3a": "Hier ziet u de berekende kans om uw doel te bereiken.",
-  "Tutorial3b": "Hier kun je later uit verschillende presets kiezen welk doel je wilt bereiken, bijvoorbeeld de overleving van de patiënt, en welke interventies er beschikbaar zijn, bijvoorbeeld therapie.",
+  "Tutorial3b": "Hier kunt u later uw gewenste resultaten en beschikbare interventies aanpassen.",
+  "Tutorial3c": "Kies hier uw gewenste uitkomsten (bijvoorbeeld de overleving van de patiënt), en welke interventies beschikbaar zijn (bijv. therapie).",
   "Tutorial4a": "Hier kunt u de relevantie en invloed van elk bewijs voor de voorspelling zien.",
   "Tutorial4b": "Klik hier voor een andere uitleg.",
   "Tutorial4c": "Selecteer \"Alle voorspellingen\"",
@@ -107,5 +109,6 @@
   "pdfExport": "pdf exporteren",
   "textUpload": "tekst uploaden",
   "CaseSummary": "Samenvatting van de zaak",
-  "custom": "gewoonte"
+  "custom": "gewoonte",
+  "Language": "Taal"
 } 

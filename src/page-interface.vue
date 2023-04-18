@@ -5,6 +5,10 @@
 
     <Header ref="menu" @changePage="changePage()"/>
 
+    <Dialog v-model:visible="stepIsMinus1" :closable="false" modal>
+      <ProgressSpinner />
+    </Dialog>
+
     <!-- main cards -->
     <div class="grid w-full relative">
 
@@ -63,10 +67,16 @@ export default {
       this.$emit("changePage")
     },
   },
+  computed : {
+    stepIsMinus1: function () {
+      return this.Store.tutorialStep === -1
+    }
+  },
   mounted: async function () {
     this.Store.language = this.$i18n.locale
     this.Store.localNet = this.localNet
     await this.Store.loadNodes()
+    this.Store.tutorialStep = 0
   },
   created: async function () {
     this.Store.network = this.network
