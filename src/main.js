@@ -32,6 +32,7 @@ import BlockUI from 'primevue/blockui';
 import ToggleButton from 'primevue/togglebutton';
 import SelectButton from 'primevue/selectbutton';
 import Toolbar from 'primevue/toolbar';
+import ProgressSpinner from 'primevue/progressspinner';
 import 'primevue/resources/themes/tailwind-light/theme.css';       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css'
@@ -78,6 +79,7 @@ vueApp.use(PrimeVue)
     .component('ToggleButton',ToggleButton)
     .component('SelectButton', SelectButton)
     .component('Toolbar', Toolbar)
+    .component('ProgressSpinner', ProgressSpinner)
     .directive('tooltip', Tooltip)
 
 vueApp.use(createPinia())
