@@ -34,12 +34,14 @@
   "BestOption": "empfohlen",
   "Node": "Variable",
   "Tutorial1a": "Willkommen!",
-  "Tutorial1b": "Möchtest du das Tutorial starten?",
+  "Tutorial1b": "Mit RUBIN kannst du Ergebnisse auf Basis der Evidenz eines Patienten vorhersagen.",
+  "Tutorial1c": "Möchtest du das Tutorial starten?",
   "Tutorial2a": "Geben Sie hier ein, was Sie bereits über den Patienten wissen. Z.B. Symptome, Testergebnisse und persönliche Informationen wie Alter und Geschlecht.",
   "Tutorial2b": "Wähle eine Evidenz aus!",
   "Tutorial2c": "Klicke hier, um sie hinzuzufügen!",
   "Tutorial3a": "Hier siehst du die berechnete Wahrscheinlichkeit, dein Ziel zu erreichen.",
-  "Tutorial3b": "Hier kannst du später aus verschiedenen Voreinstellungen wählen, welches Ziel du erreichen möchtest, z.B. das Überleben des Patienten, und welche Interventionen zur Verfügung stehen, z.B. Therapie.",
+  "Tutorial3b": "Hier kannst du später die erwünschten Ergebnisse und verfügbaren Interventionen anpassen.",
+  "Tutorial3c": "Wähle hier die gewünschten Ergebnisse (z. B. das Überleben des Patienten) und welche Interventionen zur Verfügung stehen (z. B. Therapie).",
   "Tutorial4a": "Hier siehst du die Relevanz und den Einfluss jeder Evidenz für die Vorhersage.",
   "Tutorial4b": "Klicke hier, um eine weitere Erklärung anzuzeigen.",
   "Tutorial4c": "Wähle \"Alle Vorhersagen\"",
@@ -106,5 +108,6 @@
   "pdfExport": "pdf Export",
   "textUpload": "Text hochladen",
   "CaseSummary": "Fall Zusammenfassung",
-  "custom": "konfigurieren"
+  "custom": "konfigurieren",
+  "Language": "Sprache"
 }

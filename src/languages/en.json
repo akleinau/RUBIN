@@ -34,12 +34,14 @@
   "BestOption": "recommended",
   "Node": "Variable",
   "Tutorial1a": "Welcome!",
-  "Tutorial1b": "Do you want to start the tutorial?",
+  "Tutorial1b": "With RUBIN you can predict outcomes based on patient evidence.",
+  "Tutorial1c": "Do you want to start the tutorial?",
   "Tutorial2a": "Enter here what you already know about the patient. Eg symptoms, results of tests and personal information like age and gender.",
   "Tutorial2b": "Select some evidence!",
   "Tutorial2c":"Click to add!",
-  "Tutorial3a": "Here you can see the calculated probability of achieving your goal.",
-  "Tutorial3b": "Here you can later choose from different presets what goal you want to achieve, eg the survival of the patient, and what interventions are available, eg therapy.",
+  "Tutorial3a": "Here you can see the calculated probability of your desired outcome.",
+  "Tutorial3b": "Here you can later customize your desired outcomes and available interventions.",
+  "Tutorial3c": "Choose here your desired outcomes (eg the survival of the patient), and what interventions are available (eg therapy).",
   "Tutorial4a": "Here you can see the relevance and influence of each evidence for the prediction.",
   "Tutorial4b": "Click here to view another explanation.",
   "Tutorial4c": "Select \"All predictions\"",
@@ -107,5 +109,6 @@
   "pdfExport": "pdf Export",
   "textUpload": "Text Upload",
   "CaseSummary": "Case Summary",
-  "custom": "custom"
+  "custom": "custom",
+  "Language": "Language"
 }
