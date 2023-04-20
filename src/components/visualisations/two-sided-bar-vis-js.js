@@ -12,7 +12,7 @@ export function createSVG(width, value) {
 
     var color = d3.scaleQuantize()
         .domain([-1, 1])
-        .range(["red", "green"]);
+        .range(["maroon", "#5bd75b"]);
 
     var svg = d3.create("svg")
         .attr("height", 25)
