@@ -38,7 +38,7 @@
       </Column>
       <Column v-for="goal in goalnames" :key="goal">
         <template #body="slotProps">
-          <twoSidedBar :value="slotProps.data.relevancies[goal.name]"
+          <twoSidedBar :value="slotProps.data.relevancies[goal.name]" :direction="goal.direction"
                        v-tooltip.left="{value: getDirectionTooltip(slotProps.data.relevancies[goal.name],
                        goal.direction, goal.label), fitContent: true}"
           />
@@ -147,14 +147,8 @@ export default {
        * @returns {*|string}
        */
     getDirectionTooltip(number, direction, label) {
-      if (direction === "min") {
-        if (number > 0.001) return this.$t("decreasesProbability") + " " + label
-        else if (number < -0.001) return this.$t("increasesProbability") + " " + label
-      }
-      if (direction === "max") {
         if (number > 0.001) return this.$t("increasesProbability") + " " + label
         else if (number < -0.001) return this.$t("decreasesProbability") + " " + label
-      }
 
       return this.$t("noInfluence")
     },
