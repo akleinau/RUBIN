@@ -7,8 +7,10 @@ import * as d3 from "d3";
  * @param value
  * @returns {*}
  */
-export function createSVG(width, value) {
+export function createSVG(width, value, direction) {
     let height = 50
+    let colValue = value
+    if (direction === "min") colValue = -colValue
 
     var color = d3.scaleQuantize()
         .domain([-1, 1])
@@ -31,7 +33,7 @@ export function createSVG(width, value) {
     }
 
     svg.append("rect")
-        .attr("fill", color(value))
+        .attr("fill", color(colValue))
         .attr("y", 3)
         .attr("x", width / 2 + x)
         .attr("height", height - 6)

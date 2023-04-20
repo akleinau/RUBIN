@@ -9,7 +9,7 @@ import * as twosidedbarvisjs from "@/components/visualisations/two-sided-bar-vis
 export default {
   name: "two-sided-bar-vis",
   props: [
-    "value"
+    "value", "direction"
   ],
   mounted() {
     this.visualise()
@@ -20,7 +20,7 @@ export default {
      */
     visualise() {
 
-      let svg = twosidedbarvisjs.createSVG(300, this.value)
+      let svg = twosidedbarvisjs.createSVG(300, this.value, this.direction)
 
       d3.select(this.$refs.container).node().append(svg)
 
