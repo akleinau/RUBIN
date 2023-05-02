@@ -24,6 +24,9 @@
         <Explanation/>
       </BlockUI>
     </div>
+
+    <FooterComponent/>
+
 </div>
 
 </template>
@@ -34,6 +37,7 @@ import Explanation from "./components/page-explanation";
 import Prediction from "@/components/page-prediction";
 import Evidence from "@/components/page-evidence";
 import tutorial from "@/components/page-tutorial";
+import FooterComponent from "@/components/footer-component";
 import {useStore} from '@/store'
 
 export default {
@@ -44,7 +48,8 @@ export default {
     Explanation,
     Prediction,
     Evidence,
-    tutorial
+    tutorial,
+    FooterComponent
   },
   props: [
     "network", "localNet"
