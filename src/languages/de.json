@@ -110,5 +110,14 @@
   "CaseSummary": "Fall Zusammenfassung",
   "custom": "konfigurieren",
   "Language": "Sprache",
-  "notEnoughEvidenceEndorisk": "Füge mindestens den präoperativen Tumorgrad, drei Biomarker und eine klinische Variable hinzu, um genauere Informationen zu erhalten!"
+  "notEnoughEvidenceEndorisk": "Füge mindestens den präoperativen Tumorgrad, drei Biomarker und eine klinische Variable hinzu, um genauere Informationen zu erhalten!",
+  "nodeName": "Name",
+  "state": "Zustand",
+  "legend": "Legende",
+  "givenNodes": "gegeben",
+  "predictedNodes": "vorhergesagt",
+  "changedNodes": "geändert",
+  "unchangedNodes": "ungeändert",
+  "currentState": "aktueller Zustand",
+  "compareState": "Vergleichszustand"
 }

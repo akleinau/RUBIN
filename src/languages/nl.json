@@ -111,5 +111,14 @@
   "CaseSummary": "Samenvatting van de zaak",
   "custom": "gewoonte",
   "Language": "Taal",
-  "notEnoughEvidenceEndorisk": "Voeg ten minste de preoperatieve tumorgraad, drie biomarkers en één klinische variabele toe voor meer nauwkeurige informatie!"
+  "notEnoughEvidenceEndorisk": "Voeg ten minste de preoperatieve tumorgraad, drie biomarkers en één klinische variabele toe voor meer nauwkeurige informatie!",
+  "nodeName": "naam",
+  "state": "staat",
+  "legend": "legende",
+  "givenNodes": "gegeven",
+  "predictedNodes": "voorspeld",
+  "changedNodes": "gewijzigd",
+  "unchangedNodes": "ongewijzigd",
+  "currentState": "huidige staat",
+  "compareState": "vergelijk state"
 } 

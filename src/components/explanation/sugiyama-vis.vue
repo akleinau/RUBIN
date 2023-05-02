@@ -336,17 +336,15 @@ export default {
 
         d3.select(this.$refs.container).call(zoom)
 
-        this.showLegend(width)
+        this.showLegend()
 
       }
 
     },
     /**
      * displays legend
-     *
-     * @param width - width of the svg viewport of the network
      */
-    showLegend(width) {
+    showLegend() {
 
 
       d3.select(this.$refs.legend).selectAll("*").remove()
@@ -354,10 +352,10 @@ export default {
 
       var svg = d3.select(this.$refs.legend)
           .append("svg")
-          .attr("viewBox", [-3, -10, width/2 + 30, 40])
+          .attr("viewBox", [-3, -10, 120, 40])
 
        svg.append("rect")
-          .attr("width", 76)
+          .attr("width", 90)
           .attr("height", 36)
           .attr('fill', "white")
           .attr("stroke", "darkslategray")
@@ -365,23 +363,23 @@ export default {
           .attr("transform", "translate(-1,-8)")
 
       svg.append('text')
-          .text("legend")
+          .text(this.$t("legend"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
           .attr('font-style', 'bold')
-          .attr("transform", "translate(38,-4)")
+          .attr("transform", "translate(45,-4)")
 
 
       //predicted nodes
       svg.append('text')
-          .text("predicted nodes")
+          .text(this.$t("predictedNodes"))
           .attr('text-anchor', 'start')
           .attr('font-size', '4px')
           .attr("transform", "translate(2,2)")
           .attr("fill", "darkslategray")
 
       svg.append("rect")
-          .attr("width", 26)
+          .attr("width", 38)
           .attr("height", 22)
           .attr('fill', "white")
           .attr("stroke", "slateblue")
@@ -391,81 +389,81 @@ export default {
           .attr("transform", "translate(2,4)")
 
       svg.append('text')
-          .text("name:")
+          .text(this.$t("nodeName") + ":")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(15,8)")
+          .attr("transform", "translate(21,8)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
-          .text("state")
+          .text(this.$t("state"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(15,12)")
+          .attr("transform", "translate(21,12)")
           .attr("fill", "darkslategray")
 
       svg.append('rect')
           .attr("width", 20)
           .attr("height", 1)
           .attr("fill", "lightgray")
-          .attr('transform', `translate(5,14)`)
+          .attr('transform', `translate(11,14)`)
       svg.append('rect')
           .attr("width", 15)
           .attr("height", 1)
           .attr("fill", "slategray")
-          .attr('transform', `translate(5,14)`)
+          .attr('transform', `translate(11,14)`)
 
       svg.append('text')
           .text("0%")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(8,20)")
+          .attr("transform", "translate(15,20)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
           .text("100%")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(20,20)")
+          .attr("transform", "translate(27,20)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
-          .text("probability")
+          .text(this.$t("Likeliness"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(15,24)")
+          .attr("transform", "translate(21,24)")
           .attr("fill", "darkslategray")
 
       //given nodes
       svg.append('text')
-          .text("given nodes")
+          .text(this.$t("givenNodes"))
           .attr('text-anchor', 'start')
           .attr('font-size', '4px')
-          .attr("transform", "translate(40,2)")
+          .attr("transform", "translate(45,2)")
           .attr("fill", "darkslategray")
 
       svg.append("rect")
-          .attr("width", 26)
+          .attr("width", 38)
           .attr("height", 10)
           .attr('fill', "white")
           .attr("stroke", "black")
           .attr("stroke-width", 0.4)
           .attr("rx", 2)
           .attr("ry", 2)
-          .attr("transform", "translate(40,4)")
+          .attr("transform", "translate(45,4)")
 
       svg.append('text')
-          .text("name:")
+          .text(this.$t("nodeName") + ":")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(53,8)")
+          .attr("transform", "translate(64,8)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
-          .text("state")
+          .text(this.$t("state"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(53,12)")
+          .attr("transform", "translate(64,12)")
           .attr("fill", "darkslategray")
 
     }

@@ -378,7 +378,7 @@ export default {
 
         d3.select(this.$refs.container).call(zoom)
 
-        this.showLegend(width)
+        this.showLegend()
 
       }
 
@@ -386,10 +386,8 @@ export default {
     },
     /**
      * displays legend
-     *
-     * @param width - width of the svg viewport of the network
      */
-    showLegend(width) {
+    showLegend() {
 
 
       d3.select(this.$refs.legend).selectAll("*").remove()
@@ -397,10 +395,10 @@ export default {
 
       var svg = d3.select(this.$refs.legend)
           .append("svg")
-          .attr("viewBox", [-3, -10, width/2 + 30, 40])
+          .attr("viewBox", [-3, -10, 120, 40])
 
        svg.append("rect")
-          .attr("width", 76)
+          .attr("width", 90)
           .attr("height", 36)
           .attr('fill', "white")
           .attr("stroke", "darkslategray")
@@ -408,23 +406,23 @@ export default {
           .attr("transform", "translate(-1,-8)")
 
       svg.append('text')
-          .text("legend")
+          .text(this.$t("legend"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
           .attr('font-style', 'bold')
-          .attr("transform", "translate(38,-4)")
+          .attr("transform", "translate(45,-4)")
 
 
       //unchanged nodes
       svg.append('text')
-          .text("unchanged nodes")
+          .text(this.$t("unchangedNodes"))
           .attr('text-anchor', 'start')
           .attr('font-size', '4px')
           .attr("transform", "translate(2,2)")
           .attr("fill", "darkslategray")
 
       svg.append("rect")
-          .attr("width", 26)
+          .attr("width", 38)
           .attr("height", 10)
           .attr('fill', "white")
           .attr("stroke", "gray")
@@ -434,56 +432,56 @@ export default {
           .attr("transform", "translate(2,4)")
 
       svg.append('text')
-          .text("name:")
+          .text(this.$t("nodeName") + ":")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(15,8)")
+          .attr("transform", "translate(21,8)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
-          .text("state")
+          .text(this.$t("state"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(15,12)")
+          .attr("transform", "translate(21,12)")
           .attr("fill", "darkslategray")
 
       //changed nodes
       svg.append('text')
-          .text("changed nodes")
+          .text(this.$t("changedNodes"))
           .attr('text-anchor', 'start')
           .attr('font-size', '4px')
           .attr("transform", "translate(40,2)")
           .attr("fill", "darkslategray")
 
       svg.append("rect")
-          .attr("width", 32)
+          .attr("width", 38)
           .attr("height", 14)
           .attr('fill', "white")
           .attr("stroke", "red")
           .attr("stroke-width", 0.4)
           .attr("rx", 2)
           .attr("ry", 2)
-          .attr("transform", "translate(40,4)")
+          .attr("transform", "translate(45,4)")
 
       svg.append('text')
-          .text("name:")
+          .text(this.$t("nodeName") + ":")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(56,8)")
+          .attr("transform", "translate(64,8)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
-          .text("current state")
+          .text(this.$t("currentState"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(56,12)")
+          .attr("transform", "translate(64,12)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
-          .text("(compare state)")
+          .text("(" + this.$t("compareState") + ")")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(56,16)")
+          .attr("transform", "translate(64,16)")
           .attr("fill", "#6d00bf")
 
     }

@@ -70,7 +70,7 @@
   "OptDescription": "Description (optional)",
   "UploadNet": "Upload Network",
   "Prediction": "Prediction",
-  "Likeliness": "Certainty",
+  "Likeliness": "Probability",
   "Choose": "Choose",
   "Cancel": "Cancel",
   "noInterventions": "overall",
@@ -111,5 +111,15 @@
   "CaseSummary": "Case Summary",
   "custom": "custom",
   "Language": "Language",
-  "notEnoughEvidenceEndorisk": "Add at least the preoperative tumor grade, three biomarkers and one clinical variable for more accurate information!"
+  "notEnoughEvidenceEndorisk": "Add at least the preoperative tumor grade, three biomarkers and one clinical variable for more accurate information!",
+  "nodeName": "name",
+  "state": "state",
+  "legend": "legend",
+  "givenNodes": "given nodes",
+  "predictedNodes": "predicted nodes",
+  "changedNodes": "changed nodes",
+  "unchangedNodes": "unchanged nodes",
+  "currentState": "current state",
+  "compareState": "compare state"
+
 }
