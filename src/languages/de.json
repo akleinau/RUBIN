@@ -109,5 +109,6 @@
   "textUpload": "Text hochladen",
   "CaseSummary": "Fall Zusammenfassung",
   "custom": "konfigurieren",
-  "Language": "Sprache"
+  "Language": "Sprache",
+  "notEnoughEvidenceEndorisk": "Füge mindestens den präoperativen Tumorgrad, drei Biomarker und eine klinische Variable hinzu, um genauere Informationen zu erhalten!"
 }

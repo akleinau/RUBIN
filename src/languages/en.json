@@ -110,5 +110,6 @@
   "textUpload": "Text Upload",
   "CaseSummary": "Case Summary",
   "custom": "custom",
-  "Language": "Language"
+  "Language": "Language",
+  "notEnoughEvidenceEndorisk": "Add at least the preoperative tumor grade, three biomarkers and one clinical variable for more accurate information!"
 }
