@@ -36,7 +36,7 @@
   "Tutorial1a": "Welcome!",
   "Tutorial1b": "With RUBIN you can predict outcomes based on patient evidence.",
   "Tutorial1c": "Do you want to start the tutorial?",
-  "Tutorial2a": "Enter here what you already know about the patient. Eg symptoms, results of tests and personal information like age and gender.",
+  "Tutorial2a": "To start, enter here what you already know about the patient. Eg symptoms, results of tests and personal information like age and gender.",
   "Tutorial2b": "Select some evidence!",
   "Tutorial2c":"Click to add!",
   "Tutorial3a": "Here you can see the calculated probability of your desired outcome.",
