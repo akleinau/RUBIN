@@ -66,6 +66,9 @@
           </Accordion>
         </template>
       </Card>
+
+      <FooterComponent />
+
     </div>
 
     <Dialog v-model:visible="langOverlay" :modal="true" :dismissableMask="true">
@@ -79,6 +82,7 @@
 <script>
 import UploadNetwork from "./components/NetworkLoading/upload-network";
 import SelectNetwork from "./components/NetworkLoading/select-network.vue"
+import FooterComponent from "./components/footer-component.vue"
 
 export default {
   name: "page-choose-net",
@@ -91,7 +95,8 @@ export default {
   },
   components: {
     UploadNetwork,
-    SelectNetwork
+    SelectNetwork,
+    FooterComponent
   },
   mounted() {
     this.langOverlay = false //set to true for lang overlay

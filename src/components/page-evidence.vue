@@ -14,8 +14,7 @@
         <!-- Help box more evidence -->
         <div v-if="notEnoughEvidenceEndorisk()">
           <i class="pi pi-exclamation-circle"/>
-          Add at least the preoperative tumor grade, three biomarkers and one clinical variable for more accurate
-          information!
+          {{$t("notEnoughEvidenceEndorisk")}}
         </div>
 
         <!-- Evidence Table -->

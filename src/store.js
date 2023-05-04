@@ -315,7 +315,7 @@ export const useStore = defineStore('store', {
             this.labels.evidence_groups = {}
             this.backgroundColor = "#372f5e"
 
-            if (customization !== undefined) {
+            if (customization !== undefined && customization !== null) {
                 this.phases = network.customization.phases
                 if (!noPhase) {
                     this.currentPhase = this.phases[0]

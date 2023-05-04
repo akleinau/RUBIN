@@ -72,8 +72,7 @@ export default {
      */
     getState2(n) {
       let node = this.nodes2.find(d => d.name === n.data.id)
-      if (this.isChanged(n)) return "(" +  this.Store.labels.states[node.name][node.state] + ")"
-      else return ""
+      return "(" +  this.Store.labels.states[node.name][node.state] + ")"
     },
     /**
      * returns 1 when the current and compare state are different, else 0
@@ -128,16 +127,19 @@ export default {
         d3.select(e.target.parentNode).selectAll(".box")
             .attr("width", d => this.Store.labels.nodes[d.data.id].length + 90)
             .attr("height", d => {
-              let height = 15
+              let height = 15 //for title
               let node = this.nodes.find(node => node.name === d.data.id)
-              if (node.distribution) height = node.distribution.length * 10 + 15
+              if (node.distribution) height = node.distribution.length * 10 + 15 //for current bars and spacing
               let node2 = this.nodes2.find(node => node.name === d.data.id)
-              if (node2.distribution) height += node2.distribution.length * 10 + 10
+              if (node2.distribution) height += node2.distribution.length * 10 //for compare bars
+              height += 10 //for compare title
               return height
             })
             .attr("transform", d => `translate(${-(this.Store.labels.nodes[d.data.id].length + 90) / 2},-4)`)
         //show full text
         d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels.nodes[d.data.id]) + ": ")
+        d3.select(e.target.parentNode).selectAll(".textState")
+          .text(d => String(this.getState(d)))
         // show all probabilities
         d3.select(e.target.parentNode).selectAll(".textState").each(d => {
           let node = this.nodes.find(node => node.name === d.data.id)
@@ -170,15 +172,17 @@ export default {
 
         })
 
+        //show probabilities of compare node
         d3.select(e.target.parentNode).selectAll(".textState2").each(d => {
           let node = this.nodes2.find(node => node.name === d.data.id)
-          let nodeCompare = this.nodes.find(node => node.name === d.data.id)
-          if (node.distribution) {
-            let displacement = (nodeCompare.distribution) ? nodeCompare.distribution.length * 10 + 10 : 10
-            d3.select(e.target.parentNode).selectAll(".textState2")
-                .attr("dy", displacement + 5)
-                .text(this.$t('compare') + ": " + String(this.getState2(d)))
+          let nodeCurrent = this.nodes.find(node => node.name === d.data.id)
 
+          let displacement = (nodeCurrent.distribution) ? nodeCurrent.distribution.length * 10 + 10 : 10
+          d3.select(e.target.parentNode).selectAll(".textState2")
+              .attr("dy", displacement + 5)
+              .text(this.$t('compare') + ": " + String(this.getState2(d)))
+
+          if (node.distribution) {
 
             node.distribution.forEach((p, i) => {
               d3.select(e.target.parentNode).append("rect")
@@ -224,9 +228,12 @@ export default {
 
       d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels.nodes[d.data.id]).substring(0, 10) + ": ")
 
+      d3.select(e.target.parentNode).selectAll(".textState")
+          .text(d => String(this.getState(d)).substring(0, 10))
+
       d3.select(e.target.parentNode).selectAll(".textState2")
           .attr("dy", 10)
-          .text(d => String(this.getState2(d)).substring(0, 10))
+          .text(d => String(this.isChanged(d) ? this.getState2(d) : "").substring(0, 10))
       d3.select(e.target.parentNode).selectAll(".probBar").remove()
       d3.select(e.target.parentNode).selectAll(".probState").remove()
       d3.select(e.target.parentNode).selectAll(".probText").remove()
@@ -350,7 +357,7 @@ export default {
 
         // Add text to nodes
         nodes.append('text')
-            .text(d => String(this.getState2(d)).substring(0, 10))
+            .text(d => String(this.isChanged(d) ? this.getState2(d) : "").substring(0, 10))
             .attr("class", "textState2")
             .attr('font-size', '4px')
             .attr('text-anchor', 'middle')
@@ -371,7 +378,7 @@ export default {
 
         d3.select(this.$refs.container).call(zoom)
 
-        this.showLegend(width)
+        this.showLegend()
 
       }
 
@@ -379,10 +386,8 @@ export default {
     },
     /**
      * displays legend
-     *
-     * @param width - width of the svg viewport of the network
      */
-    showLegend(width) {
+    showLegend() {
 
 
       d3.select(this.$refs.legend).selectAll("*").remove()
@@ -390,10 +395,10 @@ export default {
 
       var svg = d3.select(this.$refs.legend)
           .append("svg")
-          .attr("viewBox", [-3, -10, width/2 + 30, 40])
+          .attr("viewBox", [-3, -10, 120, 40])
 
        svg.append("rect")
-          .attr("width", 76)
+          .attr("width", 90)
           .attr("height", 36)
           .attr('fill', "white")
           .attr("stroke", "darkslategray")
@@ -401,23 +406,23 @@ export default {
           .attr("transform", "translate(-1,-8)")
 
       svg.append('text')
-          .text("legend")
+          .text(this.$t("legend"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
           .attr('font-style', 'bold')
-          .attr("transform", "translate(38,-4)")
+          .attr("transform", "translate(45,-4)")
 
 
       //unchanged nodes
       svg.append('text')
-          .text("unchanged nodes")
+          .text(this.$t("unchangedNodes"))
           .attr('text-anchor', 'start')
           .attr('font-size', '4px')
           .attr("transform", "translate(2,2)")
           .attr("fill", "darkslategray")
 
       svg.append("rect")
-          .attr("width", 26)
+          .attr("width", 38)
           .attr("height", 10)
           .attr('fill', "white")
           .attr("stroke", "gray")
@@ -427,56 +432,56 @@ export default {
           .attr("transform", "translate(2,4)")
 
       svg.append('text')
-          .text("name:")
+          .text(this.$t("nodeName") + ":")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(15,8)")
+          .attr("transform", "translate(21,8)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
-          .text("state")
+          .text(this.$t("state"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(15,12)")
+          .attr("transform", "translate(21,12)")
           .attr("fill", "darkslategray")
 
       //changed nodes
       svg.append('text')
-          .text("changed nodes")
+          .text(this.$t("changedNodes"))
           .attr('text-anchor', 'start')
           .attr('font-size', '4px')
           .attr("transform", "translate(40,2)")
           .attr("fill", "darkslategray")
 
       svg.append("rect")
-          .attr("width", 32)
+          .attr("width", 38)
           .attr("height", 14)
           .attr('fill', "white")
           .attr("stroke", "red")
           .attr("stroke-width", 0.4)
           .attr("rx", 2)
           .attr("ry", 2)
-          .attr("transform", "translate(40,4)")
+          .attr("transform", "translate(45,4)")
 
       svg.append('text')
-          .text("name:")
+          .text(this.$t("nodeName") + ":")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(56,8)")
+          .attr("transform", "translate(64,8)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
-          .text("current state")
+          .text(this.$t("currentState"))
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(56,12)")
+          .attr("transform", "translate(64,12)")
           .attr("fill", "darkslategray")
 
       svg.append('text')
-          .text("(compare state)")
+          .text("(" + this.$t("compareState") + ")")
           .attr('text-anchor', 'middle')
           .attr('font-size', '4px')
-          .attr("transform", "translate(56,16)")
+          .attr("transform", "translate(64,16)")
           .attr("fill", "#6d00bf")
 
     }

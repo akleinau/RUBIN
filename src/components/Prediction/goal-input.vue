@@ -13,8 +13,6 @@
                   placeholder="enter goal" @change="onNodeChange(slotProps.data)"
                   class="p-0 m-0">
         </Dropdown>
-        <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
-                @click="deleteNode(slotProps.data)"/>
       </template>
     </Column>
      <Column field="direction">
@@ -22,9 +20,15 @@
         <Dropdown v-model="slotProps.data.direction" :options="directionOptions"
                   optionLabel="label" optionValue="name" optionKey="name"
                   @change="onNodeChange(slotProps.data)"
-                  class="p-0 m-0 w-7">
+                  class="p-0 m-0 w-10rem">
         </Dropdown>
       </template>
+    </Column>
+    <Column>
+        <template #body="slotProps">
+            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
+                @click="deleteNode(slotProps.data)"/>
+        </template>
     </Column>
   </DataTable>
   <!--    input dialog  -->
