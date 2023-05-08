@@ -68,6 +68,18 @@ export const useStore = defineStore('store', {
             this.compareConfig = null
             this.patient.evidence.forEach(a => this.deleteEvidence(a))
             this.patient.name = ""
+            this.predictions = {
+                options: null,
+                likelyResult: null,
+                selectedOption: null,
+            }
+
+            //explaining calculations for the chosen option
+            this.explain = {
+                explanation: null,
+                relevance: null, //{node_name, overall_relevance, relevancies[goal]}
+                states: null,
+            }
 
             if (noPhase || this.phases.length === 0) {
                 this.currentPhase = null
