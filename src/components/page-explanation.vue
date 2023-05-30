@@ -4,7 +4,7 @@
       {{ $t("Explanation") }}
       <Button icon="pi pi-question" class="p-button-outlined p-button-secondary p-button-rounded p-button-raised help"
               @click="$refs.op.toggle($event)"/>
-      <OverlayPanel ref="op" style="width: 500px">
+      <OverlayPanel ref="op" style="width: 400px">
         {{ $t("ExplanationHelp") }}
         <h3>{{ $t("Relevance") }}</h3> {{ $t("RelevanceHelp") }}
         <h3>{{ $t("AllPredictions") }}</h3> {{ $t("AllPredictionsHelp") }}
@@ -96,10 +96,10 @@ export default {
   },
   watch: {
       /**
-       * shows relevance view when tutorial is started
+       * shows relevance view when tutorial is started and ended
        */
     tutorialStep: function () {
-      if (this.tutorialStep === 1) {
+      if (this.tutorialStep === 1 || this.tutorialStep === 12) {
         this.currentIndex = 0
       }
     },

@@ -6,7 +6,7 @@
       {{ $t("Prediction") }}
       <Button icon="pi pi-question" class="p-button-outlined p-button-secondary p-button-rounded p-button-raised help"
               @click="$refs.op.toggle($event)"/>
-      <OverlayPanel ref="op" style="width: 500px">
+      <OverlayPanel ref="op" style="width: 400px">
         {{ $t("TreatmentHelp") }}
       </OverlayPanel>
     </template>
