@@ -11,7 +11,7 @@
         <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
                   :optionLabel="get_option_label"  show-clear
                   placeholder="enter goal" @change="onNodeChange(slotProps.data)"
-                  class="p-0 m-0">
+                  class="p-0 m-0 w-full">
         </Dropdown>
       </template>
     </Column>
