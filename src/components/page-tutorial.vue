@@ -159,7 +159,7 @@ export default {
      */
     loading: function () {
       this.setAllOverlayPositions()
-    }
+    },
   },
   computed: {
     tutorialStep: function () {
@@ -195,7 +195,7 @@ export default {
         "explain": !(this.Store.tutorialStep >= 6 && this.Store.tutorialStep !== this.finalStep - 1),
       }
 
-      if (this.Store.tutorialStep === 1 || this.Store.tutorialStep === this.finalStep) {
+      if (this.Store.tutorialStep === 1 || this.Store.tutorialStep === 10) {
         window.scrollTo(0, 0);
       }
 

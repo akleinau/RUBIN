@@ -9,7 +9,7 @@
     <Column field="value" class="optionCol">
       <template #body="slotProps">
         <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
-                  :optionLabel="get_option_label"
+                  :optionLabel="get_option_label"  show-clear
                   placeholder="enter goal" @change="onNodeChange(slotProps.data)"
                   class="p-0 m-0">
         </Dropdown>
@@ -23,12 +23,6 @@
                   class="p-0 m-0 w-10rem">
         </Dropdown>
       </template>
-    </Column>
-    <Column>
-        <template #body="slotProps">
-            <Button icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
-                @click="deleteNode(slotProps.data)"/>
-        </template>
     </Column>
   </DataTable>
   <!--    input dialog  -->
