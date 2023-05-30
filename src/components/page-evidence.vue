@@ -47,7 +47,7 @@
                 <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
                           :optionLabel="get_option_label"
                           placeholder="" @change="onNodeChange(slotProps.data)"
-                          class="flex p-0 m-0 flex-shrink" showClear
+                          class="flex p-0 m-0 flex-shrink w-full" showClear
                           :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
                 </Dropdown>
               </div>
