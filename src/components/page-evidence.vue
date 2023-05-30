@@ -47,12 +47,9 @@
                 <Dropdown v-model="slotProps.data.selected" :options="slotProps.data.options"
                           :optionLabel="get_option_label"
                           placeholder="" @change="onNodeChange(slotProps.data)"
-                          class="flex p-0 m-0 flex-shrink"
+                          class="flex p-0 m-0 flex-shrink" showClear
                           :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
                 </Dropdown>
-                <Button v-if="slotProps.data.selected" icon="pi pi-times"
-                        class="flex p-button-rounded p-button-secondary p-button-text p-button-sm p-0 m-0"
-                        @click="deleteNode(slotProps.data)"/>
               </div>
             </template>
           </Column>
@@ -283,7 +280,12 @@ export default {
        * @param node
        */
     onNodeChange(node) {
-      this.addNodes([node])
+      if (node.selected === null) {
+          this.deleteNode(node)
+      }
+      else {
+         this.addNodes([node])
+      }
     },
       /**
        * adds nodes to patient evidence and calls recalculation
