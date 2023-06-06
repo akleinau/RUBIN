@@ -85,7 +85,6 @@ export default {
     this.Store.language = this.$i18n.locale
     this.Store.localNet = this.localNet
     await this.Store.loadNodes()
-    this.Store.tutorialStep = 0
   },
   created: async function () {
     this.Store.network = this.network

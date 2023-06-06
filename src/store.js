@@ -362,6 +362,7 @@ export const useStore = defineStore('store', {
 
             this.updateLabels()
 
+            this.tutorialStep = 0
             await this.calculate()
         },
 
