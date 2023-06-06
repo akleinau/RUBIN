@@ -9,6 +9,10 @@
       <ProgressSpinner />
     </Dialog>
 
+    <div class="flex text-white-alpha-80 justify-content-center pr-3 pt-1 pb-1 mx-1  bg-purple-800 border-round">
+        DISCLAIMER: This user interface is still under development!
+    </div>
+
     <!-- main cards -->
     <div class="grid w-full relative">
 
@@ -81,7 +85,6 @@ export default {
     this.Store.language = this.$i18n.locale
     this.Store.localNet = this.localNet
     await this.Store.loadNodes()
-    this.Store.tutorialStep = 0
   },
   created: async function () {
     this.Store.network = this.network
