@@ -136,6 +136,7 @@ export default {
       let configItem = this.items.find(a => a.key === "savedConfigurations")
       configItem.label = this.$t('stopComparing')
       configItem.icon = "pi pi-fw pi-times"
+      configItem.style="border: 3px solid darkviolet; border-radius: 5px;"
       configItem.command = () => {
         this.stopComparing()
       }
