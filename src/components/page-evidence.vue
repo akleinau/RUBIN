@@ -113,6 +113,8 @@
             <div class="flex justify-content-end">
               <Button class="m-2 p-button-text" @click="clearEvidenceDialog = false"> {{$t("Cancel")}}</Button>
               <Button class="m-2" @click="clearEvidence()"> {{$t("proceed")}}</Button>
+              <Button class="m-2" v-if="Store.compareConfig" @click="Store.compareConfig = null; clearEvidence()" >
+                  {{$t("stopComparing")}} & {{$t("proceed")}}</Button>
             </div>
 
           </Dialog>
