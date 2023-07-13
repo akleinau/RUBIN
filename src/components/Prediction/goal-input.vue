@@ -39,15 +39,12 @@
       <template #header>
         <div class="flex justify-content-between">
                 <span class="p-input-icon-right" style="width:100%">
-                    <InputText style="width:100%" v-model="filters['name'].value" :placeholder="$t('search') + '...'"/>
+                    <InputText style="width:100%" v-model="filters['label'].value" :placeholder="$t('search') + '...'"/>
                   <i class="pi pi-search"/>
                 </span>
         </div>
       </template>
-      <Column field="name" :header="$t('Node')">
-        <template #body="slotProps">
-          {{ Store.labels.nodes[slotProps.data.name] }}
-        </template>
+      <Column field="label" :header="$t('Node')">
       </Column>
       <Column field="options">
         <template #body="slotProps">
@@ -95,7 +92,7 @@ export default {
       overlay: false,
       selected: null,
       filters: {
-        'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+        'label': {value: null, matchMode: FilterMatchMode.CONTAINS}
       },
       nodesToAdd: [],
       directionOptions: [
@@ -142,6 +139,7 @@ export default {
       return nodes.map(node => {
             return {
               name: node.name,
+              label: this.Store.labels.nodes[node.name],
               options: node.options.map(option => {
                 return {
                   name: option.name,
@@ -179,7 +177,6 @@ export default {
     onOverlayOptionChange(slotProps, option) {
       //deselect this and other options of the node
       this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
-      this.filters.name.value = null
 
       //convert node in format used for selected nodes and add it to 'shopping list'
       if (option.checked) {
@@ -259,6 +256,7 @@ export default {
     cancelOverlay() {
       this.nodesToAdd = []
       this.overlay = false
+      this.filters.label.value = null
     },
     /**
      * returns label of an option
