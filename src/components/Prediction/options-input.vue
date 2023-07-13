@@ -22,7 +22,7 @@
         <Button class="p-button-secondary" :label="this.$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
       </div>
     </template>
-      <Listbox v-model="selected" class="t-2" :options="overlayNodes" optionLabel="name"
+      <Listbox v-model="selected" class="t-2" :options="overlayNodes" optionLabel="label"
                emptyMessage="" :multiple="true"
                :filter="true" filterPlaceholder="Search">
         <template #option="slotProps">
@@ -58,7 +58,9 @@ export default {
      * @returns {Object[]}
      */
     overlayNodes: function () {
-      return this.Store.patient.nodes
+        let nodes = JSON.parse(JSON.stringify(this.Store.patient.nodes))
+        nodes.forEach(n => n.label=this.Store.labels.nodes[n.name])
+        return nodes
     }
   },
   methods: {

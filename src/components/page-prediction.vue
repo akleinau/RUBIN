@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       "showLocal": false,
-      currentPhaseIndex: 0
+      currentPhaseIndex: 0,
     }
   },
   watch: {

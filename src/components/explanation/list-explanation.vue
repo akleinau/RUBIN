@@ -1,6 +1,15 @@
 <template>
   <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false" sortField="label" :sortOrder="1"
-             class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="listExplanation">
+             class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="listExplanation"
+             v-model:filters="filters" filterDisplay="menu">
+    <template #header>
+        <div class="flex justify-content-between">
+        <span class="p-input-icon-right" style="width:100%">
+            <InputText style="width:100%" v-model="filters['label'].value" :placeholder="$t('search') + '...'"/>
+          <i class="pi pi-search"/>
+        </span>
+        </div>
+    </template>
     <Column :header="$t('Node')" field="label" :sortable="true" class="w-5"/>
     <Column :header="$t('Prediction')" field="state" :sortable="true">
       <template #body="slotProps">
@@ -24,6 +33,7 @@
 
 <script>
 import {useStore} from '@/store'
+import {FilterMatchMode} from 'primevue/api';
 import bar from "@/components/visualisations/bar-vis.vue";
 
 export default {
@@ -34,6 +44,16 @@ export default {
   setup() {
     const Store = useStore()
     return {Store}
+  },
+  data: function () {
+    return {
+      filters: {
+        'label': {
+          value: '',
+          matchMode: FilterMatchMode.CONTAINS
+        }
+      }
+    }
   },
   computed: {
       /**
