@@ -49,10 +49,10 @@
     <Card v-show="step === 3" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_addOverlayEvidence"
           style="z-index: 20000">
         <template #content>
-            <i class="pi pi-arrow-up mb-2"/>
-            <br>
+            <i class="pi pi-info-circle mt-2 mr-2" style="font-size: 1.5rem"/>
             {{ $t("Tutorial2c") }}
-            <i class="pi pi-info-circle mt-2" style="font-size: 1.5rem"/>
+            <br>
+            <i class="pi pi-arrow-down mb-2"/>
         </template>
     </Card>
 
@@ -246,7 +246,7 @@ export default {
             setTimeout(() => {
                 this.setOverlayPosition('addButton', 'overlay_addButton', "up")
                 this.setOverlayPosition('evidenceOverlayTable', 'overlay_evidenceOverlayTable', "middle")
-                this.setOverlayPosition('addOverlayEvidence', 'overlay_addOverlayEvidence', "up")
+                this.setOverlayPosition('addOverlayEvidence', 'overlay_addOverlayEvidence', "down")
                 this.setOverlayPosition('optionsTable', 'overlay_optionsTable', "up")
                 this.setOverlayPosition('PhaseSelect', 'overlay_PhaseSelect', "down")
                 this.setOverlayPosition('relevanceExplanation', 'overlay_relevanceExplanation', "low_up")

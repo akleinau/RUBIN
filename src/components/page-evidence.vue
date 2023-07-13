@@ -59,13 +59,10 @@
         <Dialog header="  " v-model:visible="overlay" style=" background:white" :modal="true"
                 :closable="false" class="w-11 h-11">
           <template #header>
-            <div class="flex justify-content-end w-full">
-              <Button class="mr-2" :label="this.$t('add')" icon="pi pi-check" id="addOverlayEvidence"
-                      @click="addNodesFromOverlay()"/>
-              <Button class="p-button-secondary mr-2" :label="this.$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
+            <div class="flex justify-content-end w-full bg-white">
+              <Button class="p-button-secondary mr-2 p-button-text p-button-rounded" icon="pi pi-times" @click="cancelOverlay"/>
             </div>
           </template>
-          <br>
           <DataTable :value="overlayNodes" rowGroupMode="subheader" groupRowsBy="group" class="p-datatable-sm"
                      sortMode="single" sortField="group" :sortOrder="1"
                      responsiveLayout="scroll" id="evidenceOverlayTable"
@@ -100,6 +97,13 @@
               </template>
             </Column>
           </DataTable>
+          <template #footer>
+            <div class="flex justify-content-center w-full bg-white pt-3 border-top-3 border-gray-300">
+              <Button class="mr-4 w-4" :label="this.$t('add')" icon="pi pi-check-square" id="addOverlayEvidence"
+                      @click="addNodesFromOverlay()" />
+              <Button class="p-button-secondary mr-2" :label="this.$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
+            </div>
+          </template>
         </Dialog>
 
         <!-- Buttons -->
