@@ -1,7 +1,7 @@
 <template>
   <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false" sortField="label" :sortOrder="1"
              class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="listExplanation"
-             v-model:filters="filters" filterDisplay="menu">
+             v-model:filters="filters" filterDisplay="menu" v-model:expandedRows="expandedRows">
     <template #header>
         <div class="flex justify-content-between">
         <span class="p-input-icon-right" style="width:100%">
@@ -10,6 +10,7 @@
         </span>
         </div>
     </template>
+    <Column expander style="width: 5rem" />
     <Column :header="$t('Node')" field="label" :sortable="true" class="w-5"/>
     <Column :header="$t('Prediction')" field="state" :sortable="true">
       <template #body="slotProps">
@@ -28,6 +29,32 @@
         <div :style="{color: color(slotProps.data.beforeProb)}"> {{ slotProps.data.beforeState }}</div>
       </template>
     </Column>
+     <template #expansion="slotProps">
+         <div class="flex mb-3 justify-content-around mr-5">
+             <!--current-->
+             <div  v-if="slotProps.data.probability !== 1" class="ml-5">
+                 <div>  <br> </div>
+                 <div v-for="(p,i) in slotProps.data.distribution" v-bind:key="i" class="flex justify-content-end">
+                     {{Store.labels.states[slotProps.data.name][slotProps.data.stateNames[i]]}}:
+                     {{(p*100).toFixed(0)}}%
+                     <bar class="ml-2"  :value="p" color="darkblue"
+                     :width="150"/>
+                </div>
+            </div>
+
+            <!--compare-->
+            <div  v-if="Store.compareConfig && slotProps.data.compare_probability !== 1" class="ml-5 mr-5" style="color:#6d00bf">
+                 <div class="flex justify-content-center" >{{$t("compare")}}: </div>
+                 <div v-for="(p,i) in slotProps.data.compare_distribution" v-bind:key="i" class="flex justify-content-end">
+                     {{Store.labels.states[slotProps.data.name][slotProps.data.compare_stateNames[i]]}}:
+                     {{(p*100).toFixed(0)}}%
+                     <bar class="ml-2"  :value="p" color="#6d00bf"
+                     :width="150"/>
+                </div>
+            </div>
+
+        </div>
+     </template>
   </DataTable>
 </template>
 
@@ -52,7 +79,8 @@ export default {
           value: '',
           matchMode: FilterMatchMode.CONTAINS
         }
-      }
+      },
+      expandedRows: []
     }
   },
   computed: {
@@ -72,7 +100,9 @@ export default {
             "state": this.Store.labels.states[a.name][a.state],
             "probability": a.probability,
             "beforeState": "",
-            "beforeProb": 0
+            "beforeProb": 0,
+            "distribution": a.distribution,
+            "stateNames": a.stateNames
           })
         })
         return data
@@ -88,7 +118,12 @@ export default {
             "label": this.Store.labels.nodes[a.name],
             "probability": a.probability,
             "beforeState": state_label === compare_state_label ? "" : compare_state_label,
-            "beforeProb": state_label === compare_state_label ? 0 : compareNode.probability
+            "beforeProb": state_label === compare_state_label ? 0 : compareNode.probability,
+            "distribution": a.distribution,
+            "stateNames": a.stateNames,
+            "compare_probability": compareNode.probability,
+            "compare_distribution": compareNode.distribution,
+            "compare_stateNames": compareNode.stateNames
           })
         })
         return data
