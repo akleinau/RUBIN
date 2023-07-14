@@ -182,7 +182,8 @@ export default {
         content: [],
         styles: {
           table: {
-            margin: [0, 5, 0, 15]
+            margin: [0, 5, 0, 15],
+            alignment: 'center'
           },
           header: {
             fontSize: 18,
@@ -199,7 +200,7 @@ export default {
       data.content.push({svg: logo.return_logo(), height: 50, alignment: 'right'})
 
       data.content.push({
-        text: this.capitalize(this.Store.network) + ' - ' + this.$t('CaseSummary'),
+        text: this.capitalize(this.Store.network) + ' - RUBIN ' + this.$t('CaseSummary'),
         style: 'header'
       });
 
@@ -210,10 +211,11 @@ export default {
 
       data.content.push("  ")
 
+      this.pdf_add_predictions(data)
       this.pdf_add_evidence(data)
       this.pdf_add_goals(data)
       this.pdf_add_targets(data)
-      this.pdf_add_predictions(data)
+      data.content.push({text: "", pageBreak: 'after'})
       this.pdf_add_explanations(data)
 
       pdfMake.createPdf(data).open()
@@ -358,10 +360,11 @@ export default {
         }
 
         let out = [outOption]
+        const width = 100 / Object.keys(x.goalValues).length  +80
 
         for (const value of Object.values(x.goalValues)) {
-          out.push([(value * 100).toFixed(0) + '%',
-            {svg: barvisjs.createSVG(200, value, "teal").outerHTML}])
+          out.push([{svg: barvisjs.createSVG(width, value, "teal").outerHTML},
+          (value * 100).toFixed(0) + '%'])
         }
 
         predictions.push(out)
@@ -399,14 +402,18 @@ export default {
       }
 
       let explanations = [explanationsHeader]
+
       this.Store.explain.relevance.map(x => {
+        const width = 100 / Object.keys(x.relevancies).length  +50
+
         let out = [
           this.Store.labels.nodes[x.node_name] + ": " + this.getState(x.node_name),
-          {svg: barvisjs.createSVG(150, x.overall_relevance, "#004d80").outerHTML}
+          {svg: barvisjs.createSVG(width, x.overall_relevance, "#004d80").outerHTML}
         ]
 
+
         for (const value of Object.values(x.relevancies)) {
-          out.push({svg: twosidedbarvisjs.createSVG(150, value).outerHTML})
+          out.push({svg: twosidedbarvisjs.createSVG(width, value).outerHTML})
         }
 
         explanations.push(out)
