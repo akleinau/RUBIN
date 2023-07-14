@@ -238,7 +238,11 @@ export default {
      * @param node
      */
     onNodeChange(node) {
-      this.addNodes([node])
+      if (node.selected === null) {
+          this.deleteNode(node)
+      } else {
+          this.addNodes([node])
+      }
     },
     /**
      * adds nodes as goals
