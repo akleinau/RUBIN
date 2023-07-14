@@ -90,7 +90,7 @@
                         </Column>
                         <Column field="options">
                             <template #body="slotProps">
-                                <ToggleButton class="m-2" v-for="option in slotProps.data.options" :key="option"
+                                <ToggleButton class="m-2 " v-for="option in slotProps.data.options" :key="option"
                                               v-model="option.checked"
                                               @change="onOverlayOptionChange(slotProps, option)"
                                               :onLabel="Store.labels.states[slotProps.data.name][option.name]"
@@ -104,7 +104,7 @@
                     </DataTable>
                     <template #footer>
                         <div class="flex justify-content-center w-full bg-white pt-3 border-top-3 border-gray-300">
-                            <Button class="mr-4 w-4" :label="this.$t('add')" icon="pi pi-check-square"
+                            <Button class="mr-4 w-4 bg-teal-600 border-teal-600" :label="this.$t('add')" icon="pi pi-check-square"
                                     id="addOverlayEvidence"
                                     @click="addNodesFromOverlay()"/>
                             <Button class="p-button-secondary mr-2" :label="this.$t('Cancel')" icon="pi pi-times"
