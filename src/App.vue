@@ -40,6 +40,8 @@ export default {
       this.page = 'interface'
       this.selectedNetwork = selectedNet
       this.localNet = null
+      // eslint-disable-next-line
+      umami.track('load_network', { type: 'predefined', name: selectedNet});
     },
 
       /**
@@ -51,6 +53,8 @@ export default {
       this.page = 'interface'
       this.selectedNetwork = localNet.name
       this.localNet = localNet
+      // eslint-disable-next-line
+      umami.track('load_network', { type: 'own', name: ''});
     }
   }
 }
