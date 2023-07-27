@@ -112,6 +112,9 @@ export default {
       if (event.value == null) {
         this.$i18n.locale = "en"
       }
+
+      // eslint-disable-next-line
+      umami.track('language-change-' + this.$i18n.locale);
     }
   }
 }

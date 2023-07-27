@@ -4,14 +4,14 @@
   <InputText type="text" v-model="Store.patient.name"></InputText>
   <br><br>
   <div class="flex juistify-content-center flex-column align-items-stretch">
-    <Button :label="$t('pdfExport')" icon="pi pi-file-pdf" @click="exportPDF" class="mb-4"/>
-    <Button :label="$t('FileDownload')" @click="exportCSV()" icon="pi pi-download" class="flex p-button-secondary mb-2"/>
+    <Button :label="$t('pdfExport')" icon="pi pi-file-pdf" @click="exportPDF" class="mb-4" data-umami-event="button-pdf-export"/>
+    <Button :label="$t('FileDownload')" @click="exportCSV()" icon="pi pi-download" class="flex p-button-secondary mb-2" data-umami-event="button-csv-download"/>
     <FileUpload name="net-upload" url="./Patientupload" accept=".csv" :customUpload="true" chooseIcon="pi pi-upload"
                 mode="basic" :auto=true :chooseLabel="$t('FileUpload')" @uploader="readFile($event)"
-                class="flex p-button-secondary mb-2"/>
+                class="flex p-button-secondary mb-2" data-umami-event="button-csv-upload"/>
 
     <Button :label="$t('textUpload')" @click="TextUploadDialog = !TextUploadDialog" icon="pi pi-pencil"
-            class=" flex p-button-secondary"/>
+            class=" flex p-button-secondary" data-umami-event="button-csv-upload"/>
   </div>
   <div v-if="TextUploadDialog">
     <Textarea v-model="csvText" rows="5" class="mt-2 mb-2"/>

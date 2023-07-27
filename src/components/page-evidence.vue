@@ -330,6 +330,10 @@ export default {
             })
             document.activeElement.blur()
             this.clearEvidenceDialog = false
+
+            // eslint-disable-next-line
+            umami.track('button-clearEvidence');
+
             this.Store.calculate()
 
         },
