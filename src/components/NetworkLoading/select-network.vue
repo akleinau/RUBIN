@@ -4,7 +4,7 @@
              emptyFilterMessage="No networks found" :options="networks" option-label="name"
              placeholder="Select a network" required @click="clicked"/>
     <br>
-    <Button type="submit">{{ $t('openNetwork') }}</Button>
+    <Button type="submit" data-umami-event="button-preselect-network">{{ $t('openNetwork') }}</Button>
   </form>
 </template>
 
