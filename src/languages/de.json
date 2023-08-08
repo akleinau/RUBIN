@@ -43,7 +43,7 @@
   "Tutorial3b": "Hier kannst du später die erwünschten Ergebnisse und verfügbaren Interventionen anpassen.",
   "Tutorial3c": "Wähle hier die gewünschten Ergebnisse (z. B. das Überleben des Patienten) und welche Interventionen zur Verfügung stehen (z. B. Therapie).",
   "Tutorial4a": "Hier siehst du die Relevanz und den Einfluss jeder Evidenz für die Vorhersage.",
-  "Tutorial4b": "Klicke hier, um eine weitere Erklärung anzuzeigen.",
+  "Tutorial4b": "Optional, wenn du weitere Erklärungen sehen möchtest, klicke hier.",
   "Tutorial4c": "Wähle \"Alle Vorhersagen\"",
   "Tutorial4d": "Hier siehst du alle Vorhersagen des Modells mit ihren Wahrscheinlichkeiten.",
   "Tutorial5": "Verwende das Menü, um Patienten zu vergleichen, PDF-Dateien zu exportieren oder Hilfe zu erhalten.",
@@ -119,5 +119,6 @@
   "changedNodes": "geändert",
   "unchangedNodes": "ungeändert",
   "currentState": "aktueller Zustand",
-  "compareState": "Vergleichszustand"
+  "compareState": "Vergleichszustand",
+  "skip": "überspringen"
 }

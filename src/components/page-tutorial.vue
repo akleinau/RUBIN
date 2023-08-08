@@ -111,6 +111,7 @@
                 <i class="pi pi-info-circle mr-2" style="font-size: 1.5rem"/>
                 {{ $t("Tutorial4b") }}
             </div>
+            <Button class="p-button-text" :label="this.$t('skip')" @click="Store.tutorialStep+=3;"/>
         </template>
     </Card>
 

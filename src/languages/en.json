@@ -43,7 +43,7 @@
   "Tutorial3b": "Here you can later customize your desired outcomes and available interventions.",
   "Tutorial3c": "Choose here your desired outcomes (eg the survival of the patient), and what interventions are available (eg therapy).",
   "Tutorial4a": "Here you can see the relevance and influence of each evidence for the prediction.",
-  "Tutorial4b": "Click here to view another explanation.",
+  "Tutorial4b": "Optionally, if you want to see other explanations, click here.",
   "Tutorial4c": "Select \"All predictions\"",
   "Tutorial4d": "Here you can see all predictions of the model with their likelihoods.",
   "Tutorial5": "Use the menu to compare patients, export pdf files or receive help.",
@@ -120,6 +120,7 @@
   "changedNodes": "changed nodes",
   "unchangedNodes": "unchanged nodes",
   "currentState": "current state",
-  "compareState": "compare state"
+  "compareState": "compare state",
+  "skip": "skip"
 
 }

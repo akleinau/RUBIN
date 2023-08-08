@@ -43,7 +43,7 @@
   "Tutorial3b": "Hier kunt u later uw gewenste resultaten en beschikbare interventies aanpassen.",
   "Tutorial3c": "Kies hier uw gewenste uitkomsten (bijvoorbeeld de overleving van de patiënt), en welke interventies beschikbaar zijn (bijv. therapie).",
   "Tutorial4a": "Hier kunt u de relevantie en invloed van elk bewijs voor de voorspelling zien.",
-  "Tutorial4b": "Klik hier voor een andere uitleg.",
+  "Tutorial4b": "Indien u andere uitleg wilt zien, klik dan hier.",
   "Tutorial4c": "Selecteer \"Alle voorspellingen\"",
   "Tutorial4d": "Hier kunt u alle voorspellingen van het model zien met hun waarschijnlijkheden.",
   "Tutorial5": "Gebruik het menu om patiënten te vergelijken, pdf-bestanden te exporteren of hulp te krijgen.",
@@ -120,5 +120,6 @@
   "changedNodes": "gewijzigd",
   "unchangedNodes": "ongewijzigd",
   "currentState": "huidige staat",
-  "compareState": "vergelijk state"
+  "compareState": "vergelijk state",
+  "skip": "overspringen"
 } 
