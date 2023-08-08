@@ -1,5 +1,5 @@
 <template>
-    <Dialog v-model:visible="stepIs0" class="bg-blue-100 shadow-5 m-0 " :header="this.$t('Tutorial1a')"
+    <Dialog v-model:visible="stepIs0" class="tutorialCard shadow-5 m-0 " :header="this.$t('Tutorial1a')"
             :closable="false"
             id="overlay0" modal style="z-index: 2000">
         <div class="flex align-items-center flex-column">
@@ -22,7 +22,7 @@
             label="close tutorial" icon="pi pi-times"
             @click="close()" style="z-index: 10000; right:15%"/>
 
-    <Card v-show="step === 1" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_addButton" style="z-index: 20000">
+    <Card v-show="step === 1" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300 " id="overlay_addButton" style="z-index: 20000">
         <template #content>
             <i class="pi pi-arrow-up mb-2"/>
             <br>
@@ -34,7 +34,7 @@
         </template>
     </Card>
 
-    <Card v-show="step === 2" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_evidenceOverlayTable"
+    <Card v-show="step === 2" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_evidenceOverlayTable"
           style="z-index: 20000">
         <template #content>
             <div class="flex align-items-center justify-content-center">
@@ -46,7 +46,7 @@
         </template>
     </Card>
 
-    <Card v-show="step === 3" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_addOverlayEvidence"
+    <Card v-show="step === 3" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_addOverlayEvidence"
           style="z-index: 20000">
         <template #content>
             <i class="pi pi-info-circle mt-2 mr-2" style="font-size: 1.5rem"/>
@@ -56,7 +56,7 @@
         </template>
     </Card>
 
-    <Card v-show="step === 4" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_PhaseSelect" style="z-index: 5">
+    <Card v-show="step === 4" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_PhaseSelect" style="z-index: 5">
         <template #content>
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-info-circle mr-2" style="font-size: 2rem"/>
@@ -74,7 +74,7 @@
         </template>
     </Card>
 
-    <Card v-show="step === 5" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_optionsTable"
+    <Card v-show="step === 5" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_optionsTable"
           style="z-index: 20000">
         <template #content>
             <i class="pi pi-arrow-up mb-2"/>
@@ -88,7 +88,7 @@
         </template>
     </Card>
 
-    <Card v-show="step === 6" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_relevanceExplanation"
+    <Card v-show="step === 6" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_relevanceExplanation"
           style="z-index: 20000">
         <template #content>
             <i class="pi pi-arrow-up mb-2"/>
@@ -102,7 +102,7 @@
         </template>
     </Card>
 
-    <Card v-show="step === 7" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_explanationDropdown"
+    <Card v-show="step === 7" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_explanationDropdown"
           style="z-index: 5">
         <template #content>
             <i class="pi pi-arrow-up mb-2"/>
@@ -114,7 +114,7 @@
         </template>
     </Card>
 
-    <Card v-show="step === 8" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_explanationDropdown2"
+    <Card v-show="step === 8" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_explanationDropdown2"
           style="z-index: 5">
         <template #content>
             <div class="flex align-items-center justify-content-center">
@@ -126,7 +126,7 @@
         </template>
     </Card>
 
-    <Card v-show="step === 9" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_listExplanation" style="z-index: 5">
+    <Card v-show="step === 9" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_listExplanation" style="z-index: 5">
         <template #content>
             <i class="pi pi-arrow-up mb-2"/>
             <br>
@@ -139,7 +139,7 @@
         </template>
     </Card>
 
-    <Card v-show="step === 10" class="absolute bg-blue-100 shadow-5 m-0" id="overlay_menu" style="z-index: 20000">
+    <Card v-show="step === 10" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_menu" style="z-index: 20000">
         <template #content>
             <i class="pi pi-arrow-up mb-2"/>
             <br>
@@ -152,7 +152,7 @@
         </template>
     </Card>
 
-    <Dialog v-model:visible="stepIs11" class="bg-blue-100 shadow-5 m-0 " :header="this.$t('Tutorial6a')"
+    <Dialog v-model:visible="stepIs11" class="tutorialCard shadow-5 m-0 fadein animation-duration-300 " :header="this.$t('Tutorial6a')"
             :closable="false"
             id="overlay_addButton1" modal style="z-index: 2000">
         <div class="flex align-items-center flex-column">
@@ -304,6 +304,11 @@ export default {
 ::v-deep(.p-card-body) {
   padding-bottom: 0 !important;
   padding-top: 0 !important;
+}
+
+.tutorialCard {
+    background: #e5dbff;
+    border: 3px dotted #4d026a;
 }
 
 </style>
