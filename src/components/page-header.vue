@@ -142,7 +142,7 @@ export default {
       }
 
       // eslint-disable-next-line
-      umami.track('button-compare');
+      umami.track('button-compare', {network: this.Store.network});
 
     },
       /**
@@ -188,7 +188,7 @@ export default {
       this.items = this.getItems()
 
       // eslint-disable-next-line
-      umami.track('language-change-' + this.$i18n.locale);
+      umami.track('language-change', {language: this.$i18n.locale, network: this.Store.network} );
 
     },
       /**

@@ -332,7 +332,7 @@ export default {
             this.clearEvidenceDialog = false
 
             // eslint-disable-next-line
-            umami.track('button-clearEvidence');
+            umami.track('button-clearEvidence', {network: this.Store.network} );
 
             this.Store.calculate()
 

@@ -99,7 +99,7 @@ export default {
         this.Store.phase_change()
       }
       // eslint-disable-next-line
-      umami.track('button-phase-' + this.currentPhaseIndex);
+      umami.track('button-phase-change', {phase: this.currentPhaseIndex, network: this.Store.network} );
     }
   },
   computed: {

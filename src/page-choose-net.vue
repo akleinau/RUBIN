@@ -114,7 +114,7 @@ export default {
       }
 
       // eslint-disable-next-line
-      umami.track('language-change-' + this.$i18n.locale);
+      umami.track('language-change', {language: this.$i18n.locale, network: this.Store.network} );
     }
   }
 }
