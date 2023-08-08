@@ -2,7 +2,7 @@
   <!-- Form to upload a network file -->
   <form @submit.prevent="upload" id="upload-form" enctype="multipart/form-data">
     <FileUpload name="net-upload" url="./upload" accept=".net, .bif" :customUpload="true" :chooseLabel="$t('Upload')"
-                mode="basic" @uploader="upload" :auto="true" data-umami-event="button-own-network"
+                mode="basic" @uploader="upload" :auto="true"
                 required/>
   </form>
 </template>

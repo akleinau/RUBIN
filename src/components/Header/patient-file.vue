@@ -4,14 +4,14 @@
   <InputText type="text" v-model="Store.patient.name"></InputText>
   <br><br>
   <div class="flex juistify-content-center flex-column align-items-stretch">
-    <Button :label="$t('pdfExport')" icon="pi pi-file-pdf" @click="exportPDF" class="mb-4" data-umami-event="button-pdf-export"/>
-    <Button :label="$t('FileDownload')" @click="exportCSV()" icon="pi pi-download" class="flex p-button-secondary mb-2" data-umami-event="button-csv-download"/>
+    <Button :label="$t('pdfExport')" icon="pi pi-file-pdf" @click="exportPDF" class="mb-4"/>
+    <Button :label="$t('FileDownload')" @click="exportCSV()" icon="pi pi-download" class="flex p-button-secondary mb-2" />
     <FileUpload name="net-upload" url="./Patientupload" accept=".csv" :customUpload="true" chooseIcon="pi pi-upload"
                 mode="basic" :auto=true :chooseLabel="$t('FileUpload')" @uploader="readFile($event)"
-                class="flex p-button-secondary mb-2" data-umami-event="button-csv-upload"/>
+                class="flex p-button-secondary mb-2" />
 
     <Button :label="$t('textUpload')" @click="TextUploadDialog = !TextUploadDialog" icon="pi pi-pencil"
-            class=" flex p-button-secondary" data-umami-event="button-csv-upload"/>
+            class=" flex p-button-secondary" />
   </div>
   <div v-if="TextUploadDialog">
     <Textarea v-model="csvText" rows="5" class="mt-2 mb-2"/>
@@ -78,6 +78,10 @@ export default {
      * @param name
      */
     read(str, name) {
+
+      // eslint-disable-next-line
+      umami.track("button-csv-upload", {network: this.Store.network} )
+
       const delimiter = '; '
       const headers = ['type', 'name', 'option', 'direction']
       const rows = str.slice(str.indexOf("\n") + 1).split("\n");
@@ -165,6 +169,10 @@ export default {
      * exports current patient configuration as csv file
      */
     exportCSV() {
+
+      // eslint-disable-next-line
+      umami.track("button-csv-download", {network: this.Store.network} )
+
       const csv = this.Store.createCSVcontent();
 
       const anchor = document.createElement('a');
@@ -177,6 +185,9 @@ export default {
      * exports current data as pdf document
      */
     exportPDF() {
+
+      // eslint-disable-next-line
+      umami.track("button-pdf-export", {network: this.Store.network} )
 
       let data = {
         content: [],
