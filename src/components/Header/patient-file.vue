@@ -25,10 +25,10 @@ import {useStore} from '@/store'
 import * as barvisjs from "@/components/visualisations/bar-vis-js.js";
 import * as twosidedbarvisjs from "@/components/visualisations/two-sided-bar-vis-js.js";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as logo from "@/components/Header/svg_logo.js";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 
 export default {

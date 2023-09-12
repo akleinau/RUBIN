@@ -62,9 +62,9 @@
 </template>
 
 <script>
-import optionsInput from "@/components/Prediction/options-input";
+import optionsInput from "@/components/Prediction/options-input.vue";
 import PredictionsTable from "@/components/Prediction/predictions-table.vue"
-import GoalInput from "@/components/Prediction/goal-input";
+import GoalInput from "@/components/Prediction/goal-input.vue";
 import DefinedPhases from "@/components/Prediction/defined-phases.vue";
 import {useStore} from '@/store'
 

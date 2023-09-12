@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import Feedback from "@/components/Header/send-feedback";
+import Feedback from "@/components/Header/send-feedback.vue";
 import PatientFile from "@/components/Header/patient-file.vue";
 import {useStore} from '@/store'
 import {PrimeIcons} from 'primevue/api';

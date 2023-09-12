@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import bar from "@/components/visualisations/bar-vis";
+import bar from "@/components/visualisations/bar-vis.vue";
 import {useStore} from '@/store'
 
 export default {
