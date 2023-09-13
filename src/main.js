@@ -1,5 +1,6 @@
 import { createApp} from 'vue'
 import App from './App.vue'
+import router from './router'
 import PrimeVue from 'primevue/config';
 import Dialog from 'primevue/dialog';
 import Menubar from 'primevue/menubar'
@@ -96,5 +97,6 @@ vueApp.use(PrimeVue)
 
 vueApp.use(createPinia())
 vueApp.use(i18n)
+vueApp.use(router)
 vueApp.mount('#app')
 
