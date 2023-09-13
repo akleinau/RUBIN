@@ -145,7 +145,7 @@ export default {
 }
 
 ::v-deep(.p-tabview-nav-container) {
-  Display: None;
+  display: None;
 }
 
 ::v-deep(.p-dropdown-label) {
