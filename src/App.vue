@@ -40,7 +40,6 @@ export default {
       this.page = 'interface'
       this.selectedNetwork = selectedNet
       this.localNet = null
-      this.trackLoadNetwork()
     },
 
       /**
@@ -52,16 +51,7 @@ export default {
       this.page = 'interface'
       this.selectedNetwork = localNet.name
       this.localNet = localNet
-      this.trackLoadNetwork()
     },
-    trackLoadNetwork() {
-        track({
-          id: "interface_loaded",
-          parameters: {
-            plan: "Startup",
-        },
-})
-    }
   }
 }
 
