@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import UploadNetwork from "./components/NetworkLoading/upload-network";
+import UploadNetwork from "./components/NetworkLoading/upload-network.vue";
 import SelectNetwork from "./components/NetworkLoading/select-network.vue"
 import FooterComponent from "./components/footer-component.vue"
 
