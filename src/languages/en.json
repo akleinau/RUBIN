@@ -37,7 +37,7 @@
   "Tutorial1b": "With RUBIN you can predict outcomes based on patient evidence.",
   "Tutorial1c": "Do you want to start the tutorial?",
   "Tutorial2a": "To start, enter here what you already know about the patient. Eg symptoms, results of tests and personal information like age and gender.",
-  "Tutorial2b": "Select some evidence!",
+  "Tutorial2b": "Select one or two evidence items!",
   "Tutorial2c":"Click to add!",
   "Tutorial3a": "Here you can see the calculated probability of your desired outcome.",
   "Tutorial3b": "Here you can later customize your desired outcomes and available interventions.",
@@ -69,7 +69,7 @@
   "NetworkName": "Network name",
   "OptDescription": "Description (optional)",
   "UploadNet": "Upload Network",
-  "Prediction": "Prediction",
+  "Prediction": "Most Likely",
   "Likeliness": "Probability",
   "Choose": "Choose",
   "Cancel": "Cancel",
@@ -99,7 +99,7 @@
   "Upload": "Upload",
   "decreasesProbability": "Decreases the probability of",
   "increasesProbability": "Increases the probability of",
-  "current": "current",
+  "current": "Current",
   "networkColorExplanation1": "In",
   "networkColorExplanation2": "changed nodes",
   "networkColorExplanation3": "the different states are color coded",
@@ -121,6 +121,7 @@
   "unchangedNodes": "unchanged nodes",
   "currentState": "current state",
   "compareState": "compare state",
-  "skip": "skip"
+  "skip": "skip",
+  "Contact": "Contact"
 
 }

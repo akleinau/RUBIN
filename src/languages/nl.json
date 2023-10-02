@@ -37,7 +37,7 @@
   "Tutorial1b": "Met RUBIN kunt u uitkomsten voorspellen op basis van bewijs van patiënten.",
   "Tutorial1c": "Wil je de tutorial starten?",
   "Tutorial2a": "Om te beginnen, vul hier in wat je al weet over de patiënt. Bijvoorbeeld symptomen, resultaten van tests en persoonlijke informatie zoals leeftijd en geslacht.",
-  "Tutorial2b": "Selecteer wat evidentie!!",
+  "Tutorial2b": "Selecteer een of twee evidentie!",
   "Tutorial2c": "Klik om toe te voegen!",
   "Tutorial3a": "Hier ziet u de berekende kans om uw doel te bereiken.",
   "Tutorial3b": "Hier kunt u later uw gewenste resultaten en beschikbare interventies aanpassen.",
@@ -99,7 +99,7 @@
   "Upload": "Uploaden",
   "decreasesProbability": "Vermindert de kans op",
   "increasesProbability": "Verhoogt de kans op",
-  "current": "actueel",
+  "current": "Actueel",
   "networkColorExplanation1": "In",
   "networkColorExplanation2": "gewijzigde variabelen",
   "networkColorExplanation3": "zijn de verschillende toestanden kleurgecodeerd",
@@ -121,5 +121,6 @@
   "unchangedNodes": "ongewijzigd",
   "currentState": "huidige staat",
   "compareState": "vergelijk state",
-  "skip": "overspringen"
+  "skip": "overspringen",
+  "Contact": "Contact"
 } 
