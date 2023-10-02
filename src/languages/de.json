@@ -37,7 +37,7 @@
   "Tutorial1b": "Mit RUBIN kannst du Ergebnisse auf Basis der Evidenz eines Patienten vorhersagen.",
   "Tutorial1c": "Möchtest du das Tutorial starten?",
   "Tutorial2a": "Um zu beginnen, gib hier ein, was du bereits über den Patienten weißt. Z.B. Symptome, Testergebnisse und persönliche Informationen wie Alter und Geschlecht.",
-  "Tutorial2b": "Wähle eine Evidenz aus!",
+  "Tutorial2b": "Wähle ein oder zwei Evidenzen aus!",
   "Tutorial2c": "Klicke hier, um sie hinzuzufügen!",
   "Tutorial3a": "Hier siehst du die berechnete Wahrscheinlichkeit, dein erwünschtes Ergebnis zu erreichen.",
   "Tutorial3b": "Hier kannst du später die erwünschten Ergebnisse und verfügbaren Interventionen anpassen.",
@@ -120,5 +120,6 @@
   "unchangedNodes": "ungeändert",
   "currentState": "aktueller Zustand",
   "compareState": "Vergleichszustand",
-  "skip": "überspringen"
+  "skip": "überspringen",
+  "Contact": "Kontakt"
 }

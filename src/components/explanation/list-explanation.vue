@@ -1,6 +1,6 @@
 <template>
   <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false" sortField="label" :sortOrder="1"
-             class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="listExplanation"
+             class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="name"
              v-model:filters="filters" filterDisplay="menu" v-model:expandedRows="expandedRows">
     <template #header>
         <div class="flex justify-content-between">
@@ -11,16 +11,23 @@
         </div>
     </template>
     <Column expander style="width: 5rem" />
-    <Column :header="$t('Node')" field="label" :sortable="true" class="w-5"/>
+    <Column :header="$t('Node')" field="label" :sortable="true" class="w-5" @click="toggle(slotProps.data)">
+        <template #body="slotProps">
+            <div @click="toggle(slotProps.data)" class="w-full cursor-pointer">{{slotProps.data.label}}</div>
+        </template>
+    </Column>
     <Column :header="$t('Prediction')" field="state" :sortable="true">
       <template #body="slotProps">
-        <div :style="{color:color(slotProps.data.probability)}"> {{ slotProps.data.state }}</div>
+        <div :style="{color:color(slotProps.data.probability)}" @click="toggle(slotProps.data)" class="w-full cursor-pointer"
+             v-tooltip.bottom="capitalize((slotProps.data.probability !== 1)? $t('Prediction') : $t('given')) + ': ' + slotProps.data.state">
+            {{ slotProps.data.state }}</div>
       </template>
     </Column>
     <Column :header="$t('Likeliness')" field="probability" :sortable="true">
       <template #body="slotProps">
         <bar v-if="slotProps.data.probability !== 1" :value="slotProps.data.probability" color="slategray"
-             :width="150"/>
+             :width="150" @click="toggle(slotProps.data)" class="w-full cursor-pointer"
+             v-tooltip.bottom="$t('Likeliness') + ': ' +(slotProps.data.probability*100).toFixed(0) +'%'"/>
       </template>
     </Column>
     <Column header="" field="beforeState" v-if="Store.compareConfig">
@@ -140,7 +147,27 @@ export default {
     color(probability) {
       if (probability === 1) return "black"
       return "mediumblue"
-    }
+    },
+      /**
+       * toggles the expansion of a row
+       *
+       * @param row
+       */
+    toggle(row) {
+          if (this.expandedRows.includes(row)) {
+              this.expandedRows = this.expandedRows.filter(r => r.name !== row.name)
+          } else {
+              this.expandedRows.push(row)
+          }
+      },
+      /**
+       * capitalizes a string
+       * @param string
+       * @returns {*}
+       */
+      capitalize(string) {
+          return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    },
   }
 }
 </script>

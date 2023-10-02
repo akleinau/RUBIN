@@ -64,9 +64,9 @@
 </template>
 
 <script>
-import Relevance from "@/components/explanation/relevance-explanation";
+import Relevance from "@/components/explanation/relevance-explanation.vue";
 import sugiyama from "@/components/explanation/sugiyama-vis.vue";
-import NodeList from "@/components/explanation/list-explanation";
+import NodeList from "@/components/explanation/list-explanation.vue";
 import sugiyamaCompare from "@/components/explanation/sugiyama-vis-compare.vue";
 import {useStore} from '@/store'
 
@@ -268,7 +268,7 @@ li {
 }
 
 ::v-deep(.p-tabview-nav-container) {
-  Display: None;
+  display: None;
 }
 
 ::v-deep(.p-tabview-panels) {

@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import Interface from "./page-interface";
-import ChooseNet from "./page-choose-net";
+import Interface from "./page-interface.vue";
+import ChooseNet from "./page-choose-net.vue";
 
 export default {
   name: 'App',
@@ -52,7 +52,7 @@ export default {
       this.page = 'interface'
       this.selectedNetwork = localNet.name
       this.localNet = localNet
-    }
+    },
   }
 }
 

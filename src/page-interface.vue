@@ -36,12 +36,12 @@
 </template>
 
 <script>
-import Header from "./components/page-header";
-import Explanation from "./components/page-explanation";
-import Prediction from "@/components/page-prediction";
-import Evidence from "@/components/page-evidence";
-import tutorial from "@/components/page-tutorial";
-import FooterComponent from "@/components/footer-component";
+import Header from "./components/page-header.vue";
+import Explanation from "./components/page-explanation.vue";
+import Prediction from "@/components/page-prediction.vue";
+import Evidence from "@/components/page-evidence.vue";
+import tutorial from "@/components/page-tutorial.vue";
+import FooterComponent from "@/components/footer-component.vue";
 import {useStore} from '@/store'
 
 export default {

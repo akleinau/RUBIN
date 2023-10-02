@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import Feedback from "@/components/Header/send-feedback";
+import Feedback from "@/components/Header/send-feedback.vue";
 import PatientFile from "@/components/Header/patient-file.vue";
 import {useStore} from '@/store'
 import {PrimeIcons} from 'primevue/api';
@@ -92,7 +92,16 @@ export default {
       if (this.compareConfig == null) {
         this.stopComparing()
       }
-    }
+    },
+      /**
+       * watch language to update header
+       */
+    language: function () {
+        this.items.forEach(a => {
+                a.label = this.$t(a.key)
+        })
+        this.items = this.getItems()
+      }
   },
   computed: {
     patient: function () {
@@ -101,6 +110,9 @@ export default {
     compareConfig: function () {
       return this.Store.compareConfig
     },
+    language: function () {
+        return this.Store.language
+    }
   },
   data() {
     return {
@@ -148,6 +160,7 @@ export default {
       let configItem = this.items.find(a => a.key === "savedConfigurations")
       configItem.label = this.$t('startComparing')
       configItem.icon = PrimeIcons.BOOKMARK
+      configItem.style="border: None;"
       configItem.command = () => {
         this.startComparing()
       }
@@ -175,13 +188,8 @@ export default {
         this.$i18n.locale = "en"
       }
 
-      this.items.forEach(a => {
-        a.label = this.$t(a.key)
-      })
       this.Store.language = this.$i18n.locale
       this.Store.updateLabels()
-
-      this.items = this.getItems()
 
     },
       /**

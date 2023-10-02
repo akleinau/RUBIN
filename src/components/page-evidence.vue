@@ -280,8 +280,10 @@ export default {
          * @param node
          */
         deleteNode(node) {
-            this.Store.deleteEvidence(node)
-            this.Store.calculate()
+            if (this.Store.patient.evidence.find(n => n.name === node.name) != null) {
+                this.Store.deleteEvidence(node)
+                this.Store.calculate()
+            }
         },
         /**
          * removes node from the list of nodes that will be added to evidence at the end of using the overlay

@@ -3,21 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\"",
-    "start": "node server.js"
+    "serve": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.17.0",
-    "babel": "^6.23.0",
+    "@intlify/unplugin-vue-i18n": "^1.2.0",
     "core-js": "^3.6.5",
     "d3": "^7.6.1",
     "d3-dag": "^0.11.5",
     "d3-zoom": "^3.0.0",
     "equal-vue": "^0.74.0",
-    "eslint": "^8.14.0",
+    "eslint": "^8.49.0",
     "express": "^4.17.1",
     "json5": "^2.2.3",
     "loader-utils": "^2.0.3",
@@ -28,33 +27,31 @@
     "primeflex": "^3.3.0",
     "primeicons": "5.0.0",
     "primevue": "3.26.0",
-    "sass-loader": "^13.2.1",
+    "sass": "^1.62.1",
     "vue": "^3.2.33",
     "vue-i18n": "^9.2.2",
     "vue-router": "4.0.5"
   },
   "devDependencies": {
     "@intlify/vue-i18n-loader": "^3.0.0",
-    "@vue/cli-plugin-babel": "^5.0.4",
-    "@vue/cli-plugin-eslint": "^5.0.4",
-    "@vue/cli-service": "^5.0.4",
-    "@vue/compiler-sfc": "^3.2.33",
+    "@mdi/font": "^7.2.96",
+    "@rushstack/eslint-patch": "^1.2.0",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "eslint": "^8.34.0",
     "eslint-plugin-vue": "^8.7.1",
     "node-sass": "^8.0.0",
-    "vue-cli-plugin-i18n": "~2.3.1"
+    "vite": "^4.4.9"
   },
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "es2022": true
     },
     "extends": [
       "plugin:vue/vue3-essential",
       "eslint:recommended"
     ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
     "rules": {}
   },
   "browserslist": [

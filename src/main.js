@@ -1,5 +1,6 @@
 import { createApp} from 'vue'
 import App from './App.vue'
+import router from './router'
 import PrimeVue from 'primevue/config';
 import Dialog from 'primevue/dialog';
 import Menubar from 'primevue/menubar'
@@ -40,10 +41,22 @@ import 'primeflex/primeflex.css';
 
 import { createPinia } from 'pinia'
 import Button from 'primevue/button';
-import i18n from './i18n'
+
+import { createI18n } from 'vue-i18n'
 
 
+import en from './languages/en.json'
+import de from './languages/de.json'
+import nl from './languages/nl.json'
 
+const i18n = createI18n({
+  locale: 'en',
+  messages: {
+    en,
+    de,
+    nl
+  }
+})
 let vueApp = createApp(App)
 
 
@@ -84,5 +97,6 @@ vueApp.use(PrimeVue)
 
 vueApp.use(createPinia())
 vueApp.use(i18n)
+vueApp.use(router)
 vueApp.mount('#app')
 

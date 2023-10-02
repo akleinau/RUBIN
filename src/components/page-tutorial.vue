@@ -294,7 +294,10 @@ export default {
         languageChanged(event) {
             if (event.value == null) {
                 this.$i18n.locale = "en"
+
             }
+            this.Store.language = this.$i18n.locale
+            this.Store.updateLabels()
         }
     }
 }
