@@ -98,6 +98,8 @@ export default {
         this.Store.currentPhase = this.Store.phases[this.currentPhaseIndex]
         this.Store.phase_change()
       }
+      // eslint-disable-next-line
+      umami.track('button-phase-change', {phase: this.currentPhaseIndex, network: this.Store.network} );
     }
   },
   computed: {

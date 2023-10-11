@@ -152,6 +152,10 @@ export default {
       configItem.command = () => {
         this.stopComparing()
       }
+
+      // eslint-disable-next-line
+      umami.track('button-compare', {network: this.Store.network});
+
     },
       /**
        * called when compare feature is stopped
@@ -190,6 +194,9 @@ export default {
 
       this.Store.language = this.$i18n.locale
       this.Store.updateLabels()
+
+      // eslint-disable-next-line
+      umami.track('language-change', {language: this.$i18n.locale, network: this.Store.network} );
 
     },
       /**

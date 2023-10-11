@@ -90,6 +90,9 @@ export const useStore = defineStore('store', {
                 this.phase_change()
             }
 
+            // eslint-disable-next-line
+            umami.track('button-reset', {network: this.Store.network} );
+
 
             await this.calculate()
 
