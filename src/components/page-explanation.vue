@@ -225,6 +225,9 @@ export default {
       } else if (this.Store.tutorialStep === 8) {
         this.Store.tutorialStep = 7
       }
+      // eslint-disable-next-line
+      umami.track('button-explanation', {index: this.currentIndex, network: this.Store.network});
+
     },
       /**
        * returns options for explanation dropdown menu

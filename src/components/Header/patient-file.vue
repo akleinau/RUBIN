@@ -78,6 +78,10 @@ export default {
      * @param name
      */
     read(str, name) {
+
+      // eslint-disable-next-line
+      umami.track("button-csv-upload", {network: this.Store.network} )
+
       const delimiter = '; '
       const headers = ['type', 'name', 'option', 'direction']
       const rows = str.slice(str.indexOf("\n") + 1).split("\n");
@@ -165,6 +169,10 @@ export default {
      * exports current patient configuration as csv file
      */
     exportCSV() {
+
+      // eslint-disable-next-line
+      umami.track("button-csv-download", {network: this.Store.network} )
+
       const csv = this.Store.createCSVcontent();
 
       const anchor = document.createElement('a');
@@ -177,6 +185,9 @@ export default {
      * exports current data as pdf document
      */
     exportPDF() {
+
+      // eslint-disable-next-line
+      umami.track("button-pdf-export", {network: this.Store.network} )
 
       let data = {
         content: [],
