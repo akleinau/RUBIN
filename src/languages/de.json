@@ -121,5 +121,6 @@
   "currentState": "aktueller Zustand",
   "compareState": "Vergleichszustand",
   "skip": "überspringen",
-  "Contact": "Kontakt"
+  "Contact": "Kontakt",
+  "NotValidatedWarning": "Vorhersagen sind nicht validiert"
 }

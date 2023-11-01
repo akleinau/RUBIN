@@ -122,5 +122,6 @@
   "currentState": "huidige staat",
   "compareState": "vergelijk state",
   "skip": "overspringen",
-  "Contact": "Contact"
+  "Contact": "Contact",
+  "NotValidatedWarning": "Voorspellingen niet gevalideerd"
 } 
