@@ -91,7 +91,7 @@ export const useStore = defineStore('store', {
             }
 
             // eslint-disable-next-line
-            umami.track('button-reset', {network: this.Store.network} );
+            umami.track('button-reset', {network: this.network} );
 
 
             await this.calculate()
