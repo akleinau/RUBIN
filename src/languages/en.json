@@ -122,6 +122,7 @@
   "currentState": "current state",
   "compareState": "compare state",
   "skip": "skip",
-  "Contact": "Contact"
+  "Contact": "Contact",
+  "NotValidatedWarning": "predictions not validated"
 
 }
