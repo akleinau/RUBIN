@@ -19,8 +19,16 @@ export default {
   },
   created() {
     document.title = "RUBIN"
+
+    //dirty encoding of direct links to endorisk, and endorisk in dutch
     if (window.location.search === "?network=endorisk") {
       this.loadNetwork("endometrial cancer")
+    }
+    if (window.location.search === "?network=endorisk?lang=nl") {
+          this.loadNetwork("endometrial cancer")
+          this.$i18n.locale = "nl"
+          // eslint-disable-next-line
+          umami.track('language-change', {language: "nl", network: "endometrial cancer"} );
     }
   },
   data() {
