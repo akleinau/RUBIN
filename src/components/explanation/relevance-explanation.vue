@@ -1,7 +1,8 @@
 <template>
-    <DataTable class="w-full p-datatable-sm" :value="table"
+    <ScrollPanel style="width: 100%; height: 100%">
+    <DataTable class="w-full p-datatable-sm" :value="displayed_table"
                rowGroupMode="subheader" groupRowsBy="config_name"
-               responsiveLayout="scroll" :scrollable="true" scrollHeight="flex"
+
                :rowClass="isTherapyRow"  id="relevanceExplanation">
 
       <template #groupheader="slotProps">
@@ -44,7 +45,11 @@
           />
         </template>
       </Column>
+
     </DataTable>
+    <ToggleButton v-if="Store.compareConfig" v-model="showDetails" onIcon="pi pi-chevron-up" offIcon="pi pi-chevron-down"
+                  onLabel="Hide Details" offLabel="Show Details" style="border: 2px solid #4338CA" />
+    </ScrollPanel>
 
 </template>
 
@@ -66,9 +71,17 @@ export default {
   data() {
     return {
       showLocal: false,
+      showDetails: false,
+      sliceNr: 3,
+      show_table: true,
+      displayed_table: [],
     }
   },
-  computed: {
+  mounted() {
+      this.displayed_table = this.table
+  },
+
+    computed: {
       /**
        * computes the column names of the individual goal's columns
        *
@@ -93,7 +106,7 @@ export default {
        *
        * @returns {*[]}
        */
-    table: function () {
+    curr_table: function () {
       if (this.Store.explain.relevance) {
         let table = []
         this.Store.explain.relevance.forEach(n => {
@@ -107,10 +120,18 @@ export default {
           })
         })
 
+        table.sort((a, b) => b.overall_relevance - a.overall_relevance)
+
+        return table
+      } else return []
+    },
+
+    compare_table: function () {
         //compare
         if (this.Store.compareConfig != null) {
+          let tableCompare = []
           this.Store.compareConfig.explain.relevance.forEach(n => {
-            table.push({
+            tableCompare.push({
               config_name: "compare",
               label: this.Store.labels.nodes[n.node_name],
               node_name: n.node_name,
@@ -119,13 +140,43 @@ export default {
               relevancies: n.relevancies
             })
           })
-        }
 
-        return table
-      } else return []
+          tableCompare.sort((a, b) => b.overall_relevance - a.overall_relevance)
+
+          return tableCompare
+
+        }
+        else return []
+    },
+
+    table: function () {
+        if (this.Store.compareConfig != null) {
+            if(!this.showDetails) {
+                let table1 = JSON.parse(JSON.stringify(this.curr_table.slice(0, this.sliceNr)))
+                let table2 = JSON.parse(JSON.stringify(this.compare_table.slice(0, this.sliceNr)))
+                console.log(table1.concat(table2))
+                return table1.concat(table2)
+              //return JSON.parse(JSON.stringify(this.curr_table.slice(0, this.sliceNr).concat(this.compare_table.slice(0, this.sliceNr))))
+            }
+            console.log(this.curr_table.concat(this.compare_table))
+            return JSON.parse(JSON.stringify(this.curr_table.concat(this.compare_table)))
+        }
+        else return this.curr_table
     }
+
   },
+  watch: {
+    table: function() {
+        this.set_new_display_table()
+    },
+  },
+
   methods: {
+      async set_new_display_table() {
+          this.displayed_table = []
+          await this.$nextTick()
+          this.displayed_table = this.table
+      },
       /**
        * returns number of goals
        *
