@@ -52,6 +52,7 @@
                                           :optionLabel="get_option_label"
                                           placeholder="" @change="onNodeChange(slotProps.data)"
                                           class="flex p-0 m-0 flex-shrink w-full" showClear
+                                          :style="'max-width:' + maxWidthDropdown"
                                           :inputClass="{ highlightCompare: isDifferentState(slotProps.data) }">
                                 </Dropdown>
                             </div>
@@ -221,7 +222,10 @@ export default {
             }
 
             return table
-        }
+        },
+        maxWidthDropdown: function() {
+            return this.Store.compareConfig ? '150px' : '200px'
+        },
     },
     methods: {
         /**

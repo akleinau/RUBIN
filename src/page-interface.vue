@@ -16,15 +16,15 @@
     <!-- main cards -->
     <div class="grid w-full relative">
 
-      <BlockUI class="xl:col-3 lg:col-3 md:col-3 col-12" :blocked="block.evidence" style="height:90vh">
+      <BlockUI class="xl:col-4 lg:col-4 col-12" :blocked="block.evidence" style="height:90vh">
         <Evidence/>
       </BlockUI>
 
-      <BlockUI class="xl:col-4 lg:col-4 md:col-4 col-12" :blocked="block.options" style="height:90vh">
+      <BlockUI class="xl:col-4 lg:col-4 col-12" :blocked="block.options" style="height:90vh">
         <Prediction/>
       </BlockUI>
 
-      <BlockUI class="xl:col-5 lg:col-5 md:col-5 col-12" :blocked="block.explain" style="height:90vh">
+      <BlockUI class="xl:col-4 lg:col-4 col-12" :blocked="block.explain" style="height:90vh">
         <Explanation/>
       </BlockUI>
     </div>

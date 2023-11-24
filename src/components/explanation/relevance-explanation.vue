@@ -33,13 +33,13 @@
       </Column>
       <Column :header="$t('Relevance')" field="overall_relevance" :rowspan="2">
         <template #body="slotProps">
-          <bar :value="slotProps.data.overall_relevance" color="#004d80" width="200"
+          <bar :value="slotProps.data.overall_relevance" color="#004d80" width="150"
                v-tooltip="(slotProps.data.overall_relevance*100).toFixed(0) + '%'"></bar>
         </template>
       </Column>
       <Column v-for="goal in goalnames" :key="goal">
         <template #body="slotProps">
-          <twoSidedBar :value="slotProps.data.relevancies[goal.name]" :direction="goal.direction"
+          <twoSidedBar :value="slotProps.data.relevancies[goal.name]" :direction="goal.direction" :width="150"
                        v-tooltip.left="{value: getDirectionTooltip(slotProps.data.relevancies[goal.name],
                        goal.direction, goal.label), fitContent: true}"
           />
