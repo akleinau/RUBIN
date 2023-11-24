@@ -323,7 +323,7 @@ export const useStore = defineStore('store', {
             })
 
             this.description = network.description
-            this.network_translation.original_labels = network.labels
+            this.network_translation.original_labels = JSON.parse(JSON.stringify(network.labels))
             this.labels.nodes = network.labels
 
             this.evidenceGroupMap = {}
