@@ -123,5 +123,7 @@
   "compareState": "vergelijk state",
   "skip": "overspringen",
   "Contact": "Contact",
-  "NotValidatedWarning": "Voorspellingen niet gevalideerd"
+  "NotValidatedWarning": "Voorspellingen niet gevalideerd",
+  "showDetails": "details weergeven",
+  "hideDetails": "details verbergen"
 } 

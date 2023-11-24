@@ -48,7 +48,7 @@
 
     </DataTable>
     <ToggleButton v-if="Store.compareConfig" v-model="showDetails" onIcon="pi pi-chevron-up" offIcon="pi pi-chevron-down"
-                  onLabel="Hide Details" offLabel="Show Details" style="border: 2px solid #4338CA" />
+                  :onLabel="$t('hideDetails')" :offLabel="$t('showDetails')" style="border: 2px solid #4338CA" />
     </ScrollPanel>
 
 </template>

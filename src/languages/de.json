@@ -122,5 +122,7 @@
   "compareState": "Vergleichszustand",
   "skip": "überspringen",
   "Contact": "Kontakt",
-  "NotValidatedWarning": "Vorhersagen sind nicht validiert"
+  "NotValidatedWarning": "Vorhersagen sind nicht validiert",
+  "showDetails": "Details anzeigen",
+  "hideDetails": "Details ausblenden"
 }
