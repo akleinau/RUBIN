@@ -123,6 +123,8 @@
   "compareState": "compare state",
   "skip": "skip",
   "Contact": "Contact",
-  "NotValidatedWarning": "predictions not validated"
+  "NotValidatedWarning": "predictions not validated",
+  "showDetails": "show details",
+  "hideDetails": "hide details"
 
 }
