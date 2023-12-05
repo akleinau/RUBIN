@@ -38,10 +38,6 @@ export default {
      * @returns {Promise<void>}
      */
     async sendFeedback() {
-
-      // eslint-disable-next-line
-      umami.track("button-send-feedback", {network: this.Store.network} )
-
       const address = "https://doctorbn-backend.herokuapp.com/"
       //const address = "http://127.0.0.1:5000/"
       let csv = "NONE"

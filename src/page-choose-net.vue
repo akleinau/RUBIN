@@ -113,8 +113,6 @@ export default {
         this.$i18n.locale = "en"
       }
 
-      // eslint-disable-next-line
-      umami.track('language-change', {language: this.$i18n.locale, network: this.Store.network} );
     }
   }
 }
