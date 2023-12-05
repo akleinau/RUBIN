@@ -93,7 +93,6 @@ vueApp.use(PrimeVue)
     .component('SelectButton', SelectButton)
     .component('Toolbar', Toolbar)
     .component('ProgressSpinner', ProgressSpinner)
-    .component('ToggleButton', ToggleButton)
     .directive('tooltip', Tooltip)
 
 vueApp.use(createPinia())
