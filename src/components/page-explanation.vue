@@ -226,7 +226,8 @@ export default {
         this.Store.tutorialStep = 7
       }
       // eslint-disable-next-line
-      umami.track('button-explanation', {index: this.currentIndex, network: this.Store.network});
+      umami.track('button-explanation',
+          {index: this.currentIndex, network: this.Store.network, compare: this.Store.compareConfig!=null });
 
     },
       /**
