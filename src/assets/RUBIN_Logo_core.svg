@@ -4,23 +4,21 @@
 <svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 1000 265.482" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink">
 <defs/>
 <g id="Schrift-kopieren" vectornator:layerName="Schrift kopieren"/>
-<g id="Ebene-4" vectornator:layerName="Ebene 4">
-<path d="M292.556 50.5718L339.61 29.05L398.73 29.5881L446.388 51.1098C446.388 51.1098 418.233 198.505 370.98 201.224C333.578 203.376 315.71 182.951 302.545 164.118C280.718 132.896 284.94 82.7745 285.317 76.3979" fill="#ff0043" fill-rule="nonzero" opacity="1" stroke="none"/>
-</g>
-<g id="Ebene-2" vectornator:layerName="Ebene 2">
-<path d="M340.765 66.3391L386.151 152.943L414.313 60.1264L374.337 39.9404L340.765 66.3391Z" fill="#e8b3dc" fill-rule="nonzero" opacity="1" stroke="none"/>
-</g>
-<g id="Ebene-2--" vectornator:layerName="Ebene 2 -">
-<path d="M345.138 39.5303L376.224 39.2585" fill="none" opacity="1" stroke="#75235d" stroke-linecap="butt" stroke-linejoin="round" stroke-width="8.38399"/>
-<path d="M387.805 62.9066L376.528 41.1612L386.214 28.3398" fill="none" opacity="1" stroke="#75235d" stroke-linecap="butt" stroke-linejoin="round" stroke-width="8.38399"/>
-<path d="M358.361 195.134L333.637 152.796L329.681 67.2381L343.032 39.4538L334.96 27.355L386.978 27.0782L437.177 51.7621L386.586 64.5375L385.976 146.626L358.361 195.134Z" fill="none" opacity="1" stroke="#75235d" stroke-linecap="butt" stroke-linejoin="round" stroke-width="8.38399"/>
-<path d="M385.976 64.5375L334.471 63.4502L290.28 48.2284L314.183 36.4844L335.393 27.391" fill="none" opacity="1" stroke="#75235d" stroke-linecap="butt" stroke-linejoin="round" stroke-width="8.38399"/>
-</g>
+<g id="Ebene-4" vectornator:layerName="Ebene 4"/>
+<g id="Ebene-2" vectornator:layerName="Ebene 2"/>
+<g id="Ebene-2--" vectornator:layerName="Ebene 2 -"/>
 <g id="Ebene-1-kopieren" vectornator:layerName="Ebene 1 kopieren">
-<path d="M598.309 179.147C597.873 138.703 534.645 139.489 534.645 139.489C534.645 139.489 595.076 140.439 595.053 101.043C595.021 44.2854 520.035 57.8996 520.035 57.8996L521.294 218.547C521.294 218.547 598.876 231.764 598.309 179.147Z" fill="none" opacity="1" stroke="#1d1f32" stroke-linecap="butt" stroke-linejoin="round" stroke-width="37.7215"/>
-<path d="M686.792 57.7403L686.792 218.312" fill="none" opacity="1" stroke="#1d1f32" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215"/>
-<path d="M773.326 218.677L773.175 58.0973L872.972 220.98L873.713 57.3315" fill="none" opacity="1" stroke="#1d1f32" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215"/>
-<path d="M118.56 217.44L117.61 58.5221C117.61 58.5221 183.706 46.1487 201.524 84.2829C209.272 100.864 195.718 140.532 121.068 135.645C106.418 134.686 187.899 206.855 218.504 217.057" fill="none" opacity="1" stroke="#1d1f32" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215"/>
-<path d="M279.649 58.68C279.649 58.68 272.523 217.731 358.372 217.726C439.199 217.721 437.754 58.1685 437.754 58.1685" fill="none" opacity="1" stroke="#1d1f32" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215"/>
+<path d="M299.696 66.5204L352.611 26.67L402.675 26.67L453.48 65.8198C453.48 65.8198 430.221 185.485 430.221 185.485L376.588 226.08L320.875 184.039C320.875 184.039 299.373 71.0741 299.696 64.624" fill="#ff0043" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="Kurve 2"/>
+<path d="M352.951 71.404L402.562 173.545L432.13 67.0779L395.875 43.7677L352.951 71.404Z" fill="#e8b3dc" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="Kurve 2"/>
+<path d="M376.586 69.4678L403.261 69.1523L454.802 63.119" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 8"/>
+<path d="M377.908 69.4678L351.233 69.1523L299.692 63.119" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 9"/>
+<path d="M376.586 41.8961L394.768 41.8961L405.034 28.1285L376.586 28.1285" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 10"/>
+<path d="M394.768 41.8961L405.034 69.1523L400.374 176.008L377.909 226.08L431.542 183.073L454.802 63.0033L405.034 28.1285" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 11"/>
+<path d="M377.908 41.8961L359.726 41.8961L349.46 28.1285L377.908 28.1285" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 12"/>
+<path d="M359.726 41.8961L349.46 69.1523L354.12 176.008L376.584 226.08L322.952 183.073L299.692 63.0033L349.46 28.1285" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 13"/>
+<path d="M574.918 179.639C574.482 139.195 511.254 139.981 511.254 139.981C511.254 139.981 571.684 140.932 571.662 101.535C571.629 44.7777 496.644 58.3919 496.644 58.3919L497.902 219.039C497.902 219.039 575.485 232.256 574.918 179.639Z" fill="none" opacity="1" stroke="#161543" stroke-linecap="butt" stroke-linejoin="round" stroke-width="37.7215" vectornator:layerName="Kurve 1"/>
+<path d="M647.615 58.4532L647.615 219.025" fill="none" opacity="1" stroke="#161543" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215" vectornator:layerName="Kurve 2"/>
+<path d="M722.676 218.26L722.525 57.6804L822.322 220.563L823.062 56.9146" fill="none" opacity="1" stroke="#161543" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215" vectornator:layerName="Kurve 3"/>
+<path d="M177.888 219.156L176.938 60.2382C176.938 60.2382 243.034 47.8648 260.852 85.999C268.6 102.581 255.046 142.248 180.396 137.361C165.745 136.402 247.227 208.571 277.832 218.773" fill="none" opacity="1" stroke="#161543" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215" vectornator:layerName="Kurve 4"/>
 </g>
 </svg>
