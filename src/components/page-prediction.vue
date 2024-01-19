@@ -15,12 +15,10 @@
 
       <!-- decision table -->
       <div style="height:60%; border: solid 5px lightgray" class="p-b-2 overlap-hidden">
-        <ScrollPanel class="h-full">
+        <ScrollPanel class="h-full overlap-hidden">
           <div v-if="!Store.error">
             <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
-            <ScrollPanel class="h-full overlap-hidden">
-              <PredictionsTable id="optionsTable" class="h-full overlap-hidden"/>
-            </ScrollPanel>
+            <PredictionsTable id="optionsTable" class="h-full overlap-hidden"/>
           </div>
           <div v-else class="p-4">
             <b>{{ $t("CalculationError1") }} </b>
