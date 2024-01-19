@@ -155,11 +155,9 @@ export default {
             if(!this.showDetails) {
                 let table1 = JSON.parse(JSON.stringify(this.curr_table.slice(0, this.sliceNr)))
                 let table2 = JSON.parse(JSON.stringify(this.compare_table.slice(0, this.sliceNr)))
-                console.log(table1.concat(table2))
                 return table1.concat(table2)
               //return JSON.parse(JSON.stringify(this.curr_table.slice(0, this.sliceNr).concat(this.compare_table.slice(0, this.sliceNr))))
             }
-            console.log(this.curr_table.concat(this.compare_table))
             return JSON.parse(JSON.stringify(this.curr_table.concat(this.compare_table)))
         }
         else return this.curr_table

@@ -250,7 +250,7 @@ export default {
                 this.setOverlayPosition('addOverlayEvidence', 'overlay_addOverlayEvidence', "down")
                 this.setOverlayPosition('optionsTable', 'overlay_optionsTable', "up")
                 this.setOverlayPosition('PhaseSelect', 'overlay_PhaseSelect', "down")
-                this.setOverlayPosition('relevanceExplanation', 'overlay_relevanceExplanation', "low_up")
+                this.setOverlayPosition('relevanceExplanation', 'overlay_relevanceExplanation', "fixed_low_up")
                 this.setOverlayPosition('explanationDropdown', 'overlay_explanationDropdown', "up")
                 this.setOverlayPosition('explanationDropdown', 'overlay_explanationDropdown2', "down")
                 this.setOverlayPosition('listExplanation', 'overlay_listExplanation', "low_up")
@@ -283,7 +283,11 @@ export default {
                 } else if (position === "low_up") {
                     document.getElementById(overlay).style.top = boundingBox.bottom + window.scrollY + 5 + "px";
                     document.getElementById(overlay).style.transform = "translateY(-110%)";
+                } else if (position === "fixed_low_up") {
+                    document.getElementById(overlay).style.top = boundingBox.top + window.scrollY + 5 + "px";
+                    document.getElementById(overlay).style.transform = "translateY(300px)"; //fixed amount below top
                 }
+
 
             } else {
                 document.getElementById(overlay).style.top = "0px"

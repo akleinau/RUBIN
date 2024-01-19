@@ -1,6 +1,6 @@
 <template>
   <DataTable :value="data" responsiveLayout="scroll" :autoLayout="false" sortField="label" :sortOrder="1"
-             class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="name"
+             class="p-datatable-sm w-full" :scrollable="true" scrollHeight="flex" id="listExplanation"
              v-model:filters="filters" filterDisplay="menu" v-model:expandedRows="expandedRows">
     <template #header>
         <div class="flex justify-content-between">
