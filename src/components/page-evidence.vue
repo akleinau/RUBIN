@@ -92,7 +92,7 @@
                         <Column field="options">
                             <template #body="slotProps">
                                 <ToggleButton class="m-2 " v-for="option in slotProps.data.options" :key="option"
-                                              v-model="option.checked"
+                                              v-model="option.checked" :disabled="isDisabled(slotProps.data.group)"
                                               @change="onOverlayOptionChange(slotProps, option)"
                                               :onLabel="Store.labels.states[slotProps.data.name][option.name]"
                                               onIcon="pi pi-check"
@@ -383,6 +383,18 @@ export default {
 
             return label_element.num + " " + label
         },
+        /**
+         * returns if the evidence item should be disabled
+         */
+        isDisabled(group) {
+            if (this.Store.currentPhase !== null && this.Store.currentPhase.sets.evidence_groups !== null) {
+                return !this.Store.currentPhase.sets.evidence_groups.includes(group.substring(2));
+            } else {
+                return false
+            }
+        },
+
+
         //directly coded in here, should be in the customization file
         /**
          * returns if for the endorisk model enough evidence is added
