@@ -328,11 +328,13 @@ export default {
         //Zoom
         const zoomed = function ({transform}) {
           svg.style("transform", "translate(" + transform.x + "px," + transform.y + "px) scale(" + transform.k + ")")
+          svg.style("transform-origin", "0 0");
         };
 
         const zoom = d3.zoom().on('zoom', zoomed)
-            .extent([[0, 0], [width, height]])
-            .scaleExtent([1, 10]);
+            .extent([[0, 0], [width, height]]) //restricts zoom
+            .scaleExtent([1, 10]); //restricts zoom
+
 
         d3.select(this.$refs.container).call(zoom)
 
