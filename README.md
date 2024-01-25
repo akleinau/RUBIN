@@ -1,6 +1,6 @@
 # RUBIN
 Clinical Decision Support System based on Bayesian Networks.  
-## See http://rubin.herokuapp.com/
+## See http://akleinau.github.io/RUBIN
 
 ## Installation
 1. Install Node.js (https://nodejs.org/en/download)
