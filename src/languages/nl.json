@@ -125,5 +125,6 @@
   "Contact": "Contact",
   "NotValidatedWarning": "Voorspellingen niet gevalideerd",
   "showDetails": "details weergeven",
-  "hideDetails": "details verbergen"
+  "hideDetails": "details verbergen",
+  "EvidenceDisabled": "Deze evidentie is in de huidige fase gedeactiveerd."
 } 

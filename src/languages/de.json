@@ -124,5 +124,6 @@
   "Contact": "Kontakt",
   "NotValidatedWarning": "Vorhersagen sind nicht validiert",
   "showDetails": "Details anzeigen",
-  "hideDetails": "Details ausblenden"
+  "hideDetails": "Details ausblenden",
+  "EvidenceDisabled": "Diese Evidenz ist in der aktuellen Phase deaktiviert."
 }

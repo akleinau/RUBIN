@@ -91,14 +91,16 @@
                         </Column>
                         <Column field="options">
                             <template #body="slotProps">
-                                <ToggleButton class="m-2 " v-for="option in slotProps.data.options" :key="option"
-                                              v-model="option.checked" :disabled="isDisabled(slotProps.data.group)"
-                                              @change="onOverlayOptionChange(slotProps, option)"
-                                              :onLabel="Store.labels.states[slotProps.data.name][option.name]"
-                                              onIcon="pi pi-check"
-                                              :offLabel="Store.labels.states[slotProps.data.name][option.name]"
-                                              offIcon="pi pi-plus">
-                                </ToggleButton>
+                                <div v-tooltip.left="isDisabled(slotProps.data.group) ? $t('EvidenceDisabled') : ''">
+                                    <ToggleButton class="m-2 " v-for="option in slotProps.data.options" :key="option"
+                                                  v-model="option.checked" :disabled="isDisabled(slotProps.data.group)"
+                                                  @change="onOverlayOptionChange(slotProps, option)"
+                                                  :onLabel="Store.labels.states[slotProps.data.name][option.name]"
+                                                  onIcon="pi pi-check"
+                                                  :offLabel="Store.labels.states[slotProps.data.name][option.name]"
+                                                  offIcon="pi pi-plus">
+                                    </ToggleButton>
+                                </div>
 
                             </template>
                         </Column>
