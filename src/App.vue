@@ -19,7 +19,8 @@ export default {
   },
   created() {
     document.title = "RUBIN"
-
+  },
+  mounted() {
     //dirty encoding of direct links to endorisk, and endorisk in dutch
     if (window.location.search === "?network=endorisk") {
       this.loadNetwork("endometrial cancer")
