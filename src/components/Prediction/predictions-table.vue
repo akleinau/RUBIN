@@ -42,13 +42,16 @@
                v-tooltip="(slotProps.data.goalValues[String(goal.name)]*100).toFixed(0) + '%'"></bar>
 
           <!-- show percentages of selected configs -->
-          <div v-if="slotProps.data.config_name === 'current' &&
-              JSON.stringify(slotProps.data.option) === JSON.stringify(this.selectedOption.option)
-              || slotProps.data.config_name !== 'current' &&
-                 !isNaN(slotProps.data.goalValues[String(goal.name)])"
+          <div v-if="isCurrentOption(slotProps.data, goal)"
                style="fontSize: 1.5rem" class="flex">
             {{ (slotProps.data.goalValues[String(goal.name)] * 100).toFixed(0) }} %
           </div>
+
+          <!-- recommendation -->
+          <div v-if="isCurrentOption(slotProps.data, goal) && Store.currentPhase !== null" style="color:#3f3f46">
+              {{ recommendText(goal.name, goal.selected.name, slotProps.data.goalValues[String(goal.name)])}}
+          </div>
+
         </div>
       </template>
     </Column>
@@ -136,6 +139,19 @@ export default {
       return label
     },
 
+      /**
+       * true if row is currently selected
+        * @param data
+       * @param goal
+       * @returns {boolean}
+       */
+    isCurrentOption(data, goal) {
+        return data.config_name === 'current' &&
+              JSON.stringify(data.option) === JSON.stringify(this.selectedOption.option)
+              || data.config_name !== 'current' &&
+                 !isNaN(data.goalValues[String(goal.name)])
+    },
+
     /**
      * updates table if an option is selected/ deselected
      *
@@ -216,6 +232,23 @@ export default {
      */
     getBarWidth(num) {
       return 100 / num + 100
+    },
+
+    /**
+     * returns text based on phase recommendation
+     */
+    recommendText(name, option, value) {
+        let text = ""
+        this.Store.currentPhase.sets.goal.forEach(goal => {
+            if (goal.name === name && goal.option === option) {
+                if (value < goal.boundary) {
+                    text = goal.TextBelow
+                } else {
+                    text = goal.TextAbove
+                }
+            }
+        })
+        return text
     }
   }
 }
