@@ -26,8 +26,8 @@ export default {
       this.loadNetwork("endometrial cancer")
     }
     if (window.location.search === "?network=endorisk?lang=nl") {
-          this.loadNetwork("endometrial cancer")
           this.$i18n.locale = "nl"
+          this.loadNetwork("endometrial cancer")
     }
   },
   data() {
