@@ -312,7 +312,15 @@ export default {
               }
             }
           ]
-        }
+        },
+        {
+            label: this.$t('SendFeedback'),
+            key: 'SendFeedback',
+            icon: PrimeIcons.SEND,
+            command: () => {
+              this.showFeedback = true
+            }
+          },
       ]
     }
   }
