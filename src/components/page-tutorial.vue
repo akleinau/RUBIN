@@ -19,7 +19,7 @@
     </Dialog>
 
     <Button v-show="step < finalStep && step > 0 " class=" p-1 m-2 absolute p-button-secondary "
-            label="close tutorial" icon="pi pi-times"
+            :label="$t('closeTutorial')" icon="pi pi-times"
             @click="close()" style="z-index: 10000; right:15%"/>
 
     <Card v-show="step === 1" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300 " id="overlay_addButton" style="z-index: 20000">
