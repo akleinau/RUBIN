@@ -295,10 +295,9 @@ export default {
                 document.getElementById(overlay).style.width = "200px"
             }
         },
-        languageChanged(event) {
-            if (event.value == null) {
+        languageChanged() {
+            if (this.$i18n.locale == null) {
                 this.$i18n.locale = "en"
-
             }
             this.Store.language = this.$i18n.locale
             this.Store.updateLabels()
