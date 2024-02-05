@@ -127,6 +127,7 @@
   "NotValidatedWarning": "predictions not validated",
   "showDetails": "show details",
   "hideDetails": "hide details",
-  "EvidenceDisabled": "This evidence item is deactivated in the current phase."
+  "EvidenceDisabled": "This evidence item is deactivated in the current phase.",
+  "Legal": "Legal information"
 
 }

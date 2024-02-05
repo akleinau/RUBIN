@@ -36,7 +36,29 @@
   </OverlayPanel>
 
   <Dialog :header="$t('Contact')" v-model:visible="showContact" style="width: 50%" :modal="true">
-    Placeholder for legal and contact information
+
+    To contact us, please use <Button label="this feedback form" link class="m-0 p-0" @click="showContact = false; showFeedback = true" />.
+
+    <divider />
+
+    <p> Radboudumc </p>
+    <p> route 623 </p>
+    <p> Grooteplein Zuid 10 </p>
+    <p> 6525 GA Nijmegen </p>
+    <p> The Netherlands </p>
+
+  </Dialog>
+
+  <Dialog :header="$t('Legal')" v-model:visible="showLegal" style="width: 50%" :modal="true">
+    <h3>Legal information for ENDORISK </h3>
+
+    The ENDORISK-model is a Bayesian network that can be used to compute the risk of lymph node metastasis (LNM) in
+    patients with endometrial cancer. The ENDORISK-model is a results of academic research at the Radboud university
+    medical center in collaboration with Twente University, the Netherlands. The ENDORISK-model is still under research,
+    and can only be used by medical practitioners who are trained and aware of the safety requirements to use the model
+    for preoperativerisk estimation. The model is currently not suitable to guide adjuvant therapy, and can in no way
+    replace any clinical consultation or treatment recommendation.
+
   </Dialog>
 
   <Dialog v-model:visible="NetworkSelectionDialog" modal>
@@ -119,6 +141,7 @@ export default {
       showFeedback: false,
       showNetworkDescription: false,
       showContact: false,
+      showLegal: false,
       SavePatientName: null,
       configLabel: this.$t('startComparing'),
       NetworkSelectionDialog: false,
@@ -270,6 +293,7 @@ export default {
             {
               label: this.$t('Reset'),
               key: 'Reset',
+              icon: PrimeIcons.REFRESH,
               command: () => {
                 this.Store.reset(false)
               }
@@ -277,6 +301,7 @@ export default {
             {
               label: this.$t('ChangeLanguage'),
               key: 'ChangeLanguage',
+              icon: PrimeIcons.GLOBE,
               command: (event) => {
                 this.showLanguage(event.originalEvent)
               }
@@ -301,6 +326,14 @@ export default {
               icon: PrimeIcons.MAP_MARKER,
               command: () => {
                 this.showContact = true
+              }
+            },
+            {
+              label: this.$t('Legal'),
+              key: 'Legal',
+              icon: PrimeIcons.BRIEFCASE,
+              command: () => {
+                this.showLegal = true
               }
             },
             {
