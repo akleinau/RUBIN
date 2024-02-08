@@ -10,6 +10,8 @@
         and have been introduced to the terms and conditions as well as minimal required variables to use the ENDORISK
         model in clinical practice.
 
+        <br><br>
+
         Any action you take upon the information you find on this website (https://akleinau.github.io/RUBIN/), is strictly
         at your
         own risk. will not be liable for any losses and/or damages in connection with the use of our website.
@@ -32,6 +34,8 @@
         onderzoek. https://akleinau.github.io/RUBIN/ geeft geen garanties over de volledigheid, betrouwbaarheid en
         nauwkeurigheid van deze informatie. Deze website is bedoeld voor zorgverleners die bekend zijn met de
         voorwaarden en gebruik van het ENDORISK model en de minimaal vereiste variabelen om dit model te gebruiken.
+
+        <br><br>
 
         Elke handeling die ondernomen wordt op basis van de informatie op deze website
         (https://akleinau.github.io/RUBIN/),
