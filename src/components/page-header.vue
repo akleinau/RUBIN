@@ -50,14 +50,9 @@
   </Dialog>
 
   <Dialog :header="$t('Legal')" v-model:visible="showLegal" style="width: 50%" :modal="true">
-    <h3>Legal information for ENDORISK </h3>
+    <h2>ENDORISK </h2>
 
-    The ENDORISK-model is a Bayesian network that can be used to compute the risk of lymph node metastasis (LNM) in
-    patients with endometrial cancer. The ENDORISK-model is a results of academic research at the Radboud university
-    medical center in collaboration with Twente University, the Netherlands. The ENDORISK-model is still under research,
-    and can only be used by medical practitioners who are trained and aware of the safety requirements to use the model
-    for preoperativerisk estimation. The model is currently not suitable to guide adjuvant therapy, and can in no way
-    replace any clinical consultation or treatment recommendation.
+    <DisclaimerEndorisk/>
 
   </Dialog>
 
@@ -76,6 +71,7 @@
 <script>
 import Feedback from "@/components/Header/send-feedback.vue";
 import PatientFile from "@/components/Header/patient-file.vue";
+import DisclaimerEndorisk from "@/components/Header/diclaimer-endorisk.vue"
 import {useStore} from '@/store'
 import {PrimeIcons} from 'primevue/api';
 
@@ -84,7 +80,8 @@ export default {
   emits: ["changePage", "loadPatient", "exportCSV"],
   components: {
     Feedback,
-    PatientFile
+    PatientFile,
+    DisclaimerEndorisk
   },
   setup() {
     const Store = useStore()
