@@ -126,5 +126,6 @@
   "NotValidatedWarning": "Vorhersagen sind nicht validiert",
   "showDetails": "Details anzeigen",
   "hideDetails": "Details ausblenden",
-  "EvidenceDisabled": "Diese Evidenz ist in der aktuellen Phase deaktiviert."
+  "EvidenceDisabled": "Diese Evidenz ist in der aktuellen Phase deaktiviert.",
+  "Legal": "Disclaimer"
 }

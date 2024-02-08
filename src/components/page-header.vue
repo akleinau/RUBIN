@@ -36,7 +36,24 @@
   </OverlayPanel>
 
   <Dialog :header="$t('Contact')" v-model:visible="showContact" style="width: 50%" :modal="true">
-    Placeholder for legal and contact information
+
+    To contact us, please use <Button label="this feedback form" link class="m-0 p-0" @click="showContact = false; showFeedback = true" />.
+
+    <divider />
+
+    <p> Radboudumc </p>
+    <p> route 623 </p>
+    <p> Grooteplein Zuid 10 </p>
+    <p> 6525 GA Nijmegen </p>
+    <p> The Netherlands </p>
+
+  </Dialog>
+
+  <Dialog :header="$t('Legal')" v-model:visible="showLegal" style="width: 50%" :modal="true">
+    <h2>ENDORISK </h2>
+
+    <DisclaimerEndorisk/>
+
   </Dialog>
 
   <Dialog v-model:visible="NetworkSelectionDialog" modal>
@@ -54,6 +71,7 @@
 <script>
 import Feedback from "@/components/Header/send-feedback.vue";
 import PatientFile from "@/components/Header/patient-file.vue";
+import DisclaimerEndorisk from "@/components/Header/diclaimer-endorisk.vue"
 import {useStore} from '@/store'
 import {PrimeIcons} from 'primevue/api';
 
@@ -62,7 +80,8 @@ export default {
   emits: ["changePage", "loadPatient", "exportCSV"],
   components: {
     Feedback,
-    PatientFile
+    PatientFile,
+    DisclaimerEndorisk
   },
   setup() {
     const Store = useStore()
@@ -119,6 +138,7 @@ export default {
       showFeedback: false,
       showNetworkDescription: false,
       showContact: false,
+      showLegal: false,
       SavePatientName: null,
       configLabel: this.$t('startComparing'),
       NetworkSelectionDialog: false,
@@ -270,6 +290,7 @@ export default {
             {
               label: this.$t('Reset'),
               key: 'Reset',
+              icon: PrimeIcons.REFRESH,
               command: () => {
                 this.Store.reset(false)
               }
@@ -277,6 +298,7 @@ export default {
             {
               label: this.$t('ChangeLanguage'),
               key: 'ChangeLanguage',
+              icon: PrimeIcons.GLOBE,
               command: (event) => {
                 this.showLanguage(event.originalEvent)
               }
@@ -301,6 +323,14 @@ export default {
               icon: PrimeIcons.MAP_MARKER,
               command: () => {
                 this.showContact = true
+              }
+            },
+            {
+              label: this.$t('Legal'),
+              key: 'Legal',
+              icon: PrimeIcons.BRIEFCASE,
+              command: () => {
+                this.showLegal = true
               }
             },
             {

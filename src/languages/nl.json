@@ -127,5 +127,6 @@
   "NotValidatedWarning": "Voorspellingen niet gevalideerd",
   "showDetails": "details weergeven",
   "hideDetails": "details verbergen",
-  "EvidenceDisabled": "Deze evidentie is in de huidige fase gedeactiveerd."
+  "EvidenceDisabled": "Deze evidentie is in de huidige fase gedeactiveerd.",
+  "Legal": "Disclaimer"
 } 
