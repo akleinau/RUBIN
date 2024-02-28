@@ -93,7 +93,7 @@
                             <template #body="slotProps">
                                 <div v-tooltip.left="isDisabled(slotProps.data.group) ? $t('EvidenceDisabled') : ''">
                                     <ToggleButton class="m-2 " v-for="option in slotProps.data.options" :key="option"
-                                                  v-model="option.checked" :disabled="isDisabled(slotProps.data.group)"
+                                                  v-model="option.checked" :disabled="isDisabled(slotProps.data.group_name)"
                                                   @change="onOverlayOptionChange(slotProps, option)"
                                                   :onLabel="Store.labels.states[slotProps.data.name][option.name]"
                                                   onIcon="pi pi-check"
@@ -188,7 +188,8 @@ export default {
                                 node: node.name
                             }
                         }),
-                        group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(node.name)
+                        group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(node.name),
+                        group_name: this.Store.evidenceGroupMap === null ? "" : this.get_group_name(node.name)
                     }
                 }
             )
@@ -213,7 +214,8 @@ export default {
                             selected: '',
                             selectedCompare: n.selected.name,
                             options: n.options,
-                            group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(n.name)
+                            group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(n.name),
+                            group_name: this.Store.evidenceGroupMap === null ? "" : this.get_group_name(n.name)
                         })
                     } else {
                         foundNode.selectedCompare = n.selected.name
@@ -261,7 +263,8 @@ export default {
                             node: slotProps.data.name,
                         }
                     }),
-                    group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(slotProps.data.name)
+                    group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(slotProps.data.name),
+                    group_name: this.Store.evidenceGroupMap === null ? "" : this.get_group_name(slotProps.data.name)
                 }
                 this.nodesToAdd.push(item);
             }
@@ -386,11 +389,20 @@ export default {
             return label_element.num + " " + label
         },
         /**
+         * returns the group name
+         *
+         * @param name
+         * @returns {string}
+         */
+        get_group_name(name) {
+            return this.Store.evidenceGroupMap[name]
+        },
+        /**
          * returns if the evidence item should be disabled
          */
         isDisabled(group) {
             if (this.Store.currentPhase !== null && this.Store.currentPhase.sets.evidence_groups !== null) {
-                return !this.Store.currentPhase.sets.evidence_groups.includes(group.substring(2));
+                return !this.Store.currentPhase.sets.evidence_groups.includes(group);
             } else {
                 return false
             }
