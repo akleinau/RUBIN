@@ -282,6 +282,9 @@ export default {
             if (this.Store.tutorialStep === 3) {
                 this.Store.tutorialStep = 4
             }
+
+            // eslint-disable-next-line
+            umami.track('button-addEvidence', {network: this.Store.network} );
         },
         /**
          * deletes evidence node

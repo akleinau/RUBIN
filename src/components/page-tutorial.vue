@@ -212,6 +212,9 @@ export default {
     methods: {
         start() {
             this.Store.tutorialStep = 1
+            
+            // eslint-disable-next-line
+            umami.track('button-startTutorial', {network: this.Store.network} );
 
         },
         close() {
