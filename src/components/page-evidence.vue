@@ -91,7 +91,7 @@
                         </Column>
                         <Column field="options">
                             <template #body="slotProps">
-                                <div v-tooltip.left="isDisabled(slotProps.data.group) ? $t('EvidenceDisabled') : ''">
+                                <div v-tooltip.left="isDisabled(slotProps.data.group_name) ? $t('EvidenceDisabled') : ''">
                                     <ToggleButton class="m-2 " v-for="option in slotProps.data.options" :key="option"
                                                   v-model="option.checked" :disabled="isDisabled(slotProps.data.group_name)"
                                                   @change="onOverlayOptionChange(slotProps, option)"
