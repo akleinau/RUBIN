@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vite",
     "build": "vite build",
+    "buildGP": "vite build --base=/RUBIN/",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
