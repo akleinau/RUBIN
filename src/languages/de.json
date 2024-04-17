@@ -127,5 +127,8 @@
   "showDetails": "Details anzeigen",
   "hideDetails": "Details ausblenden",
   "EvidenceDisabled": "Diese Evidenz ist in der aktuellen Phase deaktiviert.",
-  "Legal": "Disclaimer"
+  "Legal": "Disclaimer",
+  "liability": "Bitte stimme unserer Haftungsaussage zu. Klicke hier, um sie zu lesen.",
+  "accept": "Akzeptieren",
+  "reject": "Ablehnen"
 }

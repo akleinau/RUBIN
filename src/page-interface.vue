@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-column min-h-screen" :style="{'background-color': Store.backgroundColor}">
 
-  <tutorial @setBlock="block = $event" :loading="Store.optionsLoading || Store.explanationLoading"/>
+  <tutorial @setBlock="block = $event" :loading="Store.optionsLoading || Store.explanationLoading" @changePage="changePage()"/>
 
     <Header ref="menu" @changePage="changePage()"/>
 
