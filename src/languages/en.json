@@ -128,6 +128,9 @@
   "showDetails": "show details",
   "hideDetails": "hide details",
   "EvidenceDisabled": "This evidence item is deactivated in the current phase.",
-  "Legal": "Disclaimer"
+  "Legal": "Disclaimer",
+  "liability": "Please accept our liability statement. Click here to read it.",
+  "accept": "Accept",
+  "reject": "Reject"
 
 }

@@ -1,19 +1,35 @@
 <template>
     <Dialog v-model:visible="stepIs0" class="tutorialCard shadow-5 m-0 " :header="this.$t('Tutorial1a')"
             :closable="false"
-            id="overlay0" modal style="z-index: 2000">
+            id="overlay0" modal style="z-index: 2000;max-width:95%">
         <div class="flex align-items-center flex-column">
             <div class="flex align-items-center mb-2">
                 <span class="mr-2"> {{ $t("Language") }}:</span>
                 <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
                           :value="$i18n.locale" @change="languageChanged"/>
             </div>
-            <span> {{ $t("Tutorial1b") }} </span>
-            <span class="pt-1"> {{ $t("Tutorial1c") }} </span>
-            <br>
-            <div class="flex pt-1">
-                <Button class="p-button-text" :label="this.$t('start')" icon="pi pi-check" @click="start()"/>
-                <Button class="p-button-text" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
+            <div v-if="!liability && Store.network === 'endometrial cancer'" class="flex align-items-center flex-column">
+                <Accordion>
+                    <AccordionTab :header="this.$t('liability')">
+                        <p>
+                            <disclaimer-endorisk/>
+                        </p>
+                    </AccordionTab>
+                </Accordion>
+                <br>
+                <div class="flex pt-1">
+                    <Button class="p-button-text" :label="this.$t('accept')" icon="pi pi-check" @click="liability=true"/>
+                    <Button class="p-button-text" :label="this.$t('reject')" icon="pi pi-times" @click="changePage()"/>
+                </div>
+            </div>
+            <div v-else class="flex align-items-center flex-column">
+                <span> {{ $t("Tutorial1b") }} </span>
+                <span class="pt-1"> {{ $t("Tutorial1c") }} </span>
+                <br>
+                <div class="flex pt-1">
+                    <Button class="p-button-text" :label="this.$t('start')" icon="pi pi-check" @click="start()"/>
+                    <Button class="p-button-text" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
+                </div>
             </div>
         </div>
     </Dialog>
@@ -167,16 +183,19 @@
 
 <script>
 import {useStore} from '@/store'
+import DisclaimerEndorisk from "@/components/Header/diclaimer-endorisk.vue";
 
 export default {
     name: "page-tutorial",
+    components: {DisclaimerEndorisk},
     props: ["loading"],
-    emits: ["setBlock"],
+    emits: ["setBlock", "changePage"],
     data() {
         return {
             display: false,
             step: 0,
-            finalStep: 12
+            finalStep: 12,
+            liability: false,
         }
     },
     setup() {
@@ -304,7 +323,11 @@ export default {
             }
             this.Store.language = this.$i18n.locale
             this.Store.updateLabels()
-        }
+        },
+        changePage() {
+            this.Store.reset(true)
+            this.$emit("changePage")
+        },
     }
 }
 </script>

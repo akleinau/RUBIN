@@ -128,5 +128,8 @@
   "showDetails": "details weergeven",
   "hideDetails": "details verbergen",
   "EvidenceDisabled": "Deze evidentie is in de huidige fase gedeactiveerd.",
-  "Legal": "Disclaimer"
+  "Legal": "Disclaimer",
+  "liability": "Accepteer alstublieft onze aansprakelijkheidsverklaring. Klik hier om het te lezen.",
+  "accept": "Accepteer",
+  "reject": "Wijs af"
 } 
