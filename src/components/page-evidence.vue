@@ -74,7 +74,7 @@
                                responsiveLayout="scroll" id="evidenceOverlayTable"
                                v-model:filters="filters" filterDisplay="menu" data-key="name">
                         <template #header>
-                            <div class="flex justify-content-between">
+                            <div v-if="Store.tutorialStep === 12" class="flex justify-content-between">
                             <span class="p-input-icon-right" style="width:100%">
                                 <InputText style="width:100%" v-model="filters['label'].value" :placeholder="$t('search') + '...'"/>
                               <i class="pi pi-search"/>
