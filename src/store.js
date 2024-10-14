@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia';
+//import './object_definitions.js';
 
 const address = "https://doctorbn-backend.herokuapp.com/"
 //const address = "http://127.0.0.1:5000/"
