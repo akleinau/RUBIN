@@ -8,9 +8,9 @@ export const useStore = defineStore('store', {
         //data that is specific to the patient
         patient: {
             targets: [],
-            evidence: [],
-            goals: [],
-            nodes: [], //nodes of the network that are neither evidence, goals, nor targets
+            evidence: [], // {group:"", group_name:"",name:"", options:Array({name:"", node:""})selected:Array({name:"",node:""})}
+            goals: [], // {direction:"", name:"", options:Array({name:""})selected:{name:""}}
+            nodes: [], //nodes of the network that are neither evidence, goals, nor targets {name:"", options:Array({name:""})}
             name: "",
         },
 
@@ -28,7 +28,7 @@ export const useStore = defineStore('store', {
             states: null,
         },
 
-        edges: [], //edges of the network
+        edges: [], //edges of the network {source:"", target:""}
         network_translation: {
             original_labels: null,
             custom_labels: null
@@ -212,6 +212,7 @@ export const useStore = defineStore('store', {
                     }
 
                     this.optionsLoading = false
+
                     await this.calculateExplanations(patient, predictions, explain)
                 }
             }
