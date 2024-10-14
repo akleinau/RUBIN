@@ -18,8 +18,8 @@
                 </Accordion>
                 <br>
                 <div class="flex pt-1">
-                    <Button class="p-button-text" :label="this.$t('accept')" icon="pi pi-check" @click="liability=true"/>
                     <Button class="p-button-text" :label="this.$t('reject')" icon="pi pi-times" @click="changePage()"/>
+                    <Button class="p-button-text" :label="this.$t('accept')" icon="pi pi-check" @click="liability=true"/>
                 </div>
             </div>
             <div v-else class="flex align-items-center flex-column">
