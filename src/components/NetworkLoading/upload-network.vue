@@ -7,8 +7,10 @@
   </form>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: "upload-network",
   emits: ["reloadNetList", "loadLocalNet"],
   methods: {
@@ -45,7 +47,7 @@ export default {
       }
     }
   }
-}
+})
 
 
 </script>

@@ -63,14 +63,15 @@
 
 </template>
 
-<script>
-import optionsInput from "@/components/Prediction/options-input.vue";
-import PredictionsTable from "@/components/Prediction/predictions-table.vue"
-import GoalInput from "@/components/Prediction/goal-input.vue";
-import DefinedPhases from "@/components/Prediction/defined-phases.vue";
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import optionsInput from "../components/Prediction/options-input.vue";
+import PredictionsTable from "../components/Prediction/predictions-table.vue"
+import GoalInput from "../components/Prediction/goal-input.vue";
+import DefinedPhases from "../components/Prediction/defined-phases.vue";
+import {useStore} from '../store.ts';
 
-export default {
+export default defineComponent({
   name: "page-prediction",
   emits: ["update"],
   components: {
@@ -139,7 +140,7 @@ export default {
       return this.Store.labels.nodes[goal.name] + ": " + goal.selected.name
     },
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -68,14 +68,15 @@
 
 </template>
 
-<script>
-import Feedback from "@/components/Header/send-feedback.vue";
-import PatientFile from "@/components/Header/patient-file.vue";
-import DisclaimerEndorisk from "@/components/Header/diclaimer-endorisk.vue"
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Feedback from "../components/Header/send-feedback.vue";
+import PatientFile from "../components/Header/patient-file.vue";
+import DisclaimerEndorisk from "../components/Header/diclaimer-endorisk.vue"
+import {useStore} from '../store.ts';
 import {PrimeIcons} from 'primevue/api';
 
-export default {
+export default defineComponent({
   name: "page-header",
   emits: ["changePage", "loadPatient", "exportCSV"],
   components: {
@@ -354,7 +355,7 @@ export default {
       ]
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

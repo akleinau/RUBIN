@@ -4,7 +4,7 @@
 
 <script>
 import * as d3 from "d3";
-import * as barvisjs from "@/components/visualisations/bar-vis-js.js";
+import * as barvisjs from "./bar-vis-js.js";
 
 export default {
   name: "bar-vis",

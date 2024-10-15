@@ -3,12 +3,13 @@
   <div ref="legend" class="absolute w-5" style="left:20px; bottom:20px;"/>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import * as d3 from "d3";
 import * as dag from "d3-dag"
-import {useStore} from '@/store'
+import {useStore} from '../../store.ts';
 
-export default {
+export default defineComponent({
   name: "sugiyama-vis-compare",
   props: [
     "nodes",
@@ -30,8 +31,8 @@ export default {
      * @returns {*[]}
      */
     edgeList: function () {
-      const list = []
-      this.edges.forEach(d => {
+      const list: any[] = []
+      this.edges.forEach((d: any) => {
         list.push([d["source"], d["target"]])
       })
       return list
@@ -80,7 +81,7 @@ export default {
      * @param node
      * @returns {number}
      */
-    isChanged(node) {
+    isChanged(node: any) {
       let node1 = this.nodes.find(d => d.name === node.data.id).state
       let node2 = this.nodes2.find(d => d.name === node.data.id).state
       return node1 === node2 ? 0 : 1
@@ -92,7 +93,7 @@ export default {
      * @param node
      * @returns {boolean}
      */
-    isHighlightNode(node) {
+    isHighlightNode(node: any) {
       if (this.highlight) {
         return this.highlightNodes.find(n => n.name === node.data.id) !== undefined
       }
@@ -106,7 +107,7 @@ export default {
      * @param edge
      * @returns {boolean}
      */
-    isHighlightEdge(edge) {
+    isHighlightEdge(edge: any) : boolean {
       if (this.highlight) {
         return this.highlightEdges.find(e => e.source === edge.data[0] && e.target === edge.data[1]) !== undefined
       }
@@ -487,7 +488,7 @@ export default {
 
     }
   }
-}
+})
 
 
 </script>

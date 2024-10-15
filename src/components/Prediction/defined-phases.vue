@@ -49,10 +49,11 @@
   </div>
 </template>
 
-<script>
-import {useStore} from "@/store";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../../store.ts';
 
-export default {
+export default defineComponent({
   name: "defined-phases",
   setup() {
     const Store = useStore()
@@ -142,7 +143,7 @@ export default {
       return givenTargets_compare
     },
   }
-}
+})
 </script>
 
 <style scoped>

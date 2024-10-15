@@ -36,10 +36,11 @@
   </div>
 </template>
 
-<script>
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../../store.ts';
 
-export default {
+export default defineComponent({
   name: "options-input",
   setup() {
     const Store = useStore()
@@ -92,7 +93,7 @@ export default {
       this.overlay = false
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

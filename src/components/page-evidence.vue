@@ -142,11 +142,12 @@
     </Card>
 </template>
 
-<script>
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../store.ts';
 import {FilterMatchMode} from "primevue/api";
 
-export default {
+export default defineComponent({
     name: "page-evidence",
     setup() {
         const Store = useStore()
@@ -452,7 +453,7 @@ export default {
             return notEnoughInformation
         }
     }
-}
+})
 </script>
 
 <style scoped>

@@ -4,7 +4,7 @@
 
 <script>
 import * as d3 from "d3";
-import * as twosidedbarvisjs from "@/components/visualisations/two-sided-bar-vis-js.js";
+import * as twosidedbarvisjs from "./two-sided-bar-vis-js.js";
 
 export default {
   name: "two-sided-bar-vis",

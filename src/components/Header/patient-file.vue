@@ -20,18 +20,19 @@
   </div>
 </template>
 
-<script>
-import {useStore} from '@/store'
-import * as barvisjs from "@/components/visualisations/bar-vis-js.js";
-import * as twosidedbarvisjs from "@/components/visualisations/two-sided-bar-vis-js.js";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../../store.ts';
+import * as barvisjs from "../visualisations/bar-vis-js.js";
+import * as twosidedbarvisjs from "../visualisations/two-sided-bar-vis-js.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import * as logo from "@/components/Header/svg_logo.js";
+import * as logo from "../Header/svg_logo.js";
 
 pdfMake.vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 
-export default {
+export default defineComponent({
   name: "patient-file",
   emits: ["loaded"],
   setup() {
@@ -449,7 +450,7 @@ export default {
       return state
     }
   }
-}
+})
 </script>
 
 <style scoped>

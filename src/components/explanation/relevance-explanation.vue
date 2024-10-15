@@ -54,12 +54,14 @@
 
 </template>
 
-<script>
-import bar from "@/components/visualisations/bar-vis.vue";
-import twoSidedBar from "@/components/visualisations/two-sided-bar-vis.vue";
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import bar from "../visualisations/bar-vis.vue";
+import twoSidedBar from "../visualisations/two-sided-bar-vis.vue";
+import {useStore} from '../../store.ts';
+import {RelevanceNode} from "../../types/explanation_types";
 
-export default {
+export default defineComponent({
   name: "relevance-explanation",
   components: {
     bar,
@@ -71,11 +73,11 @@ export default {
   },
   data() {
     return {
-      showLocal: false,
-      showDetails: false,
-      sliceNr: 3,
-      show_table: true,
-      displayed_table: [],
+      showLocal: false as boolean,
+      showDetails: false as boolean,
+      sliceNr: 3 as number,
+      show_table: true as boolean,
+      displayed_table: [] as any[],
     }
   },
   mounted() {
@@ -89,9 +91,9 @@ export default {
        * @returns {Object[]}
        */
     goalnames: function () {
-      let goalnames = []
+      let goalnames: any[] = []
       if (this.Store.patient.goals != null && this.Store.explain.relevance != null) {
-        this.Store.patient.goals.forEach(goal => {
+        this.Store.patient.goals.forEach((goal: any) => {
           goalnames.push({
             "name": goal.name + ": " + goal.selected.name,
             "label": this.Store.labels.nodes[goal.name] + ": " + this.Store.labels.states[goal.name][goal.selected.name],
@@ -109,8 +111,8 @@ export default {
        */
     curr_table: function () {
       if (this.Store.explain.relevance) {
-        let table = []
-        this.Store.explain.relevance.forEach(n => {
+        let table : RelevanceNode[] = []
+        this.Store.explain.relevance.forEach((n: any) => {
           table.push({
             config_name: "current",
             label: this.Store.labels.nodes[n.node_name],
@@ -130,8 +132,8 @@ export default {
     compare_table: function () {
         //compare
         if (this.Store.compareConfig != null) {
-          let tableCompare = []
-          this.Store.compareConfig.explain.relevance.forEach(n => {
+          let tableCompare : RelevanceNode[] = []
+          this.Store.compareConfig.explain.relevance.forEach((n: any) => {
             tableCompare.push({
               config_name: "compare",
               label: this.Store.labels.nodes[n.node_name],
@@ -196,7 +198,7 @@ export default {
        * @param label - name of the goal
        * @returns {*|string}
        */
-    getDirectionTooltip(number, direction, label) {
+    getDirectionTooltip(number: number, direction: String, label: String) {
         if (number > 0.001) return this.$t("increasesProbability") + " " + label
         else if (number < -0.001) return this.$t("decreasesProbability") + " " + label
 
@@ -208,9 +210,9 @@ export default {
        * @param name - node name
        * @returns {string}
        */
-    getState(name) {
-      let state = "unknown"
-      this.Store.explain.states.forEach(node => {
+    getState(name: string) {
+      let state : string = "unknown"
+      this.Store.explain.states.forEach((node: any) => {
         if (node.name === name) {
           state = this.Store.labels.states[name][node.state]
         }
@@ -223,9 +225,9 @@ export default {
        * @param name - node name
        * @returns {string}
        */
-    getCompareState(name) {
+    getCompareState(name: string) {
       let state = "unknown"
-      this.Store.compareConfig.explain.states.forEach(node => {
+      this.Store.compareConfig.explain.states.forEach((node: any) => {
         if (node.name === name) {
           state = this.Store.labels.states[name][node.state]
         }
@@ -238,9 +240,9 @@ export default {
        * @param row
        * @returns {null}
        */
-    isTherapyRow(row) {
+    isTherapyRow(row: RelevanceNode) {
       let rowClass = null
-      this.Store.patient.targets.forEach(target => {
+      this.Store.patient.targets.forEach((target: any) => {
         if (target.name === row.node_name) rowClass = "therapy"
       })
       return rowClass
@@ -251,12 +253,12 @@ export default {
        * @param row
        * @returns {boolean}
        */
-    isDifferentName(row) {
+    isDifferentName(row: RelevanceNode) {
       if (row.config_name === "compare") {
-        return !this.Store.explain.relevance.find(a => a.node_name === row.node_name);
+        return !this.Store.explain.relevance.find((a: any) => a.node_name === row.node_name);
       }
       if (this.Store.compareConfig !== null) {
-        return !this.Store.compareConfig.explain.relevance.find(a => a.node_name === row.node_name)
+        return !this.Store.compareConfig.explain.relevance.find((a: any) => a.node_name === row.node_name)
       }
       return false
     },
@@ -266,7 +268,7 @@ export default {
        * @param row
        * @returns {boolean}
        */
-    isDifferentState(row) {
+    isDifferentState(row: RelevanceNode) {
       if (row.config_name === "compare") {
         let node = this.Store.explain.relevance.find(a => a.node_name === row.node_name)
         if (node === undefined) return true
@@ -281,7 +283,7 @@ export default {
 
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

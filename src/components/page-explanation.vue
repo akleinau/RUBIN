@@ -63,14 +63,15 @@
   </Card>
 </template>
 
-<script>
-import Relevance from "@/components/explanation/relevance-explanation.vue";
-import sugiyama from "@/components/explanation/sugiyama-vis.vue";
-import NodeList from "@/components/explanation/list-explanation.vue";
-import sugiyamaCompare from "@/components/explanation/sugiyama-vis-compare.vue";
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Relevance from "../components/explanation/relevance-explanation.vue";
+import sugiyama from "../components/explanation/sugiyama-vis.vue";
+import NodeList from "../components/explanation/list-explanation.vue";
+import sugiyamaCompare from "../components/explanation/sugiyama-vis-compare.vue";
+import {useStore} from "../store"
 
-export default {
+export default defineComponent({
   name: "page-explanation",
   components: {
     Relevance,
@@ -244,7 +245,7 @@ export default {
       ]
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

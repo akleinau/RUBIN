@@ -67,11 +67,12 @@
   </DataTable>
 </template>
 
-<script>
-import bar from "@/components/visualisations/bar-vis.vue";
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import bar from "../visualisations/bar-vis.vue";
+import {useStore} from '../../store.ts';
 
-export default {
+export default defineComponent({
   name: "predictions-table",
   components: {
     bar
@@ -251,7 +252,7 @@ export default {
         return text
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

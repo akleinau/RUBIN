@@ -77,11 +77,12 @@
 </template>
 
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import {FilterMatchMode} from 'primevue/api';
-import {useStore} from "@/store";
+import {useStore} from "../../store";
 
-export default {
+export default defineComponent ({
   name: "goal-input",
   setup() {
     const Store = useStore()
@@ -272,7 +273,7 @@ export default {
       return this.Store.labels.states[option.node][option.name]
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

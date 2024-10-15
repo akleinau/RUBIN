@@ -181,21 +181,22 @@
 
 </template>
 
-<script>
-import {useStore} from '@/store'
-import DisclaimerEndorisk from "@/components/Header/diclaimer-endorisk.vue";
+<script  lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../store.ts';
+import DisclaimerEndorisk from "../components/Header/diclaimer-endorisk.vue";
 
-export default {
+export default defineComponent({
     name: "page-tutorial",
     components: {DisclaimerEndorisk},
     props: ["loading"],
     emits: ["setBlock", "changePage"],
     data() {
         return {
-            display: false,
-            step: 0,
-            finalStep: 12,
-            liability: false,
+            display: false as boolean,
+            step: 0 as number,
+            finalStep: 12 as number,
+            liability: false as boolean,
         }
     },
     setup() {
@@ -329,7 +330,7 @@ export default {
             this.$emit("changePage")
         },
     }
-}
+})
 </script>
 
 <style lang="scss" scoped>
