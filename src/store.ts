@@ -3,6 +3,7 @@ import {NNode, NEvidence, NGoal, NTarget, Patient_type} from "./types/node_types
 import {Explain_type} from "./types/explanation_types.ts";
 import {Prediction_type} from "./types/prediction_types.ts";
 import {Phase, PhaseGoal} from "./types/phase_types.ts";
+import {CustomLabels, Label_type, Labelmap} from "./types/label_types.ts";
 
 const address = "https://doctorbn-backend.herokuapp.com/"
 //const address = "http://127.0.0.1:5000/"
@@ -32,27 +33,27 @@ export const useStore = defineStore('store', {
             states: [],
         } as Explain_type,
 
-        edges: [], //edges of the network {source:"", target:""}
+        edges: [] as {source: string, target: string}[], //edges of the network
         network_translation: {
-            original_labels: null,
-            custom_labels: null
+            original_labels: {} as Labelmap,
+            custom_labels: {} as CustomLabels
         },
 
         labels: {
-            nodes: null,
-            states: null,
-            evidence_groups: null
-        },
+            nodes: {},
+            states: {},
+            evidence_groups: {}
+        } as Label_type,
 
         configurations: [],
         compareConfig: null as null |{patient: Patient_type, explain: Explain_type, predictions: Prediction_type},
 
-        optionsLoading: false,
-        explanationLoading: false,
+        optionsLoading: false as boolean,
+        explanationLoading: false as boolean,
 
         description: "" as string,
         network: "" as string,
-        localNet: "",
+        localNet: null as null | {fileString: string, fileFormat: string, description: string},
         phases: [] as Phase[],
         evidenceGroupMap: null,
         currentPhase: null as Phase | null,
@@ -335,6 +336,7 @@ export const useStore = defineStore('store', {
 
             this.description = network.description
             this.network_translation.original_labels = JSON.parse(JSON.stringify(network.labels))
+            console.log(this.network_translation)
             this.labels.nodes = network.labels
 
             this.evidenceGroupMap = {}
@@ -429,6 +431,7 @@ export const useStore = defineStore('store', {
                     this.labels.states[name][option_name] = label
                 }
             }
+
         },
         /**
          * adds nodes as patient evidence and deletes them from remaining node list
