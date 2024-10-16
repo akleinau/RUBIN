@@ -55,7 +55,7 @@ export const useStore = defineStore('store', {
         network: "" as string,
         localNet: null as null | {fileString: string, fileFormat: string, description: string},
         phases: [] as Phase[],
-        evidenceGroupMap: null,
+        evidenceGroupMap: {} as { [key: string]: string },
         currentPhase: null as Phase | null,
         language: "en" as string,
         tutorialStep: -1 as number,
@@ -330,13 +330,12 @@ export const useStore = defineStore('store', {
             this.patient.nodes = nodes
 
             this.edges = []
-            network.edges.forEach(edge => {
+            network.edges.forEach((edge: any) => {
                 this.edges.push({"source": edge[0], "target": edge[1]})
             })
 
             this.description = network.description
             this.network_translation.original_labels = JSON.parse(JSON.stringify(network.labels))
-            console.log(this.network_translation)
             this.labels.nodes = network.labels
 
             this.evidenceGroupMap = {}
@@ -352,7 +351,7 @@ export const useStore = defineStore('store', {
 
                 if (network.customization.evidence_groups) {
                     network.customization.evidence_groups.forEach((g: any, i: number) => {
-                        g.variables.forEach(v => {
+                        g.variables.forEach((v: string) => {
                             this.evidenceGroupMap[v] = g.name
                         })
                         this.labels.evidence_groups[g.name] = {"num": i, "labels": g.labels}

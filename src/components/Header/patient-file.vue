@@ -28,6 +28,7 @@ import * as twosidedbarvisjs from "../visualisations/two-sided-bar-vis-js.js";
 import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as logo from "../Header/svg_logo.js";
+import {NNode} from "../../types/node_types.ts";
 
 pdfMake.vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
@@ -104,7 +105,7 @@ export default defineComponent({
      * @returns {*[]}
      */
     getCorrespondingNode(nodeArr, type) {
-      let correspondingNodes = []
+      let correspondingNodes = [] as NNode[]
       nodeArr.forEach(node => {
         let correspondingNode = this.Store.patient.nodes.find(x => x.name === node.name)
         if (correspondingNode == null) console.log("Not found: " + node)
@@ -132,7 +133,7 @@ export default defineComponent({
      * @param name
      * @returns {Promise<void>}
      */
-    async load(patientData, name) {
+    async load(patientData, name: string) {
       for (var row in patientData) {
         let item = patientData[row]
         if (item.type === 'evidence') {

@@ -70,6 +70,7 @@ import sugiyama from "../components/explanation/sugiyama-vis.vue";
 import NodeList from "../components/explanation/list-explanation.vue";
 import sugiyamaCompare from "../components/explanation/sugiyama-vis-compare.vue";
 import {useStore} from "../store"
+import {StateExplanation} from "../types/explanation_types.ts"
 
 export default defineComponent({
   name: "page-explanation",
@@ -92,7 +93,7 @@ export default defineComponent({
       compactEdges: null,
       exNodes: null,
       currentIndex: 0,
-      options: null
+      options: [] as { label: string, value: number }[]
     }
   },
   watch: {
@@ -126,13 +127,13 @@ export default defineComponent({
       }
       //nodes
 
-      let explanationNodes = []
+      let explanationNodes = [] as StateExplanation[]
       this.Store.explain.explanation["nodes"].forEach(node => {
         let originalNode = this.Store.explain.states.find(n => n.name === node)
         if (originalNode != null) {
           explanationNodes.push(originalNode)
         } else {
-          explanationNodes.push({"name": node, "probability": "1.0"})
+          explanationNodes.push({"name": node, "probability": 1.0})
         }
       })
 

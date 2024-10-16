@@ -161,7 +161,7 @@ export default defineComponent({
             filters: {
                 'label': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
-            nodesToAdd: [],
+            nodesToAdd: [] as NEvidence[],
             multiSortMeta: [
                 {field: 'group', order: 1},
                 {field: 'label', order: 2},
@@ -304,7 +304,7 @@ export default defineComponent({
          *
          * @param node
          */
-        deleteNodeFromOverlay(node) {
+        deleteNodeFromOverlay(node: NEvidence) {
             this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
         },
         /**
@@ -359,7 +359,7 @@ export default defineComponent({
          * @param item
          * @returns {boolean}
          */
-        isDifferentState(item) {
+        isDifferentState(item: NEvidence) {
             if (item.selectedCompare === '') return false
             return item.selected.name !== item.selectedCompare
         },
@@ -369,7 +369,7 @@ export default defineComponent({
          * @param option
          * @returns {*}
          */
-        get_option_label(option) {
+        get_option_label(option: any) {
             return this.Store.labels.states[option.node][option.name]
         },
         /**

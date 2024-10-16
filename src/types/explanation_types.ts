@@ -38,13 +38,13 @@ export interface NetworkExplanation {
 }
 
 export interface StateExplanation {
-    distribution: number[],
-    distribution_wo_evidence: number[],
-    divergence: number,
+    distribution?: number[],
+    distribution_wo_evidence?: number[],
+    divergence?: number,
     name: string,
     probability: number,
-    state: string,
-    stateNames: {
+    state?: string,
+    stateNames?: {
         [key: number]: string
     }[]
 }

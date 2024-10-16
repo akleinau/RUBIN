@@ -16,6 +16,7 @@ export interface NEvidence {
     group_name : string;
     options : {name: string, node: string}[];
     selected : {name: string, node: string};
+    selectedCompare? : string;
 }
 
 export interface NTarget {
