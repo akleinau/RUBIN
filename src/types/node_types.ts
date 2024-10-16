@@ -19,7 +19,7 @@ export interface NEvidence {
 }
 
 export interface NTarget {
-    label : string;
+    label? : string;
     name : string;
     options : {name: string}[];
 }

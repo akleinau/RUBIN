@@ -1,5 +1,8 @@
 import {defineStore} from 'pinia';
 import {NNode, NEvidence, NGoal, NTarget, Patient_type} from "./types/node_types.ts";
+import {Explain_type} from "./types/explanation_types.ts";
+import {Prediction_type} from "./types/prediction_types.ts";
+import {Phase, PhaseGoal} from "./types/phase_types.ts";
 
 const address = "https://doctorbn-backend.herokuapp.com/"
 //const address = "http://127.0.0.1:5000/"
@@ -17,17 +20,17 @@ export const useStore = defineStore('store', {
 
         //available options to treat the patient given the interventions
         predictions: {
-            options: null,
+            options: [],
             likelyResult: null,
             selectedOption: null,
-        },
+        } as Prediction_type,
 
         //explaining calculations for the chosen option
         explain: {
             explanation: null,
-            relevance: null, //{node_name, overall_relevance, relevancies[goal]}
-            states: null,
-        },
+            relevance: [],
+            states: [],
+        } as Explain_type,
 
         edges: [], //edges of the network {source:"", target:""}
         network_translation: {
@@ -42,7 +45,7 @@ export const useStore = defineStore('store', {
         },
 
         configurations: [],
-        compareConfig: null, //{patient, explain, predictions}
+        compareConfig: null as null |{patient: Patient_type, explain: Explain_type, predictions: Prediction_type},
 
         optionsLoading: false,
         explanationLoading: false,
@@ -50,9 +53,9 @@ export const useStore = defineStore('store', {
         description: "" as string,
         network: "" as string,
         localNet: "",
-        phases: [],
+        phases: [] as Phase[],
         evidenceGroupMap: null,
-        currentPhase: null,
+        currentPhase: null as Phase | null,
         language: "en" as string,
         tutorialStep: -1 as number,
         error: false as boolean,
@@ -70,7 +73,7 @@ export const useStore = defineStore('store', {
             this.patient.evidence.forEach(a => this.deleteEvidence(a))
             this.patient.name = ""
             this.predictions = {
-                options: null,
+                options: [],
                 likelyResult: null,
                 selectedOption: null,
             }
@@ -78,8 +81,8 @@ export const useStore = defineStore('store', {
             //explaining calculations for the chosen option
             this.explain = {
                 explanation: null,
-                relevance: null, //{node_name, overall_relevance, relevancies[goal]}
-                states: null,
+                relevance: [], //{node_name, overall_relevance, relevancies[goal]}
+                states: [],
             }
 
             if (noPhase || this.phases.length === 0) {
@@ -108,7 +111,7 @@ export const useStore = defineStore('store', {
             let patient = this.patient
             let predictions = this.predictions
             let explain = this.explain
-            if (compare) {
+            if (compare && this.compareConfig) {
                 patient = this.compareConfig.patient
                 predictions = this.compareConfig.predictions
                 explain = this.compareConfig.explain
@@ -200,9 +203,10 @@ export const useStore = defineStore('store', {
                     predictions.options.unshift(predictions.likelyResult[0])
 
                     //don't overwrite the saved selected option
-                    if (predictions.selectedOption) {
+                    if (predictions.selectedOption !== null) {
+                        let tmpOption = JSON.stringify(predictions.selectedOption.option)
                         let oldOption = predictions.options.find(a => JSON.stringify(a.option) ===
-                            JSON.stringify(predictions.selectedOption.option))
+                            tmpOption)
                         if (oldOption) {
                             predictions.selectedOption = oldOption
                         } else {
@@ -226,24 +230,29 @@ export const useStore = defineStore('store', {
          * @param {Object} explain - explanation object used to save the results of the calculation
          * @returns {Promise<void>}
          */
-        async calculateExplanations(patient: Patient_type, predictions, explain) {
+        async calculateExplanations(patient: Patient_type, predictions: Prediction_type, explain: Explain_type) {
             this.explanationLoading = true
 
-            let evidences = {}
+            let evidences : any = {}
             for (var ev in patient.evidence) {
                 evidences[patient.evidence[ev].name] = patient.evidence[ev].selected.name;
             }
 
-            let goals = {}
-            let goalDirections = {}
+            let goals: any = {}
+            let goalDirections: any = {}
             for (var goal in this.patient.goals) {
                 if (!evidences[this.patient.goals[goal].name]) {
                     goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
                     goalDirections[this.patient.goals[goal].name] = this.patient.goals[goal].direction
                 }
             }
+            let tmpoptions = null
+                if (predictions.selectedOption) {
+                    tmpoptions = predictions.selectedOption.option
+                }
             let gResponse = null
             if (this.localNet) {
+
                 gResponse = await fetch(address + "calcOptions", {
                     method: 'POST',
                     headers: {
@@ -254,7 +263,7 @@ export const useStore = defineStore('store', {
                         fileString: this.localNet.fileString,
                         fileFormat: this.localNet.fileFormat,
                         evidences: evidences,
-                        options: predictions.selectedOption.option,
+                        options: tmpoptions,
                         goals: goals,
                         goalDirections: goalDirections
                     })
@@ -268,7 +277,7 @@ export const useStore = defineStore('store', {
                     body: JSON.stringify({
                         network: this.network,
                         evidences: evidences,
-                        options: predictions.selectedOption.option,
+                        options: tmpoptions,
                         goals: goals,
                         goalDirections: goalDirections
                     })
@@ -505,22 +514,26 @@ export const useStore = defineStore('store', {
          * checks if phase was changed and triggers recalculation of data accordingly
          */
         phase_change() {
+            if (this.currentPhase == null) {
+                return
+            }
             let reload = false //if recalculation has to happen
 
             //updates targets
-            if (this.differentLists(this.patient.targets.map(a => a.name), this.currentPhase.sets.target)) {
+            if (this.differentLists(this.patient.targets.map((a: NTarget) => a.name), this.currentPhase.sets.target)) {
                 this.patient.targets.forEach(a => this.deleteTarget(a))
-                this.addTargets(this.patient.nodes.filter(a => this.currentPhase.sets.target.includes(a.name)))
+                let currTargets = this.currentPhase.sets.target
+                this.addTargets(this.patient.nodes.filter((a: NNode) => currTargets.includes(a.name)))
                 reload = true
             }
 
             //updates goals
             if (this.differentLists(this.patient.goals.map(a => a.name + a.selected.name + a.direction),
-                this.currentPhase.sets.goal.map(a => a.name + a.option + a.direction))) {
+                this.currentPhase.sets.goal.map((a: PhaseGoal) => a.name + a.option + a.direction))) {
                 this.patient.goals.forEach(a => this.deleteGoal(a))
 
                 let goalList: NGoal[] = []
-                this.currentPhase.sets.goal.forEach(a => {
+                this.currentPhase.sets.goal.forEach((a: PhaseGoal) => {
                     let fullnode = this.patient.nodes.find(b => b.name === a.name)
                     if (fullnode) {
                         let selectedOption = fullnode.options.find(o => o.name === a.option)

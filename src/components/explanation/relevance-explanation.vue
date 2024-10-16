@@ -59,7 +59,7 @@ import { defineComponent } from 'vue';
 import bar from "../visualisations/bar-vis.vue";
 import twoSidedBar from "../visualisations/two-sided-bar-vis.vue";
 import {useStore} from '../../store.ts';
-import {RelevanceNode} from "../../types/explanation_types";
+import {RelevanceNode, RelevancePrediction} from "../../types/explanation_types";
 
 export default defineComponent({
   name: "relevance-explanation",
@@ -112,7 +112,7 @@ export default defineComponent({
     curr_table: function () {
       if (this.Store.explain.relevance) {
         let table : RelevanceNode[] = []
-        this.Store.explain.relevance.forEach((n: any) => {
+        this.Store.explain.relevance.forEach((n: RelevancePrediction) => {
           table.push({
             config_name: "current",
             label: this.Store.labels.nodes[n.node_name],

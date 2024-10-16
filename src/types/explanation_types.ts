@@ -15,11 +15,42 @@ export interface CompareExplainNode extends ExplainNode {
     "compare_stateNames": string[]
 }
 
-export interface RelevanceNode {
+export interface RelevancePrediction {
+    node_name: string,
+    overall_relevance: number,
+    relevancies: {
+        [key: string]: number
+    }[]
+}
+
+export interface RelevanceNode extends RelevancePrediction {
         config_name: string,
         label: string,
-        node_name: string,
         state: string,
-        overall_relevance: number,
-        relevancies: any
+}
+
+export interface NetworkExplanation {
+    edges: {
+        source: string,
+        target: string
+    }[],
+    nodes: string[]
+}
+
+export interface StateExplanation {
+    distribution: number[],
+    distribution_wo_evidence: number[],
+    divergence: number,
+    name: string,
+    probability: number,
+    state: string,
+    stateNames: {
+        [key: number]: string
+    }[]
+}
+
+export interface Explain_type {
+    explanation: NetworkExplanation | null,
+    relevance: RelevancePrediction[],
+    states: StateExplanation[]
 }
