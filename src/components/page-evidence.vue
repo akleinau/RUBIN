@@ -146,6 +146,7 @@
 import { defineComponent } from 'vue';
 import {useStore} from '../store.ts';
 import {FilterMatchMode} from "primevue/api";
+import { NEvidence, NNode } from "../types/node_types.ts";
 
 export default defineComponent({
     name: "page-evidence",
@@ -178,7 +179,7 @@ export default defineComponent({
         overlayNodes: function () {
             let nodes = this.Store.patient.nodes
 
-            return nodes.map(node => {
+            return nodes.map((node: NNode) => {
                     return {
                         name: node.name,
                         label: this.Store.labels.nodes[node.name],
@@ -204,11 +205,11 @@ export default defineComponent({
             let table = JSON.parse(JSON.stringify(this.Store.patient.evidence))
 
             if (this.Store.compareConfig) {
-                table.forEach(n => n.selectedCompare = '-')
+                table.forEach((n: NEvidence) => n.selectedCompare = '-')
                 let compareEvidence = this.Store.compareConfig.patient.evidence
 
-                compareEvidence.forEach(n => {
-                    let foundNode = table.find(a => a.name === n.name)
+                compareEvidence.forEach((n: NEvidence) => {
+                    let foundNode = table.find((a: NEvidence) => a.name === n.name)
                     if (foundNode == null) {
                         table.push({
                             name: n.name,
@@ -223,7 +224,7 @@ export default defineComponent({
                     }
                 })
             } else {
-                table.forEach(n => n.selectedCompare = '')
+                table.forEach((n: NEvidence) => n.selectedCompare = '')
             }
 
             return table
@@ -292,8 +293,8 @@ export default defineComponent({
          *
          * @param node
          */
-        deleteNode(node) {
-            if (this.Store.patient.evidence.find(n => n.name === node.name) != null) {
+        deleteNode(node: NEvidence) {
+            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === node.name) != null) {
                 this.Store.deleteEvidence(node)
                 this.Store.calculate()
             }
@@ -311,7 +312,7 @@ export default defineComponent({
          *
          * @param node
          */
-        onNodeChange(node) {
+        onNodeChange(node: NEvidence) {
             if (node.selected === null) {
                 this.deleteNode(node)
             } else {
@@ -323,7 +324,7 @@ export default defineComponent({
          *
          * @param nodes
          */
-        addNodes(nodes) {
+        addNodes(nodes: NEvidence[]) {
             this.Store.addEvidences(nodes)
             this.Store.calculate()
         },
@@ -340,7 +341,7 @@ export default defineComponent({
          */
         clearEvidence() {
             this.cancelOverlay()
-            this.Store.patient.evidence.forEach(ev => {
+            this.Store.patient.evidence.forEach((ev: NEvidence) => {
                 this.Store.deleteEvidence(ev)
             })
             document.activeElement.blur()
@@ -377,7 +378,7 @@ export default defineComponent({
          * @param name
          * @returns {string}
          */
-        get_group_label(name) {
+        get_group_label(name: string): string {
             let id = this.Store.evidenceGroupMap[name]
             if (id === "") return ""
             let label_element = this.Store.labels.evidence_groups[id]
@@ -398,13 +399,13 @@ export default defineComponent({
          * @param name
          * @returns {string}
          */
-        get_group_name(name) {
+        get_group_name(name: string) : string {
             return this.Store.evidenceGroupMap[name]
         },
         /**
          * returns if the evidence item should be disabled
          */
-        isDisabled(group) {
+        isDisabled(group: string): boolean {
             if (this.Store.currentPhase !== null && this.Store.currentPhase.sets.evidence_groups !== null) {
                 return !this.Store.currentPhase.sets.evidence_groups.includes(group);
             } else {
@@ -423,22 +424,22 @@ export default defineComponent({
             if (this.Store.network !== "endometrial cancer") return false
             let notEnoughInformation = false
             //tumor grade
-            if (!this.Store.patient.evidence.find(n => n.name === 'PrimaryTumor')) {
+            if (!this.Store.patient.evidence.find((n: NEvidence) => n.name === 'PrimaryTumor')) {
                 notEnoughInformation = true
             }
 
             //3 biomarkers
             let biomarkers = 0
-            if (this.Store.patient.evidence.find(n => n.name === 'PR')) {
+            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === 'PR')) {
                 biomarkers += 1
             }
-            if (this.Store.patient.evidence.find(n => n.name === 'ER')) {
+            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === 'ER')) {
                 biomarkers += 1
             }
-            if (this.Store.patient.evidence.find(n => n.name === 'L1CAM')) {
+            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === 'L1CAM')) {
                 biomarkers += 1
             }
-            if (this.Store.patient.evidence.find(n => n.name === 'p53')) {
+            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === 'p53')) {
                 biomarkers += 1
             }
             if (biomarkers < 3) {
@@ -446,7 +447,7 @@ export default defineComponent({
             }
 
             //one clinical variable
-            if (!this.Store.patient.evidence.find(n => ['CA125', 'CTMRI', 'Platelets', 'Cytology'].includes(n.name))) {
+            if (!this.Store.patient.evidence.find((n: NEvidence) => ['CA125', 'CTMRI', 'Platelets', 'Cytology'].includes(n.name))) {
                 notEnoughInformation = true
             }
 

@@ -81,6 +81,7 @@
 import { defineComponent } from 'vue';
 import {FilterMatchMode} from 'primevue/api';
 import {useStore} from "../../store";
+import {NGoal, NNode} from "../../types/node_types.ts";
 
 export default defineComponent ({
   name: "goal-input",
@@ -95,7 +96,7 @@ export default defineComponent ({
       filters: {
         'label': {value: null, matchMode: FilterMatchMode.CONTAINS}
       },
-      nodesToAdd: [],
+      nodesToAdd: [] as NGoal[],
       directionOptions: [
         {name: "max", label: this.$t("max")},
         {name: "min", label: this.$t("min")}
@@ -109,7 +110,7 @@ export default defineComponent ({
        * @returns {any}
        */
     table: function () {
-      return this.Store.patient.goals.map(node => {
+      return this.Store.patient.goals.map((node: NGoal) => {
         return {
           name: node.name,
           selected: {name: node.selected.name, node: node.name},
@@ -131,13 +132,13 @@ export default defineComponent ({
      * @returns {Object[]}
      */
     overlayNodes: function () {
-      let nodes = this.Store.patient.nodes
+      let nodes: NNode[] = this.Store.patient.nodes
       if (this.Store.currentPhase !== null) {
-        nodes = nodes.filter(x => this.Store.currentPhase.sets.goal.map(a => a.name).includes(x.name))
+        nodes = nodes.filter((x: NNode) => this.Store.currentPhase.sets.goal.map(a => a.name).includes(x.name))
 
       }
 
-      return nodes.map(node => {
+      return nodes.map((node: NNode) => {
             return {
               name: node.name,
               label: this.Store.labels.nodes[node.name],
@@ -161,8 +162,8 @@ export default defineComponent ({
      * @param node
      * @returns {*|null}
      */
-    getDirection(node) {
-      let listNode = this.nodesToAdd.find(n => n.name === node.name)
+    getDirection(node: NGoal) {
+      let listNode = this.nodesToAdd.find((n: NGoal) => n.name === node.name)
       if (listNode) {
         return listNode.direction
       }
@@ -175,13 +176,13 @@ export default defineComponent ({
      * @param slotProps
      * @param option
      */
-    onOverlayOptionChange(slotProps, option) {
+    onOverlayOptionChange(slotProps: NGoal, option) {
       //deselect this and other options of the node
-      this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
+      this.nodesToAdd = this.nodesToAdd.filter((n: NGoal) => n.name !== slotProps.data.name)
 
       //convert node in format used for selected nodes and add it to 'shopping list'
       if (option.checked) {
-        let item = {
+        let item: NGoal = {
           name: slotProps.data.name,
           selected: {name: option.name, node: slotProps.data.name},
           options: slotProps.data.options.map(option => {
@@ -201,8 +202,8 @@ export default defineComponent ({
      *
      * @param slotProps
      */
-    onOverlayDirectionChange(slotProps) {
-      this.nodesToAdd.find(a => a.name === slotProps.data.name).direction = slotProps.data.direction
+    onOverlayDirectionChange(slotProps: NGoal) {
+      this.nodesToAdd.find((a: NGoal) => a.name === slotProps.data.name).direction = slotProps.data.direction
     },
 
     /**
@@ -218,7 +219,7 @@ export default defineComponent ({
      *
      * @param node
      */
-    deleteNode(node) {
+    deleteNode(node: NGoal) {
       this.Store.deleteGoal(node)
       this.Store.calculate()
       if (this.Store.compareConfig) {
@@ -230,15 +231,15 @@ export default defineComponent ({
      *
      * @param node
      */
-    deleteNodeFromOverlay(node) {
-      this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
+    deleteNodeFromOverlay(node: NGoal) {
+      this.nodesToAdd = this.nodesToAdd.filter((x: NGoal) => x !== node)
     },
     /**
      * Called when a different state is selected via the dropdown menu of a goal
      *
      * @param node
      */
-    onNodeChange(node) {
+    onNodeChange(node: NGoal) {
       if (node.selected === null) {
           this.deleteNode(node)
       } else {
@@ -248,7 +249,7 @@ export default defineComponent ({
     /**
      * adds nodes as goals
      */
-    addNodes(nodes) {
+    addNodes(nodes: NGoal[]) {
       this.Store.addGoals(nodes)
       this.Store.calculate()
       if (this.Store.compareConfig) {

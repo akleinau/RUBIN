@@ -52,6 +52,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {useStore} from '../../store.ts';
+import {NGoal, NNode, NEvidence, NTarget} from "../../types/node_types.ts";
 
 export default defineComponent({
   name: "defined-phases",
@@ -65,12 +66,12 @@ export default defineComponent({
      *
      * @returns {Object[]}
      */
-    givenGoals: function () {
-      let givenGoals = []
+    givenGoals: function () : NEvidence[] {
+      let givenGoals: NEvidence[] = []
       if (this.Store.currentPhase !== null) {
         let goals = this.Store.currentPhase.sets.goal
-        goals.forEach(g => {
-          let ev = this.Store.patient.evidence.find(e => e.name === g.name)
+        goals.forEach((g: NGoal) => {
+          let ev = this.Store.patient.evidence.find((e: NEvidence) => e.name === g.name)
           if (ev) {
             givenGoals.push(ev)
           }
@@ -105,12 +106,12 @@ export default defineComponent({
      *
      * @returns {Object[]}
      */
-    givenTargets: function () {
-      let givenTargets = []
+    givenTargets: function () : NEvidence[] {
+      let givenTargets: NEvidence[] = []
       if (this.Store.currentPhase !== null) {
         let targets = this.Store.currentPhase.sets.target
-        targets.forEach(t => {
-          let ev = this.Store.patient.evidence.find(e => e.name === t)
+        targets.forEach((t: NTarget) => {
+          let ev = this.Store.patient.evidence.find((e: NEvidence) => e.name === t)
           if (ev) {
             givenTargets.push(ev)
           }

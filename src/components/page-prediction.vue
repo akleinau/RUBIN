@@ -115,7 +115,7 @@ export default defineComponent({
       let phases = []
       this.Store.phases.forEach((p, i) => {
         //find label based on language
-        let label = p.name
+        let label: string = p.name
         if (p.labels[this.Store.language]) {
           label = p.labels[this.Store.language]
         }
@@ -136,7 +136,7 @@ export default defineComponent({
        * @param goal
        * @returns {string}
        */
-    getGoalLabel(goal) {
+    getGoalLabel(goal: any) {
       return this.Store.labels.nodes[goal.name] + ": " + goal.selected.name
     },
   }

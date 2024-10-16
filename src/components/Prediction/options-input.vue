@@ -39,6 +39,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {useStore} from '../../store.ts';
+import {NTarget, NNode} from "../../types/node_types.ts";
 
 export default defineComponent({
   name: "options-input",
@@ -48,7 +49,7 @@ export default defineComponent({
   },
   data() {
     return {
-      selected: null,
+      selected: null as NTarget[] | null,
       overlay: false
     }
   },
@@ -58,9 +59,9 @@ export default defineComponent({
      *
      * @returns {Object[]}
      */
-    overlayNodes: function () {
+    overlayNodes: function () : NTarget[] {
         let nodes = JSON.parse(JSON.stringify(this.Store.patient.nodes))
-        nodes.forEach(n => n.label=this.Store.labels.nodes[n.name])
+        nodes.forEach((n: (NNode|NTarget)) => n.label=this.Store.labels.nodes[n.name])
         return nodes
     }
   },
@@ -81,7 +82,7 @@ export default defineComponent({
      *
      * @param node
      */
-    deleteNode(node) {
+    deleteNode(node: NTarget) {
       this.Store.deleteTarget(node)
       this.Store.calculate()
     },

@@ -223,7 +223,7 @@ export default defineComponent({
        *
        * @param event
        */
-    loadPatient(event) {
+    loadPatient(event: any) {
       this.$refs.loadOverlay.toggle(event)
     },
     /**
@@ -231,7 +231,7 @@ export default defineComponent({
      *
      * @param networkName
      */
-    format(networkName) {
+    format(networkName: string) {
       if (networkName.length > 15) {
         return this.capitalize(networkName).substring(0, 14) + "..."
       }
@@ -246,7 +246,7 @@ export default defineComponent({
        * @param string
        * @returns {string}
        */
-    capitalize(string) {
+    capitalize(string: string) {
       return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
 

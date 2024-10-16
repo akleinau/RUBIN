@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-//import './object_definitions.ts';
+import {NNode, NEvidence, NGoal, NTarget, Patient_type} from "./types/node_types.ts";
 
 const address = "https://doctorbn-backend.herokuapp.com/"
 //const address = "http://127.0.0.1:5000/"
@@ -9,11 +9,11 @@ export const useStore = defineStore('store', {
         //data that is specific to the patient
         patient: {
             targets: [],
-            evidence: [], // {group:"", group_name:"",name:"", options:Array({name:"", node:""})selected:Array({name:"",node:""})}
-            goals: [], // {direction:"", name:"", options:Array({name:""})selected:{name:""}}
-            nodes: [], //nodes of the network that are neither evidence, goals, nor targets {name:"", options:Array({name:""})}
+            evidence: [],
+            goals: [],
+            nodes: [], //nodes of the network that are neither evidence, goals, nor targets
             name: "",
-        },
+        } as Patient_type,
 
         //available options to treat the patient given the interventions
         predictions: {
@@ -47,16 +47,16 @@ export const useStore = defineStore('store', {
         optionsLoading: false,
         explanationLoading: false,
 
-        description: "",
-        network: "",
+        description: "" as string,
+        network: "" as string,
         localNet: "",
         phases: [],
         evidenceGroupMap: null,
         currentPhase: null,
-        language: "en",
-        tutorialStep: -1,
-        error: false,
-        backgroundColor: "#372f5e"
+        language: "en" as string,
+        tutorialStep: -1 as number,
+        error: false as boolean,
+        backgroundColor: "#372f5e" as string
     }),
     actions: {
         /**
@@ -65,7 +65,7 @@ export const useStore = defineStore('store', {
          * @param {boolean} noPhase - true when the first phase should be selected, false when no phase should be selected
          * @returns {Promise<void>}
          */
-        async reset(noPhase = false) {
+        async reset(noPhase : boolean = false) {
             this.compareConfig = null
             this.patient.evidence.forEach(a => this.deleteEvidence(a))
             this.patient.name = ""
@@ -104,7 +104,7 @@ export const useStore = defineStore('store', {
          * @param {boolean} compare - true when the calculations should be done for the compare configuration
          * @returns {Promise<void>}
          */
-        async calculate(compare = false) {
+        async calculate(compare : boolean = false) {
             let patient = this.patient
             let predictions = this.predictions
             let explain = this.explain
@@ -119,14 +119,14 @@ export const useStore = defineStore('store', {
                 this.optionsLoading = true
                 this.explanationLoading = true
 
-                let evidences = {}
+                let evidences: any = {}
                 for (const ev in patient.evidence) {
                     evidences[patient.evidence[ev].name] = patient.evidence[ev].selected.name;
                 }
 
                 //use current patient goals in both current config and compare config
-                let goals = {}
-                let goalDirections = {}
+                let goals : any = {}
+                let goalDirections: any = {}
                 for (const goal in this.patient.goals) {
                     if (!evidences[this.patient.goals[goal].name]) {
                         goals[this.patient.goals[goal].name] = this.patient.goals[goal].selected.name;
@@ -226,7 +226,7 @@ export const useStore = defineStore('store', {
          * @param {Object} explain - explanation object used to save the results of the calculation
          * @returns {Promise<void>}
          */
-        async calculateExplanations(patient, predictions, explain) {
+        async calculateExplanations(patient: Patient_type, predictions, explain) {
             this.explanationLoading = true
 
             let evidences = {}
@@ -306,12 +306,12 @@ export const useStore = defineStore('store', {
             }
             const network = await gResponse.json();
             let customization = network.customization
-            let nodes = []
+            let nodes : NNode[] = []
             this.labels.states = {}
             for (var key in network.states) {
-                let options = []
+                let options: {"name": string}[] = []
                 this.labels.states[key] = {}
-                network.states[key].forEach(option_name => {
+                network.states[key].forEach((option_name: string) => {
                     this.labels.states[key][option_name] = option_name
                     options.push({'name': option_name})
                 })
@@ -340,7 +340,7 @@ export const useStore = defineStore('store', {
                 }
 
                 if (network.customization.evidence_groups) {
-                    network.customization.evidence_groups.forEach((g, i) => {
+                    network.customization.evidence_groups.forEach((g: any, i: number) => {
                         g.variables.forEach(v => {
                             this.evidenceGroupMap[v] = g.name
                         })
@@ -426,9 +426,9 @@ export const useStore = defineStore('store', {
          *
          * @param {Object[]} nodes - List of nodes that should be added
          */
-        addEvidences(nodes) {
-            nodes.forEach(node => {
-                this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
+        addEvidences(nodes: NEvidence[]) {
+            nodes.forEach((node: NEvidence) => {
+                this.patient.evidence = this.patient.evidence.filter((x: NEvidence) => x.name !== node.name)
                 this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
                 this.patient.evidence.push(node)
             })
@@ -438,8 +438,8 @@ export const useStore = defineStore('store', {
          *
          * @param {Object} node - the node that should be deleted
          */
-        deleteEvidence(node) {
-            this.patient.evidence = this.patient.evidence.filter(x => x.name !== node.name)
+        deleteEvidence(node: NEvidence) {
+            this.patient.evidence = this.patient.evidence.filter((x: NEvidence) => x.name !== node.name)
             this.patient.nodes.push({name: node.name, options: node.options})
         },
         /**
@@ -447,8 +447,8 @@ export const useStore = defineStore('store', {
          *
          * @param {Object[]} nodes - List of nodes that should be added
          */
-        addTargets(nodes) {
-            nodes.forEach(node => {
+        addTargets(nodes: NTarget[]) {
+            nodes.forEach((node: NTarget) => {
                 this.patient.targets.push(node)
                 this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
             })
@@ -458,8 +458,8 @@ export const useStore = defineStore('store', {
          *
          * @param {Object} node - the node that should be deleted
          */
-        deleteTarget(node) {
-            this.patient.targets = this.patient.targets.filter(x => x.name !== node.name)
+        deleteTarget(node: NTarget) {
+            this.patient.targets = this.patient.targets.filter((x: NTarget) => x.name !== node.name)
             this.patient.nodes.push(node)
         },
         /**
@@ -467,10 +467,10 @@ export const useStore = defineStore('store', {
          *
          * @param {Object[]} nodes - List of nodes that should be added
          */
-        addGoals(nodes) {
+        addGoals(nodes: NGoal[]) {
             nodes.forEach(node => {
-                this.patient.goals = this.patient.goals.filter(x => x.name !== node.name)
-                this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
+                this.patient.goals = this.patient.goals.filter((x: NGoal) => x.name !== node.name)
+                this.patient.nodes = this.patient.nodes.filter((x: NNode) => x.name !== node.name)
                 this.patient.goals.push(node)
             })
         },
@@ -479,8 +479,8 @@ export const useStore = defineStore('store', {
          *
          * @param {Object} node - the node that should be deleted
          */
-        deleteGoal(node) {
-            this.patient.goals = this.patient.goals.filter(x => x.name !== node.name)
+        deleteGoal(node: NGoal) {
+            this.patient.goals = this.patient.goals.filter((x: NGoal) => x.name !== node.name)
             this.patient.nodes.push({name: node.name, options: node.options})
         },
         /**
@@ -490,13 +490,13 @@ export const useStore = defineStore('store', {
          */
         createCSVcontent() {
             var csv = "Type; Variable; Option; Direction"
-            this.patient.evidence.forEach(ev => {
+            this.patient.evidence.forEach((ev : NEvidence) => {
                 csv += "\nevidence; " + ev.name + "; " + ev.selected.name
             })
-            this.patient.targets.forEach(ev => {
+            this.patient.targets.forEach((ev: NTarget) => {
                 csv += "\ntarget; " + ev.name
             })
-            this.patient.goals.forEach(ev => {
+            this.patient.goals.forEach((ev : NGoal) => {
                 csv += "\ngoal; " + ev.name + "; " + ev.selected.name + "; " + ev.direction
             })
             return csv
@@ -519,7 +519,7 @@ export const useStore = defineStore('store', {
                 this.currentPhase.sets.goal.map(a => a.name + a.option + a.direction))) {
                 this.patient.goals.forEach(a => this.deleteGoal(a))
 
-                let goalList = []
+                let goalList: NGoal[] = []
                 this.currentPhase.sets.goal.forEach(a => {
                     let fullnode = this.patient.nodes.find(b => b.name === a.name)
                     if (fullnode) {
@@ -551,7 +551,7 @@ export const useStore = defineStore('store', {
          * @param b
          * @returns {boolean}
          */
-        differentLists(a, b) {
+        differentLists(a: any[], b: any[]) {
             let missing = (a.filter(x => !b.includes(x))).length
             missing += (b.filter(x => !a.includes(x))).length
             return missing > 0
