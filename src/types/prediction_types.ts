@@ -11,5 +11,6 @@ export interface Prediction_option {
     option: {
         [key: string]: number
     },
-    value: number
+    value: number,
+    config_name?: string,
 }

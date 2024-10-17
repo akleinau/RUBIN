@@ -70,7 +70,7 @@ import { defineComponent } from 'vue';
 import {useStore} from '../../store.ts';
 import {FilterMatchMode} from 'primevue/api';
 import bar from "../visualisations/bar-vis.vue"
-import {ExplainNode, CompareExplainNode} from "../../types/explanation_types"
+import {ExplainNode, CompareExplainNode, StateExplanation} from "../../types/explanation_types"
 
 export default defineComponent({
   name: "list-explanation",
@@ -117,23 +117,26 @@ export default defineComponent({
         return data
       } else {
         let data: CompareExplainNode[] = []
+        let compareConfig = this.Store.compareConfig
         this.Store.explain.states.forEach((a: any) => {
-          let compareNode = this.Store.compareConfig.explain.states.find(n => n.name === a.name)
-          let state_label = this.Store.labels.states[a.name][a.state]
-          let compare_state_label = this.Store.labels.states[a.name][compareNode.state]
-          data.push({
-            "name": a.name,
-            "state": state_label,
-            "label": this.Store.labels.nodes[a.name],
-            "probability": a.probability,
-            "beforeState": state_label === compare_state_label ? "" : compare_state_label,
-            "beforeProb": state_label === compare_state_label ? 0 : compareNode.probability,
-            "distribution": a.distribution,
-            "stateNames": a.stateNames,
-            "compare_probability": compareNode.probability,
-            "compare_distribution": compareNode.distribution,
-            "compare_stateNames": compareNode.stateNames
-          })
+          let compareNode = compareConfig.explain.states.find(n => n.name === a.name) as StateExplanation
+          if (compareNode) {
+            let state_label = this.Store.labels.states[a.name][a.state]
+            let compare_state_label = this.Store.labels.states[a.name][compareNode.state]
+            data.push({
+              "name": a.name,
+              "state": state_label,
+              "label": this.Store.labels.nodes[a.name],
+              "probability": a.probability,
+              "beforeState": state_label === compare_state_label ? "" : compare_state_label,
+              "beforeProb": state_label === compare_state_label ? 0 : compareNode.probability,
+              "distribution": a.distribution,
+              "stateNames": a.stateNames,
+              "compare_probability": compareNode.probability,
+              "compare_distribution": compareNode.distribution,
+              "compare_stateNames": compareNode.stateNames
+            })
+          }
         })
         return data
       }

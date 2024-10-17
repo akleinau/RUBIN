@@ -41,7 +41,7 @@
         <template #body="slotProps">
           <twoSidedBar :value="slotProps.data.relevancies[goal.name]" :direction="goal.direction" :width="150"
                        v-tooltip.left="{value: getDirectionTooltip(slotProps.data.relevancies[goal.name],
-                       goal.direction, goal.label), fitContent: true}"
+                       goal.label), fitContent: true}"
           />
         </template>
       </Column>
@@ -194,11 +194,10 @@ export default defineComponent({
        * returns tooltips for the two-sided bars showing influence on outcomes.
        *
        * @param number - the numerical influence score
-       * @param direction - if for the current goal minimal or maximal values are preferred
        * @param label - name of the goal
        * @returns {*|string}
        */
-    getDirectionTooltip(number: number, direction: String, label: String) {
+    getDirectionTooltip(number: number, label: String) {
         if (number > 0.001) return this.$t("increasesProbability") + " " + label
         else if (number < -0.001) return this.$t("decreasesProbability") + " " + label
 
@@ -227,6 +226,8 @@ export default defineComponent({
        */
     getCompareState(name: string) {
       let state = "unknown"
+      if (this.Store.compareConfig === null) return state
+
       this.Store.compareConfig.explain.states.forEach((node: any) => {
         if (node.name === name) {
           state = this.Store.labels.states[name][node.state]

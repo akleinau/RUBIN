@@ -143,7 +143,7 @@ export default defineComponent({
       SavePatientName: null,
       configLabel: this.$t('startComparing'),
       NetworkSelectionDialog: false,
-      items: null
+      items: [] as any[]
     }
   },
   methods: {
@@ -202,7 +202,7 @@ export default defineComponent({
        *
        * @param event
        */
-    showLanguage(event) {
+    showLanguage(event: any) {
       this.$refs.langOverlay.toggle(event)
     },
       /**

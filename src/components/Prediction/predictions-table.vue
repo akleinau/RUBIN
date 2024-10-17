@@ -71,6 +71,9 @@
 import { defineComponent } from 'vue';
 import bar from "../visualisations/bar-vis.vue";
 import {useStore} from '../../store.ts';
+import {NGoal} from "../../types/node_types.ts";
+import {Prediction_option} from "../../types/prediction_types.ts";
+import {PhaseGoal} from "../../types/phase_types.ts";
 
 export default defineComponent({
   name: "predictions-table",
@@ -87,14 +90,16 @@ export default defineComponent({
      *
      * @returns {any}
      */
-    table: function () {
+    table: function () : Prediction_option[] {
       let table = JSON.parse(JSON.stringify(this.Store.predictions.options))
       if (table !== null) {
-        table.forEach(n => n.config_name = "current")
+        table.forEach((n: Prediction_option) => n.config_name = "current")
         if (this.Store.compareConfig) {
           let compare = this.Store.compareConfig.predictions.selectedOption
-          compare.config_name = "compare"
-          table.push(compare)
+          if (compare) {
+            compare.config_name = "compare"
+            table.push(compare)
+          }
         }
       }
       this.updateSelected(table)
@@ -111,7 +116,7 @@ export default defineComponent({
   },
   data() {
     return {
-      selectedOption: []
+      selectedOption: null as Prediction_option | null
     }
   },
   methods: {
@@ -120,10 +125,11 @@ export default defineComponent({
      *
      * @returns {[]}
      */
-    getGoalKeys() {
-      if (this.Store.patient.goals != null) {
+    getGoalKeys() : NGoal[] {
+      if (this.Store.patient.goals.length > 0) {
         return this.Store.patient.goals
       }
+      return []
     },
     /**
      * returns string of the target combination of an option, or null if it's the basic option
@@ -131,7 +137,7 @@ export default defineComponent({
      * @param option
      * @returns {string|null}
      */
-    getOptionLabel(option) {
+    getOptionLabel(option: any) {
       if (option == null) return null
       let label = ""
       Object.keys(option).forEach(d => {
@@ -146,9 +152,11 @@ export default defineComponent({
        * @param goal
        * @returns {boolean}
        */
-    isCurrentOption(data, goal) {
+    isCurrentOption(data: Prediction_option, goal: NGoal) {
+        let selected = this.Store.predictions.selectedOption
+        if (selected === null) return false
         return data.config_name === 'current' &&
-              JSON.stringify(data.option) === JSON.stringify(this.selectedOption.option)
+              JSON.stringify(data.option) === JSON.stringify(selected.option)
               || data.config_name !== 'current' &&
                  !isNaN(data.goalValues[String(goal.name)])
     },
@@ -158,24 +166,26 @@ export default defineComponent({
      *
      * @param event
      */
-    update(event) {
+    update(event: any = null) {
       if (this.table !== null && this.table !== undefined) {
 
         //in case someone selects an option of compare view
-        if (event.index < this.minIndex) {
+        if (event !== null && event.index < this.minIndex) {
           this.selectedOption = this.table[this.minIndex]
         }
 
-        if (this.selectedOption.length === 0) {
+        if (this.selectedOption === null) {
           this.selectedOption = this.table[this.minIndex]
         }
-
-        let newOption = this.Store.predictions.options.find(n =>
-            this.selectedOption.config_name === "current" &&
-            JSON.stringify(n.option) === JSON.stringify(this.selectedOption.option))
-        if (newOption !== this.Store.predictions.selectedOption) {
-          this.Store.predictions.selectedOption = newOption
-          this.Store.calculateExplanations(this.Store.patient, this.Store.predictions, this.Store.explain)
+        else {
+          let selected = this.selectedOption
+          let newOption = this.Store.predictions.options.find(n =>
+              selected.config_name === "current" &&
+              JSON.stringify(n.option) === JSON.stringify(selected.option)) as Prediction_option
+          if (newOption !== this.Store.predictions.selectedOption) {
+            this.Store.predictions.selectedOption = newOption
+            this.Store.calculateExplanations(this.Store.patient, this.Store.predictions, this.Store.explain)
+          }
         }
       }
     },
@@ -184,12 +194,13 @@ export default defineComponent({
      *
      * @param table
      */
-    updateSelected(table) {
+    updateSelected(table: Prediction_option[]) {
       if (table !== null && table !== undefined) {
         if (this.selectedOption) {
+          let selected = this.selectedOption
           let newOption = table.find(n =>
               n.config_name === "current" &&
-              JSON.stringify(n.option) === JSON.stringify(this.selectedOption.option))
+              JSON.stringify(n.option) === JSON.stringify(selected.option))
           if (newOption) {
             this.selectedOption = newOption
           } else {
@@ -206,14 +217,18 @@ export default defineComponent({
      * @param goal
      * @returns {string}
      */
-    getGoalLabel(goal) {
+    getGoalLabel(goal: NGoal) {
       return this.Store.labels.nodes[goal.name] + ": " + this.Store.labels.states[goal.name][goal.selected.name]
     },
     /**
      * called when an option is deselected. Resets selection to standard.
      */
     deselect() {
-      this.Store.predictions.selectedOption = this.Store.predictions.likelyResult[0]
+      if (this.Store.predictions.likelyResult) {
+        this.Store.predictions.selectedOption = this.Store.predictions.likelyResult[0]
+      } else {
+        this.Store.predictions.selectedOption = this.Store.predictions.options[0]
+      }
       this.update()
     },
     /**
@@ -222,7 +237,7 @@ export default defineComponent({
      * @param data
      * @returns {string|null}
      */
-    rowClass(data) {
+    rowClass(data: Prediction_option): string | null {
       return Object.keys(data.option).length === 0 && data.config_name === "current" ? 'overall' : null;
     },
     /**
@@ -231,20 +246,22 @@ export default defineComponent({
      * @param num - number of rows
      * @returns {number}
      */
-    getBarWidth(num) {
+    getBarWidth(num: number): number {
       return 100 / num + 100
     },
 
     /**
      * returns text based on phase recommendation
      */
-    recommendText(name, option, value) {
+    recommendText(name: string, option: string, value: number) {
         let text = ""
-        this.Store.currentPhase.sets.goal.forEach(goal => {
-            if (goal.name === name && goal.option === option) {
-                if (value < goal.boundary) {
+        if (this.Store.currentPhase === null) return text
+
+        this.Store.currentPhase.sets.goal.forEach((goal: PhaseGoal) => {
+            if (goal.name === name && goal.option === option && goal.boundary) {
+                if (value < goal.boundary && goal.TextBelow) {
                     text = goal.TextBelow
-                } else {
+                } else if (value >= goal.boundary && goal.TextAbove) {
                     text = goal.TextAbove
                 }
             }

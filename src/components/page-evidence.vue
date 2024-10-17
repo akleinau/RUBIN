@@ -146,7 +146,7 @@
 import { defineComponent } from 'vue';
 import {useStore} from '../store.ts';
 import {FilterMatchMode} from "primevue/api";
-import { NEvidence, NNode } from "../types/node_types.ts";
+import {NEvidence, NNode, SOption} from "../types/node_types.ts";
 
 export default defineComponent({
     name: "page-evidence",
@@ -369,7 +369,7 @@ export default defineComponent({
          * @param option
          * @returns {*}
          */
-        get_option_label(option: any) {
+        get_option_label(option: SOption) {
             return this.Store.labels.states[option.node][option.name]
         },
         /**

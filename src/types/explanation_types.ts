@@ -29,24 +29,26 @@ export interface RelevanceNode extends RelevancePrediction {
         state: string,
 }
 
+export interface Edge {
+    source: string,
+    target: string
+}
+
 export interface NetworkExplanation {
-    edges: {
-        source: string,
-        target: string
-    }[],
+    edges: Edge[],
     nodes: string[]
 }
 
 export interface StateExplanation {
-    distribution?: number[],
+    distribution: number[],
     distribution_wo_evidence?: number[],
     divergence?: number,
     name: string,
     probability: number,
-    state?: string,
-    stateNames?: {
+    state: string,
+    stateNames: {
         [key: number]: string
-    }[]
+    }
 }
 
 export interface Explain_type {

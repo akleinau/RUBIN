@@ -8,6 +8,7 @@ import { defineComponent } from 'vue';
 import * as d3 from "d3";
 import * as dag from "d3-dag"
 import {useStore} from '../../store.ts';
+import {Edge} from "../../types/explanation_types.ts";
 
 export default defineComponent({
   name: "sugiyama-vis-compare",
@@ -109,7 +110,7 @@ export default defineComponent({
      */
     isHighlightEdge(edge: any) : boolean {
       if (this.highlight) {
-        return this.highlightEdges.find(e => e.source === edge.data[0] && e.target === edge.data[1]) !== undefined
+        return this.highlightEdges.find((e: Edge) => e.source === edge.data[0] && e.target === edge.data[1]) !== undefined
       }
       return true
     },
@@ -222,7 +223,7 @@ export default defineComponent({
      *
      * @param e - the event
      */
-    hideDetails(e) {
+    hideDetails(e: any) {
       d3.select(e.target.parentNode).selectAll(".box").attr("width", 25)
           .attr("height", d => 10 * (this.isChanged(d) * 0.5 + 1))
           .attr("transform", `translate(-12.5,-4)`)

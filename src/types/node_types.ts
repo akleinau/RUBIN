@@ -1,28 +1,36 @@
+export interface NOption {
+    name: string;
+}
+
+export interface SOption extends NOption {
+    node: string;
+}
+
 export interface NNode {
     name : string;
-    options : {name: string}[];
+    options : NOption[];
 }
 
 export interface NGoal{
     direction : string;
     name : string;
-    options : {name: string}[];
-    selected: {name: string};
+    options : NOption[];
+    selected: NOption;
 }
 
 export interface NEvidence {
     name : string;
     group : string;
     group_name : string;
-    options : {name: string, node: string}[];
-    selected : {name: string, node: string};
+    options : SOption[];
+    selected : SOption;
     selectedCompare? : string;
 }
 
 export interface NTarget {
     label? : string;
     name : string;
-    options : {name: string}[];
+    options : NOption[];
 }
 
 export interface Patient_type {

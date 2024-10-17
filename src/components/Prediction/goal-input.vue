@@ -81,7 +81,7 @@
 import { defineComponent } from 'vue';
 import {FilterMatchMode} from 'primevue/api';
 import {useStore} from "../../store";
-import {NGoal, NNode} from "../../types/node_types.ts";
+import {NGoal, NNode, NOption, SOption} from "../../types/node_types.ts";
 
 export default defineComponent ({
   name: "goal-input",
@@ -134,7 +134,8 @@ export default defineComponent ({
     overlayNodes: function () {
       let nodes: NNode[] = this.Store.patient.nodes
       if (this.Store.currentPhase !== null) {
-        nodes = nodes.filter((x: NNode) => this.Store.currentPhase.sets.goal.map(a => a.name).includes(x.name))
+        let currentPhase = this.Store.currentPhase
+        nodes = nodes.filter((x: NNode) => currentPhase.sets.goal.map(a => a.name).includes(x.name))
 
       }
 
@@ -160,14 +161,14 @@ export default defineComponent ({
      * returns direction of a node of the overlay, if that node is supposed to be added as goal
      *
      * @param node
-     * @returns {*|null}
+     * @returns string
      */
-    getDirection(node: NGoal) {
+    getDirection(node: NNode): string {
       let listNode = this.nodesToAdd.find((n: NGoal) => n.name === node.name)
       if (listNode) {
         return listNode.direction
       }
-      return null
+      return ""
     },
 
     /**
@@ -176,19 +177,20 @@ export default defineComponent ({
      * @param slotProps
      * @param option
      */
-    onOverlayOptionChange(slotProps: NGoal, option) {
+    onOverlayOptionChange(slotProps: any, option: any) {
+      let node = slotProps.data as NNode
       //deselect this and other options of the node
       this.nodesToAdd = this.nodesToAdd.filter((n: NGoal) => n.name !== slotProps.data.name)
 
       //convert node in format used for selected nodes and add it to 'shopping list'
       if (option.checked) {
         let item: NGoal = {
-          name: slotProps.data.name,
-          selected: {name: option.name, node: slotProps.data.name},
-          options: slotProps.data.options.map(option => {
+          name: node.name,
+          selected: {name: option.name},
+          options: slotProps.data.options.map((option:any) => {
             return {
               name: option.name,
-              node: slotProps.data.name
+              node: node.name
             }
           }),
           direction: "max"
@@ -202,8 +204,12 @@ export default defineComponent ({
      *
      * @param slotProps
      */
-    onOverlayDirectionChange(slotProps: NGoal) {
-      this.nodesToAdd.find((a: NGoal) => a.name === slotProps.data.name).direction = slotProps.data.direction
+    onOverlayDirectionChange(slotProps: any) {
+      let node = slotProps.data as NGoal
+      let equivalent_node = this.nodesToAdd.find((a: NGoal) => a.name === node.name)
+      if (equivalent_node) {
+       equivalent_node.direction = node.direction
+      }
     },
 
     /**
@@ -270,7 +276,7 @@ export default defineComponent ({
      * @param option
      * @returns {*}
      */
-    get_option_label(option) {
+    get_option_label(option: SOption) {
       return this.Store.labels.states[option.node][option.name]
     }
   }
