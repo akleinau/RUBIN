@@ -145,6 +145,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {useStore} from '../store.ts';
+import {usePatientStore} from "../stores/patient_store.ts";
 import {FilterMatchMode} from "primevue/api";
 import {NEvidence, NNode, SOption} from "../types/node_types.ts";
 
@@ -152,7 +153,8 @@ export default defineComponent({
     name: "page-evidence",
     setup() {
         const Store = useStore()
-        return {Store}
+        const PatientStore = usePatientStore()
+        return {Store, PatientStore}
     },
     data() {
         return {
@@ -177,7 +179,7 @@ export default defineComponent({
          * @returns {{name: *, options: *, group: string|*}[]}
          */
         overlayNodes: function () {
-            let nodes = this.Store.patient.nodes
+            let nodes = this.PatientStore.nodes
 
             return nodes.map((node: NNode) => {
                     return {
@@ -202,7 +204,7 @@ export default defineComponent({
          * @returns {any}
          */
         table: function () {
-            let table = JSON.parse(JSON.stringify(this.Store.patient.evidence))
+            let table = JSON.parse(JSON.stringify(this.PatientStore.evidence))
 
             if (this.Store.compareConfig) {
                 table.forEach((n: NEvidence) => n.selectedCompare = '-')
@@ -294,8 +296,8 @@ export default defineComponent({
          * @param node
          */
         deleteNode(node: NEvidence) {
-            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === node.name) != null) {
-                this.Store.deleteEvidence(node)
+            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === node.name) != null) {
+                this.PatientStore.deleteEvidence(node)
                 this.Store.calculate()
             }
         },
@@ -325,7 +327,7 @@ export default defineComponent({
          * @param nodes
          */
         addNodes(nodes: NEvidence[]) {
-            this.Store.addEvidences(nodes)
+            this.PatientStore.addEvidences(nodes)
             this.Store.calculate()
         },
         /**
@@ -341,8 +343,8 @@ export default defineComponent({
          */
         clearEvidence() {
             this.cancelOverlay()
-            this.Store.patient.evidence.forEach((ev: NEvidence) => {
-                this.Store.deleteEvidence(ev)
+            this.PatientStore.evidence.forEach((ev: NEvidence) => {
+                this.PatientStore.deleteEvidence(ev)
             })
             document.activeElement.blur()
             this.clearEvidenceDialog = false
@@ -424,22 +426,22 @@ export default defineComponent({
             if (this.Store.network !== "endometrial cancer") return false
             let notEnoughInformation = false
             //tumor grade
-            if (!this.Store.patient.evidence.find((n: NEvidence) => n.name === 'PrimaryTumor')) {
+            if (!this.PatientStore.evidence.find((n: NEvidence) => n.name === 'PrimaryTumor')) {
                 notEnoughInformation = true
             }
 
             //3 biomarkers
             let biomarkers = 0
-            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === 'PR')) {
+            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'PR')) {
                 biomarkers += 1
             }
-            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === 'ER')) {
+            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'ER')) {
                 biomarkers += 1
             }
-            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === 'L1CAM')) {
+            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'L1CAM')) {
                 biomarkers += 1
             }
-            if (this.Store.patient.evidence.find((n: NEvidence) => n.name === 'p53')) {
+            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'p53')) {
                 biomarkers += 1
             }
             if (biomarkers < 3) {
@@ -447,7 +449,7 @@ export default defineComponent({
             }
 
             //one clinical variable
-            if (!this.Store.patient.evidence.find((n: NEvidence) => ['CA125', 'CTMRI', 'Platelets', 'Cytology'].includes(n.name))) {
+            if (!this.PatientStore.evidence.find((n: NEvidence) => ['CA125', 'CTMRI', 'Platelets', 'Cytology'].includes(n.name))) {
                 notEnoughInformation = true
             }
 

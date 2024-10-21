@@ -4,20 +4,15 @@ import {Explain_type} from "./types/explanation_types.ts";
 import {Prediction_type} from "./types/prediction_types.ts";
 import {Phase, PhaseGoal} from "./types/phase_types.ts";
 import {CustomLabels, Label_type, Labelmap} from "./types/label_types.ts";
+import {usePatientStore} from "./stores/patient_store.ts";
 
 const address = "https://doctorbn-backend.herokuapp.com/"
 //const address = "http://127.0.0.1:5000/"
 
 export const useStore = defineStore('store', {
     state: () => ({
-        //data that is specific to the patient
-        patient: {
-            targets: [],
-            evidence: [],
-            goals: [],
-            nodes: [], //nodes of the network that are neither evidence, goals, nor targets
-            name: "",
-        } as Patient_type,
+
+        patient: usePatientStore(),
 
         //available options to treat the patient given the interventions
         predictions: {
@@ -71,7 +66,7 @@ export const useStore = defineStore('store', {
          */
         async reset(noPhase : boolean = false) {
             this.compareConfig = null
-            this.patient.evidence.forEach(a => this.deleteEvidence(a))
+            this.patient.evidence.forEach(a => this.patient.deleteEvidence(a))
             this.patient.name = ""
             this.predictions = {
                 options: [],
@@ -88,8 +83,8 @@ export const useStore = defineStore('store', {
 
             if (noPhase || this.phases.length === 0) {
                 this.currentPhase = null
-                this.patient.goals.forEach(a => this.deleteGoal(a))
-                this.patient.targets.forEach(a => this.deleteTarget(a))
+                this.patient.goals.forEach(a => this.patient.deleteGoal(a))
+                this.patient.targets.forEach(a => this.patient.deleteTarget(a))
             } else {
                 this.currentPhase = this.phases[0]
                 this.phase_change()
@@ -433,86 +428,6 @@ export const useStore = defineStore('store', {
 
         },
         /**
-         * adds nodes as patient evidence and deletes them from remaining node list
-         *
-         * @param {Object[]} nodes - List of nodes that should be added
-         */
-        addEvidences(nodes: NEvidence[]) {
-            nodes.forEach((node: NEvidence) => {
-                this.patient.evidence = this.patient.evidence.filter((x: NEvidence) => x.name !== node.name)
-                this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
-                this.patient.evidence.push(node)
-            })
-        },
-        /**
-         * deletes nodes from patient evidence and adds them to remaining node list
-         *
-         * @param {Object} node - the node that should be deleted
-         */
-        deleteEvidence(node: NEvidence) {
-            this.patient.evidence = this.patient.evidence.filter((x: NEvidence) => x.name !== node.name)
-            this.patient.nodes.push({name: node.name, options: node.options})
-        },
-        /**
-         * adds nodes as patient target and deletes them from remaining node list
-         *
-         * @param {Object[]} nodes - List of nodes that should be added
-         */
-        addTargets(nodes: NTarget[]) {
-            nodes.forEach((node: NTarget) => {
-                this.patient.targets.push(node)
-                this.patient.nodes = this.patient.nodes.filter(x => x.name !== node.name)
-            })
-        },
-        /**
-         * deletes nodes from patient target and adds them to remaining node list
-         *
-         * @param {Object} node - the node that should be deleted
-         */
-        deleteTarget(node: NTarget) {
-            this.patient.targets = this.patient.targets.filter((x: NTarget) => x.name !== node.name)
-            this.patient.nodes.push(node)
-        },
-        /**
-         * adds nodes as patient goals and deletes them from remaining node list
-         *
-         * @param {Object[]} nodes - List of nodes that should be added
-         */
-        addGoals(nodes: NGoal[]) {
-            nodes.forEach(node => {
-                this.patient.goals = this.patient.goals.filter((x: NGoal) => x.name !== node.name)
-                this.patient.nodes = this.patient.nodes.filter((x: NNode) => x.name !== node.name)
-                this.patient.goals.push(node)
-            })
-        },
-        /**
-         * deletes nodes from patient targets and adds them to remaining node list
-         *
-         * @param {Object} node - the node that should be deleted
-         */
-        deleteGoal(node: NGoal) {
-            this.patient.goals = this.patient.goals.filter((x: NGoal) => x.name !== node.name)
-            this.patient.nodes.push({name: node.name, options: node.options})
-        },
-        /**
-         * creates csv file content for download of patient configuration
-         *
-         * @returns {string}
-         */
-        createCSVcontent() {
-            var csv = "Type; Variable; Option; Direction"
-            this.patient.evidence.forEach((ev : NEvidence) => {
-                csv += "\nevidence; " + ev.name + "; " + ev.selected.name
-            })
-            this.patient.targets.forEach((ev: NTarget) => {
-                csv += "\ntarget; " + ev.name
-            })
-            this.patient.goals.forEach((ev : NGoal) => {
-                csv += "\ngoal; " + ev.name + "; " + ev.selected.name + "; " + ev.direction
-            })
-            return csv
-        },
-        /**
          * checks if phase was changed and triggers recalculation of data accordingly
          */
         phase_change() {
@@ -523,16 +438,16 @@ export const useStore = defineStore('store', {
 
             //updates targets
             if (this.differentLists(this.patient.targets.map((a: NTarget) => a.name), this.currentPhase.sets.target)) {
-                this.patient.targets.forEach(a => this.deleteTarget(a))
+                this.patient.targets.forEach(a => this.patient.deleteTarget(a))
                 let currTargets = this.currentPhase.sets.target
-                this.addTargets(this.patient.nodes.filter((a: NNode) => currTargets.includes(a.name)))
+                this.patient.addTargets(this.patient.nodes.filter((a: NNode) => currTargets.includes(a.name)))
                 reload = true
             }
 
             //updates goals
             if (this.differentLists(this.patient.goals.map(a => a.name + a.selected.name + a.direction),
                 this.currentPhase.sets.goal.map((a: PhaseGoal) => a.name + a.option + a.direction))) {
-                this.patient.goals.forEach(a => this.deleteGoal(a))
+                this.patient.goals.forEach(a => this.patient.deleteGoal(a))
 
                 let goalList: NGoal[] = []
                 this.currentPhase.sets.goal.forEach((a: PhaseGoal) => {
@@ -547,7 +462,7 @@ export const useStore = defineStore('store', {
                         }
                     }
                 })
-                this.addGoals(goalList)
+                this.patient.addGoals(goalList)
                 reload = true
             }
 

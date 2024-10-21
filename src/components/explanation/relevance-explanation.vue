@@ -59,6 +59,7 @@ import { defineComponent } from 'vue';
 import bar from "../visualisations/bar-vis.vue";
 import twoSidedBar from "../visualisations/two-sided-bar-vis.vue";
 import {useStore} from '../../store.ts';
+import {usePatientStore} from "../../stores/patient_store.ts";
 import {RelevanceNode, RelevancePrediction} from "../../types/explanation_types";
 
 export default defineComponent({
@@ -69,7 +70,8 @@ export default defineComponent({
   },
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   data() {
     return {
@@ -92,8 +94,8 @@ export default defineComponent({
        */
     goalnames: function () {
       let goalnames: any[] = []
-      if (this.Store.patient.goals != null && this.Store.explain.relevance != null) {
-        this.Store.patient.goals.forEach((goal: any) => {
+      if (this.PatientStore.goals != null && this.Store.explain.relevance != null) {
+        this.PatientStore.goals.forEach((goal: any) => {
           goalnames.push({
             "name": goal.name + ": " + goal.selected.name,
             "label": this.Store.labels.nodes[goal.name] + ": " + this.Store.labels.states[goal.name][goal.selected.name],
@@ -184,8 +186,8 @@ export default defineComponent({
        * @returns {number}
        */
     getGoalKeyNum() {
-      if (this.Store.patient.goals != null) {
-        return this.Store.patient.goals.length
+      if (this.PatientStore.goals != null) {
+        return this.PatientStore.goals.length
       } else {
         return 0
       }
@@ -243,7 +245,7 @@ export default defineComponent({
        */
     isTherapyRow(row: RelevanceNode) {
       let rowClass = null
-      this.Store.patient.targets.forEach((target: any) => {
+      this.PatientStore.targets.forEach((target: any) => {
         if (target.name === row.node_name) rowClass = "therapy"
       })
       return rowClass

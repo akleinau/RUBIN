@@ -81,13 +81,15 @@
 import { defineComponent } from 'vue';
 import {FilterMatchMode} from 'primevue/api';
 import {useStore} from "../../store";
+import {usePatientStore} from "../../stores/patient_store.ts";
 import {NGoal, NNode, NOption, SOption} from "../../types/node_types.ts";
 
 export default defineComponent ({
   name: "goal-input",
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   data() {
     return {
@@ -226,7 +228,7 @@ export default defineComponent ({
      * @param node
      */
     deleteNode(node: NGoal) {
-      this.Store.deleteGoal(node)
+      this.PatientStore.deleteGoal(node)
       this.Store.calculate()
       if (this.Store.compareConfig) {
         this.Store.calculate(true)
@@ -256,7 +258,7 @@ export default defineComponent ({
      * adds nodes as goals
      */
     addNodes(nodes: NGoal[]) {
-      this.Store.addGoals(nodes)
+      this.PatientStore.addGoals(nodes)
       this.Store.calculate()
       if (this.Store.compareConfig) {
         this.Store.calculate(true)

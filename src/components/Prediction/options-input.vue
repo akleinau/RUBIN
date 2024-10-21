@@ -39,13 +39,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {useStore} from '../../store.ts';
+import {usePatientStore} from "../../stores/patient_store.ts";
 import {NTarget, NNode} from "../../types/node_types.ts";
 
 export default defineComponent({
   name: "options-input",
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   data() {
     return {
@@ -71,7 +73,7 @@ export default defineComponent({
      */
     addTargetsFromOverlay() {
       if (this.selected != null) {
-        this.Store.addTargets(this.selected)
+        this.PatientStore.addTargets(this.selected)
         this.Store.calculate()
       }
       this.selected = []
@@ -83,7 +85,7 @@ export default defineComponent({
      * @param node
      */
     deleteNode(node: NTarget) {
-      this.Store.deleteTarget(node)
+      this.PatientStore.deleteTarget(node)
       this.Store.calculate()
     },
     /**

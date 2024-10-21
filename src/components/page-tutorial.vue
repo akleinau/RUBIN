@@ -83,7 +83,7 @@
             </div>
 
             <br>
-            <Button v-if="Store.patient.goals.length > 0" class="p-button-text" :label="this.$t('next')"
+            <Button v-if="PatientStore.goals.length > 0" class="p-button-text" :label="this.$t('next')"
                     @click="next()"/>
             <br>
             <i class="pi pi-arrow-down mb-2"/>
@@ -184,6 +184,7 @@
 <script  lang="ts">
 import { defineComponent } from 'vue';
 import {useStore} from '../store.ts';
+import {usePatientStore} from "../stores/patient_store.ts";
 import DisclaimerEndorisk from "../components/Header/diclaimer-endorisk.vue";
 
 export default defineComponent({
@@ -201,7 +202,8 @@ export default defineComponent({
     },
     setup() {
         const Store = useStore()
-        return {Store}
+        const PatientStore = usePatientStore()
+        return {Store, PatientStore}
     },
     watch: {
         /**

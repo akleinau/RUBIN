@@ -74,6 +74,7 @@ import Feedback from "../components/Header/send-feedback.vue";
 import PatientFile from "../components/Header/patient-file.vue";
 import DisclaimerEndorisk from "../components/Header/diclaimer-endorisk.vue"
 import {useStore} from '../store.ts';
+import {usePatientStore} from "../stores/patient_store.ts";
 import {PrimeIcons} from 'primevue/api';
 
 export default defineComponent({
@@ -86,7 +87,8 @@ export default defineComponent({
   },
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   created() {
     this.items = this.getItems()
@@ -125,7 +127,7 @@ export default defineComponent({
   },
   computed: {
     patient: function () {
-      return this.Store.patient.name
+      return this.PatientStore.name
     },
     compareConfig: function () {
       return this.Store.compareConfig
@@ -160,7 +162,7 @@ export default defineComponent({
        */
     startComparing() {
       this.Store.compareConfig = {
-        "patient": JSON.parse(JSON.stringify(this.Store.patient)),
+        "patient": JSON.parse(JSON.stringify(this.PatientStore)),
         "predictions": JSON.parse(JSON.stringify(this.Store.predictions)),
         "explain": JSON.parse(JSON.stringify(this.Store.explain))
       }
@@ -258,7 +260,7 @@ export default defineComponent({
     getItems() {
       return [
         {
-          label: this.$t('File') + ": " + this.Store.patient.name,
+          label: this.$t('File') + ": " + this.PatientStore.name,
           icon: PrimeIcons.FILE,
           key: 'Patient',
           command: (event) => {

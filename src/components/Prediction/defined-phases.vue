@@ -1,7 +1,7 @@
 <template>
   <!-- Phase Desired Outcomes-->
   <div class="text-left"><b>{{ $t("DesiredOutcomes") }}:</b></div>
-  <div v-for="goal in Store.patient.goals" :key="goal.name">
+  <div v-for="goal in PatientStore.goals" :key="goal.name">
     {{ Store.labels.nodes[goal.name] }} : {{ Store.labels.states[goal.name][goal.selected.name] }}
     <span class="text-color-secondary">
        ({{ $t(goal.direction) }})
@@ -32,11 +32,11 @@
   </div>
 
   <!-- Phase Interventions-->
-  <div class="text-left pt-4" v-if="Store.patient.targets.length > 0 || this.givenTargets.length > 0 ||
+  <div class="text-left pt-4" v-if="PatientStore.targets.length > 0 || this.givenTargets.length > 0 ||
             this.givenTargets_compare.length > 0"><b>
     {{ $t("Interventions") }}:
   </b></div>
-  <div v-for="target in Store.patient.targets" :key="target.name">
+  <div v-for="target in PatientStore.targets" :key="target.name">
     {{ Store.labels.nodes[target.name] }}
   </div>
   <div v-for="target in this.givenTargets" :key="target.name">
@@ -52,13 +52,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {useStore} from '../../store.ts';
+import {usePatientStore} from "../../stores/patient_store.ts";
 import {NGoal, NNode, NEvidence, NTarget} from "../../types/node_types.ts";
 
 export default defineComponent({
   name: "defined-phases",
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   computed: {
     /**
@@ -71,7 +73,7 @@ export default defineComponent({
       if (this.Store.currentPhase !== null) {
         let goals = this.Store.currentPhase.sets.goal
         goals.forEach((g: NGoal) => {
-          let ev = this.Store.patient.evidence.find((e: NEvidence) => e.name === g.name)
+          let ev = this.PatientStore.evidence.find((e: NEvidence) => e.name === g.name)
           if (ev) {
             givenGoals.push(ev)
           }
@@ -111,7 +113,7 @@ export default defineComponent({
       if (this.Store.currentPhase !== null) {
         let targets = this.Store.currentPhase.sets.target
         targets.forEach((t: NTarget) => {
-          let ev = this.Store.patient.evidence.find((e: NEvidence) => e.name === t)
+          let ev = this.PatientStore.evidence.find((e: NEvidence) => e.name === t)
           if (ev) {
             givenTargets.push(ev)
           }
