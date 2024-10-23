@@ -3,7 +3,7 @@
   <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1 z-3" id="menu" style="position:relative">
     <template #end>
       <div class="flex flex-row align-center align-content-center">
-        <Button class="p-button-text p-button-secondary" :label="this.$t('backToNetwork')"
+        <Button class="p-button-text p-button-secondary" :label="$t('backToNetwork')"
                 @click="NetworkSelectionDialog = true" icon="pi pi-home" style="color:#3f3f46"/>
         <div v-if="Store.network === 'endometrial cancer'" class="align-self-center">
           <img id="logoENDORISK" src="../assets/logo_endorisk.png" class="align-self-center flex"

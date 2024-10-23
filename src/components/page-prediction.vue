@@ -32,7 +32,7 @@
       <ScrollPanel style="height:40%">
         <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="label" optionValue="index" id="PhaseSelect"
                   class="flex flex-align-full mt-4 "/>
-        <div class="w-full mt-2 p-1 bg-yellow-100" v-if="this.Store.network === 'endometrial cancer' && currentPhaseIndex !== 0">
+        <div class="w-full mt-2 p-1 bg-yellow-100" v-if="Store.network === 'endometrial cancer' && currentPhaseIndex !== 0">
             <i class="pi pi-exclamation-circle"/>
             {{$t("NotValidatedWarning")}}
         </div>
