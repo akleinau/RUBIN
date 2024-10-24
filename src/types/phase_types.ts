@@ -11,7 +11,7 @@ export interface Phase {
     name: string,
     labels: {
         [key: string]: string
-    }[],
+    },
     sets: {
         evidence_groups: string[],
         goal: PhaseGoal[],

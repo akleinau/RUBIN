@@ -107,10 +107,10 @@
                     </DataTable>
                     <template #footer>
                         <div class="flex justify-content-center w-full bg-white pt-3 border-top-3 border-gray-300">
-                            <Button class="mr-4 w-4 bg-teal-600 border-teal-600" :label="this.$t('add')" icon="pi pi-check-square"
+                            <Button class="mr-4 w-4 bg-teal-600 border-teal-600" :label="$t('add')" icon="pi pi-check-square"
                                     id="addOverlayEvidence"
                                     @click="addNodesFromOverlay()"/>
-                            <Button class="p-button-secondary mr-2" :label="this.$t('Cancel')" icon="pi pi-times"
+                            <Button class="p-button-secondary mr-2" :label="$t('Cancel')" icon="pi pi-times"
                                     @click="cancelOverlay"/>
                         </div>
                     </template>

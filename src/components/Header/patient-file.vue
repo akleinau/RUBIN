@@ -24,8 +24,8 @@
 import { defineComponent } from 'vue';
 import {useStore} from '../../store.ts';
 import {usePatientStore} from "../../stores/patient_store.ts";
-import * as barvisjs from "../visualisations/bar-vis-js.js";
-import * as twosidedbarvisjs from "../visualisations/two-sided-bar-vis-js.js";
+import * as barvisjs from "../visualisations/bar-vis-js.ts";
+import * as twosidedbarvisjs from "../visualisations/two-sided-bar-vis-js.ts";
 import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as logo from "../Header/svg_logo.js";

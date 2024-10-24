@@ -8,24 +8,24 @@
     </span>
     <span v-if="givenGoals_compare.find(a => a.name === goal.name)">
       ,<b> {{ $t("compare") }}: - {{ $t("given") }}:
-      {{Store.labels.states[goal.name][givenGoals_compare.find(a => a.name === goal.name).selected.name] }} </b>
+      {{get_selected_name(goal.name) }} </b>
       <span class="text-color-secondary">
-                   ({{ $t(givenGoals_compare.find(a => a.name === goal.name).direction) }})
+                   ({{ $t(goal.direction) }})
       </span>
     </span>
   </div>
 
   <div v-for="goal in givenGoals" :key="goal.name">
     {{ Store.labels.nodes[goal.name] }} - <b> {{ $t("given") }}:
-    {{ Store.labels.states[goal.name][goal.selected.name] }} </b>
+    {{ get_selected_name(goal.name) }} </b>
     <span class="text-color-secondary">
         ({{ $t(goal.direction) }})
     </span>
     <span v-if="givenGoals_compare.find(a => a.name === goal.name)">
       ,<b> {{ $t("compare") }}: - {{ $t("given") }}:
-      {{Store.labels.states[goal.name][givenGoals_compare.find(a => a.name === goal.name).selected.name]}}
+      {{get_selected_name(goal.name)}}
       <span class="text-color-secondary">
-                  ({{ $t(givenGoals_compare.find(a => a.name === goal.name).direction) }})
+                  ({{ $t(goal.direction) }})
       </span>
     </b>
     </span>
@@ -53,7 +53,8 @@
 import { defineComponent } from 'vue';
 import {useStore} from '../../store.ts';
 import {usePatientStore} from "../../stores/patient_store.ts";
-import {NGoal, NNode, NEvidence, NTarget} from "../../types/node_types.ts";
+import {NEvidence} from "../../types/node_types.ts";
+import {PhaseGoal} from "../../types/phase_types.ts";
 
 export default defineComponent({
   name: "defined-phases",
@@ -68,14 +69,14 @@ export default defineComponent({
      *
      * @returns {Object[]}
      */
-    givenGoals: function () : NEvidence[] {
-      let givenGoals: NEvidence[] = []
+    givenGoals: function () : PhaseGoal[] {
+      let givenGoals: PhaseGoal[] = []
       if (this.Store.currentPhase !== null) {
         let goals = this.Store.currentPhase.sets.goal
-        goals.forEach((g: NGoal) => {
+        goals.forEach((g: PhaseGoal) => {
           let ev = this.PatientStore.evidence.find((e: NEvidence) => e.name === g.name)
           if (ev) {
-            givenGoals.push(ev)
+            givenGoals.push(g)
           }
         })
       }
@@ -87,8 +88,8 @@ export default defineComponent({
      *
      * @returns {Object[]}
      */
-    givenGoals_compare: function () {
-      let givenGoals_compare = []
+    givenGoals_compare: function () : NEvidence[] {
+      let givenGoals_compare: NEvidence[] = []
       if (this.Store.currentPhase !== null) {
         let goals = this.Store.currentPhase.sets.goal
         goals.forEach(g => {
@@ -112,7 +113,7 @@ export default defineComponent({
       let givenTargets: NEvidence[] = []
       if (this.Store.currentPhase !== null) {
         let targets = this.Store.currentPhase.sets.target
-        targets.forEach((t: NTarget) => {
+        targets.forEach((t: string) => {
           let ev = this.PatientStore.evidence.find((e: NEvidence) => e.name === t)
           if (ev) {
             givenTargets.push(ev)
@@ -128,8 +129,8 @@ export default defineComponent({
      *
      * @returns {Object[]}
      */
-    givenTargets_compare: function () {
-      let givenTargets_compare = []
+    givenTargets_compare: function (): NEvidence[] {
+      let givenTargets_compare: NEvidence[] = []
       if (this.Store.currentPhase !== null) {
         let targets = this.Store.currentPhase.sets.target
         targets.forEach(t => {
@@ -145,6 +146,20 @@ export default defineComponent({
 
       return givenTargets_compare
     },
+  },
+  methods: {
+    /**
+     * returns name of selected goal
+     *
+     * @param goal
+     */
+    get_selected_name: function (goalname: string) : string {
+      let compare_goal = this.givenGoals_compare.find(a => a.name === goalname)
+      if (compare_goal) {
+        return this.Store.labels.states[goalname][compare_goal.selected.name]
+      }
+      else return ""
+    }
   }
 })
 </script>

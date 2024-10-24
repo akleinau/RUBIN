@@ -30,8 +30,8 @@
           :closable="false">
     <template #header>
       <div class="flex justify-content-end w-full">
-        <Button class="mr-2" :label="this.$t('add')" icon="pi pi-check" @click="addNodesFromOverlay()"/>
-        <Button class="p-button-secondary" :label="this.$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
+        <Button class="mr-2" :label="$t('add')" icon="pi pi-check" @click="addNodesFromOverlay()"/>
+        <Button class="p-button-secondary" :label="$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
       </div>
     </template>
     <DataTable :value="overlayNodes" class="p-datatable-sm" responsiveLayout="scroll"
@@ -82,7 +82,7 @@ import { defineComponent } from 'vue';
 import {FilterMatchMode} from 'primevue/api';
 import {useStore} from "../../store";
 import {usePatientStore} from "../../stores/patient_store.ts";
-import {NGoal, NNode, NOption, SOption} from "../../types/node_types.ts";
+import {NGoal, NNode, SOption} from "../../types/node_types.ts";
 
 export default defineComponent ({
   name: "goal-input",

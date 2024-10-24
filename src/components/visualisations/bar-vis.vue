@@ -2,11 +2,12 @@
   <div ref="container"/>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import * as d3 from "d3";
-import * as barvisjs from "./bar-vis-js.js";
+import * as barvisjs from "./bar-vis-js.ts";
 
-export default {
+export default defineComponent( {
   name: "bar-vis",
   props: [
     "value",
@@ -37,7 +38,7 @@ export default {
 
     }
   }
-}
+})
 </script>
 
 <style scoped>

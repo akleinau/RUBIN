@@ -104,7 +104,7 @@ export const useStore = defineStore('store', {
          * @returns {Promise<void>}
          */
         async calculate(compare : boolean = false) {
-            let patient = this.patient
+            let patient = this.patient as Patient_type
             let predictions = this.predictions
             let explain = this.explain
             if (compare && this.compareConfig) {

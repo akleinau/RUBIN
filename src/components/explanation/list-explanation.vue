@@ -69,7 +69,7 @@
 import { defineComponent } from 'vue';
 import {useStore} from '../../store.ts';
 import {FilterMatchMode} from 'primevue/api';
-import bar from "../visualisations/bar-vis.vue"
+import bar from '../visualisations/bar-vis.vue'
 import {ExplainNode, CompareExplainNode, StateExplanation} from "../../types/explanation_types"
 
 export default defineComponent({

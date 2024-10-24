@@ -70,6 +70,7 @@ import PredictionsTable from "../components/Prediction/predictions-table.vue"
 import GoalInput from "../components/Prediction/goal-input.vue";
 import DefinedPhases from "../components/Prediction/defined-phases.vue";
 import {useStore} from '../store.ts';
+import {NGoal} from "../types/node_types.ts";
 
 export default defineComponent({
   name: "page-prediction",
