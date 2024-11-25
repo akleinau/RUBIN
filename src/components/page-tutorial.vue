@@ -47,8 +47,14 @@
                 {{ $t("Tutorial2a") }}
             </div>
 
+            <div class="border-circle mouse absolute centered" style="z-index: 20000; top:-45px;"> </div>
+
         </template>
     </Card>
+
+    <div class="shadow-5" id="mouse_addButton">
+      Hello!
+    </div>
 
     <Card v-show="step === 2" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_evidenceOverlayTable"
           style="z-index: 20000">
@@ -69,6 +75,7 @@
             {{ $t("Tutorial2c") }}
             <br>
             <i class="pi pi-arrow-down mb-2"/>
+          <div class="border-circle mouse absolute centered" style="z-index: 20000; bottom:-55px;"> </div>
         </template>
     </Card>
 
@@ -83,8 +90,11 @@
             </div>
 
             <br>
-            <Button v-if="PatientStore.goals.length > 0" class="p-button-text" :label="$t('next')"
-                    @click="next()"/>
+            <div class="relative">
+              <Button v-if="PatientStore.goals.length > 0" class="p-button-text" :label="$t('next')"
+                      @click="next()"/>
+              <div class="border-circle mouse absolute centered" style="z-index: 20000; bottom:5px;"> </div>
+            </div>
             <br>
             <i class="pi pi-arrow-down mb-2"/>
         </template>
@@ -100,7 +110,10 @@
                 {{ $t("Tutorial3a") }}
             </div>
             <br>
-            <Button class="p-button-text" :label="$t('next')" @click="next()"/>
+            <div class="relative">
+              <Button class="p-button-text" :label="$t('next')" @click="next()"/>
+              <div class="border-circle mouse absolute centered" style="z-index: 20000; bottom:5px;"> </div>
+            </div>
         </template>
     </Card>
 
@@ -114,7 +127,10 @@
                 {{ $t("Tutorial4a") }}
             </div>
             <br>
-            <Button class="p-button-text" :label="$t('next')" @click="next()"/>
+            <div class="relative">
+              <Button class="p-button-text" :label="$t('next')" @click="next()"/>
+              <div class="border-circle mouse absolute centered" style="z-index: 20000; bottom:5px;"> </div>
+            </div>
         </template>
     </Card>
 
@@ -128,6 +144,7 @@
                 {{ $t("Tutorial4b") }}
             </div>
             <Button class="p-button-text" :label="$t('skip')" @click="Store.tutorialStep+=3;"/>
+            <div class="border-circle mouse absolute centered" style="z-index: 20000; top:-40px;"> </div>
         </template>
     </Card>
 
@@ -140,6 +157,7 @@
             </div>
             <br>
             <i class="pi pi-arrow-down mb-2"/>
+            <div class="border-circle mouse absolute centered" style="z-index: 20000; bottom:-70px;"> </div>
         </template>
     </Card>
 
@@ -152,7 +170,10 @@
                 {{ $t("Tutorial4d") }}
             </div>
             <br>
-            <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
+            <div class="relative">
+              <Button class="p-button-text" :label="$t('next')" @click="next()"/>
+              <div class="border-circle mouse absolute centered" style="z-index: 20000; bottom:5px;"> </div>
+            </div>
         </template>
     </Card>
 
@@ -165,7 +186,10 @@
                 {{ $t("Tutorial5") }}
             </div>
             <br>
-            <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
+            <div class="relative">
+              <Button class="p-button-text" :label="$t('next')" @click="next()"/>
+              <div class="border-circle mouse absolute centered" style="z-index: 20000; bottom:5px;"> </div>
+            </div>
         </template>
     </Card>
 
@@ -175,7 +199,11 @@
         <div class="flex align-items-center flex-column">
             <span> <b>{{ $t("Tutorial6b") }}</b> </span>
             <span class="p-2">{{ $t("Tutorial6c") }} </span>
-            <Button class="p-button-text pt-4" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
+
+            <div class="relative">
+              <Button class="p-button-text pt-4" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
+              <div class="border-circle mouse absolute centered" style="z-index: 20000; bottom:5px;"> </div>
+            </div>
         </div>
     </Dialog>
 
@@ -351,6 +379,28 @@ export default defineComponent({
 .tutorialCard {
     background: #e5dbff;
     border: 3px dotted #4d026a;
+}
+
+.centered {
+  margin:auto; left:0; right:0
+}
+
+
+/* The animation code */
+@keyframes example {
+  0%   {opacity: 0.2}
+  50% {opacity: 0.8}
+  100%   {opacity: 0.2}
+}
+
+.mouse {
+  width:35px;
+  height:35px;
+  border: 9px double #e5dbff;
+  animation-name: example;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  pointer-events: none;
 }
 
 </style>
