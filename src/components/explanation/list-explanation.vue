@@ -13,21 +13,25 @@
     <Column expander style="width: 5rem" />
     <Column :header="$t('Node')" field="label" :sortable="true" class="w-5" @click="toggle(slotProps.data)">
         <template #body="slotProps">
-            <div @click="toggle(slotProps.data)" class="w-full cursor-pointer">{{slotProps.data.label}}</div>
+            <div @click="toggle(slotProps.data)" class="w-full cursor-pointer"
+              v-tooltip.bottom="get_tooltip(slotProps.data)">{{slotProps.data.label}}</div>
         </template>
     </Column>
     <Column :header="$t('Prediction')" field="state" :sortable="true">
       <template #body="slotProps">
         <div :style="{color:color(slotProps.data.probability)}" @click="toggle(slotProps.data)" class="w-full cursor-pointer"
-             v-tooltip.bottom="capitalize((slotProps.data.probability !== 1)? $t('Prediction') : $t('given')) + ': ' + slotProps.data.state">
+             v-tooltip.bottom="get_tooltip(slotProps.data)">
             {{ slotProps.data.state }}</div>
       </template>
     </Column>
     <Column :header="$t('Likeliness')" field="probability" :sortable="true">
       <template #body="slotProps">
-        <bar v-if="slotProps.data.probability !== 1" :value="slotProps.data.probability" color="slategray"
-             :width="150" @click="toggle(slotProps.data)" class="w-full cursor-pointer"
-             v-tooltip.bottom="$t('Likeliness') + ': ' +(slotProps.data.probability*100).toFixed(0) +'%'"/>
+        <div class="flex justify-content-start" v-if="slotProps.data.probability !== 1">
+          <bar :value="slotProps.data.probability" color="slategray"
+               :width="150" @click="toggle(slotProps.data)" class="cursor-pointer"
+               v-tooltip.bottom="get_tooltip(slotProps.data)"/>
+          <span class="ml-2 text-gray-600">{{ (slotProps.data.probability * 100).toFixed(0) }}% </span>
+        </div>
       </template>
     </Column>
     <Column header="" field="beforeState" v-if="Store.compareConfig">
@@ -173,6 +177,15 @@ export default defineComponent({
       capitalize(string: String) {
           return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
+
+    get_tooltip(data: ExplainNode) {
+      let tooltip = data.label + " = " + data.state
+      if (data.probability !== 1) {
+        tooltip += " " + this.$t("withProbabilityOf") + " " + (data.probability * 100).toFixed(0) + "%"
+      }
+      return tooltip
+    }
+
   }
 })
 </script>

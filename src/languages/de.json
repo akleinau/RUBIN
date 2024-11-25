@@ -130,5 +130,6 @@
   "Legal": "Disclaimer",
   "liability": "Bitte stimme unserer Haftungsaussage zu. Klicke hier, um sie zu lesen.",
   "accept": "Akzeptieren",
-  "reject": "Ablehnen"
+  "reject": "Ablehnen",
+  "withProbabilityOf": "mit einer Wahrscheinlichkeit von"
 }
