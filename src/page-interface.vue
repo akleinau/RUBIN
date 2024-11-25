@@ -35,16 +35,17 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import Header from "./components/page-header.vue";
 import Explanation from "./components/page-explanation.vue";
-import Prediction from "@/components/page-prediction.vue";
-import Evidence from "@/components/page-evidence.vue";
-import tutorial from "@/components/page-tutorial.vue";
-import FooterComponent from "@/components/footer-component.vue";
-import {useStore} from '@/store'
+import Prediction from "./components/page-prediction.vue";
+import Evidence from "./components/page-evidence.vue";
+import tutorial from "./components/page-tutorial.vue";
+import FooterComponent from "./components/footer-component.vue";
+import {useStore} from "./store.ts"
 
-export default {
+export default defineComponent({
   name: "page-interface",
   emits: ["changePage"],
   components: {
@@ -79,7 +80,7 @@ export default {
   computed : {
     stepIsMinus1: function () {
       return this.Store.tutorialStep === -1
-    }
+    },
   },
   mounted: async function () {
     this.Store.language = this.$i18n.locale
@@ -89,7 +90,7 @@ export default {
   created: async function () {
     this.Store.network = this.network
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

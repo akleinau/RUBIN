@@ -8,8 +8,9 @@
   </form>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+export default defineComponent({
   name: "select-network",
   emits: ["changePage", "updated"],
   data() {
@@ -68,7 +69,7 @@ export default {
   created: function () {
     this.loadNetList()
   }
-}
+})
 </script>
 
 <style scoped>

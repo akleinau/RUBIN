@@ -1,7 +1,7 @@
 <template>
   <label> {{ $t("name") }}: </label>
   <br>
-  <InputText type="text" v-model="Store.patient.name"></InputText>
+  <InputText type="text" v-model="PatientStore.name"></InputText>
   <br><br>
   <div class="flex juistify-content-center flex-column align-items-stretch">
     <Button :label="$t('pdfExport')" icon="pi pi-file-pdf" @click="exportPDF" class="mb-4"/>
@@ -20,23 +20,27 @@
   </div>
 </template>
 
-<script>
-import {useStore} from '@/store'
-import * as barvisjs from "@/components/visualisations/bar-vis-js.js";
-import * as twosidedbarvisjs from "@/components/visualisations/two-sided-bar-vis-js.js";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../../store.ts';
+import {usePatientStore} from "../../stores/patient_store.ts";
+import * as barvisjs from "../visualisations/bar-vis-js.ts";
+import * as twosidedbarvisjs from "../visualisations/two-sided-bar-vis-js.ts";
 import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import * as logo from "@/components/Header/svg_logo.js";
+import * as logo from "../Header/svg_logo.js";
+import {NNode} from "../../types/node_types.ts";
 
 pdfMake.vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 
-export default {
+export default defineComponent({
   name: "patient-file",
   emits: ["loaded"],
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   data() {
     return {
@@ -103,9 +107,9 @@ export default {
      * @returns {*[]}
      */
     getCorrespondingNode(nodeArr, type) {
-      let correspondingNodes = []
+      let correspondingNodes = [] as NNode[]
       nodeArr.forEach(node => {
-        let correspondingNode = this.Store.patient.nodes.find(x => x.name === node.name)
+        let correspondingNode = this.PatientStore.nodes.find(x => x.name === node.name)
         if (correspondingNode == null) console.log("Not found: " + node)
         let item = {
           name: correspondingNode.name,
@@ -131,7 +135,7 @@ export default {
      * @param name
      * @returns {Promise<void>}
      */
-    async load(patientData, name) {
+    async load(patientData, name: string) {
       for (var row in patientData) {
         let item = patientData[row]
         if (item.type === 'evidence') {
@@ -161,7 +165,7 @@ export default {
       this.Store.addEvidences(evidenceNodes)
       this.Store.addTargets(targetNodes)
       this.Store.addGoals(goalNodes)
-      this.Store.patient.name = name
+      this.PatientStore.name = name
       this.Store.calculate()
       this.$emit('loaded')
     },
@@ -178,7 +182,7 @@ export default {
       const anchor = document.createElement('a');
       anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
       anchor.target = '_blank';
-      anchor.download = this.Store.patient.name + '.csv';
+      anchor.download = this.PatientStore.name + '.csv';
       anchor.click();
     },
     /**
@@ -216,7 +220,7 @@ export default {
       });
 
       data.content.push({
-        text: this.$t('Patient') + ': ' + this.Store.patient.name,
+        text: this.$t('Patient') + ': ' + this.PatientStore.name,
         style: 'subheader'
       })
 
@@ -294,7 +298,7 @@ export default {
      */
     pdf_add_evidence(data) {
       let evidence = [[this.$t("Node"), ""]]
-      this.Store.patient.evidence.map(x => {
+      this.PatientStore.evidence.map(x => {
         evidence.push([this.Store.labels.nodes[x.name],
           this.Store.labels.states[x.name][x.selected.name]
         ])
@@ -311,7 +315,7 @@ export default {
      */
     pdf_add_goals(data) {
       let goals = [[this.$t("Node"), "", ""]]
-      this.Store.patient.goals.map(x => {
+      this.PatientStore.goals.map(x => {
         goals.push([
           this.Store.labels.nodes[x.name],
           this.Store.labels.states[x.name][x.selected.name],
@@ -329,9 +333,9 @@ export default {
      * @param data
      */
     pdf_add_targets: function (data) {
-      if (this.Store.patient.targets.length > 0) {
+      if (this.PatientStore.targets.length > 0) {
         let targets = [[this.$t("Node")]]
-        this.Store.patient.targets.map(x => {
+        this.PatientStore.targets.map(x => {
           targets.push([this.Store.labels.nodes[x.name]])
         })
 
@@ -350,7 +354,7 @@ export default {
       data.content.push({text: this.$t("Treatment"), style: 'subheader'})
       let predictionsHeader = [""]
 
-      for (const goal of this.Store.patient.goals) {
+      for (const goal of this.PatientStore.goals) {
         predictionsHeader.push(this.Store.labels.nodes[goal.name] + ": " +
             this.Store.labels.states[goal.name][goal.selected.name])
       }
@@ -406,7 +410,7 @@ export default {
 
       let explanationsHeader = ["", this.$t("Relevance")]
 
-      for (const goal of this.Store.patient.goals) {
+      for (const goal of this.PatientStore.goals) {
         explanationsHeader.push(this.Store.labels.nodes[goal.name] + ": " +
             this.Store.labels.states[goal.name][goal.selected.name] + " (" +
             this.$t(goal.direction) + ")")
@@ -449,7 +453,7 @@ export default {
       return state
     }
   }
-}
+})
 </script>
 
 <style scoped>

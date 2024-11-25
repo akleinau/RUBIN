@@ -65,12 +65,14 @@
   </DataTable>
 </template>
 
-<script>
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../../store.ts';
 import {FilterMatchMode} from 'primevue/api';
-import bar from "@/components/visualisations/bar-vis.vue";
+import bar from '../visualisations/bar-vis.vue'
+import {ExplainNode, CompareExplainNode, StateExplanation} from "../../types/explanation_types"
 
-export default {
+export default defineComponent({
   name: "list-explanation",
   components: {
     bar
@@ -83,11 +85,11 @@ export default {
     return {
       filters: {
         'label': {
-          value: '',
+          value: '' as String,
           matchMode: FilterMatchMode.CONTAINS
         }
       },
-      expandedRows: []
+      expandedRows: [] as ExplainNode[]
     }
   },
   computed: {
@@ -99,8 +101,8 @@ export default {
     data: function () {
       if (this.Store.explain.states === null) return null
       if (this.Store.compareConfig == null) {
-        let data = []
-        this.Store.explain.states.forEach(a => {
+        let data: ExplainNode[] = []
+        this.Store.explain.states.forEach((a: any) => {
           data.push({
             "name": a.name,
             "label": this.Store.labels.nodes[a.name],
@@ -114,24 +116,27 @@ export default {
         })
         return data
       } else {
-        let data = []
-        this.Store.explain.states.forEach(a => {
-          let compareNode = this.Store.compareConfig.explain.states.find(n => n.name === a.name)
-          let state_label = this.Store.labels.states[a.name][a.state]
-          let compare_state_label = this.Store.labels.states[a.name][compareNode.state]
-          data.push({
-            "name": a.name,
-            "state": state_label,
-            "label": this.Store.labels.nodes[a.name],
-            "probability": a.probability,
-            "beforeState": state_label === compare_state_label ? "" : compare_state_label,
-            "beforeProb": state_label === compare_state_label ? 0 : compareNode.probability,
-            "distribution": a.distribution,
-            "stateNames": a.stateNames,
-            "compare_probability": compareNode.probability,
-            "compare_distribution": compareNode.distribution,
-            "compare_stateNames": compareNode.stateNames
-          })
+        let data: CompareExplainNode[] = []
+        let compareConfig = this.Store.compareConfig
+        this.Store.explain.states.forEach((a: any) => {
+          let compareNode = compareConfig.explain.states.find(n => n.name === a.name) as StateExplanation
+          if (compareNode) {
+            let state_label = this.Store.labels.states[a.name][a.state]
+            let compare_state_label = this.Store.labels.states[a.name][compareNode.state]
+            data.push({
+              "name": a.name,
+              "state": state_label,
+              "label": this.Store.labels.nodes[a.name],
+              "probability": a.probability,
+              "beforeState": state_label === compare_state_label ? "" : compare_state_label,
+              "beforeProb": state_label === compare_state_label ? 0 : compareNode.probability,
+              "distribution": a.distribution,
+              "stateNames": a.stateNames,
+              "compare_probability": compareNode.probability,
+              "compare_distribution": compareNode.distribution,
+              "compare_stateNames": compareNode.stateNames
+            })
+          }
         })
         return data
       }
@@ -144,7 +149,7 @@ export default {
        * @param probability
        * @returns {string}
        */
-    color(probability) {
+    color(probability: Number) {
       if (probability === 1) return "black"
       return "mediumblue"
     },
@@ -153,7 +158,7 @@ export default {
        *
        * @param row
        */
-    toggle(row) {
+    toggle(row: ExplainNode) {
           if (this.expandedRows.includes(row)) {
               this.expandedRows = this.expandedRows.filter(r => r.name !== row.name)
           } else {
@@ -165,11 +170,11 @@ export default {
        * @param string
        * @returns {*}
        */
-      capitalize(string) {
+      capitalize(string: String) {
           return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
   }
-}
+})
 </script>
 
 <style scoped>

@@ -3,7 +3,7 @@
   <Menubar :model="items" ref="menu" class="p-0 ml-1 mr-1 z-3" id="menu" style="position:relative">
     <template #end>
       <div class="flex flex-row align-center align-content-center">
-        <Button class="p-button-text p-button-secondary" :label="this.$t('backToNetwork')"
+        <Button class="p-button-text p-button-secondary" :label="$t('backToNetwork')"
                 @click="NetworkSelectionDialog = true" icon="pi pi-home" style="color:#3f3f46"/>
         <div v-if="Store.network === 'endometrial cancer'" class="align-self-center">
           <img id="logoENDORISK" src="../assets/logo_endorisk.png" class="align-self-center flex"
@@ -68,14 +68,16 @@
 
 </template>
 
-<script>
-import Feedback from "@/components/Header/send-feedback.vue";
-import PatientFile from "@/components/Header/patient-file.vue";
-import DisclaimerEndorisk from "@/components/Header/diclaimer-endorisk.vue"
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Feedback from "../components/Header/send-feedback.vue";
+import PatientFile from "../components/Header/patient-file.vue";
+import DisclaimerEndorisk from "../components/Header/diclaimer-endorisk.vue"
+import {useStore} from '../store.ts';
+import {usePatientStore} from "../stores/patient_store.ts";
 import {PrimeIcons} from 'primevue/api';
 
-export default {
+export default defineComponent({
   name: "page-header",
   emits: ["changePage", "loadPatient", "exportCSV"],
   components: {
@@ -85,7 +87,8 @@ export default {
   },
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   created() {
     this.items = this.getItems()
@@ -124,7 +127,7 @@ export default {
   },
   computed: {
     patient: function () {
-      return this.Store.patient.name
+      return this.PatientStore.name
     },
     compareConfig: function () {
       return this.Store.compareConfig
@@ -142,7 +145,7 @@ export default {
       SavePatientName: null,
       configLabel: this.$t('startComparing'),
       NetworkSelectionDialog: false,
-      items: null
+      items: [] as any[]
     }
   },
   methods: {
@@ -159,7 +162,7 @@ export default {
        */
     startComparing() {
       this.Store.compareConfig = {
-        "patient": JSON.parse(JSON.stringify(this.Store.patient)),
+        "patient": JSON.parse(JSON.stringify(this.PatientStore)),
         "predictions": JSON.parse(JSON.stringify(this.Store.predictions)),
         "explain": JSON.parse(JSON.stringify(this.Store.explain))
       }
@@ -201,7 +204,7 @@ export default {
        *
        * @param event
        */
-    showLanguage(event) {
+    showLanguage(event: any) {
       this.$refs.langOverlay.toggle(event)
     },
       /**
@@ -222,7 +225,7 @@ export default {
        *
        * @param event
        */
-    loadPatient(event) {
+    loadPatient(event: any) {
       this.$refs.loadOverlay.toggle(event)
     },
     /**
@@ -230,7 +233,7 @@ export default {
      *
      * @param networkName
      */
-    format(networkName) {
+    format(networkName: string) {
       if (networkName.length > 15) {
         return this.capitalize(networkName).substring(0, 14) + "..."
       }
@@ -245,7 +248,7 @@ export default {
        * @param string
        * @returns {string}
        */
-    capitalize(string) {
+    capitalize(string: string) {
       return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
 
@@ -257,7 +260,7 @@ export default {
     getItems() {
       return [
         {
-          label: this.$t('File') + ": " + this.Store.patient.name,
+          label: this.$t('File') + ": " + this.PatientStore.name,
           icon: PrimeIcons.FILE,
           key: 'Patient',
           command: (event) => {
@@ -354,7 +357,7 @@ export default {
       ]
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

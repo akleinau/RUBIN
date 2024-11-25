@@ -79,12 +79,14 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { useI18n } from 'vue-i18n'
 import UploadNetwork from "./components/NetworkLoading/upload-network.vue";
 import SelectNetwork from "./components/NetworkLoading/select-network.vue"
 import FooterComponent from "./components/footer-component.vue"
 
-export default {
+export default defineComponent({
   name: "page-choose-net",
   emits: ["changePage", "loadLocalNet"],
   data() {
@@ -115,7 +117,7 @@ export default {
 
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

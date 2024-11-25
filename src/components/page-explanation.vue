@@ -63,14 +63,16 @@
   </Card>
 </template>
 
-<script>
-import Relevance from "@/components/explanation/relevance-explanation.vue";
-import sugiyama from "@/components/explanation/sugiyama-vis.vue";
-import NodeList from "@/components/explanation/list-explanation.vue";
-import sugiyamaCompare from "@/components/explanation/sugiyama-vis-compare.vue";
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Relevance from "../components/explanation/relevance-explanation.vue";
+import sugiyama from "../components/explanation/sugiyama-vis.vue";
+import NodeList from "../components/explanation/list-explanation.vue";
+import sugiyamaCompare from "../components/explanation/sugiyama-vis-compare.vue";
+import {useStore} from "../store"
+import {Edge, StateExplanation} from "../types/explanation_types.ts"
 
-export default {
+export default defineComponent({
   name: "page-explanation",
   components: {
     Relevance,
@@ -91,7 +93,7 @@ export default {
       compactEdges: null,
       exNodes: null,
       currentIndex: 0,
-      options: null
+      options: [] as { label: string, value: number }[]
     }
   },
   watch: {
@@ -123,37 +125,39 @@ export default {
       if (this.Store.explain.explanation == null) {
         return null
       }
+      let explanation = this.Store.explain.explanation
+
       //nodes
 
-      let explanationNodes = []
-      this.Store.explain.explanation["nodes"].forEach(node => {
+      let explanationNodes = [] as StateExplanation[]
+      explanation["nodes"].forEach(node => {
         let originalNode = this.Store.explain.states.find(n => n.name === node)
         if (originalNode != null) {
           explanationNodes.push(originalNode)
         } else {
-          explanationNodes.push({"name": node, "probability": "1.0"})
+          explanationNodes.push({"name": node, "probability": 1.0, state:"given", stateNames:{0:"given"}, distribution:[]})
         }
       })
 
       //edges
-      let edges = []
+      let edges = [] as Edge[]
 
       let connectedNodes = new Set()
       this.Store.edges.forEach(edge => {
-        if (this.Store.explain.explanation["nodes"].includes(edge["source"]) && this.Store.explain.explanation["nodes"].includes(edge["target"])) {
+        if (explanation["nodes"].includes(edge["source"]) && explanation["nodes"].includes(edge["target"])) {
           edges.push(edge)
           connectedNodes.add(edge["source"])
           connectedNodes.add(edge["target"])
         }
       })
-      let notConnectedNodes = this.Store.explain.explanation["nodes"].filter(x => !connectedNodes.has(x))
+      let notConnectedNodes = explanation["nodes"].filter(x => !connectedNodes.has(x))
       notConnectedNodes.forEach(node => {
         let neighborNodes = this.Store.explain.states.filter(n =>
             this.Store.edges.find(e => e["source"] === node && e["target"] === n.name) != null)
         neighborNodes.forEach(n => {
           let otherEdges = this.Store.edges.filter(e => e["target"] === n.name)
           otherEdges.forEach(oe => {
-            if (oe["source"] !== node && this.Store.explain.explanation["nodes"].includes(oe["source"])) {
+            if (oe["source"] !== node && explanation["nodes"].includes(oe["source"])) {
               if (!explanationNodes.includes(n)) {
                 explanationNodes.push(n)
               }
@@ -244,7 +248,7 @@ export default {
       ]
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

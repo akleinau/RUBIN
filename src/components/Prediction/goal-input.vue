@@ -30,8 +30,8 @@
           :closable="false">
     <template #header>
       <div class="flex justify-content-end w-full">
-        <Button class="mr-2" :label="this.$t('add')" icon="pi pi-check" @click="addNodesFromOverlay()"/>
-        <Button class="p-button-secondary" :label="this.$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
+        <Button class="mr-2" :label="$t('add')" icon="pi pi-check" @click="addNodesFromOverlay()"/>
+        <Button class="p-button-secondary" :label="$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
       </div>
     </template>
     <DataTable :value="overlayNodes" class="p-datatable-sm" responsiveLayout="scroll"
@@ -77,15 +77,19 @@
 </template>
 
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import {FilterMatchMode} from 'primevue/api';
-import {useStore} from "@/store";
+import {useStore} from "../../store";
+import {usePatientStore} from "../../stores/patient_store.ts";
+import {NGoal, NNode, SOption} from "../../types/node_types.ts";
 
-export default {
+export default defineComponent ({
   name: "goal-input",
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   data() {
     return {
@@ -94,7 +98,7 @@ export default {
       filters: {
         'label': {value: null, matchMode: FilterMatchMode.CONTAINS}
       },
-      nodesToAdd: [],
+      nodesToAdd: [] as NGoal[],
       directionOptions: [
         {name: "max", label: this.$t("max")},
         {name: "min", label: this.$t("min")}
@@ -108,7 +112,7 @@ export default {
        * @returns {any}
        */
     table: function () {
-      return this.Store.patient.goals.map(node => {
+      return this.Store.patient.goals.map((node: NGoal) => {
         return {
           name: node.name,
           selected: {name: node.selected.name, node: node.name},
@@ -130,13 +134,14 @@ export default {
      * @returns {Object[]}
      */
     overlayNodes: function () {
-      let nodes = this.Store.patient.nodes
+      let nodes: NNode[] = this.Store.patient.nodes
       if (this.Store.currentPhase !== null) {
-        nodes = nodes.filter(x => this.Store.currentPhase.sets.goal.map(a => a.name).includes(x.name))
+        let currentPhase = this.Store.currentPhase
+        nodes = nodes.filter((x: NNode) => currentPhase.sets.goal.map(a => a.name).includes(x.name))
 
       }
 
-      return nodes.map(node => {
+      return nodes.map((node: NNode) => {
             return {
               name: node.name,
               label: this.Store.labels.nodes[node.name],
@@ -158,14 +163,14 @@ export default {
      * returns direction of a node of the overlay, if that node is supposed to be added as goal
      *
      * @param node
-     * @returns {*|null}
+     * @returns string
      */
-    getDirection(node) {
-      let listNode = this.nodesToAdd.find(n => n.name === node.name)
+    getDirection(node: NNode): string {
+      let listNode = this.nodesToAdd.find((n: NGoal) => n.name === node.name)
       if (listNode) {
         return listNode.direction
       }
-      return null
+      return ""
     },
 
     /**
@@ -174,19 +179,20 @@ export default {
      * @param slotProps
      * @param option
      */
-    onOverlayOptionChange(slotProps, option) {
+    onOverlayOptionChange(slotProps: any, option: any) {
+      let node = slotProps.data as NNode
       //deselect this and other options of the node
-      this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
+      this.nodesToAdd = this.nodesToAdd.filter((n: NGoal) => n.name !== slotProps.data.name)
 
       //convert node in format used for selected nodes and add it to 'shopping list'
       if (option.checked) {
-        let item = {
-          name: slotProps.data.name,
-          selected: {name: option.name, node: slotProps.data.name},
-          options: slotProps.data.options.map(option => {
+        let item: NGoal = {
+          name: node.name,
+          selected: {name: option.name},
+          options: slotProps.data.options.map((option:any) => {
             return {
               name: option.name,
-              node: slotProps.data.name
+              node: node.name
             }
           }),
           direction: "max"
@@ -200,8 +206,12 @@ export default {
      *
      * @param slotProps
      */
-    onOverlayDirectionChange(slotProps) {
-      this.nodesToAdd.find(a => a.name === slotProps.data.name).direction = slotProps.data.direction
+    onOverlayDirectionChange(slotProps: any) {
+      let node = slotProps.data as NGoal
+      let equivalent_node = this.nodesToAdd.find((a: NGoal) => a.name === node.name)
+      if (equivalent_node) {
+       equivalent_node.direction = node.direction
+      }
     },
 
     /**
@@ -217,8 +227,8 @@ export default {
      *
      * @param node
      */
-    deleteNode(node) {
-      this.Store.deleteGoal(node)
+    deleteNode(node: NGoal) {
+      this.PatientStore.deleteGoal(node)
       this.Store.calculate()
       if (this.Store.compareConfig) {
         this.Store.calculate(true)
@@ -229,15 +239,15 @@ export default {
      *
      * @param node
      */
-    deleteNodeFromOverlay(node) {
-      this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
+    deleteNodeFromOverlay(node: NGoal) {
+      this.nodesToAdd = this.nodesToAdd.filter((x: NGoal) => x !== node)
     },
     /**
      * Called when a different state is selected via the dropdown menu of a goal
      *
      * @param node
      */
-    onNodeChange(node) {
+    onNodeChange(node: NGoal) {
       if (node.selected === null) {
           this.deleteNode(node)
       } else {
@@ -247,8 +257,8 @@ export default {
     /**
      * adds nodes as goals
      */
-    addNodes(nodes) {
-      this.Store.addGoals(nodes)
+    addNodes(nodes: NGoal[]) {
+      this.PatientStore.addGoals(nodes)
       this.Store.calculate()
       if (this.Store.compareConfig) {
         this.Store.calculate(true)
@@ -268,11 +278,11 @@ export default {
      * @param option
      * @returns {*}
      */
-    get_option_label(option) {
+    get_option_label(option: SOption) {
       return this.Store.labels.states[option.node][option.name]
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

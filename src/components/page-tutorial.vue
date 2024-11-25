@@ -1,5 +1,5 @@
 <template>
-    <Dialog v-model:visible="stepIs0" class="tutorialCard shadow-5 m-0 " :header="this.$t('Tutorial1a')"
+    <Dialog v-model:visible="stepIs0" class="tutorialCard shadow-5 m-0 " :header="$t('Tutorial1a')"
             :closable="false"
             id="overlay0" modal style="z-index: 2000;max-width:95%">
         <div class="flex align-items-center flex-column">
@@ -10,7 +10,7 @@
             </div>
             <div v-if="!liability && Store.network === 'endometrial cancer'" class="flex align-items-center flex-column">
                 <Accordion>
-                    <AccordionTab :header="this.$t('liability')">
+                    <AccordionTab :header="$t('liability')">
                         <p>
                             <disclaimer-endorisk/>
                         </p>
@@ -18,8 +18,8 @@
                 </Accordion>
                 <br>
                 <div class="flex pt-1">
-                    <Button class="p-button-text" :label="this.$t('accept')" icon="pi pi-check" @click="liability=true"/>
-                    <Button class="p-button-text" :label="this.$t('reject')" icon="pi pi-times" @click="changePage()"/>
+                    <Button class="p-button-text" :label="$t('reject')" icon="pi pi-times" @click="changePage()"/>
+                    <Button class="p-button-text" :label="$t('accept')" icon="pi pi-check" @click="liability=true"/>
                 </div>
             </div>
             <div v-else class="flex align-items-center flex-column">
@@ -27,8 +27,8 @@
                 <span class="pt-1"> {{ $t("Tutorial1c") }} </span>
                 <br>
                 <div class="flex pt-1">
-                    <Button class="p-button-text" :label="this.$t('start')" icon="pi pi-check" @click="start()"/>
-                    <Button class="p-button-text" :label="this.$t('close')" icon="pi pi-times" @click="close()"/>
+                    <Button class="p-button-text" :label="$t('start')" icon="pi pi-check" @click="start()"/>
+                    <Button class="p-button-text" :label="$t('close')" icon="pi pi-times" @click="close()"/>
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
             </div>
 
             <br>
-            <Button v-if="Store.patient.goals.length > 0" class="p-button-text" :label="this.$t('next')"
+            <Button v-if="PatientStore.goals.length > 0" class="p-button-text" :label="$t('next')"
                     @click="next()"/>
             <br>
             <i class="pi pi-arrow-down mb-2"/>
@@ -100,7 +100,7 @@
                 {{ $t("Tutorial3a") }}
             </div>
             <br>
-            <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
+            <Button class="p-button-text" :label="$t('next')" @click="next()"/>
         </template>
     </Card>
 
@@ -114,7 +114,7 @@
                 {{ $t("Tutorial4a") }}
             </div>
             <br>
-            <Button class="p-button-text" :label="this.$t('next')" @click="next()"/>
+            <Button class="p-button-text" :label="$t('next')" @click="next()"/>
         </template>
     </Card>
 
@@ -127,7 +127,7 @@
                 <i class="pi pi-info-circle mr-2" style="font-size: 1.5rem"/>
                 {{ $t("Tutorial4b") }}
             </div>
-            <Button class="p-button-text" :label="this.$t('skip')" @click="Store.tutorialStep+=3;"/>
+            <Button class="p-button-text" :label="$t('skip')" @click="Store.tutorialStep+=3;"/>
         </template>
     </Card>
 
@@ -181,26 +181,29 @@
 
 </template>
 
-<script>
-import {useStore} from '@/store'
-import DisclaimerEndorisk from "@/components/Header/diclaimer-endorisk.vue";
+<script  lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../store.ts';
+import {usePatientStore} from "../stores/patient_store.ts";
+import DisclaimerEndorisk from "../components/Header/diclaimer-endorisk.vue";
 
-export default {
+export default defineComponent({
     name: "page-tutorial",
     components: {DisclaimerEndorisk},
     props: ["loading"],
     emits: ["setBlock", "changePage"],
     data() {
         return {
-            display: false,
-            step: 0,
-            finalStep: 12,
-            liability: false,
+            display: false as boolean,
+            step: 0 as number,
+            finalStep: 12 as number,
+            liability: false as boolean,
         }
     },
     setup() {
         const Store = useStore()
-        return {Store}
+        const PatientStore = usePatientStore()
+        return {Store, PatientStore}
     },
     watch: {
         /**
@@ -231,7 +234,7 @@ export default {
     methods: {
         start() {
             this.Store.tutorialStep = 1
-            
+
             // eslint-disable-next-line
             umami.track('button-startTutorial', {network: this.Store.network} );
 
@@ -288,34 +291,40 @@ export default {
          * @param {string} overlay - the id of the overlay
          * @param {string} position - relative position of overlay to target
          */
-        setOverlayPosition(target, overlay, position) {
-            if (document.getElementById(target)) {
-                let boundingBox = document.getElementById(target).getBoundingClientRect()
-                document.getElementById(overlay).style.width = boundingBox.width + "px";
-                document.getElementById(overlay).style.left = boundingBox.left + document.body.scrollLeft + "px";
+        setOverlayPosition(target: string, overlay: string, position: string) {
+          let target_object = document.getElementById(target) as HTMLElement | null
+          let overlay_object = document.getElementById(overlay) as HTMLElement | null
 
-                if (position === "up") {
-                    document.getElementById(overlay).style.top = boundingBox.bottom + window.scrollY + 5 + "px";
-                } else if (position === "middle") {
-                    document.getElementById(overlay).style.top = boundingBox.top + window.scrollY + "px";
-                    document.getElementById(overlay).style.transform = "translateY(-50%)";
-                } else if (position === "down") {
-                    document.getElementById(overlay).style.top = boundingBox.top + window.scrollY + "px";
-                    document.getElementById(overlay).style.transform = "translateY(-110%)";
-                } else if (position === "low_up") {
-                    document.getElementById(overlay).style.top = boundingBox.bottom + window.scrollY + 5 + "px";
-                    document.getElementById(overlay).style.transform = "translateY(-110%)";
-                } else if (position === "fixed_low_up") {
-                    document.getElementById(overlay).style.top = boundingBox.top + window.scrollY + 5 + "px";
-                    document.getElementById(overlay).style.transform = "translateY(300px)"; //fixed amount below top
-                }
+          if (overlay_object != null) {
+            if (target_object != null) {
+
+                  let boundingBox = target_object.getBoundingClientRect()
+                  overlay_object.style.width = boundingBox.width + "px";
+                  overlay_object.style.left = boundingBox.left + document.body.scrollLeft + "px";
+
+                  if (position === "up") {
+                      overlay_object.style.top = boundingBox.bottom + window.scrollY + 5 + "px";
+                  } else if (position === "middle") {
+                      overlay_object.style.top = boundingBox.top + window.scrollY + "px";
+                      overlay_object.style.transform = "translateY(-50%)";
+                  } else if (position === "down") {
+                      overlay_object.style.top = boundingBox.top + window.scrollY + "px";
+                      overlay_object.style.transform = "translateY(-110%)";
+                  } else if (position === "low_up") {
+                      overlay_object.style.top = boundingBox.bottom + window.scrollY + 5 + "px";
+                      overlay_object.style.transform = "translateY(-110%)";
+                  } else if (position === "fixed_low_up") {
+                      overlay_object.style.top = boundingBox.top + window.scrollY + 5 + "px";
+                      overlay_object.style.transform = "translateY(300px)"; //fixed amount below top
+                  }
 
 
-            } else {
-                document.getElementById(overlay).style.top = "0px"
-                document.getElementById(overlay).style.left = "0px"
-                document.getElementById(overlay).style.width = "200px"
+              } else {
+                  overlay_object.style.top = "0px"
+                  overlay_object.style.left = "0px"
+                  overlay_object.style.width = "200px"
             }
+          }
         },
         languageChanged() {
             if (this.$i18n.locale == null) {
@@ -329,7 +338,7 @@ export default {
             this.$emit("changePage")
         },
     }
-}
+})
 </script>
 
 <style lang="scss" scoped>

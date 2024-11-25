@@ -14,10 +14,11 @@
   </form>
 </template>
 
-<script>
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../../store.ts';
 
-export default {
+export default defineComponent({
   name: "send-feedback",
   emits: ["sendFeedback"],
   setup() {
@@ -61,7 +62,7 @@ export default {
       this.$emit("sendFeedback")
     }
   }
-}
+})
 </script>
 
 <style scoped>

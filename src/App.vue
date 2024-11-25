@@ -7,11 +7,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import Interface from "./page-interface.vue";
 import ChooseNet from "./page-choose-net.vue";
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     Interface,
@@ -64,7 +65,7 @@ export default {
       umami.track('load_network', { type: 'own', network: ''});
     }
   }
-}
+})
 
 
 </script>

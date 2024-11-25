@@ -4,12 +4,13 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import * as d3 from "d3";
 import * as dag from "d3-dag"
-import {useStore} from '@/store'
+import {useStore} from '../../store.ts';
 
-export default {
+export default defineComponent({
   name: "sugiyama-vis",
   props: [
     "nodes",
@@ -30,9 +31,9 @@ export default {
      * @returns {*[]}
      */
     edgeList: function () {
-      const list = []
+      const list : any[] = []
       if (this.edges) {
-        this.edges.forEach(d => {
+        this.edges.forEach((d: any) => {
           list.push([d["source"], d["target"]])
         })
       }
@@ -64,7 +65,7 @@ export default {
      * @returns {*}
      */
     getState(n) {
-      let node = this.nodes.find(d => d.name === n.data.id)
+      let node = this.nodes.find((d: any) => d.name === n.data.id)
       return this.Store.labels.states[node.name][node.state]
     },
     /**
@@ -73,7 +74,7 @@ export default {
      * @param node
      * @returns {string|*}
      */
-    getProbability(node) {
+    getProbability(node: any) {
       return this.nodes.find(d => d.name === node.data.id).probability
     },
 
@@ -84,7 +85,7 @@ export default {
      * @param node
      * @returns {boolean}
      */
-    isHighlightNode(node) {
+    isHighlightNode(node: any) {
       if (this.highlight) {
         return this.highlightNodes.find(n => n.name === node.data.id) !== undefined
       }
@@ -98,9 +99,9 @@ export default {
      * @param edge
      * @returns {boolean}
      */
-    isHighlightEdge(edge) {
+    isHighlightEdge(edge: any) {
       if (this.highlight) {
-        return this.highlightEdges.find(e => e.source === edge.data[0] && e.target === edge.data[1]) !== undefined
+        return this.highlightEdges.find((e: any) => e.source === edge.data[0] && e.target === edge.data[1]) !== undefined
       }
       return true
     },
@@ -111,14 +112,14 @@ export default {
      * @param e - the hover event
      * @param d - the data of the event
      */
-    getDetails(e, d) {
+    getDetails(e: any, d: any) {
       if (!this.highlight || this.isHighlightNode(d)) {
         //move into focus
         d3.select(e.target.parentNode).raise()
         //size up node
         d3.select(e.target.parentNode).selectAll(".box")
-            .attr("width", d => this.Store.labels.nodes[d.data.id].length + 90)
-            .attr("height", d => {
+            .attr("width", (d: any) => this.Store.labels.nodes[d.data.id].length + 90)
+            .attr("height", (d: any) => {
               let node = this.nodes.find(node => node.name === d.data.id)
               if (node.distribution) return node.distribution.length * 10 + 15
               else return 15
@@ -128,10 +129,10 @@ export default {
         d3.select(e.target.parentNode).selectAll(".textName").text(d => String(this.Store.labels.nodes[d.data.id]) + ": ")
         // show all probabilities
         d3.select(e.target.parentNode).selectAll(".textState").text(d => String(this.getState(d)))
-        d3.select(e.target.parentNode).selectAll(".textState").each(d => {
-          let node = this.nodes.find(node => node.name === d.data.id)
+        d3.select(e.target.parentNode).selectAll(".textState").each((d: any) => {
+          let node = this.nodes.find((node: any) => node.name === d.data.id)
           if (node.distribution) {
-            node.distribution.forEach((p, i) => {
+            node.distribution.forEach((p: number, i: number) => {
               d3.select(e.target.parentNode).append("rect")
                   .attr("class", "probBar")
                   .attr("width", p * 20)
@@ -167,7 +168,7 @@ export default {
      *
      * @param e - the event
      */
-    hideDetails(e) {
+    hideDetails(e: any) {
       d3.select(e.target.parentNode).selectAll(".box").attr("width", 25)
           .attr("height", 13)
           .attr("transform", `translate(-12.5,-4)`)
@@ -183,7 +184,7 @@ export default {
      * displays network in sugiyama layout
      */
     visualise() {
-      if (this.nodes !== null && this.edgeList !== [] && this.edgeList.length !== 0) {
+      if (this.nodes !== null && this.edgeList.length !== 0 && this.edgeList.length !== 0) {
 
         let edgeColor = this.highlight ? "darkslategray" : "darkgray"
 
@@ -200,7 +201,7 @@ export default {
 
         let {width, height} = layout(graph)
 
-        const color = probability => {
+        const color = (probability: number) => {
           if (probability === 1) return "black"
           else return "mediumblue"
         }
@@ -470,7 +471,7 @@ export default {
 
     }
   }
-}
+})
 
 
 </script>

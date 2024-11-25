@@ -18,8 +18,8 @@
     :closable="false">
       <template #header>
       <div class="flex justify-content-end w-full">
-        <Button class="mr-2" :label="this.$t('add')" icon="pi pi-check" @click="addTargetsFromOverlay()"/>
-        <Button class="p-button-secondary" :label="this.$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
+        <Button class="mr-2" :label="$t('add')" icon="pi pi-check" @click="addTargetsFromOverlay()"/>
+        <Button class="p-button-secondary" :label="$t('Cancel')" icon="pi pi-times" @click="cancelOverlay"/>
       </div>
     </template>
       <Listbox v-model="selected" class="t-2" :options="overlayNodes" optionLabel="label"
@@ -36,18 +36,22 @@
   </div>
 </template>
 
-<script>
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {useStore} from '../../store.ts';
+import {usePatientStore} from "../../stores/patient_store.ts";
+import {NTarget, NNode} from "../../types/node_types.ts";
 
-export default {
+export default defineComponent({
   name: "options-input",
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   data() {
     return {
-      selected: null,
+      selected: null as NTarget[] | null,
       overlay: false
     }
   },
@@ -57,9 +61,9 @@ export default {
      *
      * @returns {Object[]}
      */
-    overlayNodes: function () {
+    overlayNodes: function () : NTarget[] {
         let nodes = JSON.parse(JSON.stringify(this.Store.patient.nodes))
-        nodes.forEach(n => n.label=this.Store.labels.nodes[n.name])
+        nodes.forEach((n: (NNode|NTarget)) => n.label=this.Store.labels.nodes[n.name])
         return nodes
     }
   },
@@ -69,7 +73,7 @@ export default {
      */
     addTargetsFromOverlay() {
       if (this.selected != null) {
-        this.Store.addTargets(this.selected)
+        this.PatientStore.addTargets(this.selected)
         this.Store.calculate()
       }
       this.selected = []
@@ -80,8 +84,8 @@ export default {
      *
      * @param node
      */
-    deleteNode(node) {
-      this.Store.deleteTarget(node)
+    deleteNode(node: NTarget) {
+      this.PatientStore.deleteTarget(node)
       this.Store.calculate()
     },
     /**
@@ -92,7 +96,7 @@ export default {
       this.overlay = false
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

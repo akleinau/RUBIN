@@ -32,7 +32,7 @@
       <ScrollPanel style="height:40%">
         <Dropdown v-model="currentPhaseIndex" :options="phases" optionLabel="label" optionValue="index" id="PhaseSelect"
                   class="flex flex-align-full mt-4 "/>
-        <div class="w-full mt-2 p-1 bg-yellow-100" v-if="this.Store.network === 'endometrial cancer' & currentPhaseIndex !== 0">
+        <div class="w-full mt-2 p-1 bg-yellow-100" v-if="Store.network === 'endometrial cancer' && currentPhaseIndex !== 0">
             <i class="pi pi-exclamation-circle"/>
             {{$t("NotValidatedWarning")}}
         </div>
@@ -63,14 +63,16 @@
 
 </template>
 
-<script>
-import optionsInput from "@/components/Prediction/options-input.vue";
-import PredictionsTable from "@/components/Prediction/predictions-table.vue"
-import GoalInput from "@/components/Prediction/goal-input.vue";
-import DefinedPhases from "@/components/Prediction/defined-phases.vue";
-import {useStore} from '@/store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import optionsInput from "../components/Prediction/options-input.vue";
+import PredictionsTable from "../components/Prediction/predictions-table.vue"
+import GoalInput from "../components/Prediction/goal-input.vue";
+import DefinedPhases from "../components/Prediction/defined-phases.vue";
+import {useStore} from '../store.ts';
+import {NGoal} from "../types/node_types.ts";
 
-export default {
+export default defineComponent({
   name: "page-prediction",
   emits: ["update"],
   components: {
@@ -114,7 +116,7 @@ export default {
       let phases = []
       this.Store.phases.forEach((p, i) => {
         //find label based on language
-        let label = p.name
+        let label: string = p.name
         if (p.labels[this.Store.language]) {
           label = p.labels[this.Store.language]
         }
@@ -135,11 +137,11 @@ export default {
        * @param goal
        * @returns {string}
        */
-    getGoalLabel(goal) {
+    getGoalLabel(goal: NGoal) {
       return this.Store.labels.nodes[goal.name] + ": " + goal.selected.name
     },
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
