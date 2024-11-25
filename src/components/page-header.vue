@@ -27,7 +27,7 @@
     <Feedback @sendFeedback="sendFeedback"></Feedback>
   </Dialog>
   <OverlayPanel ref="networkOverlay" :header="$t('NetworkDescription')" style="width: 50%" :modal="true">
-    {{ Store.description }}
+    <p v-html="Store.description"></p>
   </OverlayPanel>
 
   <OverlayPanel ref="langOverlay">
