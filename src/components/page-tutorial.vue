@@ -40,7 +40,7 @@
 
     <Card v-show="step === 1" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300 " id="overlay_addButton" style="z-index: 20000">
         <template #content>
-            <i class="pi pi-arrow-up mb-2"/>
+            <i class="pi pi-arrow-up mb-2 arrow"/>
             <br>
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-info-circle mr-2" style="font-size: 2rem"/>
@@ -58,7 +58,7 @@
                 {{ $t("Tutorial2b") }}
             </div>
             <br>
-            <i class="pi pi-arrow-down mb-2"/>
+            <i class="pi pi-arrow-down mb-2 arrow"/>
         </template>
     </Card>
 
@@ -68,7 +68,7 @@
             <i class="pi pi-info-circle mt-2 mr-2" style="font-size: 1.5rem"/>
             {{ $t("Tutorial2c") }}
             <br>
-            <i class="pi pi-arrow-down mb-2"/>
+            <i class="pi pi-arrow-down mb-2 arrow"/>
         </template>
     </Card>
 
@@ -86,14 +86,14 @@
             <Button v-if="PatientStore.goals.length > 0" class="p-button-text" :label="$t('next')"
                     @click="next()"/>
             <br>
-            <i class="pi pi-arrow-down mb-2"/>
+            <i class="pi pi-arrow-down mb-2 arrow"/>
         </template>
     </Card>
 
     <Card v-show="step === 5" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_optionsTable"
           style="z-index: 20000">
         <template #content>
-            <i class="pi pi-arrow-up mb-2"/>
+            <i class="pi pi-arrow-up mb-2 arrow"/>
             <br>
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-info-circle mr-2" style="font-size: 2rem"/>
@@ -107,7 +107,7 @@
     <Card v-show="step === 6" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_relevanceExplanation"
           style="z-index: 20000">
         <template #content>
-            <i class="pi pi-arrow-up mb-2"/>
+            <i class="pi pi-arrow-up mb-2 arrow"/>
             <br>
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-info-circle mr-2" style="font-size: 2rem"/>
@@ -121,7 +121,7 @@
     <Card v-show="step === 7" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_explanationDropdown"
           style="z-index: 5">
         <template #content>
-            <i class="pi pi-arrow-up mb-2"/>
+            <i class="pi pi-arrow-up mb-2 arrow"/>
             <br>
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-info-circle mr-2" style="font-size: 1.5rem"/>
@@ -139,13 +139,13 @@
                 {{ $t("Tutorial4c") }}
             </div>
             <br>
-            <i class="pi pi-arrow-down mb-2"/>
+            <i class="pi pi-arrow-down mb-2 arrow"/>
         </template>
     </Card>
 
     <Card v-show="step === 9" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_listExplanation" style="z-index: 5">
         <template #content>
-            <i class="pi pi-arrow-up mb-2"/>
+            <i class="pi pi-arrow-up mb-2 arrow"/>
             <br>
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-info-circle mr-2" style="font-size: 2rem"/>
@@ -158,7 +158,7 @@
 
     <Card v-show="step === 10" class="absolute tutorialCard shadow-5 m-0 fadein animation-duration-300" id="overlay_menu" style="z-index: 20000">
         <template #content>
-            <i class="pi pi-arrow-up mb-2"/>
+            <i class="pi pi-arrow-up mb-2 arrow"/>
             <br>
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-info-circle mr-2" style="font-size: 2rem"/>
@@ -348,9 +348,37 @@ export default defineComponent({
   padding-top: 0 !important;
 }
 
+@keyframes borderAnimation {
+  0% {
+    opacity:1;
+    border-color: #4d026a;
+  }
+  25% {
+    opacity:1;
+    border-color: #002a85;
+  }
+  50% {
+    opacity:1;
+    border-color: #00985e;
+  }
+  75% {
+    opacity:1;
+    border-color: #c00093;
+  }
+  100% {
+    opacity:1;
+    border-color: #4d026a;
+  }
+}
+
 .tutorialCard {
     background: #e5dbff;
-    border: 3px dotted #4d026a;
+    border: 4px dashed #4d026a;
+    opacity: 0;
+    animation-name: borderAnimation;
+    animation-duration: 5s !important;
+    animation-iteration-count: infinite;
+    animation-delay: 0.5s !important;
 }
 
 </style>
