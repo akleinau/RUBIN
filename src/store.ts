@@ -48,7 +48,7 @@ export const useStore = defineStore('store', {
 
         description: "" as string,
         network: "" as string,
-        localNet: null as null | {fileString: string, fileFormat: string, description: string},
+        localNet: null as null | {fileString: string, fileFormat: string, description: string, customText:string},
         phases: [] as Phase[],
         evidenceGroupMap: {} as { [key: string]: string },
         currentPhase: null as Phase | null,
@@ -311,6 +311,9 @@ export const useStore = defineStore('store', {
             }
             const network = await gResponse.json();
             let customization = network.customization
+            if (this.localNet && this.localNet.customText !== "") {
+                customization = JSON.parse(this.localNet.customText)
+            }
             let nodes : NNode[] = []
             this.labels.states = {}
             for (var key in network.states) {
@@ -338,14 +341,14 @@ export const useStore = defineStore('store', {
             this.backgroundColor = "#372f5e"
 
             if (customization !== undefined && customization !== null) {
-                this.phases = network.customization.phases
+                this.phases = customization.phases
                 if (!noPhase) {
                     this.currentPhase = this.phases[0]
                     this.phase_change()
                 }
 
-                if (network.customization.evidence_groups) {
-                    network.customization.evidence_groups.forEach((g: any, i: number) => {
+                if (customization.evidence_groups) {
+                    customization.evidence_groups.forEach((g: any, i: number) => {
                         g.variables.forEach((v: string) => {
                             this.evidenceGroupMap[v] = g.name
                         })
@@ -354,12 +357,12 @@ export const useStore = defineStore('store', {
                     })
                 }
 
-                if (network.customization.translation) {
-                    this.network_translation.custom_labels = network.customization.translation
+                if (customization.translation) {
+                    this.network_translation.custom_labels = customization.translation
                 }
 
-                if (network.customization.backgroundColor) {
-                    this.backgroundColor = network.customization.backgroundColor
+                if (customization.backgroundColor) {
+                    this.backgroundColor = customization.backgroundColor
                 }
 
             } else {
