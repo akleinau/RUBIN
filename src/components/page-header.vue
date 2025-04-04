@@ -10,7 +10,7 @@
                                                 style="height: 1rem"/>
         </div>
         <div id="logo" class="r-2 align-self-center">
-          <img id="logoSVG" src="../assets/RUBIN_Logo_core.svg" class="align-self-center flex"
+          <img id="logoRUBIN" src="../assets/RUBIN_Logo_core.svg" class="align-self-center flex"
                                                           style="height: 1.5rem"/>
         </div>
       </div>

@@ -28,7 +28,6 @@ import * as barvisjs from "../visualisations/bar-vis-js.ts";
 import * as twosidedbarvisjs from "../visualisations/two-sided-bar-vis-js.ts";
 import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import * as logo from "../Header/svg_logo.js";
 import {NNode} from "../../types/node_types.ts";
 
 pdfMake.vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
@@ -212,7 +211,42 @@ export default defineComponent({
         }
       }
 
-      data.content.push({svg: logo.return_logo(), height: 50, alignment: 'right'})
+      // load svg logo
+      let rubin_logo =  document.getElementById("logoRUBIN")
+      var rubin_canvas = document.createElement('canvas');
+        rubin_canvas.width = rubin_logo.width*3;
+        rubin_canvas.height = rubin_logo.height*3;
+        rubin_canvas.getContext('2d').drawImage(rubin_logo, 0, 0);
+      rubin_canvas.toDataURL('image/png')
+
+      if (this.Store.network === "endometrial cancer") {
+
+        let endorisk_logo = document.getElementById("logoENDORISK")
+        var endorisk_canvas = document.createElement('canvas');
+        endorisk_canvas.width = endorisk_logo.width * 5.3;
+        endorisk_canvas.height = endorisk_logo.height * 5.9;
+        // its way too big, so we need to scale it down
+        endorisk_canvas.getContext('2d').scale(0.20, 0.20);
+        endorisk_canvas.getContext('2d').drawImage(endorisk_logo, 0, 60);
+        // its way too big, so we need to scale it down
+
+        endorisk_canvas.toDataURL('image/png')
+
+        data.content.push({
+          alignment: "right", marginBottom: 15, marginLeft: 280, columns: [
+            {image: endorisk_canvas.toDataURL('image/png'), width: endorisk_logo.width + 15, alignment: 'right'},
+            {image: rubin_canvas.toDataURL('image/png'), width: rubin_logo.width, alignment: 'left'},
+          ]
+        })
+
+      } else {
+        data.content.push({
+          alignment: "right", marginBottom: 15, marginLeft: 380, columns: [
+            {image: rubin_canvas.toDataURL('image/png'), width: rubin_logo.width + 15, alignment: 'right'},
+          ]
+        })
+      }
+
 
       data.content.push({
         text: this.capitalize(this.Store.network) + ' - RUBIN ' + this.$t('CaseSummary'),

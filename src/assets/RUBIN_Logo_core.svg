@@ -1,24 +1,186 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Created with Vectornator (http://vectornator.io/) -->
-<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 1000 265.482" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink">
-<defs/>
-<g id="Schrift-kopieren" vectornator:layerName="Schrift kopieren"/>
-<g id="Ebene-4" vectornator:layerName="Ebene 4"/>
-<g id="Ebene-2" vectornator:layerName="Ebene 2"/>
-<g id="Ebene-2--" vectornator:layerName="Ebene 2 -"/>
-<g id="Ebene-1-kopieren" vectornator:layerName="Ebene 1 kopieren">
-<path d="M299.696 66.5204L352.611 26.67L402.675 26.67L453.48 65.8198C453.48 65.8198 430.221 185.485 430.221 185.485L376.588 226.08L320.875 184.039C320.875 184.039 299.373 71.0741 299.696 64.624" fill="#ff0043" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="Kurve 2"/>
-<path d="M352.951 71.404L402.562 173.545L432.13 67.0779L395.875 43.7677L352.951 71.404Z" fill="#e8b3dc" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="Kurve 2"/>
-<path d="M376.586 69.4678L403.261 69.1523L454.802 63.119" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 8"/>
-<path d="M377.908 69.4678L351.233 69.1523L299.692 63.119" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 9"/>
-<path d="M376.586 41.8961L394.768 41.8961L405.034 28.1285L376.586 28.1285" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 10"/>
-<path d="M394.768 41.8961L405.034 69.1523L400.374 176.008L377.909 226.08L431.542 183.073L454.802 63.0033L405.034 28.1285" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 11"/>
-<path d="M377.908 41.8961L359.726 41.8961L349.46 28.1285L377.908 28.1285" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 12"/>
-<path d="M359.726 41.8961L349.46 69.1523L354.12 176.008L376.584 226.08L322.952 183.073L299.692 63.0033L349.46 28.1285" fill="none" opacity="1" stroke="#330d67" stroke-linecap="butt" stroke-linejoin="round" stroke-width="13.9449" vectornator:layerName="Kurve 13"/>
-<path d="M574.918 179.639C574.482 139.195 511.254 139.981 511.254 139.981C511.254 139.981 571.684 140.932 571.662 101.535C571.629 44.7777 496.644 58.3919 496.644 58.3919L497.902 219.039C497.902 219.039 575.485 232.256 574.918 179.639Z" fill="none" opacity="1" stroke="#161543" stroke-linecap="butt" stroke-linejoin="round" stroke-width="37.7215" vectornator:layerName="Kurve 1"/>
-<path d="M647.615 58.4532L647.615 219.025" fill="none" opacity="1" stroke="#161543" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215" vectornator:layerName="Kurve 2"/>
-<path d="M722.676 218.26L722.525 57.6804L822.322 220.563L823.062 56.9146" fill="none" opacity="1" stroke="#161543" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215" vectornator:layerName="Kurve 3"/>
-<path d="M177.888 219.156L176.938 60.2382C176.938 60.2382 243.034 47.8648 260.852 85.999C268.6 102.581 255.046 142.248 180.396 137.361C165.745 136.402 247.227 208.571 277.832 218.773" fill="none" opacity="1" stroke="#161543" stroke-linecap="round" stroke-linejoin="round" stroke-width="37.7215" vectornator:layerName="Kurve 4"/>
+
+<svg
+   height="100%"
+   stroke-miterlimit="10"
+   style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;"
+   version="1.1"
+   viewBox="0 0 1000 265.482"
+   width="100%"
+   xml:space="preserve"
+   id="svg12"
+   sodipodi:docname="RUBIN_Logo_core.svg"
+   inkscape:export-filename="RUBIN_Logo_core_2.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:vectornator="http://vectornator.io"><sodipodi:namedview
+   id="namedview12"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   inkscape:zoom="0.888"
+   inkscape:cx="500.56306"
+   inkscape:cy="259.57207"
+   inkscape:window-width="1920"
+   inkscape:window-height="1009"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Ebene-1-kopieren" />
+<defs
+   id="defs1" />
+<g
+   id="Schrift-kopieren"
+   vectornator:layerName="Schrift kopieren" />
+<g
+   id="Ebene-4"
+   vectornator:layerName="Ebene 4" />
+<g
+   id="Ebene-2"
+   vectornator:layerName="Ebene 2" />
+<g
+   id="Ebene-2--"
+   vectornator:layerName="Ebene 2 -" />
+<g
+   id="Ebene-1-kopieren"
+   vectornator:layerName="Ebene 1 kopieren">
+<path
+   d="m 307.88946,73.356005 47.19256,-37.155543 h 44.64988 l 45.31075,36.50232 c 0,0 -20.74368,111.572928 -20.74368,111.572928 l -47.83291,37.84978 -49.68798,-39.198 c 0,0 -19.17668,-105.325726 -18.88862,-111.339643"
+   fill="#ff0043"
+   fill-rule="nonzero"
+   opacity="1"
+   stroke="none"
+   vectornator:layerName="Kurve 2"
+   id="path1"
+   style="stroke-width:0.911891" />
+<path
+   d="M 355.38526,77.909353 399.63113,173.14313 426.00152,73.875804 393.66729,52.14194 Z"
+   fill="#e8b3dc"
+   fill-rule="nonzero"
+   opacity="1"
+   stroke="none"
+   vectornator:layerName="Kurve 2"
+   id="path2"
+   style="stroke-width:0.911891" />
+<path
+   d="m 376.46428,76.104089 23.79026,-0.294166 45.96715,-5.625301"
+   fill="none"
+   opacity="1"
+   stroke="#330d67"
+   stroke-linecap="butt"
+   stroke-linejoin="round"
+   stroke-width="12.7163"
+   vectornator:layerName="Kurve 8"
+   id="path3"
+   style="stroke:#0e1176;stroke-opacity:1" />
+<path
+   d="M 377.6433,76.104089 353.85305,75.809923 307.8859,70.184622"
+   fill="none"
+   opacity="1"
+   stroke="#330d67"
+   stroke-linecap="butt"
+   stroke-linejoin="round"
+   stroke-width="12.7163"
+   vectornator:layerName="Kurve 9"
+   id="path4"
+   style="stroke:#0e1176;stroke-opacity:1" />
+<path
+   d="M 376.46428,50.396907 H 392.68 l 9.15579,-12.836576 h -25.37151"
+   fill="none"
+   opacity="1"
+   stroke="#330d67"
+   stroke-linecap="butt"
+   stroke-linejoin="round"
+   stroke-width="12.7163"
+   vectornator:layerName="Kurve 10"
+   id="path5"
+   style="stroke:#0e1176;stroke-opacity:1" />
+<path
+   d="m 392.68,50.396907 9.15579,25.413016 -4.15604,99.629657 -20.03556,46.68591 47.83293,-40.09868 20.74457,-111.950064 -44.3859,-32.516415"
+   fill="none"
+   opacity="1"
+   stroke="#330d67"
+   stroke-linecap="butt"
+   stroke-linejoin="round"
+   stroke-width="12.7163"
+   vectornator:layerName="Kurve 11"
+   id="path6"
+   style="stroke:#0e1176;stroke-opacity:1" />
+<path
+   d="M 377.6433,50.396907 H 361.42758 L 352.27179,37.560331 H 377.6433"
+   fill="none"
+   opacity="1"
+   stroke="#330d67"
+   stroke-linecap="butt"
+   stroke-linejoin="round"
+   stroke-width="12.7163"
+   vectornator:layerName="Kurve 12"
+   id="path7"
+   style="stroke:#0e1176;stroke-opacity:1" />
+<path
+   d="m 361.42758,50.396907 -9.15579,25.413016 4.15604,99.629657 20.03467,46.68591 L 328.63047,182.02681 307.8859,70.076746 352.27179,37.560331"
+   fill="none"
+   opacity="1"
+   stroke="#330d67"
+   stroke-linecap="butt"
+   stroke-linejoin="round"
+   stroke-width="12.7163"
+   vectornator:layerName="Kurve 13"
+   id="path8"
+   style="stroke:#0e1176;stroke-opacity:1" />
+<path
+   d="m 566.78504,169.33871 c -0.43752,-39.72398 -63.8858,-38.95198 -63.8858,-38.95198 0,0 60.64053,0.93408 60.61846,-37.761545 C 563.48454,36.878332 488.23833,50.25016 488.23833,50.25016 l 1.26238,157.78712 c 0,0 77.8533,12.9817 77.28433,-38.69857 z"
+   fill="none"
+   opacity="1"
+   stroke="#161543"
+   stroke-linecap="butt"
+   stroke-linejoin="round"
+   stroke-width="37.4493"
+   vectornator:layerName="Kurve 1"
+   id="path9"
+   style="stroke:#0e1176;stroke-opacity:1" />
+<path
+   d="M 639.34569,48.881128 V 209.45292"
+   fill="none"
+   opacity="1"
+   stroke="#161543"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   stroke-width="37.7215"
+   vectornator:layerName="Kurve 2"
+   id="path10"
+   style="stroke:#0e1176;stroke-opacity:1" />
+<path
+   d="m 714.40669,208.68792 -0.151,-160.579592 99.797,162.882592 0.74,-163.648392"
+   fill="none"
+   opacity="1"
+   stroke="#161543"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   stroke-width="37.7215"
+   vectornator:layerName="Kurve 3"
+   id="path11"
+   style="stroke:#0e1176;stroke-opacity:1" />
+<path
+   d="m 183.51863,209.02086 -0.95,-158.917795 c 0,0 66.096,-12.3734 83.914,25.7608 7.748,16.582 -5.806,56.248995 -80.456,51.361995 -14.651,-0.959 66.831,71.21 97.436,81.412"
+   fill="none"
+   opacity="1"
+   stroke="#161543"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   stroke-width="37.7215"
+   vectornator:layerName="Kurve 4"
+   id="path12"
+   style="stroke:#0e1176;stroke-opacity:1" />
 </g>
 </svg>
