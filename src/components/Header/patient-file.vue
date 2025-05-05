@@ -176,7 +176,7 @@ export default defineComponent({
       // eslint-disable-next-line
       umami.track("button-csv-download", {network: this.Store.network} )
 
-      const csv = this.Store.createCSVcontent();
+      const csv = this.PatientStore.createCSVcontent();
 
       const anchor = document.createElement('a');
       anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);

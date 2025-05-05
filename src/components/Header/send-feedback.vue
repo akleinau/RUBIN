@@ -17,13 +17,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {useStore} from '../../store.ts';
+import {usePatientStore} from "../../stores/patient_store.ts";
 
 export default defineComponent({
   name: "send-feedback",
   emits: ["sendFeedback"],
   setup() {
     const Store = useStore()
-    return {Store}
+    const PatientStore = usePatientStore()
+    return {Store, PatientStore}
   },
   data() {
     return {
@@ -43,7 +45,7 @@ export default defineComponent({
       //const address = "http://127.0.0.1:5000/"
       let csv = "NONE"
       if (this.sendConfig) {
-        csv = this.Store.createCSVcontent();
+        csv = this.PatientStore.createCSVcontent();
       }
 
       const gResponse = await fetch(address + "sendFeedback", {
