@@ -131,5 +131,8 @@
   "liability": "Bitte stimme unserer Haftungsaussage zu. Klicke hier, um sie zu lesen.",
   "accept": "Akzeptieren",
   "reject": "Ablehnen",
-  "withProbabilityOf": "mit einer Wahrscheinlichkeit von"
+  "withProbabilityOf": "mit einer Wahrscheinlichkeit von",
+  "AskPartOfStudy": "Ist dein Patient Teil der ENDORISK-Studie?",
+  "yes": "Ja",
+  "no": "Nein"
 }

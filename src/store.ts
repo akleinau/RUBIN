@@ -55,7 +55,8 @@ export const useStore = defineStore('store', {
         language: "en" as string,
         tutorialStep: -1 as number,
         error: false as boolean,
-        backgroundColor: "#372f5e" as string
+        backgroundColor: "#372f5e" as string,
+        partOfStudy: false as boolean, //true when the user is part of the study, false when not
     }),
     actions: {
         /**
@@ -489,5 +490,38 @@ export const useStore = defineStore('store', {
             missing += (b.filter(x => !a.includes(x))).length
             return missing > 0
         },
+
+        /**
+         * ask the server for a new endorisk id that is returned as a string
+         */
+
+        async generate_endorisk_id() {
+
+            let patient = this.patient as Patient_type
+
+            let csv = usePatientStore().createCSVcontent()
+
+            let gResponse = null
+            gResponse = await fetch(address + "generateEndoriskId", {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                        network: this.network,
+                        csv: csv,
+                })
+            })
+
+            let answer = await gResponse.text();
+            if (gResponse.ok) {
+                return answer
+            } else {
+                console.log("error generating endorisk id")
+                console.log(gResponse)
+                return ""
+
+            }
+        }
     }
 })
