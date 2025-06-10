@@ -26,7 +26,7 @@
             </div>
 
           <!-- part of study? -->
-          <div v-else-if="!partOfStudyAsked && Store.network === 'endometrial cancer'" class="flex align-items-center flex-column">
+          <div v-else-if="!partOfStudyAsked && Store.network === 'endometrial cancer' && false" class="flex align-items-center flex-column">
                 <span> {{ $t("AskPartOfStudy") }} </span>
                 <br>
                 <div class="flex pt-1">
