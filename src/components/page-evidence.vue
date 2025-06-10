@@ -15,7 +15,7 @@
                 <!-- Help box more evidence -->
                 <div v-if="!presetRequirementsSatisfied.satisfied">
                     <i class="pi pi-exclamation-circle"/>
-                    {{ $t("For accurate information, please add:") }}
+                    {{ $t("RequirementsAccurateInformation") }}
                   <div>
                     <ul class="mt-1" style="text-align: center;">
                         <li v-for="(requirement, index) in presetRequirementsSatisfied.requirements" :key="index"

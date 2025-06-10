@@ -135,5 +135,6 @@
   "withProbabilityOf": "met een waarschijnlijkheid van",
   "AskPartOfStudy": "Is uw patiënt onderdeel van de ENDORISK-studie?",
   "yes": "Ja",
-  "no": "Nee"
+  "no": "Nee",
+  "RequirementsAccurateInformation": "Voor nauwkeurige informatie, vul de volgende gegevens in:"
 } 

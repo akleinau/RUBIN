@@ -134,5 +134,6 @@
   "withProbabilityOf": "mit einer Wahrscheinlichkeit von",
   "AskPartOfStudy": "Ist dein Patient Teil der ENDORISK-Studie?",
   "yes": "Ja",
-  "no": "Nein"
+  "no": "Nein",
+  "RequirementsAccurateInformation": "Für genaue Informationen, gib bitte an:"
 }
