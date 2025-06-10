@@ -256,265 +256,270 @@ export default defineComponent({
     },
     watch: {
         currentPhase: function () {
-          // get current phase
-          if (this.Store.currentPhase === null || this.Store.currentPhase.sets.requirements === undefined) {
-            this.presetRequirementsSatisfied = { satisfied: true, requirements: [] }
-            return
-          }
-
-          const RequirementFulfillment = { satisfied: true, requirements: []}
-          //check if all requirements are satisfied
-          for (const requirement of this.Store.currentPhase.sets.requirements) {
-            let satisfied = true
-            let counter = 0
-
-            if (requirement.type == "items") {
-              for (const item of requirement.members) {
-                if (this.PatientStore.evidence.find((n: NEvidence) => n.name === item)) {
-                  counter += 1
-                }
-              }
-            } else if (requirement.type == "groups") {
-              for (const group of requirement.members) {
-                if (this.PatientStore.evidence.find((n: NEvidence) => n.group_name === group)) {
-                  counter += 1
-                }
-              }
-            }
-
-            if (counter < requirement.nr) {
-              satisfied = false
-            }
-
-            RequirementFulfillment.requirements.push({satisfied: satisfied, text: requirement.description})
-
-          }
-
-          RequirementFulfillment.satisfied = RequirementFulfillment.requirements.every(r => r.satisfied)
-
-          this.presetRequirementsSatisfied = RequirementFulfillment
+            this.checkRequirements()
         }
     },
     methods: {
-        /**
-         * Gets called when user clicks on the "add evidence" button.
-         */
-        addButtonClicked() {
-            this.overlay = true
-            if (this.Store.tutorialStep === 1) {
-                this.Store.tutorialStep = 2
-            }
-        },
+      /**
+       * Gets called when user clicks on the "add evidence" button.
+       */
+      addButtonClicked() {
+        this.overlay = true
+        if (this.Store.tutorialStep === 1) {
+          this.Store.tutorialStep = 2
+        }
+      },
 
-        /**
-         * Gets called when user selects/ deselects something in the overlay
-         *
-         * @param slotProps - the changed node
-         * @param option - the selected/ deselected option
-         */
-        onOverlayOptionChange(slotProps, option) {
-            //deselect this and other options of the node
-            this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
+      /**
+       * Gets called when user selects/ deselects something in the overlay
+       *
+       * @param slotProps - the changed node
+       * @param option - the selected/ deselected option
+       */
+      onOverlayOptionChange(slotProps, option) {
+        //deselect this and other options of the node
+        this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
 
-            //convert node in format used for selected nodes and add it to 'shopping list'
-            if (option.checked) {
-                let item = {
-                    name: slotProps.data.name,
-                    selected: {name: option.name, node: slotProps.data.name},
-                    options: slotProps.data.options.map(option => {
-                        return {
-                            name: option.name,
-                            node: slotProps.data.name,
-                        }
-                    }),
-                    group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(slotProps.data.name),
-                    group_name: this.Store.evidenceGroupMap === null ? "" : this.get_group_name(slotProps.data.name)
-                }
-                this.nodesToAdd.push(item);
-            }
-            if (this.Store.tutorialStep === 2) {
-                this.Store.tutorialStep = 3
-            }
-        },
-        /**
-         * Adds selected nodes from overlay to patient evidence
-         */
-        addNodesFromOverlay() {
-            this.addNodes(this.nodesToAdd)
-            this.nodesToAdd = []
-            this.overlay = false
-            if (this.Store.tutorialStep === 3) {
-                this.Store.tutorialStep = 4
-            }
+        //convert node in format used for selected nodes and add it to 'shopping list'
+        if (option.checked) {
+          let item = {
+            name: slotProps.data.name,
+            selected: {name: option.name, node: slotProps.data.name},
+            options: slotProps.data.options.map(option => {
+              return {
+                name: option.name,
+                node: slotProps.data.name,
+              }
+            }),
+            group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(slotProps.data.name),
+            group_name: this.Store.evidenceGroupMap === null ? "" : this.get_group_name(slotProps.data.name)
+          }
+          this.nodesToAdd.push(item);
+        }
+        if (this.Store.tutorialStep === 2) {
+          this.Store.tutorialStep = 3
+        }
+      },
+      /**
+       * Adds selected nodes from overlay to patient evidence
+       */
+      addNodesFromOverlay() {
+        this.addNodes(this.nodesToAdd)
+        this.nodesToAdd = []
+        this.overlay = false
+        if (this.Store.tutorialStep === 3) {
+          this.Store.tutorialStep = 4
+        }
 
-            // eslint-disable-next-line
-            umami.track('button-addEvidence', {network: this.Store.network} );
-        },
-        /**
-         * deletes evidence node
-         *
-         * @param node
-         */
-        deleteNode(node: NEvidence) {
-            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === node.name) != null) {
-                this.PatientStore.deleteEvidence(node)
-                this.Store.calculate()
-            }
-        },
-        /**
-         * removes node from the list of nodes that will be added to evidence at the end of using the overlay
-         *
-         * @param node
-         */
-        deleteNodeFromOverlay(node: NEvidence) {
-            this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
-        },
-        /**
-         * Gets called when for an evidence item a different option is selected via dropdown menu
-         *
-         * @param node
-         */
-        onNodeChange(node: NEvidence) {
-            if (node.selected === null) {
-                this.deleteNode(node)
-            } else {
-                this.addNodes([node])
-            }
-        },
-        /**
-         * adds nodes to patient evidence and calls recalculation
-         *
-         * @param nodes
-         */
-        addNodes(nodes: NEvidence[]) {
-            this.PatientStore.addEvidences(nodes)
-            this.Store.calculate()
-        },
-        /**
-         * Gets called when the overlay is closed
-         */
-        cancelOverlay() {
-            this.nodesToAdd = []
-            this.overlay = false
-            this.filters.label.value = null
-        },
-        /**
-         * deletes all evidence
-         */
-        clearEvidence() {
-            this.cancelOverlay()
-            this.PatientStore.evidence.forEach((ev: NEvidence) => {
-                this.PatientStore.deleteEvidence(ev)
-            })
-            document.activeElement.blur()
-            this.clearEvidenceDialog = false
+        this.checkRequirements()
 
-            // eslint-disable-next-line
-            umami.track('button-clearEvidence', {network: this.Store.network} );
+        // eslint-disable-next-line
+        umami.track('button-addEvidence', {network: this.Store.network});
+      },
+      /**
+       * deletes evidence node
+       *
+       * @param node
+       */
+      deleteNode(node: NEvidence) {
+        if (this.PatientStore.evidence.find((n: NEvidence) => n.name === node.name) != null) {
+          this.PatientStore.deleteEvidence(node)
+          this.Store.calculate()
+        }
+      },
+      /**
+       * removes node from the list of nodes that will be added to evidence at the end of using the overlay
+       *
+       * @param node
+       */
+      deleteNodeFromOverlay(node: NEvidence) {
+        this.nodesToAdd = this.nodesToAdd.filter(x => x !== node)
+      },
+      /**
+       * Gets called when for an evidence item a different option is selected via dropdown menu
+       *
+       * @param node
+       */
+      onNodeChange(node: NEvidence) {
+        if (node.selected === null) {
+          this.deleteNode(node)
+        } else {
+          this.addNodes([node])
+        }
+      },
+      /**
+       * adds nodes to patient evidence and calls recalculation
+       *
+       * @param nodes
+       */
+      addNodes(nodes: NEvidence[]) {
+        this.PatientStore.addEvidences(nodes)
+        this.Store.calculate()
+      },
+      /**
+       * Gets called when the overlay is closed
+       */
+      cancelOverlay() {
+        this.nodesToAdd = []
+        this.overlay = false
+        this.filters.label.value = null
+      },
+      /**
+       * deletes all evidence
+       */
+      clearEvidence() {
+        this.cancelOverlay()
+        this.PatientStore.evidence.forEach((ev: NEvidence) => {
+          this.PatientStore.deleteEvidence(ev)
+        })
+        document.activeElement.blur()
+        this.clearEvidenceDialog = false
 
-            this.Store.calculate()
+        // eslint-disable-next-line
+        umami.track('button-clearEvidence', {network: this.Store.network});
 
-        },
-        /**
-         * checks if a node has the same state selected in current and compare configuration
-         *
-         * @param item
-         * @returns {boolean}
-         */
-        isDifferentState(item: NEvidence) {
-            if (item.selectedCompare === '') return false
-            return item.selected.name !== item.selectedCompare
-        },
-        /**
-         * returns the option label
-         *
-         * @param option
-         * @returns {*}
-         */
-        get_option_label(option: SOption) {
-            return this.Store.labels.states[option.node][option.name]
-        },
-        /**
-         * returns the group label
-         *
-         * @param name
-         * @returns {string}
-         */
-        get_group_label(name: string): string {
-            let id = this.Store.evidenceGroupMap[name]
-            if (id === "") return ""
-            let label_element = this.Store.labels.evidence_groups[id]
+        this.Store.calculate()
 
-            //find label based on language
-            let label = id
-            if (label_element.labels[this.Store.language]) {
-                label = label_element.labels[this.Store.language]
-            } else if (label_element.labels["standard"]) {
-                label = label_element.labels["standard"]
-            }
+      },
+      /**
+       * checks if a node has the same state selected in current and compare configuration
+       *
+       * @param item
+       * @returns {boolean}
+       */
+      isDifferentState(item: NEvidence) {
+        if (item.selectedCompare === '') return false
+        return item.selected.name !== item.selectedCompare
+      },
+      /**
+       * returns the option label
+       *
+       * @param option
+       * @returns {*}
+       */
+      get_option_label(option: SOption) {
+        return this.Store.labels.states[option.node][option.name]
+      },
+      /**
+       * returns the group label
+       *
+       * @param name
+       * @returns {string}
+       */
+      get_group_label(name: string): string {
+        let id = this.Store.evidenceGroupMap[name]
+        if (id === "") return ""
+        let label_element = this.Store.labels.evidence_groups[id]
 
-            return label_element.num + " " + label
-        },
-        /**
-         * returns the group name
-         *
-         * @param name
-         * @returns {string}
-         */
-        get_group_name(name: string) : string {
-            return this.Store.evidenceGroupMap[name]
-        },
-        /**
-         * returns if the evidence item should be disabled
-         */
-        isDisabled(group: string): boolean {
-            if (this.Store.currentPhase !== null && this.Store.currentPhase.sets.evidence_groups !== null) {
-                return !this.Store.currentPhase.sets.evidence_groups.includes(group);
-            } else {
-                return false
-            }
-        },
+        //find label based on language
+        let label = id
+        if (label_element.labels[this.Store.language]) {
+          label = label_element.labels[this.Store.language]
+        } else if (label_element.labels["standard"]) {
+          label = label_element.labels["standard"]
+        }
+
+        return label_element.num + " " + label
+      },
+      /**
+       * returns the group name
+       *
+       * @param name
+       * @returns {string}
+       */
+      get_group_name(name: string): string {
+        return this.Store.evidenceGroupMap[name]
+      },
+      /**
+       * returns if the evidence item should be disabled
+       */
+      isDisabled(group: string): boolean {
+        if (this.Store.currentPhase !== null && this.Store.currentPhase.sets.evidence_groups !== null) {
+          return !this.Store.currentPhase.sets.evidence_groups.includes(group);
+        } else {
+          return false
+        }
+      },
 
 
-        //directly coded in here, should be in the customization file
-        /**
-         * returns if for the endorisk model enough evidence is added
-         *
-         * @returns {boolean}
-         */
-        notEnoughEvidenceEndorisk() {
-            if (this.Store.network !== "endometrial cancer") return false
-            let notEnoughInformation = false
-            //tumor grade
-            if (!this.PatientStore.evidence.find((n: NEvidence) => n.name === 'PrimaryTumor')) {
-                notEnoughInformation = true
-            }
+      //directly coded in here, should be in the customization file
+      /**
+       * returns if for the endorisk model enough evidence is added
+       *
+       * @returns {boolean}
+       */
+      notEnoughEvidenceEndorisk() {
+        if (this.Store.network !== "endometrial cancer") return false
+        let notEnoughInformation = false
+        //tumor grade
+        if (!this.PatientStore.evidence.find((n: NEvidence) => n.name === 'PrimaryTumor')) {
+          notEnoughInformation = true
+        }
 
-            //3 biomarkers
-            let biomarkers = 0
-            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'PR')) {
-                biomarkers += 1
-            }
-            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'ER')) {
-                biomarkers += 1
-            }
-            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'L1CAM')) {
-                biomarkers += 1
-            }
-            if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'p53')) {
-                biomarkers += 1
-            }
-            if (biomarkers < 3) {
-                notEnoughInformation = true
-            }
+        //3 biomarkers
+        let biomarkers = 0
+        if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'PR')) {
+          biomarkers += 1
+        }
+        if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'ER')) {
+          biomarkers += 1
+        }
+        if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'L1CAM')) {
+          biomarkers += 1
+        }
+        if (this.PatientStore.evidence.find((n: NEvidence) => n.name === 'p53')) {
+          biomarkers += 1
+        }
+        if (biomarkers < 3) {
+          notEnoughInformation = true
+        }
 
-            //one clinical variable
-            if (!this.PatientStore.evidence.find((n: NEvidence) => ['CA125', 'CTMRI', 'Platelets', 'Cytology'].includes(n.name))) {
-                notEnoughInformation = true
-            }
+        //one clinical variable
+        if (!this.PatientStore.evidence.find((n: NEvidence) => ['CA125', 'CTMRI', 'Platelets', 'Cytology'].includes(n.name))) {
+          notEnoughInformation = true
+        }
 
-            return notEnoughInformation
-        },
+        return notEnoughInformation
+      },
+      checkRequirements() {
+        // get current phase
+        if (this.Store.currentPhase === null || this.Store.currentPhase.sets.requirements === undefined) {
+          this.presetRequirementsSatisfied = {satisfied: true, requirements: []}
+          return
+        }
+
+        const RequirementFulfillment = {satisfied: true, requirements: []}
+        //check if all requirements are satisfied
+        for (const requirement of this.Store.currentPhase.sets.requirements) {
+          let satisfied = true
+          let counter = 0
+
+          if (requirement.type == "items") {
+            for (const item of requirement.members) {
+              if (this.PatientStore.evidence.find((n: NEvidence) => n.name === item)) {
+                counter += 1
+              }
+            }
+          } else if (requirement.type == "groups") {
+            for (const group of requirement.members) {
+              if (this.PatientStore.evidence.find((n: NEvidence) => n.group_name === group)) {
+                counter += 1
+              }
+            }
+          }
+
+          if (counter < requirement.nr) {
+            satisfied = false
+          }
+
+          RequirementFulfillment.requirements.push({satisfied: satisfied, text: requirement.description})
+
+        }
+
+        RequirementFulfillment.satisfied = RequirementFulfillment.requirements.every(r => r.satisfied)
+
+        this.presetRequirementsSatisfied = RequirementFulfillment
+      },
       getDescriptionInCorrectLanguage(description: any) {
           if (description === null) return ""
           if (description[this.Store.language]) {
