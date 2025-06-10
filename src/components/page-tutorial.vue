@@ -8,6 +8,8 @@
                 <Dropdown v-model="$i18n.locale" :options="$i18n.availableLocales" :key="`locale-${$i18n.locale}`"
                           :value="$i18n.locale" @change="languageChanged"/>
             </div>
+
+          <!-- liability info -->
             <div v-if="!liability && Store.network === 'endometrial cancer'" class="flex align-items-center flex-column">
                 <Accordion>
                     <AccordionTab :header="$t('liability')">
@@ -22,6 +24,18 @@
                     <Button class="p-button-text" :label="$t('accept')" icon="pi pi-check" @click="liability=true"/>
                 </div>
             </div>
+
+          <!-- part of study? -->
+          <div v-else-if="!partOfStudyAsked && Store.network === 'endometrial cancer' && false" class="flex align-items-center flex-column">
+                <span> {{ $t("AskPartOfStudy") }} </span>
+                <br>
+                <div class="flex pt-1">
+                    <Button class="p-button-text" :label="$t('no')" icon="pi pi-times" @click="answerPartOfStudy(false)"/>
+                    <Button class="p-button-text" :label="$t('yes')" icon="pi pi-check" @click="answerPartOfStudy(true)"/>
+                </div>
+          </div>
+
+          <!-- start tutorial -->
             <div v-else class="flex align-items-center flex-column">
                 <span> {{ $t("Tutorial1b") }} </span>
                 <span class="pt-1"> {{ $t("Tutorial1c") }} </span>
@@ -198,6 +212,7 @@ export default defineComponent({
             step: 0 as number,
             finalStep: 12 as number,
             liability: false as boolean,
+            partOfStudyAsked: false as boolean,
         }
     },
     setup() {
@@ -337,6 +352,10 @@ export default defineComponent({
             this.Store.reset(true)
             this.$emit("changePage")
         },
+        answerPartOfStudy(answer: boolean) {
+            this.partOfStudyAsked = true
+            this.Store.partOfStudy = answer;
+        }
     }
 })
 </script>

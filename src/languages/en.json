@@ -132,6 +132,10 @@
   "liability": "Please accept our liability statement. Click here to read it.",
   "accept": "Accept",
   "reject": "Reject",
-  "withProbabilityOf": "with a probability of"
+  "withProbabilityOf": "with a probability of",
+  "AskPartOfStudy": "Is your patient part of the ENDORISK study?",
+  "yes": "Yes",
+  "no": "No",
+  "RequirementsAccurateInformation": "For accurate information, please add:"
 
 }

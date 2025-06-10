@@ -7,6 +7,15 @@ export interface PhaseGoal {
     TextAbove?: string,
 }
 
+export interface Requirement {
+    nr: number,
+    type: string,
+    members: string[],
+    description: {
+        [key: string]: string
+    },
+}
+
 export interface Phase {
     name: string,
     labels: {
@@ -15,7 +24,8 @@ export interface Phase {
     sets: {
         evidence_groups: string[],
         goal: PhaseGoal[],
-        target: string[]
-    }
+        target: string[],
+        requirements: Requirement[],
+    },
 
 }

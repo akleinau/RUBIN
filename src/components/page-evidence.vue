@@ -13,9 +13,22 @@
             <ScrollPanel style="height:100%">
 
                 <!-- Help box more evidence -->
-                <div v-if="notEnoughEvidenceEndorisk()">
+                <div v-if="!presetRequirementsSatisfied.satisfied">
                     <i class="pi pi-exclamation-circle"/>
-                    {{ $t("notEnoughEvidenceEndorisk") }}
+                    {{ $t("RequirementsAccurateInformation") }}
+                  <div>
+                    <ul class="mt-1" style="text-align: center;">
+                        <li v-for="(requirement, index) in presetRequirementsSatisfied.requirements" :key="index"
+                            :style="requirement.satisfied ? 'color: darkgrey' : 'color: crimson'"
+                            style="display: block; text-align: center">
+                          <span v-if="!requirement.satisfied">
+                            {{ getDescriptionInCorrectLanguage(requirement.text) }}
+                          </span>
+                        </li>
+                    </ul>
+                  </div>
+
+
                 </div>
 
                 <!-- Evidence Table -->
@@ -148,6 +161,7 @@ import {useStore} from '../store.ts';
 import {usePatientStore} from "../stores/patient_store.ts";
 import {FilterMatchMode} from "primevue/api";
 import {NEvidence, NNode, SOption} from "../types/node_types.ts";
+import {Requirement} from "../types/phase_types.ts";
 
 export default defineComponent({
     name: "page-evidence",
@@ -169,7 +183,8 @@ export default defineComponent({
                 {field: 'label', order: 2},
                 {field: 'name', order: 3}
             ],
-            clearEvidenceDialog: false
+            clearEvidenceDialog: false,
+            presetRequirementsSatisfied: {satisfied: false, requirements: []}
         }
     },
     computed: {
@@ -234,6 +249,51 @@ export default defineComponent({
         maxWidthDropdown: function() {
             return this.Store.compareConfig ? '150px' : '200px'
         },
+        currentPhase: function() {
+            return this.Store.currentPhase
+        }
+
+    },
+    watch: {
+        currentPhase: function () {
+          // get current phase
+          if (this.Store.currentPhase === null || this.Store.currentPhase.sets.requirements === undefined) {
+            this.presetRequirementsSatisfied = { satisfied: true, requirements: [] }
+            return
+          }
+
+          const RequirementFulfillment = { satisfied: true, requirements: []}
+          //check if all requirements are satisfied
+          for (const requirement of this.Store.currentPhase.sets.requirements) {
+            let satisfied = true
+            let counter = 0
+
+            if (requirement.type == "items") {
+              for (const item of requirement.members) {
+                if (this.PatientStore.evidence.find((n: NEvidence) => n.name === item)) {
+                  counter += 1
+                }
+              }
+            } else if (requirement.type == "groups") {
+              for (const group of requirement.members) {
+                if (this.PatientStore.evidence.find((n: NEvidence) => n.group_name === group)) {
+                  counter += 1
+                }
+              }
+            }
+
+            if (counter < requirement.nr) {
+              satisfied = false
+            }
+
+            RequirementFulfillment.requirements.push({satisfied: satisfied, text: requirement.description})
+
+          }
+
+          RequirementFulfillment.satisfied = RequirementFulfillment.requirements.every(r => r.satisfied)
+
+          this.presetRequirementsSatisfied = RequirementFulfillment
+        }
     },
     methods: {
         /**
@@ -454,7 +514,18 @@ export default defineComponent({
             }
 
             return notEnoughInformation
+        },
+      getDescriptionInCorrectLanguage(description: any) {
+          if (description === null) return ""
+          if (description[this.Store.language]) {
+            return description[this.Store.language]
+          } else if (description["standard"]) {
+            return description["standard"]
+          } else {
+            return description
+          }
         }
+
     }
 })
 </script>

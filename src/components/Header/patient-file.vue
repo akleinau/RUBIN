@@ -187,7 +187,7 @@ export default defineComponent({
     /**
      * exports current data as pdf document
      */
-    exportPDF() {
+    async exportPDF() {
 
       // eslint-disable-next-line
       umami.track("button-pdf-export", {network: this.Store.network} )
@@ -257,6 +257,20 @@ export default defineComponent({
         text: this.$t('Patient') + ': ' + this.PatientStore.name,
         style: 'subheader'
       })
+
+      if (this.Store.partOfStudy) {
+
+        let endoriskId = await this.Store.generate_endorisk_id()
+
+        console.log("Endorisk ID: " + endoriskId)
+
+        data.content.push({
+          text: "ENDORISK ID" + ': ' + endoriskId,
+          style: 'subheader'
+        })
+
+      }
+
 
       data.content.push("  ")
 

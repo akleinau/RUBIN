@@ -132,5 +132,9 @@
   "liability": "Accepteer alstublieft onze aansprakelijkheidsverklaring. Klik hier om het te lezen.",
   "accept": "Accepteer",
   "reject": "Wijs af",
-  "withProbabilityOf": "met een waarschijnlijkheid van"
+  "withProbabilityOf": "met een waarschijnlijkheid van",
+  "AskPartOfStudy": "Is uw patiënt onderdeel van de ENDORISK-studie?",
+  "yes": "Ja",
+  "no": "Nee",
+  "RequirementsAccurateInformation": "Voor nauwkeurige informatie, vul de volgende gegevens in:"
 } 
