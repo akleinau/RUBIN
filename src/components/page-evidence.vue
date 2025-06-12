@@ -99,6 +99,12 @@
                             <h3> {{ slotProps.data.group.substr(2) }} </h3>
                         </template>
                         <Column field="label" :header="$t('Node')">
+                          <template #body="slotProps">
+                            {{slotProps.data.label}}
+                            <div class="mt-2" style="color:gray" >
+                              <i> description here </i>
+                            </div>
+                          </template>
                         </Column>
                         <Column field="group" header="group">
                         </Column>
