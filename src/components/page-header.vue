@@ -162,7 +162,7 @@ export default defineComponent({
        */
     startComparing() {
       this.Store.compareConfig = {
-        "patient": JSON.parse(JSON.stringify(this.PatientStore)),
+        "patient": JSON.parse(JSON.stringify(this.PatientStore.generate_patient())),
         "predictions": JSON.parse(JSON.stringify(this.Store.predictions)),
         "explain": JSON.parse(JSON.stringify(this.Store.explain))
       }
