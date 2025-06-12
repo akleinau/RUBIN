@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {NEvidence, NGoal, NTarget, NNode} from "../types/node_types.ts";
+import {NEvidence, NGoal, NNode, NTarget, Patient_type} from "../types/node_types.ts";
 
 export const usePatientStore = defineStore('patientStore', {
     state: () => ({
@@ -93,6 +93,20 @@ export const usePatientStore = defineStore('patientStore', {
             })
             return csv
         },
+        /**
+         * creates a patient object that can be saved for comparison
+         *
+         * @returns {Patient_type}
+         */
+        generate_patient() : Patient_type {
+            return {
+                targets: this.targets,
+                evidence: this.evidence,
+                goals: this.goals,
+                nodes: this.nodes,
+                name: this.name
+            };
+        }
 
     }
 
