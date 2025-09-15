@@ -519,6 +519,8 @@ export default defineComponent({
         RequirementFulfillment.satisfied = RequirementFulfillment.requirements.every(r => r.satisfied)
 
         this.presetRequirementsSatisfied = RequirementFulfillment
+        this.Store.phaseRequirementsSatisfied = RequirementFulfillment.satisfied
+
       },
       getDescriptionInCorrectLanguage(description: any) {
           if (description === null) return ""

@@ -16,7 +16,10 @@
       <!-- decision table -->
       <div style="height:60%; border: solid 5px lightgray" class="p-b-2 overlap-hidden">
         <ScrollPanel class="h-full overlap-hidden">
-          <div v-if="!Store.error">
+          <div v-if="Store.strictPhaseMode & Store.phaseRequirementsSatisfied === false"
+               class="p-4">
+          </div>
+          <div v-else-if="!Store.error">
             <ProgressBar v-if="Store.optionsLoading" mode="indeterminate" style="height: .5em"/>
             <PredictionsTable id="optionsTable" class="h-full overlap-hidden"/>
           </div>

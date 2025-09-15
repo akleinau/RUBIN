@@ -355,6 +355,7 @@ export default defineComponent({
         answerPartOfStudy(answer: boolean) {
             this.partOfStudyAsked = true
             this.Store.partOfStudy = answer;
+            this.Store.strictPhaseMode = answer;
         }
     }
 })
