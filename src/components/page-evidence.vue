@@ -324,6 +324,7 @@ export default defineComponent({
       deleteNode(node: NEvidence) {
         if (this.PatientStore.evidence.find((n: NEvidence) => n.name === node.name) != null) {
           this.PatientStore.deleteEvidence(node)
+          this.checkRequirements()
           this.Store.calculate()
         }
       },
@@ -488,7 +489,7 @@ export default defineComponent({
           return
         }
 
-        const RequirementFulfillment = {satisfied: true, requirements: []}
+        let RequirementFulfillment = {satisfied: true, requirements: []}
         //check if all requirements are satisfied
         for (const requirement of this.Store.currentPhase.sets.requirements) {
           let satisfied = true
@@ -519,6 +520,8 @@ export default defineComponent({
         RequirementFulfillment.satisfied = RequirementFulfillment.requirements.every(r => r.satisfied)
 
         this.presetRequirementsSatisfied = RequirementFulfillment
+        this.Store.phaseRequirementsSatisfied = RequirementFulfillment.satisfied
+
       },
       getDescriptionInCorrectLanguage(description: any) {
           if (description === null) return ""
