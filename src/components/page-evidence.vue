@@ -296,8 +296,21 @@ export default defineComponent({
           }
           this.nodesToAdd.push(item);
         }
+
+        //update the tutorial
         if (this.Store.tutorialStep === 2) {
-          this.Store.tutorialStep = 3
+
+          if (this.Store.strictPhaseMode) {
+            this.checkRequirements()
+            if (this.Store.phaseRequirementsSatisfied) {
+              this.Store.tutorialStep = 3
+            }
+          }
+
+          else {
+            this.Store.tutorialStep = 3
+          }
+
         }
       },
       /**
@@ -483,6 +496,12 @@ export default defineComponent({
         return notEnoughInformation
       },
       checkRequirements() {
+
+        //Create a set containing both the evidence and selected nodes in overlay
+        let items = [] as NEvidence[]
+        this.PatientStore.evidence.forEach((n: NEvidence) => items.push(n))
+        this.nodesToAdd.forEach((n: NEvidence) => items.push(n))
+
         // get current phase
         if (this.Store.currentPhase === null || this.Store.currentPhase.sets.requirements === undefined) {
           this.presetRequirementsSatisfied = {satisfied: true, requirements: []}
@@ -497,13 +516,13 @@ export default defineComponent({
 
           if (requirement.type == "items") {
             for (const item of requirement.members) {
-              if (this.PatientStore.evidence.find((n: NEvidence) => n.name === item)) {
+              if (items.find((n: NEvidence) => n.name === item)) {
                 counter += 1
               }
             }
           } else if (requirement.type == "groups") {
             for (const group of requirement.members) {
-              if (this.PatientStore.evidence.find((n: NEvidence) => n.group_name === group)) {
+              if (items.find((n: NEvidence) => n.group_name === group)) {
                 counter += 1
               }
             }
