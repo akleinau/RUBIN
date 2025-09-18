@@ -69,7 +69,14 @@
         <template #content>
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-info-circle mr-2" style="font-size: 2rem"/>
-                {{ $t("Tutorial2b") }}
+
+                <span v-if="Store.strictPhaseMode">
+                  {{ $t("Tutorial2bS") }}
+                  <span class="ml-3" style="color: crimson">{{ Store.phaseRequirementsString }}</span>
+                </span>
+                <span v-else>
+                  {{ $t("Tutorial2b") }}
+                </span>
             </div>
             <br>
             <i class="pi pi-arrow-down mb-2 arrow"/>

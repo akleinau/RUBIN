@@ -38,6 +38,7 @@
   "Tutorial1c": "Do you want to start the tutorial?",
   "Tutorial2a": "To start, enter here what you already know about the patient. Eg symptoms, results of tests and personal information like age and gender.",
   "Tutorial2b": "Select one or two evidence items!",
+  "Tutorial2bS": "Select at least the following:",
   "Tutorial2c":"Click to add!",
   "Tutorial3a": "Here you can see the calculated probability of your desired outcome.",
   "Tutorial3b": "Here you can later customize your desired outcomes and available interventions.",

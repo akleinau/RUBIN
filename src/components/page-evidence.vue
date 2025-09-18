@@ -77,14 +77,14 @@
                 <Dialog header="  " v-model:visible="overlay" style="background:white; width: 80%;  height:90%" :modal="true"
                         :closable="false">
                     <template #header>
-                        <div class="flex justify-content-end w-full bg-white">
+                        <div class="flex justify-content-end w-full bg-white" id="evidenceOverlayTable">
                             <Button class="p-button-secondary mr-2 p-button-text p-button-rounded" icon="pi pi-times"
                                     @click="cancelOverlay"/>
                         </div>
                     </template>
                     <DataTable :value="overlayNodes" rowGroupMode="subheader" groupRowsBy="group" class="p-datatable-sm"
                                sortMode="single" sortField="group" :sortOrder="1"
-                               responsiveLayout="scroll" id="evidenceOverlayTable"
+                               responsiveLayout="scroll"
                                v-model:filters="filters" filterDisplay="menu" data-key="name">
                         <template #header>
                             <div v-if="Store.tutorialStep === 12" class="flex justify-content-between">
@@ -121,7 +121,7 @@
                     <template #footer>
                         <div class="flex justify-content-center w-full bg-white pt-3 border-top-3 border-gray-300">
                             <Button class="mr-4 w-4 bg-teal-600 border-teal-600" :label="$t('add')" icon="pi pi-check-square"
-                                    id="addOverlayEvidence"
+                                    id="addOverlayEvidence" :disabled="Store.tutorialStep === 2 && Store.strictPhaseMode && !presetRequirementsSatisfied.satisfied"
                                     @click="addNodesFromOverlay()"/>
                             <Button class="p-button-secondary mr-2" :label="$t('Cancel')" icon="pi pi-times"
                                     @click="cancelOverlay"/>
@@ -276,7 +276,7 @@ export default defineComponent({
        * @param slotProps - the changed node
        * @param option - the selected/ deselected option
        */
-      onOverlayOptionChange(slotProps, option) {
+      async onOverlayOptionChange(slotProps, option) {
         //deselect this and other options of the node
         this.nodesToAdd = this.nodesToAdd.filter(n => n.name !== slotProps.data.name)
 
@@ -296,9 +296,32 @@ export default defineComponent({
           }
           this.nodesToAdd.push(item);
         }
+
+        //update the tutorial
         if (this.Store.tutorialStep === 2) {
-          this.Store.tutorialStep = 3
+
+          if (this.Store.strictPhaseMode) {
+            this.checkRequirements()
+            if (this.Store.phaseRequirementsSatisfied) {
+              this.Store.tutorialStep = 3
+            }
+          }
+
+          else {
+            this.Store.tutorialStep = 3
+          }
+
         }
+
+        if (this.Store.tutorialStep === 3) {
+          if (this.Store.strictPhaseMode) {
+            this.checkRequirements()
+            if (!this.Store.phaseRequirementsSatisfied) {
+              this.Store.tutorialStep = 2
+            }
+          }
+        }
+
       },
       /**
        * Adds selected nodes from overlay to patient evidence
@@ -364,6 +387,11 @@ export default defineComponent({
         this.nodesToAdd = []
         this.overlay = false
         this.filters.label.value = null
+
+        if (this.Store.tutorialStep === 2) {
+          this.Store.tutorialStep = 1
+        }
+
       },
       /**
        * deletes all evidence
@@ -483,6 +511,12 @@ export default defineComponent({
         return notEnoughInformation
       },
       checkRequirements() {
+
+        //Create a set containing both the evidence and selected nodes in overlay
+        let items = [] as NEvidence[]
+        this.PatientStore.evidence.forEach((n: NEvidence) => items.push(n))
+        this.nodesToAdd.forEach((n: NEvidence) => items.push(n))
+
         // get current phase
         if (this.Store.currentPhase === null || this.Store.currentPhase.sets.requirements === undefined) {
           this.presetRequirementsSatisfied = {satisfied: true, requirements: []}
@@ -497,13 +531,13 @@ export default defineComponent({
 
           if (requirement.type == "items") {
             for (const item of requirement.members) {
-              if (this.PatientStore.evidence.find((n: NEvidence) => n.name === item)) {
+              if (items.find((n: NEvidence) => n.name === item)) {
                 counter += 1
               }
             }
           } else if (requirement.type == "groups") {
             for (const group of requirement.members) {
-              if (this.PatientStore.evidence.find((n: NEvidence) => n.group_name === group)) {
+              if (items.find((n: NEvidence) => n.group_name === group)) {
                 counter += 1
               }
             }
@@ -521,6 +555,10 @@ export default defineComponent({
 
         this.presetRequirementsSatisfied = RequirementFulfillment
         this.Store.phaseRequirementsSatisfied = RequirementFulfillment.satisfied
+        this.Store.phaseRequirementsString = RequirementFulfillment.requirements
+            .filter(r => !r.satisfied)
+            .map(r => this.getDescriptionInCorrectLanguage(r.text))
+            .join(", ")
 
       },
       getDescriptionInCorrectLanguage(description: any) {
