@@ -53,6 +53,7 @@ export const useStore = defineStore('store', {
         evidenceGroupMap: {} as { [key: string]: string },
         currentPhase: null as Phase | null,
         phaseRequirementsSatisfied: false as boolean,
+        phaseRequirementsString: "" as string,
         strictPhaseMode: false as boolean,
         language: "en" as string,
         tutorialStep: -1 as number,

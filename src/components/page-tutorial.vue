@@ -70,6 +70,7 @@
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-info-circle mr-2" style="font-size: 2rem"/>
                 {{ $t("Tutorial2b") }}
+              <span class="ml-5"  style="color: crimson">{{ Store.phaseRequirementsString}} </span>
             </div>
             <br>
             <i class="pi pi-arrow-down mb-2 arrow"/>
