@@ -327,14 +327,13 @@ export default defineComponent({
        * Adds selected nodes from overlay to patient evidence
        */
       addNodesFromOverlay() {
+        this.checkRequirements()
         this.addNodes(this.nodesToAdd)
         this.nodesToAdd = []
         this.overlay = false
         if (this.Store.tutorialStep === 3) {
           this.Store.tutorialStep = 4
         }
-
-        this.checkRequirements()
 
         // eslint-disable-next-line
         umami.track('button-addEvidence', {network: this.Store.network});
