@@ -207,8 +207,8 @@ export default defineComponent({
                                 node: node.name
                             }
                         }),
-                        group: this.Store.evidenceGroupMap === null ? "" : this.get_group_label(node.name),
-                        group_name: this.Store.evidenceGroupMap === null ? "" : this.get_group_name(node.name)
+                        group: this.Store.evidenceGroupMap == null ? "" : this.get_group_label(node.name),
+                        group_name: this.Store.evidenceGroupMap == null ? "" : this.get_group_name(node.name)
                     }
                 }
             )
@@ -436,7 +436,7 @@ export default defineComponent({
        */
       get_group_label(name: string): string {
         let id = this.Store.evidenceGroupMap[name]
-        if (id === "") return ""
+        if (id === "" || id == undefined) return ""
         let label_element = this.Store.labels.evidence_groups[id]
 
         //find label based on language
@@ -462,7 +462,7 @@ export default defineComponent({
        * returns if the evidence item should be disabled
        */
       isDisabled(group: string): boolean {
-        if (this.Store.currentPhase !== null && this.Store.currentPhase.sets.evidence_groups !== null) {
+        if (this.Store.currentPhase !== null && this.Store.currentPhase.sets.evidence_groups !== undefined) {
           return !this.Store.currentPhase.sets.evidence_groups.includes(group);
         } else {
           return false
