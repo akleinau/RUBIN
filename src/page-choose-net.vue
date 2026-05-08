@@ -59,10 +59,6 @@
               In clinical decision support, Bayesian networks can provide clinicians with a second opinion based on
               statistics and AI.
             </AccordionTab>
-            <AccordionTab header="Who is the team behind RUBIN?">
-              RUBIN is a cooperation of PLRI Hannover (previously with OVGU Magdeburg), University of Twente,
-              The Netherlands and Radboud University Medical Center, The Netherlands.
-            </AccordionTab>
           </Accordion>
         </template>
       </Card>

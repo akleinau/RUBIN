@@ -27,7 +27,7 @@
     <Feedback @sendFeedback="sendFeedback"></Feedback>
   </Dialog>
   <OverlayPanel ref="networkOverlay" :header="$t('NetworkDescription')" style="width: 50%" :modal="true">
-    <p v-html="Store.description"></p>
+    <p>Description redacted for anonymization purposes. </p>
   </OverlayPanel>
 
   <OverlayPanel ref="langOverlay">
@@ -41,11 +41,6 @@
 
     <divider />
 
-    <p> Radboudumc </p>
-    <p> route 623 </p>
-    <p> Grooteplein Zuid 10 </p>
-    <p> 6525 GA Nijmegen </p>
-    <p> The Netherlands </p>
 
   </Dialog>
 
