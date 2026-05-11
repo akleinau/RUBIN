@@ -5,10 +5,7 @@
       <div class="flex flex-row align-center align-content-center">
         <Button class="p-button-text p-button-secondary" :label="$t('backToNetwork')"
                 @click="NetworkSelectionDialog = true" icon="pi pi-home" style="color:#3f3f46"/>
-        <div v-if="Store.network === 'endometrial cancer'" class="align-self-center">
-          <img id="logoENDORISK" src="../assets/logo_endorisk.png" class="align-self-center flex"
-                                                style="height: 1rem"/>
-        </div>
+
         <div id="logo" class="r-2 align-self-center">
           <img id="logoRUBIN" src="../assets/RUBIN_Logo_core.svg" class="align-self-center flex"
                                                           style="height: 1.5rem"/>
@@ -44,13 +41,6 @@
 
   </Dialog>
 
-  <Dialog :header="$t('Legal')" v-model:visible="showLegal" style="width: 50%" :modal="true">
-    <h2>ENDORISK </h2>
-
-    <DisclaimerEndorisk/>
-
-  </Dialog>
-
   <Dialog v-model:visible="NetworkSelectionDialog" modal>
     <div class="m-2"> {{ $t("BackToNetworkSelection") }} <br>
     </div>
@@ -67,7 +57,6 @@
 import { defineComponent } from 'vue';
 import Feedback from "../components/Header/send-feedback.vue";
 import PatientFile from "../components/Header/patient-file.vue";
-import DisclaimerEndorisk from "../components/Header/diclaimer-endorisk.vue"
 import {useStore} from '../store.ts';
 import {usePatientStore} from "../stores/patient_store.ts";
 import {PrimeIcons} from 'primevue/api';
@@ -78,7 +67,6 @@ export default defineComponent({
   components: {
     Feedback,
     PatientFile,
-    DisclaimerEndorisk
   },
   setup() {
     const Store = useStore()
@@ -136,7 +124,6 @@ export default defineComponent({
       showFeedback: false,
       showNetworkDescription: false,
       showContact: false,
-      showLegal: false,
       SavePatientName: null,
       configLabel: this.$t('startComparing'),
       NetworkSelectionDialog: false,
@@ -144,14 +131,6 @@ export default defineComponent({
     }
   },
   methods: {
-      /**
-       * called when the network selection should be opened
-       */
-    changePage() {
-      this.Store.reset(true)
-      this.NetworkSelectionDialog = false
-      this.$emit('changePage')
-    },
       /**
        * called when compare feature is started
        */
@@ -321,14 +300,6 @@ export default defineComponent({
               icon: PrimeIcons.MAP_MARKER,
               command: () => {
                 this.showContact = true
-              }
-            },
-            {
-              label: this.$t('Legal'),
-              key: 'Legal',
-              icon: PrimeIcons.BRIEFCASE,
-              command: () => {
-                this.showLegal = true
               }
             },
             {

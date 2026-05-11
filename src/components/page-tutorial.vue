@@ -218,14 +218,18 @@ export default defineComponent({
             display: false as boolean,
             step: 0 as number,
             finalStep: 12 as number,
-            liability: false as boolean,
-            partOfStudyAsked: false as boolean,
+            liability: true as boolean,
+            partOfStudyAsked: true as boolean,
         }
     },
     setup() {
         const Store = useStore()
         const PatientStore = usePatientStore()
         return {Store, PatientStore}
+    },
+    created() {
+        this.Store.partOfStudy = false
+        this.Store.strictPhaseMode = false
     },
     watch: {
         /**
