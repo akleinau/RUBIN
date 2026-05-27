@@ -15,5 +15,12 @@ For the backend, please refer to: https://github.com/akleinau/DoctorBN_backend
 Kleinau, Anna, et al. "User-Centered Development of a Clinical Decision Support System." SMARTERCARE@ AI* IA. 2021.
 https://ceur-ws.org/Vol-3060/paper-8.pdf
 
+## Packages
+- Frontend: built with Vue.js — https://vuejs.org/
+- Python backend: https://github.com/akleinau/DoctorBN_backend
+- d3.js (visualizations): https://d3js.org/
+- PrimeVue (UI components): https://www.primefaces.org/primevue/
+
+
 ## Notes
 - the tool got renamed from "DoctorBN" to "RUBIN" in 2023
