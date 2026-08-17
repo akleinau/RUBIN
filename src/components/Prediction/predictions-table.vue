@@ -91,18 +91,16 @@ export default defineComponent({
      * @returns {any}
      */
     table: function () : Prediction_option[] {
-      let table = JSON.parse(JSON.stringify(this.Store.predictions.options))
+      let table = this.Store.predictions.options.map((n: Prediction_option) => ({...n}))
       if (table !== null) {
         table.forEach((n: Prediction_option) => n.config_name = "current")
         if (this.Store.compareConfig) {
           let compare = this.Store.compareConfig.predictions.selectedOption
           if (compare) {
-            compare.config_name = "compare"
-            table.push(compare)
+            table.push({...compare, config_name: "compare"})
           }
         }
       }
-      this.updateSelected(table)
       return table
     },
     /**
@@ -119,7 +117,20 @@ export default defineComponent({
       selectedOption: null as Prediction_option | null
     }
   },
+  watch: {
+    table: {
+      handler(table: Prediction_option[]) {
+        this.updateSelected(table)
+      },
+      immediate: true
+    }
+  },
   methods: {
+    optionSignature(option: any): string {
+      if (!option || typeof option !== "object") return ""
+      const keys = Object.keys(option).sort()
+      return keys.map((k) => `${k}:${option[k]}`).join("|")
+    },
     /**
      * returns goals for the columns
      *
@@ -155,8 +166,10 @@ export default defineComponent({
     isCurrentOption(data: Prediction_option, goal: NGoal) {
         let selected = this.Store.predictions.selectedOption
         if (selected === null) return false
+        const dataSignature = this.optionSignature(data.option)
+        const selectedSignature = this.optionSignature(selected.option)
         return data.config_name === 'current' &&
-              JSON.stringify(data.option) === JSON.stringify(selected.option)
+          dataSignature === selectedSignature
               || data.config_name !== 'current' &&
                  !isNaN(data.goalValues[String(goal.name)])
     },
@@ -167,21 +180,23 @@ export default defineComponent({
      * @param event
      */
     update(event: any = null) {
-      if (this.table !== null && this.table !== undefined) {
+      const table = this.table
+      if (table !== null && table !== undefined) {
 
         //in case someone selects an option of compare view
         if (event !== null && event.index < this.minIndex) {
-          this.selectedOption = this.table[this.minIndex]
+          this.selectedOption = table[this.minIndex]
         }
 
         if (this.selectedOption === null) {
-          this.selectedOption = this.table[this.minIndex]
+          this.selectedOption = table[this.minIndex]
         }
         else {
           let selected = this.selectedOption
+          const selectedSignature = this.optionSignature(selected.option)
           let newOption = this.Store.predictions.options.find(n =>
               selected.config_name === "current" &&
-              JSON.stringify(n.option) === JSON.stringify(selected.option)) as Prediction_option
+              this.optionSignature(n.option) === selectedSignature) as Prediction_option
           if (newOption !== this.Store.predictions.selectedOption) {
             this.Store.predictions.selectedOption = newOption
             this.Store.calculateExplanations(this.Store.patient, this.Store.predictions, this.Store.explain)
@@ -198,9 +213,10 @@ export default defineComponent({
       if (table !== null && table !== undefined) {
         if (this.selectedOption) {
           let selected = this.selectedOption
+          const selectedSignature = this.optionSignature(selected.option)
           let newOption = table.find(n =>
               n.config_name === "current" &&
-              JSON.stringify(n.option) === JSON.stringify(selected.option))
+              this.optionSignature(n.option) === selectedSignature)
           if (newOption) {
             this.selectedOption = newOption
           } else {
