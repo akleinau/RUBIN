@@ -474,9 +474,10 @@ export default defineComponent({
           {svg: barvisjs.createSVG(width, x.overall_relevance, "#004d80").outerHTML}
         ]
 
-
-        for (const value of Object.values(x.relevancies)) {
-          out.push({svg: twosidedbarvisjs.createSVG(width, value).outerHTML})
+        for (const [goalKey, value] of Object.entries(x.relevancies)) {
+          const goal = this.PatientStore.goals.find(g => (g.name + ": " + g.selected.name) === goalKey)
+          const direction = goal ? goal.direction : "maximize"
+          out.push({svg: twosidedbarvisjs.createSVG(width, value, direction).outerHTML})
         }
 
         explanations.push(out)
