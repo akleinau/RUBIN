@@ -208,7 +208,12 @@ export default defineComponent({
             fontSize: 15,
             bold: true
           },
-        }
+        },
+        footer: {
+          columns: [
+            { text: 'version 1.1', alignment: 'right', marginRight: 20 }
+         ]
+  },
       }
 
       // load svg logo
@@ -280,6 +285,7 @@ export default defineComponent({
       this.pdf_add_targets(data)
       data.content.push({text: "", pageBreak: 'after'})
       this.pdf_add_explanations(data)
+
 
       pdfMake.createPdf(data).open()
 
