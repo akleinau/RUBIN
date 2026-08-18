@@ -208,7 +208,12 @@ export default defineComponent({
             fontSize: 15,
             bold: true
           },
-        }
+        },
+        footer: {
+          columns: [
+            { text: 'version 1.1', alignment: 'right', marginRight: 20 }
+         ]
+  },
       }
 
       // load svg logo
@@ -280,6 +285,7 @@ export default defineComponent({
       this.pdf_add_targets(data)
       data.content.push({text: "", pageBreak: 'after'})
       this.pdf_add_explanations(data)
+
 
       pdfMake.createPdf(data).open()
 
@@ -474,9 +480,10 @@ export default defineComponent({
           {svg: barvisjs.createSVG(width, x.overall_relevance, "#004d80").outerHTML}
         ]
 
-
-        for (const value of Object.values(x.relevancies)) {
-          out.push({svg: twosidedbarvisjs.createSVG(width, value).outerHTML})
+        for (const [goalKey, value] of Object.entries(x.relevancies)) {
+          const goal = this.PatientStore.goals.find(g => (g.name + ": " + g.selected.name) === goalKey)
+          const direction = goal ? goal.direction : "maximize"
+          out.push({svg: twosidedbarvisjs.createSVG(width, value, direction).outerHTML})
         }
 
         explanations.push(out)
