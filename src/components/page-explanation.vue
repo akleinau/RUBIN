@@ -117,9 +117,26 @@ export default defineComponent({
       return this.Store.tutorialStep
     },
       /**
-       * computes all necessary information for the compact network view
+       * Derives the graph data used by the compact explanation visualisation.
+       * Backend explanation node names are joined with `explain.states` to
+       * retain probabilities and distributions. Edges are filtered from the
+       * full network and returned in the shape expected by the D3 component.
        *
-       * @returns {{compactNodes: *[], compactEdges: *[]}|null}
+       * @returns {{
+       *   compactNodes: StateExplanation[],
+       *   compactEdges: Edge[]
+       * }|null}
+       *
+       * Example:
+       * {
+       *   compactNodes: [
+       *     {name: "survival", state: "yes", probability: 0.81,
+       *      stateNames: ["no", "yes"], distribution: [0.19, 0.81]}
+       *   ],
+       *   compactEdges: [
+       *     {source: "treatment", target: "survival"}
+       *   ]
+       * }
        */
     compactNetwork: function () {
       if (this.Store.explain.explanation == null) {
@@ -135,7 +152,7 @@ export default defineComponent({
         if (originalNode != null) {
           explanationNodes.push(originalNode)
         } else {
-          explanationNodes.push({"name": node, "probability": 1.0, state:"given", stateNames:{0:"given"}, distribution:[]})
+          explanationNodes.push({"name": node, "probability": 1.0, state:"given", stateNames:["given"], distribution:[]})
         }
       })
 

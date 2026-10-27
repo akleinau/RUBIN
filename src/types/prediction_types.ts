@@ -5,12 +5,15 @@ export interface Prediction_type {
 }
 
 export interface Prediction_option {
+    /** Goal outcome probabilities keyed by goal node name. */
     goalValues: {
         [key: string]: number
     },
+    /** Intervention states keyed by target node name. */
     option: {
-        [key: string]: number
+        [key: string]: string
     },
     value: number,
+    /** Added by predictions-table.vue when current/compare rows are merged. */
     config_name?: string,
 }

@@ -98,9 +98,24 @@ export default defineComponent({
   },
   computed: {
       /**
-       * computes data for the table
+       * Converts each backend state explanation into the row shape rendered by
+       * the prediction list. `distribution[i]` corresponds to
+       * `stateNames[i]`. In comparison mode, the `compare_*` fields contain the
+       * matching node from the saved configuration.
        *
-       * @returns {*[]|null}
+       * @returns {ExplainNode[]|CompareExplainNode[]|null}
+       *
+       * Example row:
+       * {
+       *   name: "survival",
+       *   label: "Survival",
+       *   state: "yes",
+       *   probability: 0.81,
+       *   beforeState: "",
+       *   beforeProb: 0,
+       *   distribution: [0.19, 0.81],
+       *   stateNames: ["no", "yes"]
+       * }
        */
     data: function () {
       if (this.Store.explain.states === null) return null

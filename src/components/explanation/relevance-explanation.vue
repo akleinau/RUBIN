@@ -88,9 +88,20 @@ export default defineComponent({
 
     computed: {
       /**
-       * computes the column names of the individual goal's columns
+       * Builds the goal columns used by the relevance table. The `name` value
+       * matches the keys in `RelevancePrediction.relevancies`; `label` is the
+       * translated text shown to the user.
        *
-       * @returns {Object[]}
+       * @returns {{name: string, label: string, direction: string}[]}
+       *
+       * Example:
+       * [
+       *   {
+       *     name: "survival: yes",
+       *     label: "Survival: Yes",
+       *     direction: "increase"
+       *   }
+       * ]
        */
     goalnames: function () {
       let goalnames: any[] = []
@@ -107,9 +118,29 @@ export default defineComponent({
     },
 
       /**
-       * returns data for the relevance table
+       * Maps the backend relevance response to rows consumed by the table.
+       * `relevancies` is keyed by the goal name/state string generated in
+       * `goalnames`; positive and negative values are rendered by the
+       * two-sided relevance bar.
        *
-       * @returns {*[]}
+       * @returns {RelevanceNode[]}
+       *
+       * Example backend item:
+       * {
+       *   node_name: "treatment",
+       *   overall_relevance: 0.72,
+       *   relevancies: {"survival: yes": 0.65}
+       * }
+       *
+       * Example table row:
+       * {
+       *   config_name: "current",
+       *   node_name: "treatment",
+       *   label: "Treatment",
+       *   state: "not given",
+       *   overall_relevance: 0.72,
+       *   relevancies: {"survival: yes": 0.65}
+       * }
        */
     curr_table: function () {
       if (this.Store.explain.relevance) {

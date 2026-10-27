@@ -86,9 +86,19 @@ export default defineComponent({
   },
   computed: {
     /**
-     * returns data of table by combining current and (optional) compare configuration
+     * Combines prediction options with the optional comparison selection.
+     * Rows retain the backend `Prediction_option` fields and receive a
+     * `config_name` used to group current and comparison rows in the table.
      *
-     * @returns {any}
+     * A row has this shape:
+     * {
+     *   option: {"treatment":  "yes"},
+     *   goalValues: {"survival": 0.81},
+     *   value: 0.81,
+     *   config_name: "current" | "compare"
+     * }
+     *
+     * @returns {Prediction_option[]}
      */
     table: function () : Prediction_option[] {
       let table = this.Store.predictions.options.map((n: Prediction_option) => ({...n}))

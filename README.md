@@ -11,6 +11,12 @@ Clinical Decision Support System based on Bayesian Networks.
 
 For the backend, please refer to: https://github.com/akleinau/DoctorBN_backend
 
+## Data flow
+
+The frontend data flow, including network loading, patient input construction,
+backend request/response contracts, and the mapping to predictions and
+visualisations, is documented in [docs/data-flow.md](docs/data-flow.md).
+
 ## Publications
 Kleinau, Anna, et al. "User-Centered Development of a Clinical Decision Support System." SMARTERCARE@ AI* IA. 2021.
 https://ceur-ws.org/Vol-3060/paper-8.pdf
